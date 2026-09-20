@@ -1,0 +1,666 @@
+openapi: 3.0.1
+info:
+  title: Accounts_AccountTransactions_FinancialDetails_Digital_Domain_OpenAPI
+  description: "This MS will provide account summary and transaction list for a member/customer.<table><th>Change\
+    \ History</th><tr><td>Date(MM/DD/YYYY)</td><td>Version</td><td>SRT Number</td><td>OPPM\
+    \ ID</td><td>User Story</td><td>Description</td></tr><tr><td>07-26-2024</td><td>1.0.0</td><td>SRT\
+    \ 3202</td><td>WR202401389<td>PBWD-12477, PBWD-12478<td>New MS added</td></tr></br><tr><td>09-10-2024</td><td>1.1.0</td><td>SRT\
+    \ 3606</td><td>WR202401389<td>PBWD-12478<td>Description update in fields in transaction\
+    \ API and Content-Type header made optional</td></tr></br><tr><td>09-19-2024</td><td>1.2.0</td><td>SRT\
+    \ 3642</td><td>WR202401389<td>PBWD-12477<td>Removed field relationshipNumber for\
+    \ RetrieveAccountSummary API and transactionQuantity format updated to RetrieveTransactionDetails\
+    \ API to double</td></tr></br><tr><td>10-08-2024</td><td>1.3.0</td><td>SRT 3736\
+    \ </td><td>WR202401389<td>PBWD-12477<td>New object CurrencyCurrentValue added\
+    \ with 2 fields - alternateAmountValue and baseAmountValue in Account Summary\
+    \ API</td></tr>\""
+  version: 1.3.0
+  x-deployment-reference: Acc-D-AccTxn-FinDtls-DG-US
+  x-ibm-name: Accounts_AccountTransactions_FinancialDetails_Digital_Domain_OpenAPI
+servers:
+- url: https://127.0.0.1/openapi/accounttransactions/findtls/v1
+paths:
+  /accountsummary:
+    get:
+      tags:
+      - Accounts_Account Financials_Account Transactions
+      summary: This API provides the basic details and financial summary of all the
+        accounts belonging to a member/customer
+      description: This API provides the basic details and financial summary of all
+        the accounts belonging to a member/customer
+      operationId: RetrieveAccountSummary
+      parameters:
+      - name: Authorization
+        in: header
+        description: "The most recent Authorization token. This will have the format\
+          \ Bearer + {space} + {accessToken}. Example: Bearer KGNsaWVudF9pZDpjbGllbnRfc2VjcmV0KQ==."
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: uuid
+        in: header
+        description: 128 bit random UUID generated uniquely for every request.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: Accept
+        in: header
+        description: Content-Type that are acceptable for the response.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: client_id
+        in: header
+        description: Client ID generated during application registration.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: Content-Type
+        in: header
+        description: application/json
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: clientDetails
+        in: header
+        description: "This field is used to capture device,browser and network information.\
+          \ Refer the developer portal for more information.These are the fields which\
+          \ will be passed as part of the header devicePrint,deviceTokenCookie,userIpAddress,userAgent,hardwareId,simId,deviceModel,deviceName,deviceOsName,deviceOsVersion,multitaskingSupportFlag,languageSupport,wifiMacAddress,cellTowerId,locationAreaCode,rsaApplicationKey,wapClientId,mobileCarrierCode,mobileCountryCode,osId,geoLongitude,geoLatitude,geoHorizontalAccuracy,geoAltitude,geoAltitudeAccuracy,geoSpeed,geoTimestamp,geoStatus,basicServiceSetId,signalStrength,wifiChannel,serviceSetId"
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RetrieveAccountSummaryResponse'
+        "400":
+          description: <table><tr><td>Type</td><td>Code</td><td>Details</td></tr><tr><td>invalid</td><td>invalidRequest</td><td>Missing
+            or invalid Parameters</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "401":
+          description: <table><tr><td>Type</td><td>Code</td><td>Details</td></tr><tr><td>error</td><td>unAuthorized</td><td>Authorization
+            credentials are missing or invalid</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "403":
+          description: <table><tr><td>Type</td><td>Code</td><td>Details</td></tr><tr><td>error</td><td>accessNotConfigured</td><td>The
+            request operation is not configured to access this resource</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "404":
+          description: <table><tr><td>Type</td><td>Code</td><td>Details</td></tr><tr><td>error</td><td>resourceNotFound</td><td>Empty
+            resource/resource not found</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "422":
+          description: <table><tr><td>Type</td><td>Code</td><td>Details</td></tr><tr><td>error</td><td>businessValidationsFailed</td><td>Business
+            validations failed</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "500":
+          description: <table><tr><td>Type</td><td>Code</td><td>Details</td></tr><tr><td>fatal</td><td>serverUnavailable</td><td>The
+            request failed due to an internal error</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /transactiondetails/{accountId}:
+    get:
+      tags:
+      - Accounts_Account Financials_Account Transactions
+      summary: This API gives the list of all the transactions for an account.
+      description: This API gives the list of all the transactions for an account.
+      operationId: RetrieveTransactionDetails
+      parameters:
+      - name: Authorization
+        in: header
+        description: "The most recent Authorization token. This will have the format\
+          \ Bearer + {space} + {accessToken}. Example: Bearer KGNsaWVudF9pZDpjbGllbnRfc2VjcmV0KQ==."
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: uuid
+        in: header
+        description: 128 bit random UUID generated uniquely for every request.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: Accept
+        in: header
+        description: Content-Type that are acceptable for the response.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: client_id
+        in: header
+        description: Client ID generated during application registration.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: Content-Type
+        in: header
+        description: application/json
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: clientDetails
+        in: header
+        description: "This field is used to capture device,browser and network information.\
+          \ Refer the developer portal for more information.These are the fields which\
+          \ will be passed as part of the header devicePrint,deviceTokenCookie,userIpAddress,userAgent,hardwareId,simId,deviceModel,deviceName,deviceOsName,deviceOsVersion,multitaskingSupportFlag,languageSupport,wifiMacAddress,cellTowerId,locationAreaCode,rsaApplicationKey,wapClientId,mobileCarrierCode,mobileCountryCode,osId,geoLongitude,geoLatitude,geoHorizontalAccuracy,geoAltitude,geoAltitudeAccuracy,geoSpeed,geoTimestamp,geoStatus,basicServiceSetId,signalStrength,wifiChannel,serviceSetId"
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: accountId
+        in: path
+        description: "The account identifier in encrypted format. Typically, this\
+          \ is not displayed to the customer"
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+        example: "20100002091011"
+      - name: transactionFromDate
+        in: query
+        description: Starting range for transaction date in ISO 8601 date format YYYY-MM-DD.
+          The date range can be upto 3 months or 90 days. This date can be 3 years
+          prior to current date.
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+        example: 2022-09-16T00:00:00.000Z
+      - name: transactionToDate
+        in: query
+        description: End range for transaction date in ISO 8601 date format YYYY-MM-DD.
+          The date range can be upto 3 months or 90 days.
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+        example: 2022-10-30T00:00:00.000Z
+      responses:
+        "200":
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RetrieveTransactionDetailsResponse'
+        "400":
+          description: <table><tr><td>Type</td><td>Code</td><td>Details</td></tr><tr><td>invalid</td><td>invalidRequest</td><td>Missing
+            or invalid Parameters</td></tr><tr><td>invalid</td><td>invalidDateRange</td><td>Date
+            range is invalid</td></tr><tr><td>invalid</td><td>invalidTransactionFromDate</td><td>Transaction
+            from date is invalid</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "401":
+          description: <table><tr><td>Type</td><td>Code</td><td>Details</td></tr><tr><td>error</td><td>unAuthorized</td><td>Authorization
+            credentials are missing or invalid</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "403":
+          description: <table><tr><td>Type</td><td>Code</td><td>Details</td></tr><tr><td>error</td><td>accessNotConfigured</td><td>The
+            request operation is not configured to access this resource</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "404":
+          description: <table><tr><td>Type</td><td>Code</td><td>Details</td></tr><tr><td>error</td><td>resourceNotFound</td><td>Empty
+            resource/resource not found</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "422":
+          description: <table><tr><td>Type</td><td>Code</td><td>Details</td></tr><tr><td>error</td><td>businessValidationsFailed</td><td>Business
+            validations failed</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "500":
+          description: <table><tr><td>Type</td><td>Code</td><td>Details</td></tr><tr><td>fatal</td><td>serverUnavailable</td><td>The
+            request failed due to an internal error</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    RetrieveAccountSummaryResponse:
+      type: object
+      properties:
+        accountSummary:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccountSummary'
+    AccountSummary:
+      type: object
+      properties:
+        accountGroup:
+          type: string
+          description: "Refers to the account groups. Can be Banking, Investments,Liability,\
+            \ Others"
+          example: Banking
+        checking:
+          type: array
+          items:
+            $ref: '#/components/schemas/BasicAccountDetails'
+        savings:
+          type: array
+          items:
+            $ref: '#/components/schemas/BasicAccountDetails'
+        deposits:
+          type: array
+          items:
+            $ref: '#/components/schemas/BasicAccountDetails'
+        securitydeposits:
+          type: array
+          items:
+            $ref: '#/components/schemas/BasicAccountDetails'
+        timedeposits:
+          type: array
+          items:
+            $ref: '#/components/schemas/BasicAccountDetails'
+        investments:
+          type: array
+          items:
+            $ref: '#/components/schemas/BasicAccountDetails'
+        trust:
+          type: array
+          items:
+            $ref: '#/components/schemas/BasicAccountDetails'
+        custody:
+          type: array
+          items:
+            $ref: '#/components/schemas/BasicAccountDetails'
+        creditcards:
+          type: array
+          items:
+            $ref: '#/components/schemas/BasicAccountDetails'
+        loans:
+          type: array
+          items:
+            $ref: '#/components/schemas/BasicAccountDetails'
+        escrow:
+          type: array
+          items:
+            $ref: '#/components/schemas/BasicAccountDetails'
+    BasicAccountDetails:
+      type: object
+      properties:
+        displayAccountNumber:
+          type: string
+          description: A masked Account number that will be displayed to the user
+          example: 7/XXX656/028
+        accountId:
+          type: string
+          description: "The account identifier in encrypted format. Typically, this\
+            \ is not displayed to the customer"
+          example: "20100002018150"
+        accountOpenDate:
+          type: string
+          description: Date when the account was opened is ISO 8601 YYYY-MM-DDTHH
+            format
+          example: 2020-01-02
+        relationshipId:
+          type: string
+          description: "The customer relationship identifier in encrypted format.Typically,\
+            \ this is not displayed to the customer"
+          example: "20100002348150"
+        accountType:
+          type: string
+          description: "Type of an account.Please use /v1/cgw/utilities/referenceData/{accountType}\
+            \ resource to get valid value of this field with description. You can\
+            \ use the field name as the referenceCode parameter to retrieve the values."
+          example: Savings
+        accountAlternateCurrencyCode:
+          type: string
+          description: Reporting currency code of the account in ISO 4217 format
+          example: GBP
+        accountBaseCurrencyCode:
+          type: string
+          description: Nominal currency code of the account in ISO 4217 format
+          example: USD
+        productCode:
+          type: string
+          description: Product Code which the account belongs to
+          example: SIA0
+        subProductCode:
+          type: string
+          description: sub product code which an account belongs to
+          example: REG
+        accountName:
+          type: string
+          description: Name of the account
+          example: Jim Homeowner
+        accountNickname:
+          type: string
+          description: Nick name of the account holder
+          example: Jimmy
+        accountDescription:
+          type: string
+          description: Description of the account
+          example: Investment Advisory Portfolio
+        accountStatus:
+          type: string
+          description: "Indicates the status of the account. Please use /v1/cgw/utilities/referenceData/{accountStatus}\
+            \ resource to get valid value of this field with description. You can\
+            \ use the field name as the referenceCode parameter to retrieve the values."
+          example: ACTIVE
+        accountGroupId:
+          type: string
+          description: "AccountGroup to which an acct belong to. Its a Number in an\
+            \ encrypted format. Typically, this is not displayed to the customer"
+          example: "4578546215"
+        accountGroupTitle:
+          type: string
+          description: Title of an account Group
+          example: Fabiola Hafer and/or Rocc Harrel
+        accountGroupStatus:
+          type: string
+          description: "Indicates the status of the accountGroup which the account\
+            \ is part of. Please use /v1/cgw/utilities/referenceData/{accountGroupStatus}\
+            \ resource to get valid value of this field with description. You can\
+            \ use the field name as the referenceCode parameter to retrieve the values."
+          example: ACTIVE
+        balances:
+          $ref: '#/components/schemas/Balances'
+    Balances:
+      type: object
+      properties:
+        marketValue:
+          type: object
+          properties:
+            currencyBasedValue:
+              $ref: '#/components/schemas/CurrencyBasedValue'
+          description: Market Value
+        currentValue:
+          type: object
+          properties:
+            currencyCurrentValue:
+              $ref: '#/components/schemas/CurrencyCurrentValue'
+          description: "This is the CurrentValue of Account. This can have values\
+            \ like Assets, Liabilities, Escrow, Security Deposits, Contingent Liabilites.\
+            \ Multiple Values like Assets 100 Liabilities 50 can be returned for an\
+            \ account"
+        availableBalance:
+          type: object
+          properties:
+            currencyBasedValue:
+              $ref: '#/components/schemas/CurrencyBasedValue'
+          description: Available Balance
+        accruedInterest:
+          type: object
+          properties:
+            currencyBasedValue:
+              $ref: '#/components/schemas/CurrencyBasedValue'
+          description: The total accrued interest of the positions in the account
+            as of the reporting date. This is updated as of the last available close
+            of business date.
+        unrealisedGainLoss:
+          type: object
+          properties:
+            currencyBasedValue:
+              $ref: '#/components/schemas/CurrencyBasedValue'
+          description: "This is the total unrealized gain or loss on the positions\
+            \ in the account and represents the difference between the end of prior\
+            \ day cost basis of the position and the market value of the positions\
+            \ excluding any accrued interest. Please note that for eligible account(s),\
+            \ the market value is delayed at least 15 minutes. In all other scenarios,\
+            \ the value displayed is as of last available close of business day. Any\
+            \ delivered-in security without a cost basis (i.e. cost prices shown as\
+            \ zero) will show gain/loss information reported at the current market\
+            \ value that may not represent your cost-basis. Please note this does\
+            \ not affect tax or performance reporting. It will not include any intra-day\
+            \ activities as they are still being processed. These prices may not be\
+            \ obtainable upon liquidation"
+        totalBasis:
+          type: object
+          properties:
+            currencyBasedValue:
+              $ref: '#/components/schemas/CurrencyBasedValue'
+          description: This is the total amount which the client paid for all the
+            positions in the account. If multiple transactions were involved it represents
+            the total value of all the purchases. This is updated as of the last available
+            close of business date.
+        yearToDateIncome:
+          type: object
+          properties:
+            currencyBasedValue:
+              $ref: '#/components/schemas/CurrencyBasedValue'
+          description: This is the Interest/ Dividend received in the account since
+            the start of the year. This is updated as of the last available close
+            of business date.
+        ytdRealizedGainLoss:
+          type: object
+          properties:
+            currencyBasedValue:
+              $ref: '#/components/schemas/CurrencyBasedValue'
+          description: This is the Interest/Dividend received in the account since
+            the start of the year. Any delivered-in security without a cost basis
+            (i.e. cost prices shown as zero) will show gain/loss information reported
+            at the current market value that may not represent your cost basis. Please
+            note this does not affect tax or performance reporting. This is updated
+            as of the last available close of business date.
+        estimatedAnnualIncome:
+          type: object
+          properties:
+            currencyBasedValue:
+              $ref: '#/components/schemas/CurrencyBasedValue'
+          description: This is the Estimated Annual Income of all the positions held
+            in the account. The estimated annual income on the security is the yield
+            multiplied by the quantity. It is an estimate of the interest and dividends
+            expected to be earned on investments in the next 12 months and it is based
+            on past interest and dividend payments made by the securities held in
+            an account. This is updated as of the last available close of business
+            date.
+    CurrencyBasedValue:
+      type: object
+      properties:
+        alternateAmount:
+          type: number
+          description: The price an asset would fetch in the marketplace. Amount is
+            in reporting currency
+          format: double
+          example: 425.25
+        baseAmount:
+          type: number
+          description: The price an asset would fetch in the marketplace. Amount is
+            in nominal currency
+          format: double
+          example: 478.95
+    CurrencyCurrentValue:
+      type: object
+      properties:
+        alternateAmountValue:
+          type: array
+          description: The price an asset would fetch in the marketplace. Amount is
+            in reporting currency
+          items:
+            type: string
+            example: Assets 425.25
+        baseAmountValue:
+          type: array
+          description: The price an asset would fetch in the marketplace. Amount is
+            in nominal currency
+          items:
+            type: string
+            example: Assets 425.25
+    RetrieveTransactionDetailsResponse:
+      type: object
+      properties:
+        transactionlist:
+          type: array
+          items:
+            $ref: '#/components/schemas/TransactionList'
+        accountId:
+          type: string
+          description: "The account identifier in encrypted format. Typically, this\
+            \ is not displayed to the customer"
+          example: "20100002091011"
+        accountName:
+          type: string
+          description: Account Name
+          example: Investment Advisory Portfolio
+        accountType:
+          type: string
+          description: "Account Type. Please use /v1/cgw/utilities/referenceData/{accountType}\
+            \ resource to get valid value of this field with description. You can\
+            \ use the field name as the referenceCode parameter to retrieve the values."
+          example: Saving
+        displayAccountNumber:
+          type: string
+          description: A masked Account number that will be displayed to the user.
+          example: xxx/xxxx/0000
+    TransactionList:
+      type: object
+      properties:
+        transactionDateTime:
+          type: string
+          description: Date of a transaction in ISO 8601 format YYYY-MM-DD hh:mm:ssZ
+          format: dateTime
+          example: 2020-10-01T00:00:00.000Z
+        transactionId:
+          type: string
+          description: Unique identifier of a transaction. This is used for any B2B
+            communication.
+          example: "20250263144278"
+        transactionReferenceNumber:
+          type: string
+          description: Reference number of a transaction which is displayed to the
+            user
+          example: 32XX628970
+        transactionStatus:
+          type: string
+          description: "This field provides the status of a transaction. Please use\
+            \ /v1/cgw/utilities/referenceData/{transactionStatus} resource to get\
+            \ valid value of this field with description. You can use the field name\
+            \ as the referenceCode parameter to retrieve the values."
+          example: Completed
+        transactionType:
+          type: string
+          description: "The type of transaction. Please use /v1/cgw/utilities/referenceData/{transactionType}\
+            \ resource to get valid value of this field with description. You can\
+            \ use the field name as the referenceCode parameter to retrieve the values."
+          example: Outgoing
+        transactionDescription:
+          type: string
+          description: Detailed description of a transaction
+          example: STAMP DUTY CHARGES DUE TO  CHANGE OF BENEFICIARY TRANSFER
+        alternateCurrencyTransactionAmount:
+          type: number
+          description: Transaction amount in reporting currency. A negative amount
+            denotes a debit transaction. Eg -24.6. An amount without any sign denotes
+            a credit transaction. Eg 24.6.
+          format: double
+          example: 123.65
+        baseCurrencyTransactionAmount:
+          type: number
+          description: Transaction amount in base currency. A negative amount denotes
+            a debit transaction Eg -24.6. An amount without any sign denotes a credit
+            transaction. Eg 24.6.
+          format: double
+          example: 345.6
+        transactionQuantity:
+          type: number
+          description: Quantity of Units purchased
+          format: double
+          example: 20
+        alternateCurrencyCode:
+          type: string
+          description: Reporting Currency code of a transaction in ISO 4217 format
+          example: USD
+        baseCurrencyCode:
+          type: string
+          description: Nominal Currency codes of a transaction in ISO 4217 format
+          example: GBP
+        cusipNumber:
+          type: string
+          description: CUSIP number is a unique identification number assigned to
+            all stocks and registered bonds in the U.S. and Canada
+          example: 9905CST55
+        tickerSymbol:
+          type: string
+          description: A ticker symbol is an arrangements of characters representing
+            a particular security listed on an exchange or otherwise traded publicity
+          example: ABGCHA2
+        assetClass:
+          type: string
+          description: Asset Class
+          example: Equity
+    ErrorResponse:
+      required:
+      - code
+      - type
+      type: object
+      properties:
+        type:
+          type: string
+          description: Invalid - Request did not confirm to the specification and
+            was unprocessed and rejected. Please fix the value and try again
+          enum:
+          - error
+          - warn
+          - invalid
+          - fatal
+        code:
+          type: string
+          description: Error code which qualifies the error
+        details:
+          type: string
+          description: Human readable explanation specific to the occurrence of the
+            problem
+        location:
+          type: string
+          description: The name of the field that resulted in the error
+        moreInfo:
+          type: object
+          properties: {}
+          description: URI to human readable documentation of the error
+x-original-swagger-version: "2.0"

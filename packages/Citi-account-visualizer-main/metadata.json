@@ -1,0 +1,6 @@
+{
+  "name": "Citi Developer Account Insights & API Playground",
+  "description": "Pull and visualize Citi accounts, credit cards, loans, savings, and investments with live API proxy and sandbox simulator.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

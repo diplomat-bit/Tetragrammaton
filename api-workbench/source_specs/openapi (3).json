@@ -1,0 +1,2199 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Custody",
+    "description": "Access Accounts, Holdings, Transactions, Tax lots and Failed Trades data for Institutional clients \n",
+    "termsOfService": "https://developer.usbank.com/terms",
+    "contact": {
+      "url": "https://developer.usbank.com/support/create"
+    },
+    "license": {
+      "name": "U.S. Bank Operating Rules",
+      "url": "https://developer.usbank.com/terms"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://sandbox.usbank.com/wmis/custody-services/v1",
+      "description": "Sandbox URL"
+    },
+    {
+      "url": "https://alpha-api2.usbank.com/wmis/custody-services/v1",
+      "description": "UAT URL"
+    },
+    {
+      "url": "https://api2.usbank.com/wmis/custody-services/v1",
+      "description": "Production URL"
+    }
+  ],
+  "security": [
+    {
+      "oAuthClientCredential": []
+    }
+  ],
+  "paths": {
+    "/accounts": {
+      "get": {
+        "tags": [
+          "Account(s)"
+        ],
+        "summary": "Get the list of all accounts associated with the client/institution.",
+        "description": "Get the list of all accounts associated with the client/institution..",
+        "operationId": "getAccountList",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Accept"
+          },
+          {
+            "$ref": "#/components/parameters/Authorization"
+          },
+          {
+            "$ref": "#/components/parameters/Correlation-ID"
+          },
+          {
+            "$ref": "#/components/parameters/PageNumber"
+          },
+          {
+            "$ref": "#/components/parameters/PageSize"
+          },
+          {
+            "name": "accountGroupId",
+            "in": "query",
+            "description": "Optional accountGroupId that can be passed to fetch accounts from a specific account group",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "headers": {
+              "Correlation-ID": {
+                "$ref": "#/components/headers/Correlation-ID"
+              },
+              "Content-Type": {
+                "$ref": "#/components/headers/Content-Type"
+              },
+              "Date": {
+                "$ref": "#/components/headers/Date"
+              },
+              "Version": {
+                "$ref": "#/components/headers/Version"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "accounts": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/AccountDetail"
+                      }
+                    },
+                    "pagination": {
+                      "$ref": "#/components/schemas/PageMeta"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "405": {
+            "$ref": "#/components/responses/405"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          },
+          "503": {
+            "$ref": "#/components/responses/503"
+          }
+        }
+      }
+    },
+    "/accounts/holdings": {
+      "post": {
+        "tags": [
+          "Holdings"
+        ],
+        "summary": "Get holdings for a list of accounts.",
+        "description": "* Reconcile the previous business day's holdings and market value by account\n",
+        "operationId": "getHoldings",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Authorization"
+          },
+          {
+            "$ref": "#/components/parameters/Correlation-ID"
+          },
+          {
+            "$ref": "#/components/parameters/Accept"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Request"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Get Holdings",
+            "headers": {
+              "Correlation-ID": {
+                "$ref": "#/components/headers/Correlation-ID"
+              },
+              "Content-Type": {
+                "$ref": "#/components/headers/Content-Type"
+              },
+              "Version": {
+                "$ref": "#/components/headers/Version"
+              },
+              "Date": {
+                "$ref": "#/components/headers/Date"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Holdings"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "405": {
+            "$ref": "#/components/responses/405"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          },
+          "503": {
+            "$ref": "#/components/responses/503"
+          }
+        }
+      }
+    },
+    "/accounts/transactions": {
+      "post": {
+        "tags": [
+          "Transactions"
+        ],
+        "summary": "Get transactions for a list of accounts.",
+        "description": "* Get list of transactions\n",
+        "operationId": "getTransactions",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Authorization"
+          },
+          {
+            "$ref": "#/components/parameters/Correlation-ID"
+          },
+          {
+            "$ref": "#/components/parameters/Accept"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TransactionsRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Get Transactions",
+            "headers": {
+              "Correlation-ID": {
+                "$ref": "#/components/headers/Correlation-ID"
+              },
+              "Content-Type": {
+                "$ref": "#/components/headers/Content-Type"
+              },
+              "Version": {
+                "$ref": "#/components/headers/Version"
+              },
+              "Date": {
+                "$ref": "#/components/headers/Date"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Transactions"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "405": {
+            "$ref": "#/components/responses/405"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          },
+          "503": {
+            "$ref": "#/components/responses/503"
+          }
+        }
+      }
+    },
+    "/accounts/taxlots": {
+      "post": {
+        "tags": [
+          "Tax Lots"
+        ],
+        "summary": "Get tax lots for a list of accounts.",
+        "description": "* Get Tax lots for a list of accounts\n",
+        "operationId": "getTaxlots",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Authorization"
+          },
+          {
+            "$ref": "#/components/parameters/Correlation-ID"
+          },
+          {
+            "$ref": "#/components/parameters/Accept"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Request"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Get Tax lots",
+            "headers": {
+              "Correlation-ID": {
+                "$ref": "#/components/headers/Correlation-ID"
+              },
+              "Content-Type": {
+                "$ref": "#/components/headers/Content-Type"
+              },
+              "Version": {
+                "$ref": "#/components/headers/Version"
+              },
+              "Date": {
+                "$ref": "#/components/headers/Date"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TaxLots"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "405": {
+            "$ref": "#/components/responses/405"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          },
+          "503": {
+            "$ref": "#/components/responses/503"
+          }
+        }
+      }
+    },
+    "/accounts/assets": {
+      "post": {
+        "tags": [
+          "Assets"
+        ],
+        "summary": "Get asset details.",
+        "description": "Get asset details",
+        "operationId": "getAssets",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Authorization"
+          },
+          {
+            "$ref": "#/components/parameters/Correlation-ID"
+          },
+          {
+            "$ref": "#/components/parameters/Accept"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AssetsRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Get asset details",
+            "headers": {
+              "Correlation-ID": {
+                "$ref": "#/components/headers/Correlation-ID"
+              },
+              "Content-Type": {
+                "$ref": "#/components/headers/Content-Type"
+              },
+              "Version": {
+                "$ref": "#/components/headers/Version"
+              },
+              "Date": {
+                "$ref": "#/components/headers/Date"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Assets"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "405": {
+            "$ref": "#/components/responses/405"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          },
+          "503": {
+            "$ref": "#/components/responses/503"
+          }
+        }
+      }
+    },
+    "/accounts/failedtrades": {
+      "post": {
+        "tags": [
+          "Failed Trades"
+        ],
+        "summary": "Get Failed Trades.",
+        "description": "* Get failed trades\n",
+        "operationId": "getFailedTrades",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Authorization"
+          },
+          {
+            "$ref": "#/components/parameters/Correlation-ID"
+          },
+          {
+            "$ref": "#/components/parameters/Accept"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FailedTradesRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Get Failed Trades",
+            "headers": {
+              "Correlation-ID": {
+                "$ref": "#/components/headers/Correlation-ID"
+              },
+              "Content-Type": {
+                "$ref": "#/components/headers/Content-Type"
+              },
+              "Version": {
+                "$ref": "#/components/headers/Version"
+              },
+              "Date": {
+                "$ref": "#/components/headers/Date"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FailedTrades"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "405": {
+            "$ref": "#/components/responses/405"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          },
+          "503": {
+            "$ref": "#/components/responses/503"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "parameters": {
+      "Correlation-ID": {
+        "name": "Correlation-ID",
+        "in": "header",
+        "description": "Unique identifier for every request-response pair. If correlation-id is not mandated to be required by the consumer of the API, it will be auto-populated by Apigee. For external APIs, if partner is unable to provide this value, it can be populated by Apigee",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "Authorization": {
+        "name": "Authorization",
+        "in": "header",
+        "required": true,
+        "description": "Authorization - OAuth Client Credential Grant",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "Accept": {
+        "name": "Accept",
+        "in": "header",
+        "required": true,
+        "description": "Indicates the acceptable response format. Recommended to use application/json.",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "AccountGroupId": {
+        "name": "AccountGroupId",
+        "in": "header",
+        "required": false,
+        "description": "Account Group Identifier",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "AccountId": {
+        "name": "accountId",
+        "in": "path",
+        "description": "Account Identifier",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "AsOfDate": {
+        "name": "asOfDate",
+        "in": "query",
+        "required": false,
+        "description": "As of Date",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "PageNumber": {
+        "name": "pageNumber",
+        "in": "query",
+        "required": false,
+        "description": "Page Number",
+        "schema": {
+          "type": "integer",
+          "format": "int32"
+        }
+      },
+      "PageSize": {
+        "name": "pageSize",
+        "in": "query",
+        "required": false,
+        "description": "The size of the items array for this page",
+        "schema": {
+          "type": "integer",
+          "format": "int32",
+          "maximum": 100
+        }
+      }
+    },
+    "schemas": {
+      "AccountDetail": {
+        "type": "object",
+        "properties": {
+          "accountId": {
+            "$ref": "#/components/schemas/AccountId"
+          },
+          "accountNumber": {
+            "type": "string",
+            "example": "1234568"
+          },
+          "accountName": {
+            "type": "string",
+            "example": "XYZ Joint Account FD"
+          },
+          "accountType": {
+            "type": "string",
+            "example": "investment"
+          },
+          "accountClassification": {
+            "type": "string",
+            "example": "escrow"
+          },
+          "accountGroupId": {
+            "type": "string",
+            "example": "643"
+          },
+          "accountGroupName": {
+            "type": "string",
+            "description": "Client/partner account group name",
+            "example": "escrowGE"
+          },
+          "accountGroupDescription": {
+            "type": "string",
+            "description": "Account Group description",
+            "example": "escrow account"
+          },
+          "clientId": {
+            "type": "string",
+            "example": "6592"
+          },
+          "clientName": {
+            "type": "string",
+            "example": "xyz corp"
+          },
+          "firmId": {
+            "type": "string",
+            "example": "191"
+          },
+          "firmName": {
+            "type": "string",
+            "example": "GTC"
+          },
+          "subFirmId": {
+            "type": "string",
+            "example": "1010"
+          },
+          "subFirmName": {
+            "type": "string",
+            "example": "US GTC"
+          }
+        }
+      },
+      "AccountId": {
+        "description": "Long-term persistent identity of the account. This is not the account number.",
+        "type": "string",
+        "example": "a6c93fd4-bf67-b8666eea3232",
+        "maxLength": 128
+      },
+      "Assets": {
+        "type": "object",
+        "properties": {
+          "assets": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "cusip": {
+                  "$ref": "#/components/schemas/Cusip"
+                },
+                "ticker": {
+                  "$ref": "#/components/schemas/Ticker"
+                },
+                "sedol": {
+                  "$ref": "#/components/schemas/Sedol"
+                },
+                "isin": {
+                  "$ref": "#/components/schemas/Isin"
+                },
+                "firmDefinedSecurityId": {
+                  "$ref": "#/components/schemas/FirmDefinedSecurityId"
+                },
+                "optionIdentifierId": {
+                  "$ref": "#/components/schemas/OptionIdentifierId"
+                },
+                "optionTradingId": {
+                  "$ref": "#/components/schemas/OptionTradingId"
+                },
+                "instrumentShortName": {
+                  "type": "string",
+                  "example": "asset backed sec",
+                  "description": "Security Short name"
+                },
+                "instrumentLongName": {
+                  "type": "string",
+                  "description": "Security Long name",
+                  "example": "asset backed sec"
+                },
+                "instrumentTypeCode": {
+                  "type": "string",
+                  "example": "MXADF"
+                },
+                "instrumentTypeLongDesc": {
+                  "type": "string",
+                  "example": "corporate secured variable rate"
+                },
+                "majorAssetCategoryCode": {
+                  "type": "string",
+                  "example": "DBVSXXX"
+                },
+                "majorAssetCategoryDescription": {
+                  "type": "string",
+                  "example": "corporate secured variable bond"
+                },
+                "issueCurrencyCode": {
+                  "$ref": "#/components/schemas/CurrencyCode"
+                },
+                "issueCountry": {
+                  "type": "string",
+                  "description": "Issue Country",
+                  "example": "US"
+                },
+                "industryCode": {
+                  "type": "string",
+                  "description": "Industry Code",
+                  "example": "US"
+                },
+                "industryLongDesc": {
+                  "type": "string",
+                  "description": "Industry Long Description",
+                  "example": "United States of America"
+                },
+                "snpRatingCode": {
+                  "type": "string",
+                  "description": "Rating assigned to the Investment by Standard & Poor Inc",
+                  "example": "CC"
+                },
+                "moodysRatingCode": {
+                  "type": "string",
+                  "description": "Rating Assigned to Investment by Moody's Inc",
+                  "example": "BBB"
+                },
+                "paymentFrequency": {
+                  "type": "integer",
+                  "format": "int64",
+                  "description": "Number of Payments per year",
+                  "example": 52
+                },
+                "couponRate": {
+                  "type": "number",
+                  "description": "Interest Rate on a Debt security",
+                  "example": 2.5
+                },
+                "maturityDate": {
+                  "$ref": "#/components/schemas/DateTimestamp"
+                },
+                "exDividendDate": {
+                  "$ref": "#/components/schemas/DateTimestamp"
+                },
+                "recordDate": {
+                  "$ref": "#/components/schemas/DateTimestamp"
+                },
+                "paymentDate": {
+                  "$ref": "#/components/schemas/DateTimestamp"
+                },
+                "nextPaymentDate": {
+                  "$ref": "#/components/schemas/DateTimestamp"
+                },
+                "priceDate": {
+                  "$ref": "#/components/schemas/DateTimestamp"
+                },
+                "price": {
+                  "type": "string",
+                  "example": 3569.9
+                },
+                "dividendAmount": {
+                  "type": "number",
+                  "example": 1
+                },
+                "currentFactor": {
+                  "type": "number",
+                  "example": 0.5
+                },
+                "issueDate": {
+                  "$ref": "#/components/schemas/DateTimestamp"
+                }
+              }
+            }
+          },
+          "pagination": {
+            "$ref": "#/components/schemas/PageMeta"
+          }
+        }
+      },
+      "AssetsRequest": {
+        "type": "object",
+        "properties": {
+          "assets": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "assetIdentifierType": {
+                  "type": "string",
+                  "enum": [
+                    "CUSIP",
+                    "TICKER",
+                    "SEDOL",
+                    "ISIN",
+                    "FIRMDEFINEDSECURITYID",
+                    "OPTIONIDENTIFIERID",
+                    "OPTIONTRADINGID"
+                  ]
+                },
+                "assetIdentifierValue": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "Cusip": {
+        "description": "An alphanumeric securities identifier assigned by the Committee on Uniform Security Identification Procedures (CUSIP) for the purposes of facilitating clearing and settlement of trades.",
+        "type": "string",
+        "example": 73240000
+      },
+      "Ticker": {
+        "description": "A ticker symbol used to identify a stock.",
+        "type": "string",
+        "example": "BFP30"
+      },
+      "Sedol": {
+        "description": "The Stock Exchange Daily Official List (SEDOL) is a list of security identifiers used in the United Kingdom and Ireland for clearing purposes.",
+        "type": "string",
+        "example": "B0999"
+      },
+      "Isin": {
+        "description": "The International Securities Identification Number (ISIN) is an alphanumeric code that identifies a specific securities issue.",
+        "type": "string",
+        "example": "US0732E45"
+      },
+      "FirmDefinedSecurityId": {
+        "type": "string",
+        "example": "A000"
+      },
+      "OptionIdentifierId": {
+        "type": "string",
+        "description": "Option Identifier ID",
+        "example": 54678
+      },
+      "OptionTradingId": {
+        "type": "string",
+        "description": "Option Trading ID",
+        "example": 345
+      },
+      "CurrencyCode": {
+        "type": "string",
+        "description": "ISO currency code",
+        "example": "USD"
+      },
+      "DateTimestamp": {
+        "description": "ISO 8601 date time with milliseconds in UTC time zone. example  2018-12-23T18:41:33.982Z",
+        "type": "string",
+        "format": "dateTime",
+        "example": "2022-04-22T18:41:33.982Z"
+      },
+      "FailedTrades": {
+        "type": "object",
+        "properties": {
+          "failedTrades": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "accountId": {
+                  "$ref": "#/components/schemas/AccountId"
+                },
+                "asOfDate": {
+                  "description": "The date for which the holdings are returned. Default will be EOD yesterday",
+                  "$ref": "#/components/schemas/DateTimestamp"
+                },
+                "cusip": {
+                  "$ref": "#/components/schemas/Cusip"
+                },
+                "ticker": {
+                  "$ref": "#/components/schemas/Ticker"
+                },
+                "sedol": {
+                  "$ref": "#/components/schemas/Sedol"
+                },
+                "isin": {
+                  "$ref": "#/components/schemas/Isin"
+                },
+                "firmDefinedSecurityId": {
+                  "$ref": "#/components/schemas/FirmDefinedSecurityId"
+                },
+                "optionIdentifierId": {
+                  "$ref": "#/components/schemas/OptionIdentifierId"
+                },
+                "optionTradingId": {
+                  "$ref": "#/components/schemas/OptionTradingId"
+                },
+                "accountAdministrator": {
+                  "type": "string",
+                  "example": "HAE"
+                },
+                "globalServicesRep": {
+                  "type": "string",
+                  "example": "HAE"
+                },
+                "operationsAnalyst": {
+                  "type": "string",
+                  "example": "EB"
+                },
+                "operationsSpecialist": {
+                  "type": "string",
+                  "example": "EB"
+                },
+                "relationshipManager": {
+                  "type": "string",
+                  "example": "NCJ"
+                },
+                "reviewAnalyst": {
+                  "type": "string",
+                  "example": "EB"
+                },
+                "tradeServiceTeam": {
+                  "type": "string",
+                  "example": "Axia"
+                },
+                "externalInvestmentAdvisor": {
+                  "type": "string",
+                  "example": "EB"
+                },
+                "tradeDate": {
+                  "$ref": "#/components/schemas/DateTimestamp"
+                },
+                "settlementDate": {
+                  "$ref": "#/components/schemas/DateTimestamp"
+                },
+                "tradeActivityId": {
+                  "type": "string",
+                  "example": "10265933"
+                },
+                "transactionTypeDesc": {
+                  "type": "string",
+                  "example": "buy"
+                },
+                "executingBrokerName": {
+                  "type": "string",
+                  "example": "securities 190"
+                },
+                "executingBrokerNumber": {
+                  "type": "string",
+                  "example": "016"
+                },
+                "clearingBrokerName": {
+                  "type": "string",
+                  "example": "securities 190"
+                },
+                "clearingBrokerNumber": {
+                  "type": "string",
+                  "example": "016"
+                },
+                "transactionUnitQuantity": {
+                  "type": "number",
+                  "example": 10000
+                },
+                "originalFaceAmount": {
+                  "type": "number",
+                  "example": 1000.98
+                },
+                "currentFaceAmount": {
+                  "type": "number",
+                  "example": 1000.98
+                },
+                "transactionPrice": {
+                  "type": "number",
+                  "example": 1000.98
+                },
+                "transactionAmount": {
+                  "type": "number",
+                  "example": 1000.98
+                },
+                "accruedInterestNetAmount": {
+                  "type": "number",
+                  "example": 0
+                },
+                "brokerCommissionAmount": {
+                  "type": "number",
+                  "example": 100
+                },
+                "secFeeAmount": {
+                  "type": "number",
+                  "example": 10
+                },
+                "miscFeeAmount": {
+                  "type": "number",
+                  "example": 9.8
+                },
+                "otherFeeAmount": {
+                  "type": "number",
+                  "example": 0
+                },
+                "baseNetTransactionAmount": {
+                  "type": "number",
+                  "example": 9900
+                },
+                "transactionNetAmount": {
+                  "type": "number",
+                  "example": 9900
+                },
+                "externalReferenceNumber": {
+                  "type": "string",
+                  "example": "AREF345"
+                },
+                "swiftReferenceText": {
+                  "type": "string",
+                  "example": "SF667"
+                },
+                "dtccControlNumber": {
+                  "type": "string",
+                  "example": 3789
+                },
+                "custodianName": {
+                  "type": "string",
+                  "example": "Depository trust company"
+                },
+                "custodyAccountNumber": {
+                  "type": "string",
+                  "example": "7856823"
+                },
+                "placeOfSafekeepingName": {
+                  "type": "string",
+                  "example": "Depository trust company"
+                },
+                "blockTradeFlag": {
+                  "type": "string",
+                  "example": "N"
+                }
+              }
+            }
+          },
+          "pagination": {
+            "$ref": "#/components/schemas/PageMeta"
+          }
+        }
+      },
+      "Holdings": {
+        "type": "object",
+        "properties": {
+          "holdings": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "accountId": {
+                  "$ref": "#/components/schemas/AccountId"
+                },
+                "asOfDate": {
+                  "description": "The date for which the holdings are returned. Default will be EOD yesterday",
+                  "$ref": "#/components/schemas/DateTimestamp"
+                },
+                "portfolioTypeCode": {
+                  "type": "string",
+                  "example": "CAI546"
+                },
+                "portfolioTypeDescription": {
+                  "type": "string",
+                  "example": "Capital Info"
+                },
+                "portfolioLongName": {
+                  "type": "string",
+                  "example": "Main"
+                },
+                "cusip": {
+                  "$ref": "#/components/schemas/Cusip"
+                },
+                "ticker": {
+                  "$ref": "#/components/schemas/Ticker"
+                },
+                "sedol": {
+                  "$ref": "#/components/schemas/Sedol"
+                },
+                "isin": {
+                  "$ref": "#/components/schemas/Isin"
+                },
+                "firmDefinedSecurityId": {
+                  "$ref": "#/components/schemas/FirmDefinedSecurityId"
+                },
+                "optionIdentifierId": {
+                  "$ref": "#/components/schemas/OptionIdentifierId"
+                },
+                "optionTradingId": {
+                  "$ref": "#/components/schemas/OptionTradingId"
+                },
+                "settledUnitQuantity": {
+                  "type": "number",
+                  "example": 23
+                },
+                "tradedUnitQuantity": {
+                  "type": "number",
+                  "example": 34
+                },
+                "tradedCurrentFaceAmount": {
+                  "type": "number",
+                  "example": 356.89
+                },
+                "settledCurrentFaceAmount": {
+                  "type": "number",
+                  "example": 356.89
+                },
+                "tradedOriginalFaceAmount": {
+                  "type": "number",
+                  "example": 356.89
+                },
+                "settledOriginalFaceAmount": {
+                  "type": "number",
+                  "example": 356.89
+                },
+                "blockedUnitQuantity": {
+                  "type": "number",
+                  "example": 67
+                },
+                "baseSettledMarketValue": {
+                  "type": "number",
+                  "example": 8789.9
+                },
+                "baseTradedMarketValue": {
+                  "type": "number",
+                  "example": 95689.9
+                },
+                "localSettledMarketValue": {
+                  "type": "number",
+                  "example": 6789.95
+                },
+                "localTradedMarketValue": {
+                  "type": "number",
+                  "example": 87689.67
+                },
+                "baseSettledNationalCost": {
+                  "type": "number",
+                  "example": 876.7
+                },
+                "baseTradedNationalCost": {
+                  "type": "number",
+                  "example": 35689.9
+                },
+                "localSettledNationalCost": {
+                  "type": "number",
+                  "example": 34600.7
+                },
+                "localTradedNationalCost": {
+                  "type": "number",
+                  "example": 35689.9
+                },
+                "localSettledUnrealilzdGainLoss": {
+                  "type": "number",
+                  "example": 1569.98
+                },
+                "baseSettledUnrealizedGainLoss": {
+                  "type": "number",
+                  "example": 5679.34
+                },
+                "localTradedUnrealilzdGainLoss": {
+                  "type": "number",
+                  "example": 35689.9
+                },
+                "baseTradedUnrealizedGainLoss": {
+                  "type": "number",
+                  "example": 35689.9
+                },
+                "baseSettledBookCost": {
+                  "type": "number",
+                  "example": 35689.9
+                },
+                "baseTradedBookCost": {
+                  "type": "number",
+                  "example": 35689.9
+                },
+                "localSettledBookCost": {
+                  "type": "number",
+                  "example": 35689.9
+                },
+                "localTradedBookCost": {
+                  "type": "number",
+                  "example": 35689.9
+                },
+                "localStateTradedCost": {
+                  "type": "number",
+                  "example": 35689.9
+                },
+                "baseStateTradedCost": {
+                  "type": "number",
+                  "example": 35689.9
+                },
+                "localStateSettledCost": {
+                  "type": "number",
+                  "example": 35689.9
+                },
+                "baseStateSettledCost": {
+                  "type": "number",
+                  "example": 35689.9
+                },
+                "baseAccrualAmount": {
+                  "type": "number",
+                  "example": 35689.9
+                },
+                "localAccrualAmount": {
+                  "type": "number",
+                  "example": 35689.9
+                },
+                "yieldRate": {
+                  "type": "number",
+                  "example": 3.7
+                },
+                "estimatedAnnualIncome": {
+                  "type": "number",
+                  "example": 15689090.9
+                },
+                "accountStateCode": {
+                  "type": "string",
+                  "example": "MN"
+                },
+                "dividendAmountRate": {
+                  "type": "number",
+                  "example": 35689.9
+                },
+                "currentFactor": {
+                  "type": "number",
+                  "example": 35689.9
+                },
+                "actualSettledQuantity": {
+                  "type": "number",
+                  "example": 876
+                },
+                "actualSettledCurrentFaceAmount": {
+                  "type": "number",
+                  "example": 65878
+                }
+              }
+            }
+          },
+          "pagination": {
+            "$ref": "#/components/schemas/PageMeta"
+          }
+        }
+      },
+      "Request": {
+        "type": "object",
+        "required": [
+          "accountId"
+        ],
+        "properties": {
+          "accountGroupId": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "accountId": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "asOfDate": {
+            "description": "The date for which the holdings are returned. Default will be EOD yesterday",
+            "$ref": "#/components/schemas/DateTimestamp"
+          },
+          "pageNumber": {
+            "type": "integer",
+            "description": "Page number"
+          },
+          "pageSize": {
+            "type": "integer",
+            "description": "Results per page",
+            "maximum": 200,
+            "default": 200
+          }
+        }
+      },
+      "FailedTradesRequest": {
+        "type": "object",
+        "required": [
+          "accountId"
+        ],
+        "properties": {
+          "accountGroupId": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "accountId": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "pageNumber": {
+            "type": "integer",
+            "description": "Page number"
+          },
+          "pageSize": {
+            "type": "integer",
+            "description": "Results per page",
+            "maximum": 200,
+            "default": 200
+          }
+        }
+      },
+      "TransactionsRequest": {
+        "type": "object",
+        "required": [
+          "accountId"
+        ],
+        "properties": {
+          "accountGroupId": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "accountId": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "fromDate": {
+            "$ref": "#/components/schemas/DateTimestamp"
+          },
+          "toDate": {
+            "$ref": "#/components/schemas/DateTimestamp"
+          },
+          "pageNumber": {
+            "type": "integer",
+            "description": "Page number"
+          },
+          "pageSize": {
+            "type": "integer",
+            "description": "Results per page",
+            "maximum": 200,
+            "default": 200
+          }
+        }
+      },
+      "PageMeta": {
+        "type": "object",
+        "description": "Pagination to minimize response times for requests and generally improve the end-user experience",
+        "properties": {
+          "pageSize": {
+            "type": "integer",
+            "format": "int32",
+            "example": 100,
+            "description": "Results per page",
+            "default": 25
+          },
+          "pageNumber": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Current page number",
+            "default": 1
+          },
+          "totalRecords": {
+            "type": "integer",
+            "description": "Total number of records in the collection",
+            "example": 400
+          },
+          "totalPages": {
+            "type": "integer",
+            "description": "Total number of pages encompassing all available records",
+            "example": 20
+          },
+          "links": {
+            "$ref": "#/components/schemas/PageLinks"
+          }
+        }
+      },
+      "PageLinks": {
+        "type": "object",
+        "description": "links",
+        "properties": {
+          "self": {
+            "type": "string",
+            "description": "URL for current page",
+            "example": "/accounts?pageNumber=2&pageSize=40"
+          },
+          "first": {
+            "type": "string",
+            "description": "URL for first page",
+            "example": "/accounts?pageNumber=1&pageSize=40"
+          },
+          "last": {
+            "type": "string",
+            "description": "URL for last page",
+            "example": "/accounts?pageNumber=5&pageSize=40"
+          },
+          "prev": {
+            "type": "string",
+            "description": "URL for previous page",
+            "example": "/accounts?pageNumber=1&pageSize=40"
+          },
+          "next": {
+            "type": "string",
+            "description": "URL for next page",
+            "example": "/accounts?pageNumber=3&pageSize=40"
+          }
+        }
+      },
+      "TaxLots": {
+        "type": "object",
+        "properties": {
+          "taxlots": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "accountId": {
+                  "$ref": "#/components/schemas/AccountId"
+                },
+                "asOfDate": {
+                  "description": "The date for which the holdings are returned. Default will be EOD yesterday",
+                  "$ref": "#/components/schemas/DateTimestamp"
+                },
+                "portfolioTypeCode": {
+                  "type": "string",
+                  "example": "200"
+                },
+                "portfolioTypeDesc": {
+                  "type": "string",
+                  "example": "Capital Portfolio"
+                },
+                "portfolioLongName": {
+                  "type": "string",
+                  "example": "Primary (capital)"
+                },
+                "cusip": {
+                  "$ref": "#/components/schemas/Cusip"
+                },
+                "ticker": {
+                  "$ref": "#/components/schemas/Ticker"
+                },
+                "sedol": {
+                  "$ref": "#/components/schemas/Sedol"
+                },
+                "isin": {
+                  "$ref": "#/components/schemas/Isin"
+                },
+                "firmDefinedSecurityId": {
+                  "$ref": "#/components/schemas/FirmDefinedSecurityId"
+                },
+                "optionIdentifierId": {
+                  "$ref": "#/components/schemas/OptionIdentifierId"
+                },
+                "optionTradingId": {
+                  "$ref": "#/components/schemas/OptionTradingId"
+                },
+                "rate": {
+                  "type": "string",
+                  "example": "1"
+                },
+                "taxlotId": {
+                  "type": "string",
+                  "example": "1337155"
+                },
+                "transactionDate": {
+                  "$ref": "#/components/schemas/DateTimestamp"
+                },
+                "tradeDate": {
+                  "$ref": "#/components/schemas/DateTimestamp"
+                },
+                "settlementDate": {
+                  "$ref": "#/components/schemas/DateTimestamp"
+                },
+                "taxlotUnitQuantity": {
+                  "type": "number",
+                  "example": 34
+                },
+                "originalFaceAmount": {
+                  "type": "number",
+                  "example": 14600
+                },
+                "currentFaceAmount": {
+                  "type": "number",
+                  "example": 14600
+                },
+                "availableUnitQuantity": {
+                  "type": "number",
+                  "example": 34
+                },
+                "blockedTaxlotUnitQuantity": {
+                  "type": "number",
+                  "example": 34
+                },
+                "custodianId": {
+                  "type": "string",
+                  "example": 578235
+                },
+                "custodianName": {
+                  "type": "string",
+                  "example": "MSP"
+                },
+                "custodyAccountNumber": {
+                  "type": "string",
+                  "example": "10479782"
+                },
+                "placeOfSafekeepingId": {
+                  "type": "string",
+                  "example": "578256"
+                },
+                "placeOfSafekeepingName": {
+                  "type": "string",
+                  "example": "Milwaukee"
+                },
+                "localCurrencyCode": {
+                  "$ref": "#/components/schemas/CurrencyCode"
+                },
+                "baseCurrencyCode": {
+                  "$ref": "#/components/schemas/CurrencyCode"
+                },
+                "localBaseCostFxRate": {
+                  "type": "number",
+                  "example": 1
+                },
+                "baseMarketValue": {
+                  "type": "number",
+                  "example": 0
+                },
+                "localMarketValue": {
+                  "type": "number",
+                  "example": 0
+                },
+                "baseNationalCostAmount": {
+                  "type": "number",
+                  "example": 1
+                },
+                "localNationalCostAmount": {
+                  "type": "number",
+                  "example": 1
+                },
+                "localUnrealizedGainLossAmount": {
+                  "type": "number",
+                  "example": -1
+                },
+                "baseUnrealizedGainLossAmount": {
+                  "type": "number",
+                  "example": 67.87
+                },
+                "baseOriginalCostAmount": {
+                  "type": "number",
+                  "example": 1
+                },
+                "localOriginalCostAmount": {
+                  "type": "number",
+                  "example": 1
+                },
+                "localStateCostAmount": {
+                  "type": "number",
+                  "example": 1
+                },
+                "baseStateCostAmount": {
+                  "type": "number",
+                  "example": 1
+                },
+                "accruedInterestNetAmount": {
+                  "type": "number",
+                  "example": 0
+                },
+                "acquisitionMethodCode": {
+                  "type": "string",
+                  "example": "1"
+                },
+                "acquisitionMethodDesc": {
+                  "type": "string",
+                  "example": "Funded"
+                },
+                "acquisitionDate": {
+                  "$ref": "#/components/schemas/DateTimestamp"
+                },
+                "clientId": {
+                  "type": "string",
+                  "example": "A123"
+                }
+              }
+            }
+          },
+          "pagination": {
+            "$ref": "#/components/schemas/PageMeta"
+          }
+        }
+      },
+      "Transactions": {
+        "type": "object",
+        "properties": {
+          "transactions": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "accountId": {
+                  "$ref": "#/components/schemas/AccountId"
+                },
+                "portfolioLongName": {
+                  "type": "string",
+                  "example": "Primary (capital)"
+                },
+                "portfolioTypeCode": {
+                  "type": "string",
+                  "example": "200"
+                },
+                "portfolioTypeDesc": {
+                  "type": "string",
+                  "example": "Capital Portfolio"
+                },
+                "cusip": {
+                  "$ref": "#/components/schemas/Cusip"
+                },
+                "ticker": {
+                  "$ref": "#/components/schemas/Ticker"
+                },
+                "sedol": {
+                  "$ref": "#/components/schemas/Sedol"
+                },
+                "isin": {
+                  "$ref": "#/components/schemas/Isin"
+                },
+                "firmDefinedSecurityId": {
+                  "$ref": "#/components/schemas/FirmDefinedSecurityId"
+                },
+                "optionIdentifierId": {
+                  "$ref": "#/components/schemas/OptionIdentifierId"
+                },
+                "optionTradingId": {
+                  "$ref": "#/components/schemas/OptionTradingId"
+                },
+                "transactionDate": {
+                  "$ref": "#/components/schemas/DateTimestamp"
+                },
+                "tradeDate": {
+                  "$ref": "#/components/schemas/DateTimestamp"
+                },
+                "settlementDate": {
+                  "$ref": "#/components/schemas/DateTimestamp"
+                },
+                "actualSettlementDate": {
+                  "$ref": "#/components/schemas/DateTimestamp"
+                },
+                "transactionId": {
+                  "type": "string",
+                  "example": 1000925
+                },
+                "transactionDesc": {
+                  "type": "string",
+                  "example": "Sale 0.02 Units of US BANK MMDA"
+                },
+                "transactionTypeCode": {
+                  "type": "string",
+                  "example": 20
+                },
+                "txnDescriptionCode": {
+                  "type": "string",
+                  "example": 202
+                },
+                "txnDescriptionDesc": {
+                  "type": "string",
+                  "example": "sell"
+                },
+                "executingBrokerNumber": {
+                  "type": "string",
+                  "example": 123
+                },
+                "executingBrokerName": {
+                  "type": "string",
+                  "example": "USB"
+                },
+                "clearingBrokerNumber": {
+                  "type": "string",
+                  "example": 123
+                },
+                "clearingBrokerName": {
+                  "type": "string",
+                  "example": "USB"
+                },
+                "localCurrencyCode": {
+                  "$ref": "#/components/schemas/CurrencyCode"
+                },
+                "transactionUnitQuantity": {
+                  "type": "number",
+                  "example": 27
+                },
+                "orginalFaceAmount": {
+                  "type": "number",
+                  "example": 1000.04
+                },
+                "currentFaceAmount": {
+                  "type": "number",
+                  "example": 999.89
+                },
+                "transactionPrice": {
+                  "type": "number",
+                  "example": 1
+                },
+                "accruedInterestNetAmount": {
+                  "type": "number",
+                  "example": 0
+                },
+                "chargesNetAmount": {
+                  "type": "number",
+                  "example": 0
+                },
+                "totalTaxAmount": {
+                  "type": "number",
+                  "example": 0
+                },
+                "brokerCommissionAmount": {
+                  "type": "number",
+                  "example": 5.76
+                },
+                "secFeeAmount": {
+                  "type": "number",
+                  "example": 12.98
+                },
+                "miscellaneousFeesAmount": {
+                  "type": "number",
+                  "example": 67.53
+                },
+                "transactionNetAmount": {
+                  "type": "number",
+                  "example": 638.01
+                },
+                "baseNetTransactionAmount": {
+                  "type": "number",
+                  "example": 0.02
+                },
+                "baseCurrencyCode": {
+                  "$ref": "#/components/schemas/CurrencyCode"
+                },
+                "localToBaseExchangeRate": {
+                  "type": "number",
+                  "example": 1
+                },
+                "baseTotalProceedsAmount": {
+                  "type": "number",
+                  "example": 1000
+                },
+                "localTotalProceedsAmount": {
+                  "type": "number",
+                  "example": 1000
+                },
+                "baseTotalCostAmount": {
+                  "type": "number",
+                  "example": 0.02
+                },
+                "localTotalCostAmount": {
+                  "type": "number",
+                  "example": 0.02
+                },
+                "baseBookCostAmount": {
+                  "type": "number",
+                  "example": 0.02
+                },
+                "localBookCostAmount": {
+                  "type": "number",
+                  "example": 0.02
+                },
+                "baseFederalLongTermRealizedGainLossAmount": {
+                  "type": "number",
+                  "example": 200
+                },
+                "localFederalLongTermRealizedGainLossAmount": {
+                  "type": "number",
+                  "example": 200
+                },
+                "baseFederalShortTermRealizedGainLossAmount": {
+                  "type": "number",
+                  "example": 200
+                },
+                "localFederalShortTermRealizedGainLossAmount": {
+                  "type": "number",
+                  "example": 200
+                },
+                "localStateCostAmount": {
+                  "type": "number",
+                  "example": 0.02
+                },
+                "baseStateCostAmount": {
+                  "type": "number",
+                  "example": 0.02
+                },
+                "localStateLtGainLossAmount": {
+                  "type": "number",
+                  "example": 200
+                },
+                "localStateStGainLossAmount": {
+                  "type": "number",
+                  "example": 100
+                },
+                "baseStateLtGainLossAmount": {
+                  "type": "number",
+                  "example": 200
+                },
+                "baseStateStGainLossAmount": {
+                  "type": "number",
+                  "example": 100
+                },
+                "checkNumber": {
+                  "type": "number",
+                  "example": 12675
+                },
+                "swiftReferenceText": {
+                  "type": "string",
+                  "example": "PASS"
+                },
+                "externalReferenceNumber": {
+                  "type": "number",
+                  "example": 123
+                },
+                "dtccControlNumber": {
+                  "type": "number",
+                  "example": 111
+                },
+                "custodianId": {
+                  "type": "string",
+                  "example": 57824
+                },
+                "custodianName": {
+                  "type": "string",
+                  "example": "MMDA Sweep"
+                },
+                "custodyAccountNumber": {
+                  "type": "string",
+                  "example": 10479782
+                },
+                "placeOfSafekeepingId": {
+                  "type": "string",
+                  "example": 57824831
+                },
+                "placeOfSafekeepingName": {
+                  "type": "string",
+                  "example": "Fund company"
+                },
+                "transactionRemarksText": {
+                  "type": "string",
+                  "example": null
+                },
+                "lastUpdateDate": {
+                  "$ref": "#/components/schemas/DateTimestamp"
+                },
+                "reversalFlag": {
+                  "type": "string",
+                  "example": 0
+                },
+                "reversedTransactionFlag": {
+                  "type": "string",
+                  "example": 0
+                },
+                "suppressionIndicatorCode": {
+                  "type": "string",
+                  "example": 1
+                },
+                "suppressionIndicatorDesc": {
+                  "type": "string",
+                  "example": "no"
+                },
+                "otherFeeAmount": {
+                  "type": "number",
+                  "example": 1
+                },
+                "txnTreatmentCode": {
+                  "type": "string",
+                  "example": "MAS1"
+                },
+                "txnTreatmentDesc": {
+                  "type": "string",
+                  "example": "MAS1"
+                }
+              }
+            }
+          },
+          "pagination": {
+            "$ref": "#/components/schemas/PageMeta"
+          }
+        }
+      },
+      "Errors": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Long term persistent identifier which can be used to trace error condition back to log information. \n  * AAA = 3-Digit HTTP Status Code\n  * BBBB = Apigee Proxy API ID. Assigned by EASE. \n  * CCCC = Backend Error Code. Assigned by Business Line API Development Team\n  Codes returned externally may differ from the codes produced within US Bank by internal facing API.\n",
+            "format": "AAA.BBBB.CCCC"
+          },
+          "message": {
+            "type": "string",
+            "description": "End user displayable information, this is the human readable text that provides a high level categorization of the error that has occurred"
+          },
+          "help": {
+            "type": "string",
+            "description": "Hyperlink(s) to supporting API documentation and U.S. Bank support contacts"
+          },
+          "details": {
+            "description": "An array of detail objects containing the specific information around why the error occurred.  Detail objects must contain attributeName AND reason",
+            "type": "array",
+            "items": {
+              "properties": {
+                "attributeName": {
+                  "type": "string",
+                  "description": "Field that caused the error.  Used in occurrences caused by validation errors"
+                },
+                "reason": {
+                  "type": "string",
+                  "description": "Description of why the field caused an error. Used in occurrences caused by validation errors."
+                }
+              }
+            }
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ]
+      },
+      "GatewayError": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "headers": {
+      "Correlation-ID": {
+        "description": "Unique identifier for every request-response pair. If correlation-id is not mandated to be required by the consumer of the API, it will be auto-populated by Apigee. For external APIs, if partner is unable to provide this value, it can be populated by Apigee",
+        "required": true,
+        "schema": {
+          "pattern": "aaa-#####-#####-#",
+          "type": "string"
+        }
+      },
+      "Version": {
+        "description": "API version code made up of major.minor.patch version",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "example": "v1.0.1"
+        }
+      },
+      "Content-Type": {
+        "description": "Indicates the content format of the payload",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "example": "application/json"
+        }
+      },
+      "Accept": {
+        "required": true,
+        "description": "Indicates the acceptable response format. Recommended to use application/json.",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "Authorization": {
+        "description": "Authorization - OAuth Client Credential Grant",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "Date": {
+        "description": "Server returns a Date header with every response",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "example": "2021-12-19T15:46:26.476Z"
+        }
+      }
+    },
+    "responses": {
+      "400": {
+        "description": "invalid request",
+        "headers": {
+          "Correlation-ID": {
+            "$ref": "#/components/parameters/Correlation-ID"
+          },
+          "Content-Type": {
+            "$ref": "#/components/headers/Content-Type"
+          },
+          "Date": {
+            "$ref": "#/components/headers/Date"
+          },
+          "Version": {
+            "$ref": "#/components/headers/Version"
+          }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Errors"
+            },
+            "example": {
+              "errors": [
+                {
+                  "code": "400.BBBB.CCCC",
+                  "message": "request was unacceptable. request cannot be fulfilled due to bad syntax or an invalid parameter",
+                  "help": null,
+                  "details": [
+                    {
+                      "attributeName": "field1",
+                      "reason": "not valid"
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "authentication failure",
+        "headers": {
+          "Correlation-ID": {
+            "$ref": "#/components/parameters/Correlation-ID"
+          },
+          "Content-Type": {
+            "$ref": "#/components/headers/Content-Type"
+          },
+          "Date": {
+            "$ref": "#/components/headers/Date"
+          },
+          "Version": {
+            "$ref": "#/components/headers/Version"
+          }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/GatewayError"
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "forbidden",
+        "headers": {
+          "Correlation-ID": {
+            "$ref": "#/components/parameters/Correlation-ID"
+          },
+          "Content-Type": {
+            "$ref": "#/components/headers/Content-Type"
+          },
+          "Date": {
+            "$ref": "#/components/headers/Date"
+          },
+          "Version": {
+            "$ref": "#/components/headers/Version"
+          }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Errors"
+            },
+            "example": {
+              "errors": [
+                {
+                  "code": "403.BBBB.CCCC",
+                  "message": "Forbidden",
+                  "help": null,
+                  "details": [
+                    {
+                      "attributeName": null,
+                      "reason": null
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "resource not found",
+        "headers": {
+          "Correlation-ID": {
+            "$ref": "#/components/parameters/Correlation-ID"
+          },
+          "Content-Type": {
+            "$ref": "#/components/headers/Content-Type"
+          },
+          "Date": {
+            "$ref": "#/components/headers/Date"
+          },
+          "Version": {
+            "$ref": "#/components/headers/Version"
+          }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/GatewayError"
+            }
+          }
+        }
+      },
+      "405": {
+        "description": "method not allowed",
+        "headers": {
+          "Correlation-ID": {
+            "$ref": "#/components/parameters/Correlation-ID"
+          },
+          "Content-Type": {
+            "$ref": "#/components/headers/Content-Type"
+          },
+          "Date": {
+            "$ref": "#/components/headers/Date"
+          },
+          "Version": {
+            "$ref": "#/components/headers/Version"
+          }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/GatewayError"
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "internal server error",
+        "headers": {
+          "Correlation-ID": {
+            "$ref": "#/components/parameters/Correlation-ID"
+          },
+          "Content-Type": {
+            "$ref": "#/components/headers/Content-Type"
+          },
+          "Date": {
+            "$ref": "#/components/headers/Date"
+          },
+          "Version": {
+            "$ref": "#/components/headers/Version"
+          }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/GatewayError"
+            }
+          }
+        }
+      },
+      "503": {
+        "description": "service temporarily unavailable",
+        "headers": {
+          "Correlation-ID": {
+            "$ref": "#/components/parameters/Correlation-ID"
+          },
+          "Content-Type": {
+            "$ref": "#/components/headers/Content-Type"
+          },
+          "Date": {
+            "$ref": "#/components/headers/Date"
+          },
+          "Version": {
+            "$ref": "#/components/headers/Version"
+          }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/GatewayError"
+            }
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "oAuthClientCredential": {
+        "type": "oauth2",
+        "description": "OAuth 2.0 with the client credential grant flow.",
+        "flows": {
+          "clientCredentials": {
+            "tokenUrl": "https://api2.usbank.com/auth/oauth2/v1/token"
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,254 @@
+openapi: 3.0.1
+info:
+  title: CardAccountBalanceTransferEligibility_OpenAPI
+  description: This API is used to check eligibility for balance transfer offer.
+  version: 1.2.0
+  x-deployment-reference: CARD-D-CreditChgCard-CRPL-BTFR-DGL-EA
+  x-linked-api: CreditChargeCard_CreditPlan_BalanceTransfer_Digital_Domain
+servers:
+- url: https://127.0.0.1/openapi/v1/accounts/loans/balanceTransfers
+paths:
+  /:
+    get:
+      tags:
+      - Accounts_Account Eligibility and Enrollment_Account Feature Eligibility
+      summary: Check Eligibility for Balance Transfer Offer
+      description: This API is triggered to check eligibility for Balance Transfer
+        Offer.
+      operationId: BalanceTransferEligibility
+      parameters:
+      - $ref: '#/components/parameters/Authorization'
+      - $ref: '#/components/parameters/uuid'
+      - $ref: '#/components/parameters/Accept'
+      - $ref: '#/components/parameters/client_id'
+      - $ref: '#/components/parameters/clientDetails'
+      - name: btSupportedAccountGroup
+        in: query
+        description: "This field refers the account group supported by Balance Transfer.\
+          \ This is a reference data field. Please use /v1/utilities/referenceData/{btSupportedAccountGroup}\
+          \ resource to get valid value of this field with description."
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BalanceTransferEligibilityResponse'
+        "204":
+          description: No Content
+          content: {}
+        "400":
+          description: <table><tr><td>Type</td><td>Code</td><td>Details</td></tr><tr><td>invalid</td><td>invalidRequest</td><td>Missing
+            or invalid parameters</td></tr><tr><td>error</td></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "401":
+          description: <table><tr><td>error</td><td>unAuthorized</td><td>Authorization
+            credential is missing or invalid</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "403":
+          description: <table><tr><td>error</td><td>accessNotConfigured</td><td>Access
+            is not configured for this resource</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "422":
+          description: <table><tr><td>error</td><td>businessValidationsFailed</td><td>Business
+            validations failed</td></tr><tr><td>error</td><td>invalidAccount</td><td>Account
+            is invalid</td></tr><tr><td>error</td><td>invalidOffer</td><td>Offer is
+            invalid</td></tr><tr><td>error</td><td>accountNotEligible</td><td>This
+            account is not eligible for this function</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "500":
+          description: <table><tr><td>fatal</td><td>serverUnavailable</td><td>The
+            request failed due to an internal error</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    BalanceTransferEligibilityResponse:
+      type: object
+      properties:
+        balanceTransferEligibilityDetails:
+          type: array
+          items:
+            $ref: '#/components/schemas/BalanceTransferEligibilityDetails'
+    ErrorResponse:
+      required:
+      - code
+      - type
+      type: object
+      properties:
+        type:
+          type: string
+          description: Invalid - Request did not confirm to the specification and
+            was unprocessed and rejected. Please fix the value and try again
+          enum:
+          - error
+          - warn
+          - invalid
+          - fatal
+        code:
+          type: string
+          description: Error code which qualifies the error
+        details:
+          type: string
+          description: Human readable explanation specific to the occurrence of the
+            problem
+        location:
+          type: string
+          description: The name of the field that resulted in the error
+        moreInfo:
+          type: object
+          properties: {}
+          description: URI to human readable documentation of the error
+    BalanceTransferEligibilityDetails:
+      required:
+      - accountId
+      - btDisbursementOptions
+      - displayAccountNumber
+      - maximumEligibleLoanAmount
+      type: object
+      properties:
+        accountId:
+          type: string
+          description: The account id  in encrypted format.
+          example: 3255613852316f2b4d4d796c344e38756339654972776f663745446e6d4c32486f455a4165374a476858343d
+        displayAccountNumber:
+          type: string
+          description: A masked account number that can be displayed to the customer.
+          example: XXXXXXXXXXXX4521
+        btSupportedAccountGroup:
+          type: string
+          description: "This field refers the account group supported by Balance Transfer.\
+            \ This is a reference data field. Please use /v1/utilities/referenceData/{btSupportedAccountGroup}\
+            \ resource to get valid value of this field with description."
+          example: READY_CREDIT
+        maximumEligibleLoanAmount:
+          type: number
+          description: This field indicates the maximum eligible amount for loan.
+          format: double
+          example: 25000.25
+        minimumEligibleLoanAmount:
+          type: number
+          description: This field indicates the minimum eligible amount for loan.
+          format: double
+          example: 5000.25
+        btDisbursementOptions:
+          type: array
+          items:
+            $ref: '#/components/schemas/BtDisbursementOptions'
+        paymentPlans:
+          type: array
+          items:
+            $ref: '#/components/schemas/PaymentPlans'
+    BtDisbursementOptions:
+      required:
+      - btDisbursementOption
+      type: object
+      properties:
+        btDisbursementOption:
+          type: string
+          description: "Provide the list of the options available to receive the disbursement\
+            \ of balance transfer. Please use /v1/utilities/referenceData/{btDisbursementOption}\
+            \ resource to get valid value of this field with description."
+          example: LOAN_PAYMENT
+    PaymentPlans:
+      type: object
+      properties:
+        tenor:
+          type: number
+          description: Tenure of loan in months.
+          format: integer
+          example: 6.0
+        effectiveInterestRate:
+          type: number
+          description: Loan effective interest rate
+          format: double
+          example: 10.1
+        annualPercentageRate:
+          type: number
+          description: Compounded annual interest rate.
+          format: double
+          example: 13.67
+        oneTimeProcessingFeeIndicator:
+          type: string
+          description: "One time processing fee indicator. Valid values : PERCENTAGE,\
+            \ FIXED_AMOUNT. This is a reference data field. Please use /v1/utilities/referenceData/{oneTimeProcessingFeeIndicator}\
+            \ resource to get valid value of this field with description."
+          example: FIXED_AMOUNT
+        oneTimeProcessingFeeAmount:
+          type: number
+          description: Fee charged as part of one time processing.
+          format: double
+          example: 15.15
+        oneTimeProcessingFeePercentage:
+          type: number
+          description: Percentage of one time processing fee charged.
+          format: double
+          example: 0.7
+  parameters:
+    Authorization:
+      name: Authorization
+      in: header
+      description: "The most recent Authorization token. This will have the format\
+        \ Bearer + {space} + {accessToken}. Example: Bearer KGNsaWVudF9pZDpjbGllbnRfc2VjcmV0KQ=="
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: string
+    uuid:
+      name: uuid
+      in: header
+      description: 128 bit random UUID generated uniquely for every request.
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: string
+    Accept:
+      name: Accept
+      in: header
+      description: Content-Type that are acceptable for the response.
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: string
+    client_id:
+      name: client_id
+      in: header
+      description: Client ID generated during application registration.
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: string
+    clientDetails:
+      name: clientDetails
+      in: header
+      description: "This field is used to capture device,browser and network information.\
+        \ Refer the developer portal for more information.These are the fields which\
+        \ will be passed as part of the header devicePrint,deviceTokenCookie,userIpAddress,userAgent,hardwareId,simId,deviceModel,deviceName,deviceOsName,deviceOsVersion,multitaskingSupportFlag,languageSupport,wifiMacAddress,cellTowerId,locationAreaCode,rsaApplicationKey,wapClientId,mobileCarrierCode,mobileCountryCode,osId,geoLongitude,geoLatitude,geoHorizontalAccuracy,geoAltitude,geoAltitudeAccuracy,geoSpeed,geoTimestamp,geoStatus,basicServiceSetId,signalStrength,wifiChannel,serviceSetId"
+      required: false
+      style: simple
+      explode: false
+      schema:
+        type: string

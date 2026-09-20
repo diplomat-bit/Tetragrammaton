@@ -1,0 +1,2104 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Visa Consumer Authentication Service",
+    "description": "",
+    "version": "1"
+  },
+  "servers": [
+    {
+      "url": "https://sandbox.api.visa.com",
+      "description": "Sandbox server"
+    }
+  ],
+  "security": [],
+  "tags": [
+    {
+      "name": "VCAS-CardStatus-API",
+      "description": "APIs for managing Card Status information in VCAS product."
+    },
+    {
+      "name": "VCAS-Marking-API",
+      "description": "The Confirmed Marking API allows clients to notify VCAS when the status of a transaction has been verified. Issuers have the option to mark transactions as Good, Fraud, or Undetermined."
+    }
+  ],
+  "paths": {
+    "/vcas/v1/confirmedMarking/clear": {
+      "put": {
+        "tags": [
+          "VCAS-Marking-API"
+        ],
+        "summary": "Clear Confirmed marking",
+        "description": "It mark the Transaction ID with marking status as Clear",
+        "requestBody": {
+          "description": "Mark a Transaction status to clear",
+          "content": {
+            "application/json": {
+              "schema": {
+                "items": {
+                  "required": [
+                    "IssuerID",
+                    "transactionId"
+                  ],
+                  "properties": {
+                    "pan": {
+                      "description": "Clear Pan - This will be used only when requesting from FileProcessor",
+                      "example": "4012009508724613",
+                      "exampleSetFlag": true,
+                      "types": [
+                        "string"
+                      ]
+                    },
+                    "IssuerID": {
+                      "maxLength": 24,
+                      "minLength": 24,
+                      "pattern": "^[a-zA-Z0-9-]{24}$",
+                      "description": "Issuer Id assigned by Cardinal",
+                      "example": "63ee0c5dc4844d60395c8d37",
+                      "exampleSetFlag": true,
+                      "types": [
+                        "string"
+                      ]
+                    },
+                    "authValue": {
+                      "description": "Cardholder Authentication Validation Value (AVV) - This will be used only when requesting from FileProcessor",
+                      "example": "AAUBBXMGAgAAACcRhANBdQAAAAA=",
+                      "exampleSetFlag": true,
+                      "types": [
+                        "string"
+                      ]
+                    },
+                    "batchMarking": {
+                      "description": "Batch Marking - This will be used only when requesting from FileProcessor",
+                      "example": "true",
+                      "exampleSetFlag": true,
+                      "types": [
+                        "boolean"
+                      ]
+                    },
+                    "transactionId": {
+                      "description": "Cardholder Transaction Id",
+                      "example": "f37a6599-0d0a-4fbb-9dbe-aad41da883ab",
+                      "exampleSetFlag": true,
+                      "types": [
+                        "string"
+                      ]
+                    }
+                  },
+                  "exampleSetFlag": false,
+                  "types": [
+                    "object"
+                  ]
+                },
+                "exampleSetFlag": false,
+                "types": [
+                  "array"
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Clear Marking Successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "description": "Confrimed marking response properties",
+                  "allOf": [
+                    {
+                      "required": [
+                        "responseCode",
+                        "responseMessage"
+                      ],
+                      "properties": {
+                        "errorDetail": {
+                          "description": "Detailed error message in case of error response",
+                          "example": "null",
+                          "exampleSetFlag": true,
+                          "types": [
+                            "string"
+                          ]
+                        },
+                        "responseCode": {
+                          "description": "Service response code 0 - Success; 10 - Invalid request; 20 - Parsing error; 30 - forbidden; 40 - Not found; 50 - System error",
+                          "example": "0",
+                          "enum": [
+                            "0",
+                            "10",
+                            "20",
+                            "30",
+                            "40",
+                            "50"
+                          ],
+                          "exampleSetFlag": true,
+                          "types": [
+                            "string"
+                          ]
+                        },
+                        "responseMessage": {
+                          "description": "Service response text specific for CRUD operations",
+                          "example": "Successfully Processed",
+                          "exampleSetFlag": true,
+                          "types": [
+                            "string"
+                          ]
+                        }
+                      },
+                      "description": "Basic API Response",
+                      "exampleSetFlag": false,
+                      "types": [
+                        "object"
+                      ]
+                    }
+                  ],
+                  "exampleSetFlag": false,
+                  "types": [
+                    "object"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "required": [
+                    "responseCode",
+                    "responseMessage"
+                  ],
+                  "properties": {
+                    "errorDetail": {
+                      "description": "Detailed error message in case of error response",
+                      "example": "null",
+                      "exampleSetFlag": true,
+                      "types": [
+                        "string"
+                      ]
+                    },
+                    "responseCode": {
+                      "description": "Service response code 0 - Success; 10 - Invalid request; 20 - Parsing error; 30 - forbidden; 40 - Not found; 50 - System error",
+                      "example": "0",
+                      "enum": [
+                        "0",
+                        "10",
+                        "20",
+                        "30",
+                        "40",
+                        "50"
+                      ],
+                      "exampleSetFlag": true,
+                      "types": [
+                        "string"
+                      ]
+                    },
+                    "responseMessage": {
+                      "description": "Service response text specific for CRUD operations",
+                      "example": "Successfully Processed",
+                      "exampleSetFlag": true,
+                      "types": [
+                        "string"
+                      ]
+                    }
+                  },
+                  "description": "Basic API Response",
+                  "exampleSetFlag": false,
+                  "types": [
+                    "object"
+                  ]
+                },
+                "example": {
+                  "errorDetail": "Comma seperated invalid fieldNames",
+                  "responseCode": "10",
+                  "responseMessage": "Invalid request"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found - Transaction ID does not exist",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "required": [
+                    "responseCode",
+                    "responseMessage"
+                  ],
+                  "properties": {
+                    "errorDetail": {
+                      "description": "Detailed error message in case of error response",
+                      "example": "null",
+                      "exampleSetFlag": true,
+                      "types": [
+                        "string"
+                      ]
+                    },
+                    "responseCode": {
+                      "description": "Service response code 0 - Success; 10 - Invalid request; 20 - Parsing error; 30 - forbidden; 40 - Not found; 50 - System error",
+                      "example": "0",
+                      "enum": [
+                        "0",
+                        "10",
+                        "20",
+                        "30",
+                        "40",
+                        "50"
+                      ],
+                      "exampleSetFlag": true,
+                      "types": [
+                        "string"
+                      ]
+                    },
+                    "responseMessage": {
+                      "description": "Service response text specific for CRUD operations",
+                      "example": "Successfully Processed",
+                      "exampleSetFlag": true,
+                      "types": [
+                        "string"
+                      ]
+                    }
+                  },
+                  "description": "Basic API Response",
+                  "exampleSetFlag": false,
+                  "types": [
+                    "object"
+                  ]
+                },
+                "example": {
+                  "errorDetail": "Marking failed. Cannot invoke \"transactionId\" or \"orgunitId\" is null",
+                  "responseCode": "40",
+                  "responseMessage": "marking not found"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "required": [
+                    "responseCode",
+                    "responseMessage"
+                  ],
+                  "properties": {
+                    "errorDetail": {
+                      "description": "Detailed error message in case of error response",
+                      "example": "null",
+                      "exampleSetFlag": true,
+                      "types": [
+                        "string"
+                      ]
+                    },
+                    "responseCode": {
+                      "description": "Service response code 0 - Success; 10 - Invalid request; 20 - Parsing error; 30 - forbidden; 40 - Not found; 50 - System error",
+                      "example": "0",
+                      "enum": [
+                        "0",
+                        "10",
+                        "20",
+                        "30",
+                        "40",
+                        "50"
+                      ],
+                      "exampleSetFlag": true,
+                      "types": [
+                        "string"
+                      ]
+                    },
+                    "responseMessage": {
+                      "description": "Service response text specific for CRUD operations",
+                      "example": "Successfully Processed",
+                      "exampleSetFlag": true,
+                      "types": [
+                        "string"
+                      ]
+                    }
+                  },
+                  "description": "Basic API Response",
+                  "exampleSetFlag": false,
+                  "types": [
+                    "object"
+                  ]
+                },
+                "example": {
+                  "errorDetail": "DB Error / Crypto Error etc",
+                  "responseCode": "50",
+                  "responseMessage": "Internal server error"
+                }
+              }
+            }
+          }
+        },
+        "x-operationVersions": [
+          {
+            "label": "v1 - Latest",
+            "operationPointer": "#/paths/~1vcas~1v1~1confirmedMarking~1clear/put",
+            "default": false
+          }
+        ],
+        "x-hideTryIt": true
+      }
+    },
+    "/vcas/v1/confirmedMarking/mark": {
+      "post": {
+        "tags": [
+          "VCAS-Marking-API"
+        ],
+        "summary": "Confirmed marking",
+        "description": "It mark the Transacction ID  with marking status as Fraud, Good etc.",
+        "requestBody": {
+          "description": "Mark a Transaction",
+          "content": {
+            "application/json": {
+              "schema": {
+                "items": {
+                  "required": [
+                    "IssuerID",
+                    "markValue",
+                    "transactionId"
+                  ],
+                  "properties": {
+                    "pan": {
+                      "description": "Clear Pan - This will be used only when requesting from FileProcessor",
+                      "example": "4012009508724613",
+                      "exampleSetFlag": true,
+                      "types": [
+                        "string"
+                      ]
+                    },
+                    "IssuerID": {
+                      "maxLength": 24,
+                      "minLength": 24,
+                      "pattern": "^[a-zA-Z0-9-]{24}$",
+                      "description": "Issuer Id assigned by Cardinal",
+                      "example": "63ee0c5dc4844d60395c8d37",
+                      "exampleSetFlag": true,
+                      "types": [
+                        "string"
+                      ]
+                    },
+                    "authValue": {
+                      "description": "Cardholder Authentication Validation Value (AVV) - This will be used only when requesting from FileProcessor",
+                      "example": "AAUBBXMGAgAAACcRhANBdQAAAAA=",
+                      "exampleSetFlag": true,
+                      "types": [
+                        "string"
+                      ]
+                    },
+                    "markValue": {
+                      "description": "Confimred Marking status for specific transaction[Good,Fraud,Undetermined]",
+                      "example": "Good",
+                      "enum": [
+                        "Good",
+                        "Fraud",
+                        "Undetermined"
+                      ],
+                      "exampleSetFlag": true,
+                      "types": [
+                        "string"
+                      ]
+                    },
+                    "batchMarking": {
+                      "description": "Batch Marking - This will be used only when requesting from FileProcessor",
+                      "example": "false",
+                      "exampleSetFlag": true,
+                      "types": [
+                        "boolean"
+                      ]
+                    },
+                    "transactionId": {
+                      "description": "Cardholder Transaction Id",
+                      "example": "f37a6599-0d0a-4fbb-9dbe-aad41da883ab",
+                      "exampleSetFlag": true,
+                      "types": [
+                        "string"
+                      ]
+                    }
+                  },
+                  "exampleSetFlag": false
+                },
+                "exampleSetFlag": false,
+                "types": [
+                  "array"
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "description": "Confrimed marking response properties",
+                  "allOf": [
+                    {
+                      "required": [
+                        "responseCode",
+                        "responseMessage"
+                      ],
+                      "properties": {
+                        "errorDetail": {
+                          "description": "Detailed error message in case of error response",
+                          "example": "null",
+                          "exampleSetFlag": true,
+                          "types": [
+                            "string"
+                          ]
+                        },
+                        "responseCode": {
+                          "description": "Service response code 0 - Success; 10 - Invalid request; 20 - Parsing error; 30 - forbidden; 40 - Not found; 50 - System error",
+                          "example": "0",
+                          "enum": [
+                            "0",
+                            "10",
+                            "20",
+                            "30",
+                            "40",
+                            "50"
+                          ],
+                          "exampleSetFlag": true,
+                          "types": [
+                            "string"
+                          ]
+                        },
+                        "responseMessage": {
+                          "description": "Service response text specific for CRUD operations",
+                          "example": "Successfully Processed",
+                          "exampleSetFlag": true,
+                          "types": [
+                            "string"
+                          ]
+                        }
+                      },
+                      "description": "Basic API Response",
+                      "exampleSetFlag": false,
+                      "types": [
+                        "object"
+                      ]
+                    }
+                  ],
+                  "exampleSetFlag": false,
+                  "types": [
+                    "object"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "required": [
+                    "responseCode",
+                    "responseMessage"
+                  ],
+                  "properties": {
+                    "errorDetail": {
+                      "description": "Detailed error message in case of error response",
+                      "example": "null",
+                      "exampleSetFlag": true,
+                      "types": [
+                        "string"
+                      ]
+                    },
+                    "responseCode": {
+                      "description": "Service response code 0 - Success; 10 - Invalid request; 20 - Parsing error; 30 - forbidden; 40 - Not found; 50 - System error",
+                      "example": "0",
+                      "enum": [
+                        "0",
+                        "10",
+                        "20",
+                        "30",
+                        "40",
+                        "50"
+                      ],
+                      "exampleSetFlag": true,
+                      "types": [
+                        "string"
+                      ]
+                    },
+                    "responseMessage": {
+                      "description": "Service response text specific for CRUD operations",
+                      "example": "Successfully Processed",
+                      "exampleSetFlag": true,
+                      "types": [
+                        "string"
+                      ]
+                    }
+                  },
+                  "description": "Basic API Response",
+                  "exampleSetFlag": false,
+                  "types": [
+                    "object"
+                  ]
+                },
+                "example": {
+                  "errorDetail": "Comma seperated invalid fieldNames",
+                  "responseCode": "10",
+                  "responseMessage": "Invalid request"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found - Transaction ID does not exist",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "required": [
+                    "responseCode",
+                    "responseMessage"
+                  ],
+                  "properties": {
+                    "errorDetail": {
+                      "description": "Detailed error message in case of error response",
+                      "example": "null",
+                      "exampleSetFlag": true,
+                      "types": [
+                        "string"
+                      ]
+                    },
+                    "responseCode": {
+                      "description": "Service response code 0 - Success; 10 - Invalid request; 20 - Parsing error; 30 - forbidden; 40 - Not found; 50 - System error",
+                      "example": "0",
+                      "enum": [
+                        "0",
+                        "10",
+                        "20",
+                        "30",
+                        "40",
+                        "50"
+                      ],
+                      "exampleSetFlag": true,
+                      "types": [
+                        "string"
+                      ]
+                    },
+                    "responseMessage": {
+                      "description": "Service response text specific for CRUD operations",
+                      "example": "Successfully Processed",
+                      "exampleSetFlag": true,
+                      "types": [
+                        "string"
+                      ]
+                    }
+                  },
+                  "description": "Basic API Response",
+                  "exampleSetFlag": false,
+                  "types": [
+                    "object"
+                  ]
+                },
+                "example": {
+                  "errorDetail": "Marking failed. Cannot invoke \"transactionId\" or \"orgunitId\" is null",
+                  "responseCode": "40",
+                  "responseMessage": "Marking not found"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "required": [
+                    "responseCode",
+                    "responseMessage"
+                  ],
+                  "properties": {
+                    "errorDetail": {
+                      "description": "Detailed error message in case of error response",
+                      "example": "null",
+                      "exampleSetFlag": true,
+                      "types": [
+                        "string"
+                      ]
+                    },
+                    "responseCode": {
+                      "description": "Service response code 0 - Success; 10 - Invalid request; 20 - Parsing error; 30 - forbidden; 40 - Not found; 50 - System error",
+                      "example": "0",
+                      "enum": [
+                        "0",
+                        "10",
+                        "20",
+                        "30",
+                        "40",
+                        "50"
+                      ],
+                      "exampleSetFlag": true,
+                      "types": [
+                        "string"
+                      ]
+                    },
+                    "responseMessage": {
+                      "description": "Service response text specific for CRUD operations",
+                      "example": "Successfully Processed",
+                      "exampleSetFlag": true,
+                      "types": [
+                        "string"
+                      ]
+                    }
+                  },
+                  "description": "Basic API Response",
+                  "exampleSetFlag": false,
+                  "types": [
+                    "object"
+                  ]
+                },
+                "example": {
+                  "errorDetail": "DB Error / Crypto Error etc",
+                  "responseCode": "50",
+                  "responseMessage": "Internal server error"
+                }
+              }
+            }
+          }
+        },
+        "x-operationVersions": [
+          {
+            "label": "v1 - Latest",
+            "operationPointer": "#/paths/~1vcas~1v1~1confirmedMarking~1mark/post",
+            "default": false
+          }
+        ],
+        "x-hideTryIt": true
+      }
+    },
+    "/vcas/v1/confirmedMarking/markings": {
+      "post": {
+        "tags": [
+          "VCAS-Marking-API"
+        ],
+        "summary": "Get confirmed marking",
+        "description": "It get the marking data from DB",
+        "requestBody": {
+          "description": "Get marking data from  DB",
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "pan"
+                ],
+                "properties": {
+                  "pan": {
+                    "description": "Cardholder PAN",
+                    "example": "4012009508724613",
+                    "exampleSetFlag": true,
+                    "types": [
+                      "string"
+                    ]
+                  },
+                  "IssuerID": {
+                    "maxLength": 24,
+                    "minLength": 24,
+                    "pattern": "^[a-zA-Z0-9-]{24}$",
+                    "description": "Issuer Id assigned by Cardinal",
+                    "example": "63ee0c5dc4844d60395c8d37",
+                    "exampleSetFlag": true,
+                    "types": [
+                      "string"
+                    ]
+                  },
+                  "transactionId": {
+                    "description": "Cardholder Transaction Id",
+                    "example": "f37a6599-0d0a-4fbb-9dbe-aad41da883ab",
+                    "exampleSetFlag": true,
+                    "types": [
+                      "string"
+                    ]
+                  }
+                },
+                "exampleSetFlag": false
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Get Markings Successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "encryptedPAN": {
+                      "example": "2sDalkHhtwafeL/ZPu3dexFTzxFbGjGeSDT5R44mTEU=",
+                      "exampleSetFlag": true,
+                      "types": [
+                        "string"
+                      ]
+                    },
+                    "confirmedData": {
+                      "items": {
+                        "properties": {
+                          "tid": {
+                            "example": "222f55f5-a5bf-46a1-9ab1-e8c56f0fcefb",
+                            "exampleSetFlag": true,
+                            "types": [
+                              "string"
+                            ]
+                          },
+                          "score": {
+                            "example": "5477",
+                            "exampleSetFlag": true,
+                            "types": [
+                              "int32"
+                            ]
+                          },
+                          "value": {
+                            "example": "Fraud",
+                            "exampleSetFlag": true,
+                            "types": [
+                              "string"
+                            ]
+                          },
+                          "trueIP": {
+                            "example": "106.222.202.240",
+                            "exampleSetFlag": true,
+                            "types": [
+                              "string"
+                            ]
+                          },
+                          "acquirer": {
+                            "example": "1337",
+                            "exampleSetFlag": true,
+                            "types": [
+                              "string"
+                            ]
+                          },
+                          "deviceID": {
+                            "example": "0bf7e92985d94a589c99e7fd72ad49c1",
+                            "exampleSetFlag": true,
+                            "types": [
+                              "string"
+                            ]
+                          },
+                          "timestamp": {
+                            "example": "2024-08-08T16:23:17.388Z",
+                            "exampleSetFlag": true,
+                            "types": [
+                              "object"
+                            ]
+                          },
+                          "merchantID": {
+                            "example": "12345678",
+                            "exampleSetFlag": true,
+                            "types": [
+                              "string"
+                            ]
+                          },
+                          "tranStatus": {
+                            "example": "Y",
+                            "exampleSetFlag": true,
+                            "types": [
+                              "string"
+                            ]
+                          },
+                          "fuzzyDeviceID": {
+                            "example": "0bf7e92985d94a589c99e7fd72ad49c1",
+                            "exampleSetFlag": true,
+                            "types": [
+                              "string"
+                            ]
+                          },
+                          "purchaseDateTime": {
+                            "example": "2024-08-08T16:23:17.388Z",
+                            "exampleSetFlag": true,
+                            "types": [
+                              "object"
+                            ]
+                          },
+                          "purchaseAmountUSD": {
+                            "example": "5477",
+                            "exampleSetFlag": true,
+                            "types": [
+                              "decimal"
+                            ]
+                          }
+                        },
+                        "exampleSetFlag": false
+                      },
+                      "exampleSetFlag": false,
+                      "types": [
+                        "array"
+                      ]
+                    }
+                  },
+                  "allOf": [
+                    {
+                      "required": [
+                        "orgUnitId"
+                      ],
+                      "properties": {
+                        "orgUnitId": {
+                          "maxLength": 24,
+                          "minLength": 24,
+                          "pattern": "^[a-zA-Z0-9-]{24}$",
+                          "description": "Issuer Id assigned by Cardinal",
+                          "example": "63ee0c5dc4844d60395c8d37",
+                          "exampleSetFlag": true,
+                          "types": [
+                            "string"
+                          ]
+                        }
+                      },
+                      "description": "Basic API Request attributes",
+                      "exampleSetFlag": false,
+                      "types": [
+                        "object"
+                      ]
+                    }
+                  ],
+                  "exampleSetFlag": false,
+                  "types": [
+                    "object"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "required": [
+                    "responseCode",
+                    "responseMessage"
+                  ],
+                  "properties": {
+                    "errorDetail": {
+                      "description": "Detailed error message in case of error response",
+                      "example": "null",
+                      "exampleSetFlag": true,
+                      "types": [
+                        "string"
+                      ]
+                    },
+                    "responseCode": {
+                      "description": "Service response code 0 - Success; 10 - Invalid request; 20 - Parsing error; 30 - forbidden; 40 - Not found; 50 - System error",
+                      "example": "0",
+                      "enum": [
+                        "0",
+                        "10",
+                        "20",
+                        "30",
+                        "40",
+                        "50"
+                      ],
+                      "exampleSetFlag": true,
+                      "types": [
+                        "string"
+                      ]
+                    },
+                    "responseMessage": {
+                      "description": "Service response text specific for CRUD operations",
+                      "example": "Successfully Processed",
+                      "exampleSetFlag": true,
+                      "types": [
+                        "string"
+                      ]
+                    }
+                  },
+                  "description": "Basic API Response",
+                  "exampleSetFlag": false,
+                  "types": [
+                    "object"
+                  ]
+                },
+                "example": {
+                  "errorDetail": "Comma seperated invalid fieldNames",
+                  "responseCode": "10",
+                  "responseMessage": "Invalid request"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found - Transaction ID does not exist",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "required": [
+                    "responseCode",
+                    "responseMessage"
+                  ],
+                  "properties": {
+                    "errorDetail": {
+                      "description": "Detailed error message in case of error response",
+                      "example": "null",
+                      "exampleSetFlag": true,
+                      "types": [
+                        "string"
+                      ]
+                    },
+                    "responseCode": {
+                      "description": "Service response code 0 - Success; 10 - Invalid request; 20 - Parsing error; 30 - forbidden; 40 - Not found; 50 - System error",
+                      "example": "0",
+                      "enum": [
+                        "0",
+                        "10",
+                        "20",
+                        "30",
+                        "40",
+                        "50"
+                      ],
+                      "exampleSetFlag": true,
+                      "types": [
+                        "string"
+                      ]
+                    },
+                    "responseMessage": {
+                      "description": "Service response text specific for CRUD operations",
+                      "example": "Successfully Processed",
+                      "exampleSetFlag": true,
+                      "types": [
+                        "string"
+                      ]
+                    }
+                  },
+                  "description": "Basic API Response",
+                  "exampleSetFlag": false,
+                  "types": [
+                    "object"
+                  ]
+                },
+                "example": {
+                  "errorDetail": "Marking failed. Cannot invoke \"transactionId\" or \"orgunitId\" is null",
+                  "responseCode": "40",
+                  "responseMessage": "marking not found"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "required": [
+                    "responseCode",
+                    "responseMessage"
+                  ],
+                  "properties": {
+                    "errorDetail": {
+                      "description": "Detailed error message in case of error response",
+                      "example": "null",
+                      "exampleSetFlag": true,
+                      "types": [
+                        "string"
+                      ]
+                    },
+                    "responseCode": {
+                      "description": "Service response code 0 - Success; 10 - Invalid request; 20 - Parsing error; 30 - forbidden; 40 - Not found; 50 - System error",
+                      "example": "0",
+                      "enum": [
+                        "0",
+                        "10",
+                        "20",
+                        "30",
+                        "40",
+                        "50"
+                      ],
+                      "exampleSetFlag": true,
+                      "types": [
+                        "string"
+                      ]
+                    },
+                    "responseMessage": {
+                      "description": "Service response text specific for CRUD operations",
+                      "example": "Successfully Processed",
+                      "exampleSetFlag": true,
+                      "types": [
+                        "string"
+                      ]
+                    }
+                  },
+                  "description": "Basic API Response",
+                  "exampleSetFlag": false,
+                  "types": [
+                    "object"
+                  ]
+                },
+                "example": {
+                  "errorDetail": "DB Error / Crypto Error etc",
+                  "responseCode": "50",
+                  "responseMessage": "Internal server error"
+                }
+              }
+            }
+          }
+        },
+        "x-operationVersions": [
+          {
+            "label": "v1 - Latest",
+            "operationPointer": "#/paths/~1vcas~1v1~1confirmedMarking~1markings/post",
+            "default": false
+          }
+        ],
+        "x-hideTryIt": true
+      }
+    },
+    "/vcas/v1/cardStatus/upsert": {
+      "put": {
+        "tags": [
+          "VCAS-CardStatus-API"
+        ],
+        "summary": "Upsert Card Status",
+        "description": "Upsert the card status",
+        "operationId": "upsertCardStatus",
+        "requestBody": {
+          "description": "Card status upsert request",
+          "content": {
+            "application/json": {
+              "schema": {
+                "items": {
+                  "$ref": "#/components/schemas/CardStatusUpsertRequest"
+                },
+                "exampleSetFlag": false,
+                "types": [
+                  "array"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Added/Updated the card status record",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/Response200"
+                  },
+                  "exampleSetFlag": false,
+                  "types": [
+                    "array"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Incomplete or invalid request information",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Response400"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Access denied",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Response401"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Account information not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Response404"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error while processing the request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Response500"
+                }
+              }
+            }
+          }
+        },
+        "x-operationVersions": [
+          {
+            "label": "v1 - Latest",
+            "operationPointer": "#/paths/~1vcas~1v1~1cardStatus~1upsert/put",
+            "default": false
+          }
+        ],
+        "x-hideTryIt": true
+      }
+    },
+    "/vcas/v1/cardStatus/lookup": {
+      "post": {
+        "tags": [
+          "VCAS-CardStatus-API"
+        ],
+        "summary": "Look up Card Status",
+        "description": "Get the current card status",
+        "operationId": "lookupCardStatus",
+        "requestBody": {
+          "description": "Card status lookup request",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CardStatusLookupRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CardStatusResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Incomplete or invalid request information",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Response400"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Access denied",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Response401"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Account information not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Response404"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error while processing the request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Response500"
+                }
+              }
+            }
+          }
+        },
+        "x-operationVersions": [
+          {
+            "label": "v1 - Latest",
+            "operationPointer": "#/paths/~1vcas~1v1~1cardStatus~1lookup/post",
+            "default": false
+          }
+        ],
+        "x-hideTryIt": true
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Timestamp": {
+        "format": "date-time",
+        "example": "2017-07-21T17:32:28Z",
+        "exampleSetFlag": true,
+        "types": [
+          "string"
+        ]
+      },
+      "CardStatusUpsertRequest": {
+        "properties": {
+          "status": {
+            "$ref": "#/components/schemas/StatusType"
+          },
+          "orgUnitId": {
+            "$ref": "#/components/schemas/OrgUnitId"
+          },
+          "accountNumber": {
+            "$ref": "#/components/schemas/PAN"
+          },
+          "statusDuration": {
+            "pattern": "^(\\d+)([mhdwy])$",
+            "description": "Status will be maintained for the given duration and then it will be ACTIVE",
+            "example": "15m",
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          }
+        },
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "createMarkRequest": {
+        "items": {
+          "required": [
+            "IssuerID",
+            "markValue",
+            "transactionId"
+          ],
+          "properties": {
+            "pan": {
+              "description": "Clear Pan - This will be used only when requesting from FileProcessor",
+              "example": "4012009508724613",
+              "exampleSetFlag": true,
+              "types": [
+                "string"
+              ]
+            },
+            "IssuerID": {
+              "maxLength": 24,
+              "minLength": 24,
+              "pattern": "^[a-zA-Z0-9-]{24}$",
+              "description": "Issuer Id assigned by Cardinal",
+              "example": "63ee0c5dc4844d60395c8d37",
+              "exampleSetFlag": true,
+              "types": [
+                "string"
+              ]
+            },
+            "authValue": {
+              "description": "Cardholder Authentication Validation Value (AVV) - This will be used only when requesting from FileProcessor",
+              "example": "AAUBBXMGAgAAACcRhANBdQAAAAA=",
+              "exampleSetFlag": true,
+              "types": [
+                "string"
+              ]
+            },
+            "markValue": {
+              "description": "Confimred Marking status for specific transaction[Good,Fraud,Undetermined]",
+              "example": "Good",
+              "enum": [
+                "Good",
+                "Fraud",
+                "Undetermined"
+              ],
+              "exampleSetFlag": true,
+              "types": [
+                "string"
+              ]
+            },
+            "batchMarking": {
+              "description": "Batch Marking - This will be used only when requesting from FileProcessor",
+              "example": "false",
+              "exampleSetFlag": true,
+              "types": [
+                "boolean"
+              ]
+            },
+            "transactionId": {
+              "description": "Cardholder Transaction Id",
+              "example": "f37a6599-0d0a-4fbb-9dbe-aad41da883ab",
+              "exampleSetFlag": true,
+              "types": [
+                "string"
+              ]
+            }
+          },
+          "exampleSetFlag": false
+        },
+        "exampleSetFlag": false,
+        "types": [
+          "array"
+        ]
+      },
+      "DateWrapper": {
+        "example": "2024-08-08T16:23:17.388Z",
+        "exampleSetFlag": true,
+        "types": [
+          "object"
+        ]
+      },
+      "NumberWrapper": {
+        "example": "5477",
+        "exampleSetFlag": true,
+        "types": [
+          "integer"
+        ]
+      },
+      "clearTransactionRequest": {
+        "items": {
+          "required": [
+            "IssuerID",
+            "transactionId"
+          ],
+          "properties": {
+            "pan": {
+              "description": "Clear Pan - This will be used only when requesting from FileProcessor",
+              "example": "4012009508724613",
+              "exampleSetFlag": true,
+              "types": [
+                "string"
+              ]
+            },
+            "IssuerID": {
+              "maxLength": 24,
+              "minLength": 24,
+              "pattern": "^[a-zA-Z0-9-]{24}$",
+              "description": "Issuer Id assigned by Cardinal",
+              "example": "63ee0c5dc4844d60395c8d37",
+              "exampleSetFlag": true,
+              "types": [
+                "string"
+              ]
+            },
+            "authValue": {
+              "description": "Cardholder Authentication Validation Value (AVV) - This will be used only when requesting from FileProcessor",
+              "example": "AAUBBXMGAgAAACcRhANBdQAAAAA=",
+              "exampleSetFlag": true,
+              "types": [
+                "string"
+              ]
+            },
+            "batchMarking": {
+              "description": "Batch Marking - This will be used only when requesting from FileProcessor",
+              "example": "true",
+              "exampleSetFlag": true,
+              "types": [
+                "boolean"
+              ]
+            },
+            "transactionId": {
+              "description": "Cardholder Transaction Id",
+              "example": "f37a6599-0d0a-4fbb-9dbe-aad41da883ab",
+              "exampleSetFlag": true,
+              "types": [
+                "string"
+              ]
+            }
+          },
+          "exampleSetFlag": false,
+          "types": [
+            "object"
+          ]
+        },
+        "exampleSetFlag": false,
+        "types": [
+          "array"
+        ]
+      },
+      "CardStatusLookupRequest": {
+        "properties": {
+          "orgUnitId": {
+            "$ref": "#/components/schemas/OrgUnitId"
+          },
+          "accountNumber": {
+            "$ref": "#/components/schemas/PAN"
+          }
+        },
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "clear": {
+        "maxLength": 32,
+        "minLength": 32,
+        "pattern": "^[a-zA-Z]{32}$",
+        "description": "Confimred Marking status for specific transaction to make clear",
+        "example": "Clear",
+        "exampleSetFlag": true,
+        "types": [
+          "string"
+        ]
+      },
+      "apiResponseType": {
+        "required": [
+          "responseCode",
+          "responseMessage"
+        ],
+        "properties": {
+          "errorDetail": {
+            "description": "Detailed error message in case of error response",
+            "example": "null",
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          },
+          "responseCode": {
+            "description": "Service response code 0 - Success; 10 - Invalid request; 20 - Parsing error; 30 - forbidden; 40 - Not found; 50 - System error",
+            "example": "0",
+            "enum": [
+              "0",
+              "10",
+              "20",
+              "30",
+              "40",
+              "50"
+            ],
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          },
+          "responseMessage": {
+            "description": "Service response text specific for CRUD operations",
+            "example": "Successfully Processed",
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          }
+        },
+        "description": "Basic API Response",
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "getMarkingDataRequest": {
+        "required": [
+          "pan"
+        ],
+        "properties": {
+          "pan": {
+            "description": "Cardholder PAN",
+            "example": "4012009508724613",
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          },
+          "IssuerID": {
+            "maxLength": 24,
+            "minLength": 24,
+            "pattern": "^[a-zA-Z0-9-]{24}$",
+            "description": "Issuer Id assigned by Cardinal",
+            "example": "63ee0c5dc4844d60395c8d37",
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          },
+          "transactionId": {
+            "description": "Cardholder Transaction Id",
+            "example": "f37a6599-0d0a-4fbb-9dbe-aad41da883ab",
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          }
+        },
+        "exampleSetFlag": false
+      },
+      "encryptedPAN": {
+        "example": "2sDalkHhtwafeL/ZPu3dexFTzxFbGjGeSDT5R44mTEU=",
+        "exampleSetFlag": true,
+        "types": [
+          "string"
+        ]
+      },
+      "getMarkingDataResponse": {
+        "properties": {
+          "encryptedPAN": {
+            "example": "2sDalkHhtwafeL/ZPu3dexFTzxFbGjGeSDT5R44mTEU=",
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          },
+          "confirmedData": {
+            "items": {
+              "properties": {
+                "tid": {
+                  "example": "222f55f5-a5bf-46a1-9ab1-e8c56f0fcefb",
+                  "exampleSetFlag": true,
+                  "types": [
+                    "string"
+                  ]
+                },
+                "score": {
+                  "example": "5477",
+                  "exampleSetFlag": true,
+                  "types": [
+                    "int32"
+                  ]
+                },
+                "value": {
+                  "example": "Fraud",
+                  "exampleSetFlag": true,
+                  "types": [
+                    "string"
+                  ]
+                },
+                "trueIP": {
+                  "example": "106.222.202.240",
+                  "exampleSetFlag": true,
+                  "types": [
+                    "string"
+                  ]
+                },
+                "acquirer": {
+                  "example": "1337",
+                  "exampleSetFlag": true,
+                  "types": [
+                    "string"
+                  ]
+                },
+                "deviceID": {
+                  "example": "0bf7e92985d94a589c99e7fd72ad49c1",
+                  "exampleSetFlag": true,
+                  "types": [
+                    "string"
+                  ]
+                },
+                "timestamp": {
+                  "example": "2024-08-08T16:23:17.388Z",
+                  "exampleSetFlag": true,
+                  "types": [
+                    "object"
+                  ]
+                },
+                "merchantID": {
+                  "example": "12345678",
+                  "exampleSetFlag": true,
+                  "types": [
+                    "string"
+                  ]
+                },
+                "tranStatus": {
+                  "example": "Y",
+                  "exampleSetFlag": true,
+                  "types": [
+                    "string"
+                  ]
+                },
+                "fuzzyDeviceID": {
+                  "example": "0bf7e92985d94a589c99e7fd72ad49c1",
+                  "exampleSetFlag": true,
+                  "types": [
+                    "string"
+                  ]
+                },
+                "purchaseDateTime": {
+                  "example": "2024-08-08T16:23:17.388Z",
+                  "exampleSetFlag": true,
+                  "types": [
+                    "object"
+                  ]
+                },
+                "purchaseAmountUSD": {
+                  "example": "5477",
+                  "exampleSetFlag": true,
+                  "types": [
+                    "decimal"
+                  ]
+                }
+              },
+              "exampleSetFlag": false
+            },
+            "exampleSetFlag": false,
+            "types": [
+              "array"
+            ]
+          }
+        },
+        "allOf": [
+          {
+            "required": [
+              "orgUnitId"
+            ],
+            "properties": {
+              "orgUnitId": {
+                "maxLength": 24,
+                "minLength": 24,
+                "pattern": "^[a-zA-Z0-9-]{24}$",
+                "description": "Issuer Id assigned by Cardinal",
+                "example": "63ee0c5dc4844d60395c8d37",
+                "exampleSetFlag": true,
+                "types": [
+                  "string"
+                ]
+              }
+            },
+            "description": "Basic API Request attributes",
+            "exampleSetFlag": false,
+            "types": [
+              "object"
+            ]
+          }
+        ],
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "commonAttributesType": {
+        "required": [
+          "orgUnitId"
+        ],
+        "properties": {
+          "orgUnitId": {
+            "maxLength": 24,
+            "minLength": 24,
+            "pattern": "^[a-zA-Z0-9-]{24}$",
+            "description": "Issuer Id assigned by Cardinal",
+            "example": "63ee0c5dc4844d60395c8d37",
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          }
+        },
+        "description": "Basic API Request attributes",
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "createMarkResponse": {
+        "description": "Confrimed marking response properties",
+        "allOf": [
+          {
+            "required": [
+              "responseCode",
+              "responseMessage"
+            ],
+            "properties": {
+              "errorDetail": {
+                "description": "Detailed error message in case of error response",
+                "example": "null",
+                "exampleSetFlag": true,
+                "types": [
+                  "string"
+                ]
+              },
+              "responseCode": {
+                "description": "Service response code 0 - Success; 10 - Invalid request; 20 - Parsing error; 30 - forbidden; 40 - Not found; 50 - System error",
+                "example": "0",
+                "enum": [
+                  "0",
+                  "10",
+                  "20",
+                  "30",
+                  "40",
+                  "50"
+                ],
+                "exampleSetFlag": true,
+                "types": [
+                  "string"
+                ]
+              },
+              "responseMessage": {
+                "description": "Service response text specific for CRUD operations",
+                "example": "Successfully Processed",
+                "exampleSetFlag": true,
+                "types": [
+                  "string"
+                ]
+              }
+            },
+            "description": "Basic API Response",
+            "exampleSetFlag": false,
+            "types": [
+              "object"
+            ]
+          }
+        ],
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "transactionId": {
+        "description": "Cardholder Transaction Id",
+        "example": "f37a6599-0d0a-4fbb-9dbe-aad41da883ab",
+        "exampleSetFlag": true,
+        "types": [
+          "string"
+        ]
+      },
+      "clearTransactionResponse": {
+        "description": "Confrimed marking response properties",
+        "allOf": [
+          {
+            "required": [
+              "responseCode",
+              "responseMessage"
+            ],
+            "properties": {
+              "errorDetail": {
+                "description": "Detailed error message in case of error response",
+                "example": "null",
+                "exampleSetFlag": true,
+                "types": [
+                  "string"
+                ]
+              },
+              "responseCode": {
+                "description": "Service response code 0 - Success; 10 - Invalid request; 20 - Parsing error; 30 - forbidden; 40 - Not found; 50 - System error",
+                "example": "0",
+                "enum": [
+                  "0",
+                  "10",
+                  "20",
+                  "30",
+                  "40",
+                  "50"
+                ],
+                "exampleSetFlag": true,
+                "types": [
+                  "string"
+                ]
+              },
+              "responseMessage": {
+                "description": "Service response text specific for CRUD operations",
+                "example": "Successfully Processed",
+                "exampleSetFlag": true,
+                "types": [
+                  "string"
+                ]
+              }
+            },
+            "description": "Basic API Response",
+            "exampleSetFlag": false,
+            "types": [
+              "object"
+            ]
+          }
+        ],
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "CardStatusResponse": {
+        "properties": {
+          "status": {
+            "$ref": "#/components/schemas/StatusType"
+          },
+          "orgUnitId": {
+            "$ref": "#/components/schemas/OrgUnitId"
+          },
+          "statusEndTs": {
+            "$ref": "#/components/schemas/Timestamp"
+          }
+        },
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "OrgUnitId": {
+        "maxLength": 24,
+        "minLength": 24,
+        "pattern": "^[a-zA-Z0-9]*$",
+        "description": "Unique ID given to each issuer",
+        "example": "55555551dd3648c5b814d2ed",
+        "exampleSetFlag": true,
+        "types": [
+          "string"
+        ]
+      },
+      "StatusType": {
+        "enum": [
+          "ACTIVE",
+          "BLOCKED",
+          "BYPASS",
+          "FORCED_CHALLENGE",
+          "TIMED_BLOCK"
+        ],
+        "exampleSetFlag": false,
+        "types": [
+          "string"
+        ]
+      },
+      "Response200": {
+        "description": "Added/Updated the card status record",
+        "allOf": [
+          {
+            "required": [
+              "responseCode",
+              "responseMessage"
+            ],
+            "properties": {
+              "errorDetail": {
+                "description": "Detailed error message in case of error response",
+                "example": "null",
+                "exampleSetFlag": true,
+                "types": [
+                  "string"
+                ]
+              },
+              "responseCode": {
+                "description": "Service response code 0 - Success; 10 - Invalid OrgUnitID; 11 - Invalid PAN; 20 - Forbidden; 30 - Not found; 40 - System error",
+                "example": "0",
+                "exampleSetFlag": true,
+                "types": [
+                  "string"
+                ]
+              },
+              "responseMessage": {
+                "description": "Service response text specific for CRUD operations",
+                "example": "Successfully Processed",
+                "exampleSetFlag": true,
+                "types": [
+                  "string"
+                ]
+              }
+            },
+            "exampleSetFlag": false,
+            "types": [
+              "object"
+            ]
+          }
+        ],
+        "exampleSetFlag": false,
+        "types": [
+          "Object"
+        ]
+      },
+      "Response400": {
+        "description": "Incomplete or invalid request information",
+        "allOf": [
+          {
+            "required": [
+              "responseCode",
+              "responseMessage"
+            ],
+            "properties": {
+              "errorDetail": {
+                "description": "Detailed error message in case of error response",
+                "example": "null",
+                "exampleSetFlag": true,
+                "types": [
+                  "string"
+                ]
+              },
+              "responseCode": {
+                "description": "Service response code 0 - Success; 10 - Invalid OrgUnitID; 11 - Invalid PAN; 20 - Forbidden; 30 - Not found; 40 - System error",
+                "example": "10",
+                "exampleSetFlag": true,
+                "types": [
+                  "string"
+                ]
+              },
+              "responseMessage": {
+                "description": "Service response text specific for CRUD operations",
+                "example": "Invalid OrgUnitID",
+                "exampleSetFlag": true,
+                "types": [
+                  "string"
+                ]
+              }
+            },
+            "exampleSetFlag": false
+          }
+        ],
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "PAN": {
+        "maxLength": 19,
+        "minLength": 13,
+        "pattern": "^[0-9]*$",
+        "description": "Primary account number (PAN) is the key identifier for the cardholder's account.",
+        "example": "1234567890123456",
+        "exampleSetFlag": true,
+        "types": [
+          "string"
+        ]
+      },
+      "Response401": {
+        "description": "Forbidden access to the account information",
+        "allOf": [
+          {
+            "required": [
+              "responseCode",
+              "responseMessage"
+            ],
+            "properties": {
+              "errorDetail": {
+                "description": "Detailed error message in case of error response",
+                "example": "null",
+                "exampleSetFlag": true,
+                "types": [
+                  "string"
+                ]
+              },
+              "responseCode": {
+                "description": "Service response code 0 - Success; 10 - Invalid OrgUnitID; 11 - Invalid PAN; 20 - Forbidden; 30 - Not found; 40 - System error",
+                "example": "20",
+                "exampleSetFlag": true,
+                "types": [
+                  "string"
+                ]
+              },
+              "responseMessage": {
+                "description": "Service response text specific for CRUD operations",
+                "example": "Forbidden access to the account information",
+                "exampleSetFlag": true,
+                "types": [
+                  "string"
+                ]
+              }
+            },
+            "exampleSetFlag": false
+          }
+        ],
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "Response500": {
+        "description": "Internal server error",
+        "allOf": [
+          {
+            "required": [
+              "responseCode",
+              "responseMessage"
+            ],
+            "properties": {
+              "errorDetail": {
+                "description": "Detailed error message in case of error response",
+                "example": "null",
+                "exampleSetFlag": true,
+                "types": [
+                  "string"
+                ]
+              },
+              "responseCode": {
+                "description": "Service response code 0 - Success; 10 - Invalid OrgUnitID; 11 - Invalid PAN; 20 - Forbidden; 30 - Not found; 40 - System error",
+                "example": "40",
+                "exampleSetFlag": true,
+                "types": [
+                  "string"
+                ]
+              },
+              "responseMessage": {
+                "description": "Service response text specific for CRUD operations",
+                "example": "Error while processing the request",
+                "exampleSetFlag": true,
+                "types": [
+                  "string"
+                ]
+              }
+            },
+            "exampleSetFlag": false
+          }
+        ],
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "mark": {
+        "maxLength": 32,
+        "minLength": 32,
+        "pattern": "^[a-zA-Z]{32}$",
+        "description": "Confimred Marking status for specific transaction[Good,Fraud,Undetermined]",
+        "example": "Good",
+        "enum": [
+          "good",
+          "fraud",
+          "Undetermined"
+        ],
+        "exampleSetFlag": true,
+        "types": [
+          "string"
+        ]
+      },
+      "orgUnitIdType": {
+        "maxLength": 24,
+        "minLength": 24,
+        "pattern": "^[a-zA-Z0-9-]{24}$",
+        "description": "Issuer Id assigned by Cardinal",
+        "example": "63ee0c5dc4844d60395c8d37",
+        "exampleSetFlag": true,
+        "types": [
+          "string"
+        ]
+      },
+      "Response404": {
+        "description": "Account details not found",
+        "allOf": [
+          {
+            "required": [
+              "responseCode",
+              "responseMessage"
+            ],
+            "properties": {
+              "errorDetail": {
+                "description": "Detailed error message in case of error response",
+                "example": "null",
+                "exampleSetFlag": true,
+                "types": [
+                  "string"
+                ]
+              },
+              "responseCode": {
+                "description": "Service response code 0 - Success; 10 - Invalid OrgUnitID; 11 - Invalid PAN; 20 - Forbidden; 30 - Not found; 40 - System error",
+                "example": "30",
+                "exampleSetFlag": true,
+                "types": [
+                  "string"
+                ]
+              },
+              "responseMessage": {
+                "description": "Service response text specific for CRUD operations",
+                "example": "Account details not found",
+                "exampleSetFlag": true,
+                "types": [
+                  "string"
+                ]
+              }
+            },
+            "exampleSetFlag": false
+          }
+        ],
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      }
+    },
+    "responses": {},
+    "parameters": {},
+    "examples": {},
+    "requestBodies": {},
+    "headers": {},
+    "callbacks": {}
+  },
+  "webhooks": {},
+  "x-tagGroups": [
+    {
+      "name": "API Reference",
+      "tags": [
+        "VCAS-CardStatus-API",
+        "VCAS-Marking-API"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "name": "Citi Sandbox API Tester",
+  "description": "An application to test the Citi Sandbox API with customizable request body and response telemetry.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

@@ -1,0 +1,1321 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Visa Travel Notification Service",
+    "description": "",
+    "version": "1"
+  },
+  "servers": [
+    {
+      "url": "https://sandbox.api.visa.com",
+      "description": "Sandbox server"
+    }
+  ],
+  "security": [],
+  "tags": [
+    {
+      "name": "Visa Travel Notification API",
+      "description": "Incorporate cardholder self-reported travel into your authorization decisions"
+    }
+  ],
+  "paths": {
+    "/travelnotificationservice/v1/travelnotification/itinerary": {
+      "put": {
+        "tags": [
+          "Visa Travel Notification API"
+        ],
+        "summary": "Update Travel Itinerary",
+        "description": "Update Travel Itinerary allows you to update details of existing travel itineraries. A successful response includes confirmation that the update was successful, which user made the update, and when the update occurred. You will use this API when you need to make changes to an existing travel itinerary, such as when a cardholder informs you the plan has changed.",
+        "operationId": "updateTravelItineary",
+        "requestBody": {
+          "description": "Request body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateTravelItinerary"
+              },
+              "examples": {
+                "Default": {
+                  "summary": "Default",
+                  "value": {
+                    "updateTravelItinerary": {
+                      "returnDate": "2016-04-28",
+                      "partnerBid": "10074101",
+                      "travelItineraryId": "2312",
+                      "destinations": [
+                        {
+                          "country": "840",
+                          "state": "CA"
+                        }
+                      ],
+                      "primaryAccountNumbers": [
+                        {
+                          "cardAccountNumber": "4645191800301236"
+                        },
+                        {
+                          "cardAccountNumber": "4645191800301237"
+                        }
+                      ],
+                      "departureDate": "2016-04-21",
+                      "userId": "rajpande"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "UpdateTravelItinerary response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateTravelItineraryResponse"
+                },
+                "example": {
+                  "updateTravelItineraryResponse": {
+                    "responseCode": "0",
+                    "responseMessage": "Success Transaction",
+                    "travelItinerary": {
+                      "source": "Cardholder Self-Reported",
+                      "userId": "rajpandey",
+                      "partnerBid": "10074101",
+                      "returnDate": "2016-04-28",
+                      "destinations": [
+                        {
+                          "state": "CA",
+                          "country": "840"
+                        }
+                      ],
+                      "departureDate": "2016-04-21",
+                      "lastUpdatedBy": "rajpandey",
+                      "lastUpdateTime": "2016-04-04",
+                      "travelItineraryId": "2313",
+                      "primaryAccountNumbers": [
+                        {
+                          "cardAccountNumber": "4645191800301236"
+                        },
+                        {
+                          "cardAccountNumber": "4645191800301237"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "202": {
+            "description": "Validation Failures",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/apiResponse"
+                },
+                "example": {
+                  "responseCode": "20",
+                  "responseMessage": "Validation Failed. [Account Number is not valid. Account Number must be between 16 to 19 digits long.]"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden Operation to requested resource",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Server has not found anything matching the request URI",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Temporary Downtime - retry operation after waiting",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Temporary Downtime for maintenance - retry operation after waiting",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "x-samplePayload": {
+          "updateTravelItinerary": {
+            "userId": "rajpande",
+            "partnerBid": "10074101",
+            "returnDate": "2016-04-28",
+            "destinations": [
+              {
+                "state": "CA",
+                "country": "840"
+              }
+            ],
+            "departureDate": "2016-04-21",
+            "travelItineraryId": "2312",
+            "primaryAccountNumbers": [
+              {
+                "cardAccountNumber": "4645191800301236"
+              },
+              {
+                "cardAccountNumber": "4645191800301237"
+              }
+            ]
+          }
+        },
+        "x-name": "Update Travel Itinerary",
+        "x-notes": "",
+        "x-codegen-request-body-name": "updateTravelItineary",
+        "x-slug": "update_travel",
+        "x-operationVersions": [
+          {
+            "label": "v1 - Latest",
+            "operationPointer": "#/paths/~1travelnotificationservice~1v1~1travelnotification~1itinerary/put",
+            "default": false
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Visa Travel Notification API"
+        ],
+        "summary": "Add Travel Itinerary",
+        "description": "Add Travel Itinerary allows you to send travel itinerary details to Visa. A successful response includes a Travel Itinerary ID created by Visa. You will use this API when cardholders inform you of their upcoming travel plans.",
+        "operationId": "addTravelItineary",
+        "requestBody": {
+          "description": "Request body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddTravelItinerary"
+              },
+              "examples": {
+                "Default": {
+                  "summary": "Default",
+                  "value": {
+                    "addTravelItinerary": {
+                      "returnDate": "2019-05-28",
+                      "partnerBid": "12345678",
+                      "destinations": [
+                        {
+                          "country": "840",
+                          "state": "CA"
+                        }
+                      ],
+                      "primaryAccountNumbers": [
+                        {
+                          "cardAccountNumber": "4645191800301234"
+                        },
+                        {
+                          "cardAccountNumber": "4645191800301235"
+                        }
+                      ],
+                      "departureDate": "2019-05-21",
+                      "userId": "Rajesh"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "AddTravelItinerary response with travelItineraryId",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AddTravelItineraryResponse"
+                },
+                "example": {
+                  "addTravelItineraryResponse": {
+                    "responseCode": "0",
+                    "responseMessage": "Success Transaction",
+                    "travelItinerary": {
+                      "source": "Cardholder Self-Reported",
+                      "userId": "Rajesh",
+                      "partnerBid": "10074101",
+                      "returnDate": "2016-04-28",
+                      "destinations": [
+                        {
+                          "state": "CA",
+                          "country": "840"
+                        }
+                      ],
+                      "departureDate": "2016-04-21",
+                      "lastUpdatedBy": "Rajesh",
+                      "lastUpdateTime": "2016-04-03",
+                      "travelItineraryId": "2306",
+                      "primaryAccountNumbers": [
+                        {
+                          "cardAccountNumber": "4645191800301234"
+                        },
+                        {
+                          "cardAccountNumber": "4645191800301235"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "202": {
+            "description": "Validation Failures",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/apiResponse"
+                },
+                "example": {
+                  "responseCode": "20",
+                  "responseMessage": "Validation Failed. [Account Number is not valid. Account Number must be between 16 to 19 digits long.]"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden Operation to requested resource",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Temporary Downtime - retry operation after waiting",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Temporary Downtime for maintenance - retry operation after waiting",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "x-samplePayload": {
+          "addTravelItinerary": {
+            "userId": "Rajesh",
+            "partnerBid": "10074101",
+            "returnDate": "2015-04-28",
+            "destinations": [
+              {
+                "state": "CA",
+                "country": "840"
+              }
+            ],
+            "departureDate": "2015-04-21",
+            "primaryAccountNumbers": [
+              {
+                "cardAccountNumber": "4645191800301234"
+              },
+              {
+                "cardAccountNumber": "4645191800301235"
+              }
+            ]
+          }
+        },
+        "x-name": "Add Travel Itinerary",
+        "x-notes": "",
+        "x-codegen-request-body-name": "addTravelItineary",
+        "x-slug": "add_travel",
+        "x-operationVersions": [
+          {
+            "label": "v1 - Latest",
+            "operationPointer": "#/paths/~1travelnotificationservice~1v1~1travelnotification~1itinerary/post",
+            "default": false
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Visa Travel Notification API"
+        ],
+        "summary": "Delete Travel Itinerary",
+        "description": "Delete Travel Itinerary API allows you to delete existing travel itineraries. A successful response includes confirmation that the deletion was successful. You will use this API when you need to delete a travel itinerary, such as when a cardholder informs you they will no longer be traveling as planned.",
+        "operationId": "deleteTravelItineary",
+        "requestBody": {
+          "description": "Request body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeleteTravelItinerary"
+              },
+              "examples": {
+                "Default": {
+                  "summary": "Default",
+                  "value": {
+                    "deleteTravelItinerary": {
+                      "partnerBid": "10074101",
+                      "travelItineraryId": "2313",
+                      "userId": "xyz"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "DeleteTravelItinerary response with travelItineraryId",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteTravelItineraryResponse"
+                },
+                "example": {
+                  "deleteTravelItineraryResponse": {
+                    "responseCode": "9",
+                    "responseMessage": "Success Transaction",
+                    "travelItineraryId": "2313"
+                  }
+                }
+              }
+            }
+          },
+          "202": {
+            "description": "Validation Failures",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/apiResponse"
+                },
+                "example": {
+                  "responseCode": "20",
+                  "responseMessage": "Validation Failed.[Partner BID 1000131555555 is not valid. Must be 8 digit long.]"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden Operation to requested resource",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Server has not found anything matching the request URI",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Temporary Downtime - retry operation after waiting",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Temporary Downtime for maintenance - retry operation after waiting",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "x-samplePayload": {
+          "deleteTravelItinerary": {
+            "userId": "xyz",
+            "partnerBid": "10074101",
+            "travelItineraryId": "2313"
+          }
+        },
+        "x-name": "Delete Travel Itinerary",
+        "x-notes": "",
+        "x-codegen-request-body-name": "deleteTravelItineary",
+        "x-slug": "delete_travel",
+        "x-operationVersions": [
+          {
+            "label": "v1 - Latest",
+            "operationPointer": "#/paths/~1travelnotificationservice~1v1~1travelnotification~1itinerary/delete",
+            "default": false
+          }
+        ]
+      }
+    },
+    "/travelnotificationservice/v1/travelnotification/retrievetravel": {
+      "post": {
+        "tags": [
+          "Visa Travel Notification API"
+        ],
+        "summary": "Retrieve Travel Itinerary",
+        "description": "Retrieve Travel Itinerary API allows you to request details of travel itineraries you previously sent to Visa. A successful response includes the list of travel itineraries that match your request.",
+        "operationId": "Retrieve Travel Itinerary",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "retrieveTravelItinerary": {
+                    "required": [
+                      "partnerBid"
+                    ],
+                    "type": "object",
+                    "properties": {
+                      "toDate": {
+                        "type": "string",
+                        "description": "Date of Return for search criteria YYYY-MM-DD"
+                      },
+                      "userId": {
+                        "maxLength": 19,
+                        "minLength": 1,
+                        "type": "string",
+                        "description": "The User ID for which you want to retrieve travel itineraries."
+                      },
+                      "fromDate": {
+                        "type": "string",
+                        "description": "Date of travel departure for search criteria YYYY-MM-DD"
+                      },
+                      "partnerBid": {
+                        "type": "string",
+                        "description": "Your Visa Business Identifier (BID)."
+                      },
+                      "travelItineraryId": {
+                        "type": "string",
+                        "description": "The ID of the travel itinerary that you want to retrieve."
+                      },
+                      "primaryAccountNumber": {
+                        "type": "object",
+                        "properties": {
+                          "cardAccountNumber": {
+                            "maxLength": 19,
+                            "minLength": 16,
+                            "type": "string",
+                            "description": "Card Account Number holds the numeric or Masked PAN and PAN should always be between 16 - 19 digits"
+                          }
+                        },
+                        "description": "Card account number for which your cardholder has reported a travel plan."
+                      }
+                    },
+                    "description": ""
+                  }
+                }
+              },
+              "examples": {
+                "Default": {
+                  "summary": "Default",
+                  "value": {
+                    "retrieveTravelItinerary": {
+                      "fromDate": "2017-03-21",
+                      "partnerBid": "10074101",
+                      "toDate": "2017-05-21",
+                      "primaryAccountNumber": {
+                        "cardAccountNumber": "4645191800301234"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "required": false
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "responseCode": {
+                      "type": "string",
+                      "description": "Web service response code"
+                    },
+                    "responseMessage": {
+                      "type": "string",
+                      "description": "Service response text specific for CRUD operations"
+                    },
+                    "travelItineraries": {
+                      "type": "array",
+                      "description": "List of travel itineraries based on the search criteria provided",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "travelItinerary": {
+                            "type": "object",
+                            "properties": {
+                              "source": {
+                                "type": "string",
+                                "description": "The source of the travel itinerary in the Visa system. When a travel itinerary is submitted to Visa through the Visa Travel Notification Service, the Source field in the response will be Cardholder Self Reported."
+                              },
+                              "userId": {
+                                "type": "string",
+                                "description": "User ID you assigned to identify the cardholder using the service."
+                              },
+                              "partnerBid": {
+                                "maxLength": 8,
+                                "type": "string",
+                                "description": "Your Visa Business Identifier (BID)."
+                              },
+                              "returnDate": {
+                                "type": "string",
+                                "description": "Date of travel Return YYYY-MM-DD"
+                              },
+                              "destinations": {
+                                "type": "object",
+                                "properties": {
+                                  "destination": {
+                                    "type": "object",
+                                    "properties": {
+                                      "state": {
+                                        "maxLength": 2,
+                                        "type": "string",
+                                        "description": "2 character State Code for a state/province"
+                                      },
+                                      "country": {
+                                        "type": "string",
+                                        "description": "ISO 3166-1 Numeric Country Code will be used for a Country"
+                                      }
+                                    },
+                                    "description": ""
+                                  }
+                                },
+                                "description": ""
+                              },
+                              "departureDate": {
+                                "type": "string",
+                                "description": "Date of travel departure YYYY-MM-DD"
+                              },
+                              "lastUpdatedBy": {
+                                "type": "string",
+                                "description": "User who updated the itinerary in current state."
+                              },
+                              "lastUpdateTime": {
+                                "type": "string",
+                                "description": "Time in format YYYY-MM-DDTHH:MM:SS."
+                              },
+                              "travelItineraryId": {
+                                "maxLength": 19,
+                                "minLength": 1,
+                                "type": "string",
+                                "description": "Itinerary ID for the travel plan stored in the system."
+                              },
+                              "primaryAccountNumbers": {
+                                "type": "object",
+                                "properties": {
+                                  "primaryAccountNumber": {
+                                    "type": "object",
+                                    "properties": {
+                                      "cardIndex": {
+                                        "type": "string",
+                                        "description": "The service response will add the card index to each PAN and Service client is expected to send back the Card Index in case of Update request for the itinerary"
+                                      },
+                                      "associatedPANs": {
+                                        "type": "object",
+                                        "properties": {
+                                          "associatedPAN": {
+                                            "type": "object",
+                                            "properties": {
+                                              "cardType": {
+                                                "maxLength": 100,
+                                                "type": "string",
+                                                "description": "Describes type of the associated PAN"
+                                              },
+                                              "cardAccountNumber": {
+                                                "maxLength": 19,
+                                                "minLength": 16,
+                                                "type": "string",
+                                                "description": "Card Account Number holds the numeric or Masked PAN and PAN should always be between 16 - 19 digits"
+                                              }
+                                            },
+                                            "description": "An associated PAN could be linked or replacement card"
+                                          }
+                                        },
+                                        "description": "List of associated PAN could be linked or replacement card that belong to a Primary Account"
+                                      },
+                                      "cardAccountNumber": {
+                                        "maxLength": 19,
+                                        "minLength": 16,
+                                        "type": "string",
+                                        "description": "Card Account Number holds the numeric or Masked PAN and PAN should always be between 16 - 19 digits"
+                                      }
+                                    },
+                                    "description": "Card account number for which your cardholder has reported a travel plan. "
+                                  }
+                                },
+                                "description": "Write a description for this parameter"
+                              }
+                            },
+                            "description": "List of travel itineraries based on the search criteria provided"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-codegen-request-body-name": "retrieveTravelItinerary",
+        "x-operationVersions": [
+          {
+            "label": "v1 - Latest",
+            "operationPointer": "#/paths/~1travelnotificationservice~1v1~1travelnotification~1retrievetravel/post",
+            "default": false
+          }
+        ],
+        "x-hideTryIt": true
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "UpdateTravelItineraryResponse": {
+        "type": "object",
+        "properties": {
+          "failureCode": {
+            "type": "string",
+            "description": "Error code specific for CRUD operations"
+          },
+          "responseCode": {
+            "type": "string",
+            "description": "Web service response code"
+          },
+          "responseMessage": {
+            "type": "string",
+            "description": "service response text specific for CRUD operations"
+          },
+          "travelItinerary": {
+            "$ref": "#/components/schemas/TravelItinerary"
+          },
+          "failureDescription": {
+            "type": "string",
+            "description": "Error description specific for CRUD operations"
+          }
+        },
+        "description": "Itinenary from the System after Update Operations"
+      },
+      "Destination": {
+        "required": [
+          "country"
+        ],
+        "type": "object",
+        "properties": {
+          "state": {
+            "pattern": "^([A-Z][A-Z])$",
+            "type": "string",
+            "description": "The state or province where your cardholder will travel. Must be a 2 character State Code for a state in the United States or a province in Canada and must not be included in the request if the Destination-Country is not the United States or Canada.A state in the United States must be included if the Destination – Country in the request is the United States. A province in Canada must be included if the Destination – Country in the request is Canada. If your cardholder will travel to multiple states or provinces, you can include multiple states or provinces in a single request."
+          },
+          "country": {
+            "pattern": "^([0-9]{1,3})$",
+            "type": "string",
+            "description": "The country where your cardholder will travel. If your cardholder will travel to multiple countries, you can include multiple countries in a single request.Must be a 3 character country code, as specified in the ISO 3166-1."
+          }
+        }
+      },
+      "TravelItineraries": {
+        "type": "array",
+        "description": "List of travel itineraries based on the search criteria provided",
+        "items": {
+          "$ref": "#/components/schemas/TravelItinerary"
+        }
+      },
+      "RegisterUserforTravelNotificationServiceResponse": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "string",
+            "description": "VDP User/application Id"
+          },
+          "partnerBid": {
+            "pattern": "^([0-9]{8})$",
+            "type": "string",
+            "description": "The issuer BID associated with Itinerary"
+          },
+          "failureCode": {
+            "type": "string",
+            "description": "Error code specific for CRUD operations"
+          },
+          "responseCode": {
+            "type": "string",
+            "description": "Web service response code"
+          },
+          "responseMessage": {
+            "type": "string",
+            "description": "service response text specific for CRUD operations"
+          },
+          "failureDescription": {
+            "type": "string",
+            "description": "Error description specific for CRUD operations"
+          }
+        },
+        "description": "Registration Information of a Developer for Travel Notification Service in VDP gateway"
+      },
+      "AddTravelItinerary": {
+        "required": [
+          "departureDate",
+          "destinations",
+          "partnerBid",
+          "primaryAccountNumbers",
+          "returnDate"
+        ],
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "string",
+            "description": "User ID you assigned to identify the cardholder using the service."
+          },
+          "partnerBid": {
+            "pattern": "^([0-9]{8})$",
+            "type": "string",
+            "description": "Your Visa Business Identifier (BID)."
+          },
+          "returnDate": {
+            "pattern": "^([0-9]{4}-(0[1-9]{1}|1[0-2]{1})-(0[1-9]{1}|[1-2]{1}[0-9]{1}|3[0-1]{1}))$",
+            "type": "string",
+            "description": "The date your cardholder will return from the trip. Must be in format YYYY-MM-DD and must not be before the Departure Date in the request or before the current date."
+          },
+          "destinations": {
+            "$ref": "#/components/schemas/Destinations"
+          },
+          "departureDate": {
+            "pattern": "^([0-9]{4}-(0[1-9]{1}|1[0-2]{1})-(0[1-9]{1}|[1-2]{1}[0-9]{1}|3[0-1]{1}))$",
+            "type": "string",
+            "description": "The date your cardholder will start their trip. Must be in format YYYY-MM-DD and must not be after the Return Date in the request."
+          },
+          "primaryAccountNumbers": {
+            "$ref": "#/components/schemas/PrimaryAccountNumbers"
+          }
+        },
+        "description": "Adds an Itineray for the User"
+      },
+      "TravelItinerary": {
+        "required": [
+          "departureDate",
+          "destinations",
+          "lastUpdatedBy",
+          "partnerBid",
+          "primaryAccountNumbers",
+          "source",
+          "travelItineraryId"
+        ],
+        "type": "object",
+        "properties": {
+          "source": {
+            "type": "string",
+            "description": "The source of the travel itinerary in the Visa system. When a travel itinerary is submitted to Visa through the Visa Travel Notification Service, the Source field in the response will be Cardholder Self Reported."
+          },
+          "userId": {
+            "type": "string",
+            "description": "User ID you assigned to identify the cardholder using the service."
+          },
+          "partnerBid": {
+            "pattern": "^([0-9]{8})$",
+            "type": "string",
+            "description": "Your Visa Business Identifier (BID)."
+          },
+          "returnDate": {
+            "pattern": "^([0-9]{4}-(0[1-9]{1}|1[0-2]{1})-(0[1-9]{1}|[1-2]{1}[0-9]{1}|3[0-1]{1}))$",
+            "type": "string",
+            "description": "The date your cardholder will return from their trip. Format is YYYY-MM-DD."
+          },
+          "destinations": {
+            "$ref": "#/components/schemas/Destinations"
+          },
+          "departureDate": {
+            "pattern": "^([0-9]{4}-(0[1-9]{1}|1[0-2]{1})-(0[1-9]{1}|[1-2]{1}[0-9]{1}|3[0-1]{1}))$",
+            "type": "string",
+            "description": "The date your cardholder will start their trip. Format is YYYY-MM-DD."
+          },
+          "lastUpdatedBy": {
+            "pattern": "^([A-Z][0-9][a-z]{1,50})$",
+            "type": "string",
+            "description": "User who updated the itinerary in current state."
+          },
+          "lastUpdateTime": {
+            "type": "string",
+            "description": "Time in format YYYY-MM-DDTHH:MM:SS."
+          },
+          "travelItineraryId": {
+            "pattern": "^([A]?[0-9]{1,19})$",
+            "type": "string",
+            "description": "Itinerary ID for the travel plan stored in the system."
+          },
+          "primaryAccountNumbers": {
+            "$ref": "#/components/schemas/PrimaryAccountNumbers"
+          }
+        },
+        "description": "An itinierary detail"
+      },
+      "DeleteTravelItinerary": {
+        "required": [
+          "travelItineraryId"
+        ],
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "string",
+            "description": "User ID you assigned to identify the cardholder using the service."
+          },
+          "partnerBid": {
+            "pattern": "^([0-9]{8})$",
+            "type": "string",
+            "description": "Your Visa Business Identifier (BID). This field is required for OBO issuer or third part resellers."
+          },
+          "travelItineraryId": {
+            "pattern": "^([A]?[0-9]{1,19})$",
+            "type": "string",
+            "description": "Itinerary ID for the travel plan stored in the system."
+          }
+        },
+        "description": "Updates an Itineray for the User"
+      },
+      "AddTravelItineraryResponse": {
+        "type": "object",
+        "properties": {
+          "failureCode": {
+            "type": "string",
+            "description": "Error code specific for CRUD operations"
+          },
+          "responseCode": {
+            "type": "string",
+            "description": "Web service response code"
+          },
+          "responseMessage": {
+            "type": "string",
+            "description": "service response text specific for CRUD operations"
+          },
+          "travelItinerary": {
+            "$ref": "#/components/schemas/TravelItinerary"
+          },
+          "failureDescription": {
+            "type": "string",
+            "description": "Error description specific for CRUD operations"
+          }
+        },
+        "description": "Itinenary from the System after Add Operations"
+      },
+      "PrimaryAccountNumbers": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/PrimaryAccountNumber"
+        }
+      },
+      "Destinations": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Destination"
+        }
+      },
+      "RegisterUserforTravelNotificationService": {
+        "required": [
+          "userId"
+        ],
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "string",
+            "description": "VDP User/application Id"
+          }
+        },
+        "description": "Registers a VDP User for Travel Notification Service in VDP gateway"
+      },
+      "DeleteTravelItineraryResponse": {
+        "type": "object",
+        "properties": {
+          "failureCode": {
+            "type": "string",
+            "description": "Error code specific for CRUD operations"
+          },
+          "responseCode": {
+            "type": "string",
+            "description": "Web service response code"
+          },
+          "responseMessage": {
+            "type": "string",
+            "description": "service response text specific for CRUD operations"
+          },
+          "travelItineraryId": {
+            "pattern": "^([A]?[0-9]{1,19})$",
+            "type": "string",
+            "description": "Itinerary ID for the travel plan stored in the system"
+          },
+          "failureDescription": {
+            "type": "string",
+            "description": "Error description specific for CRUD operations"
+          }
+        },
+        "description": "Deleted an Itineray for the User"
+      },
+      "UpdateTravelItinerary": {
+        "required": [
+          "departureDate",
+          "destinations",
+          "primaryAccountNumbers",
+          "returnDate",
+          "travelItineraryId"
+        ],
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "string",
+            "description": "User ID you assigned to identify the cardholder using the service."
+          },
+          "partnerBid": {
+            "pattern": "^([0-9]{8})$",
+            "type": "string",
+            "description": "Your Visa Business Identifier (BID). This field is required for OBO issuer or third part resellers."
+          },
+          "returnDate": {
+            "pattern": "^([0-9]{4}-(0[1-9]{1}|1[0-2]{1})-(0[1-9]{1}|[1-2]{1}[0-9]{1}|3[0-1]{1}))$",
+            "type": "string",
+            "description": "The date your cardholder will return from the trip. Must be in format YYYY-MM-DD and must not be before the Departure Date in the request or before the current date."
+          },
+          "destinations": {
+            "$ref": "#/components/schemas/Destinations"
+          },
+          "departureDate": {
+            "pattern": "^([0-9]{4}-(0[1-9]{1}|1[0-2]{1})-(0[1-9]{1}|[1-2]{1}[0-9]{1}|3[0-1]{1}))$",
+            "type": "string",
+            "description": "The date your cardholder will start their trip. Must be in format YYYY-MM-DD and must not be after the Return Date in the request."
+          },
+          "travelItineraryId": {
+            "pattern": "^([A]?[0-9]{1,19})$",
+            "type": "string",
+            "description": "Itinerary ID for the travel plan stored in the system."
+          },
+          "primaryAccountNumbers": {
+            "$ref": "#/components/schemas/PrimaryAccountNumbers"
+          }
+        },
+        "description": "Updates an Itineray for the User"
+      },
+      "RetrieveTravelItinerary": {
+        "required": [
+          "partnerBid"
+        ],
+        "type": "object",
+        "properties": {
+          "toDate": {
+            "pattern": "^([0-9]{4}-(0[1-9]{1}|1[0-2]{1})-(0[1-9]{1}|[1-2]{1}[0-9]{1}|3[0-1]{1}))$",
+            "type": "string",
+            "description": "The end date of your search for travel itineraries. Must be in format YYYY-MM-DD and must not be before the To Date in the request."
+          },
+          "userId": {
+            "type": "string",
+            "description": "The User ID for which you want to retrieve travel itineraries."
+          },
+          "fromDate": {
+            "pattern": "^([0-9]{4}-(0[1-9]{1}|1[0-2]{1})-(0[1-9]{1}|[1-2]{1}[0-9]{1}|3[0-1]{1}))$",
+            "type": "string",
+            "description": "The start date of your search for travel itineraries. Must be in format YYYY-MM-DD and must not be after the To Date in the request or earlier than 30 days from the current date."
+          },
+          "partnerBid": {
+            "pattern": "^([0-9]{8})$",
+            "type": "string",
+            "description": "Your Visa Business Identifier (BID)."
+          },
+          "travelItineraryId": {
+            "pattern": "^([A]?[0-9]{1,19})$",
+            "type": "string",
+            "description": "The ID of the travel itinerary that you want to retrieve."
+          },
+          "primaryAccountNumber": {
+            "$ref": "#/components/schemas/PrimaryAccountNumber"
+          }
+        },
+        "description": "Retrieves a list of itineray from the System for the given criteria"
+      },
+      "UpdateTravelItineraryTestData": {
+        "type": "array",
+        "description": "List of update travel itineray request and response combination",
+        "items": {
+          "type": "object",
+          "properties": {
+            "updateTravelItineraryRequestResponse": {
+              "type": "object",
+              "properties": {
+                "updateTravelItinerary": {
+                  "$ref": "#/components/schemas/UpdateTravelItinerary"
+                },
+                "updateTravelItineraryResponse": {
+                  "$ref": "#/components/schemas/UpdateTravelItineraryResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "GetTravelNotificationServiceTestDataResponse": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "string",
+            "description": "VDP User Id"
+          },
+          "failureCode": {
+            "type": "string",
+            "description": "Error code specific for CRUD operations"
+          },
+          "responseCode": {
+            "type": "string",
+            "description": "Web service response code"
+          },
+          "responseMessage": {
+            "type": "string",
+            "description": "service response text specific for CRUD operations"
+          },
+          "failureDescription": {
+            "type": "string",
+            "description": "Error description specific for CRUD operations"
+          },
+          "addTravelItineraryTestData": {
+            "$ref": "#/components/schemas/AddTravelItineraryTestData"
+          },
+          "deleteTravelItineraryTestData": {
+            "$ref": "#/components/schemas/DeleteTravelItineraryTestData"
+          },
+          "updateTravelItineraryTestData": {
+            "$ref": "#/components/schemas/UpdateTravelItineraryTestData"
+          },
+          "retrieveTravelItineraryTestData": {
+            "$ref": "#/components/schemas/RetrieveTravelItineraryTestData"
+          }
+        },
+        "description": "This is a list of test data for all the operations for the web services"
+      },
+      "RetrieveTravelItineraryResponse": {
+        "type": "object",
+        "properties": {
+          "failureCode": {
+            "type": "string",
+            "description": "Error code specific for CRUD operations"
+          },
+          "responseCode": {
+            "type": "string",
+            "description": "Web service response code"
+          },
+          "responseMessage": {
+            "type": "string",
+            "description": "service response text specific for CRUD operations"
+          },
+          "travelItineraries": {
+            "$ref": "#/components/schemas/TravelItineraries"
+          },
+          "failureDescription": {
+            "type": "string",
+            "description": "Error description specific for CRUD operations"
+          }
+        },
+        "description": "It is a list of itineray from the System for the criteria provided in the request"
+      },
+      "apiResponse": {
+        "required": [
+          "responseCode",
+          "responseMessage"
+        ],
+        "type": "object",
+        "properties": {
+          "responseCode": {
+            "type": "string",
+            "description": "Service response code",
+            "example": "0",
+            "enum": [
+              "0",
+              "5",
+              "10",
+              "15",
+              "20"
+            ]
+          },
+          "responseMessage": {
+            "type": "string",
+            "description": "Service response text specific for CRUD operations",
+            "example": "Successfully processed"
+          }
+        },
+        "description": "Basic Travel Itinerary"
+      },
+      "PrimaryAccountNumber": {
+        "type": "object",
+        "properties": {
+          "cardAccountNumber": {
+            "pattern": "^([0-9]{16,19})$",
+            "type": "string",
+            "description": "Card Account Number holds the numeric PAN and PAN should always be between 16 - 19 digits"
+          }
+        },
+        "description": "Card account number for which your cardholder has reported a travel plan. A maximum of 10 Primary Account Numbers can be included in a request, and all Primary Account Numbers must be associated with the Holding BID of the Partner BID in the request."
+      },
+      "AddTravelItineraryTestData": {
+        "type": "array",
+        "description": "List of add itinerary request and response combination",
+        "items": {
+          "type": "object",
+          "properties": {
+            "addTravelItineraryRequestResponse": {
+              "type": "object",
+              "properties": {
+                "addTravelItinerary": {
+                  "$ref": "#/components/schemas/AddTravelItinerary"
+                },
+                "addTravelItineraryResponse": {
+                  "$ref": "#/components/schemas/AddTravelItineraryResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "DeleteTravelItineraryTestData": {
+        "type": "array",
+        "description": "List of retrieve travel itineray request and response combination",
+        "items": {
+          "type": "object",
+          "properties": {
+            "deleteTravelItineraryRequestResponse": {
+              "type": "object",
+              "properties": {
+                "deleteTravelItinerary": {
+                  "$ref": "#/components/schemas/DeleteTravelItinerary"
+                },
+                "deleteTravelItineraryResponse": {
+                  "$ref": "#/components/schemas/DeleteTravelItineraryResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "RetrieveTravelItineraryTestData": {
+        "type": "array",
+        "description": "List of retrieve travel itineray request and response combination",
+        "items": {
+          "type": "object",
+          "properties": {
+            "retrieveTravelItineraryRequestResponse": {
+              "type": "object",
+              "properties": {
+                "retrieveTravelItinerary": {
+                  "$ref": "#/components/schemas/RetrieveTravelItinerary"
+                },
+                "retrieveTravelItineraryResponse": {
+                  "$ref": "#/components/schemas/RetrieveTravelItineraryResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "GetTravelNotificationServiceTestData": {
+        "required": [
+          "partnerBid",
+          "userId"
+        ],
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "string",
+            "description": "VDP User Id"
+          },
+          "partnerBid": {
+            "pattern": "^([0-9]{8})$",
+            "type": "string",
+            "description": "The issuer BID associated with Itinerary"
+          }
+        },
+        "description": "Retrieves the set of test data for an application id in VDP gateway"
+      }
+    },
+    "responses": {},
+    "parameters": {},
+    "examples": {},
+    "requestBodies": {},
+    "headers": {},
+    "callbacks": {}
+  },
+  "webhooks": {},
+  "x-tagGroups": [
+    {
+      "name": "API Reference",
+      "tags": [
+        "Visa Travel Notification API"
+      ]
+    }
+  ]
+}

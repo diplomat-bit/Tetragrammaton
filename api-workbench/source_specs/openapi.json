@@ -1,0 +1,615 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Incoming webhooks",
+    "description": " It provides the capability to a partner for publishing event notifications from partner application to U.S. Bank",
+    "termsOfService": "https://developer.usbank.com/terms",
+    "contact": {
+      "url": "https://developer.usbank.com/support/create"
+    },
+    "license": {
+      "name": "U.S. Bank Operating Rules",
+      "url": "https://developer.usbank.com/terms"
+    },
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://api2.usbank.com/event-notifications/webhook/v1",
+      "description": "Production URL"
+    },
+    {
+      "url": "https://alpha-api2.usbank.com/event-notifications/webhook/v1",
+      "description": "UAT URL"
+    }
+  ],
+  "security": [
+    {
+      "bearerAuth": []
+    },
+    {
+      "OAuth2": []
+    }
+  ],
+  "paths": {
+    "/events": {
+      "post": {
+        "tags": [
+          "Publish Event Notifications"
+        ],
+        "summary": "Event notifications from Partners.",
+        "description": "It provides the capability to a partner for publishing event notifications from partner application to U.S.Bank.\nIncoming Webhooks offer an easy and direct way to communicate real-time information to U.S. Bank from third-party applications. This simplifies the process of sending real-time notifications from external applications directly to U.S. Bank.",
+        "operationId": "publish-Events",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "OAuth Bearer Token",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Correlation-ID",
+            "in": "header",
+            "description": "Unique identifier for every request-response pair. Allows to trace full path of interactions through multiple sub-systems.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "description": "Indicates request payload format of 'application/json'.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string",
+              "example": "application/json"
+            }
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "description": "Indicates the acceptable response format. Recommended to use application/json.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RequestBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "headers": {
+              "Correlation-ID": {
+                "$ref": "#/components/headers/Correlation-ID"
+              },
+              "Content-Type": {
+                "$ref": "#/components/headers/Content-Type"
+              },
+              "Date": {
+                "$ref": "#/components/headers/Date"
+              },
+              "Version": {
+                "$ref": "#/components/headers/Version"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "405": {
+            "$ref": "#/components/responses/405"
+          },
+          "429": {
+            "$ref": "#/components/responses/429"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          },
+          "503": {
+            "$ref": "#/components/responses/503"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "RequestBody": {
+        "type": "object",
+        "properties": {},
+        "example": {
+          "customerID": "10496712671",
+          "customerIdType": "EXT_CHITL",
+          "transaction": "234223342323"
+        }
+      },
+      "Errors": {
+        "type": "object",
+        "properties": {
+          "Errors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Errors_Errors"
+            }
+          }
+        }
+      },
+      "GatewayError": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Error code to trace error condition back to log information\n|code  | message | \n|:---|:---|\n|401|Invalid API keys|\n|401|Access token expired|\n|403|Forbidden|\n|404|Resource not found|\n|405|Method not allowed|\n|500|Internal server error|\n|503|Service temporarily unavailable|\n"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "Errors_details": {
+        "required": [
+          "attributeName",
+          "reason",
+          "reasonCode"
+        ],
+        "properties": {
+          "attributeName": {
+            "type": "string",
+            "description": "Field that caused the identified error. Used when  caused by validation errors."
+          },
+          "attributeValue": {
+            "type": "string",
+            "description": "Description of why the field caused an error. Used when caused by validation errors."
+          },
+          "reason": {
+            "type": "string",
+            "description": "As end user displayable information, this human readable text provides a high-level categorization of the occurred error. Used when caused by validation errors."
+          },
+          "reasonCode": {
+            "type": "string",
+            "description": "Description of why the field caused an error. Used when caused by validation errors.\n\nHTTP Status Code |Reason|Reason Code|\n|:---|:---|:---|\n|400|Required header is not passed in the request. |4106 |400|Invalid header is passed in the request. |4110\n"
+          }
+        }
+      },
+      "Errors_Errors": {
+        "required": [
+          "code"
+        ],
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Long-term persistent identifier, which can be used to trace the error condition back to log information. \n\nIt will represent the HTTP code and Proxy ID. \nfor instance: 400.5290\n"
+          },
+          "id": {
+            "type": "string",
+            "description": "Unique identifier for the customer.\n",
+            "example": "null"
+          },
+          "message": {
+            "type": "string",
+            "description": "As end user displayable information, this human readable text\nprovides a high-level categorization of the occurred error.\n"
+          },
+          "help": {
+            "type": "string",
+            "description": "Optional hyperlink to online support page",
+            "example": "https://developer.usbank.com/support"
+          },
+          "details": {
+            "type": "array",
+            "description": "An array of detail objects contains the specific reason why the error occurred. Detail objects must contain attributeName AND attributeValue.",
+            "items": {
+              "$ref": "#/components/schemas/Errors_details"
+            }
+          }
+        }
+      }
+    },
+    "responses": {
+      "400": {
+        "description": "Invalid Request",
+        "headers": {
+          "Correlation-ID": {
+            "$ref": "#/components/parameters/Correlation-ID"
+          },
+          "Content-Type": {
+            "$ref": "#/components/headers/Content-Type"
+          },
+          "Date": {
+            "$ref": "#/components/headers/Date"
+          },
+          "Version": {
+            "$ref": "#/components/headers/Version"
+          }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Errors"
+            },
+            "example": {
+              "errors": [
+                {
+                  "code": "400.5290.4112",
+                  "message": "The request was unacceptable. The request cannot be fulfilled due to bad syntax or an invalid parameter",
+                  "help": "https://developer.usbank.com/support",
+                  "details": [
+                    {
+                      "attributeName": "field1",
+                      "reason": "not valid"
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "Authentication Failure",
+        "headers": {
+          "Correlation-ID": {
+            "$ref": "#/components/parameters/Correlation-ID"
+          },
+          "Content-Type": {
+            "$ref": "#/components/headers/Content-Type"
+          },
+          "Date": {
+            "$ref": "#/components/headers/Date"
+          },
+          "Version": {
+            "$ref": "#/components/headers/Version"
+          }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/GatewayError"
+            },
+            "example": {
+              "code": 401,
+              "message": "Access token expired"
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "Forbidden",
+        "headers": {
+          "Correlation-ID": {
+            "$ref": "#/components/parameters/Correlation-ID"
+          },
+          "Content-Type": {
+            "$ref": "#/components/headers/Content-Type"
+          },
+          "Date": {
+            "$ref": "#/components/headers/Date"
+          },
+          "Version": {
+            "$ref": "#/components/headers/Version"
+          }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/GatewayError"
+            },
+            "example": {
+              "code": 403,
+              "message": "Forbidden"
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "Resource Not Found",
+        "headers": {
+          "Correlation-ID": {
+            "$ref": "#/components/parameters/Correlation-ID"
+          },
+          "Content-Type": {
+            "$ref": "#/components/headers/Content-Type"
+          },
+          "Date": {
+            "$ref": "#/components/headers/Date"
+          },
+          "Version": {
+            "$ref": "#/components/headers/Version"
+          }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/GatewayError"
+            },
+            "example": {
+              "code": 404,
+              "message": "Resource not found"
+            }
+          }
+        }
+      },
+      "405": {
+        "description": "Method not allowed",
+        "headers": {
+          "Correlation-ID": {
+            "$ref": "#/components/parameters/Correlation-ID"
+          },
+          "Content-Type": {
+            "$ref": "#/components/headers/Content-Type"
+          },
+          "Date": {
+            "$ref": "#/components/headers/Date"
+          },
+          "Version": {
+            "$ref": "#/components/headers/Version"
+          }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/GatewayError"
+            },
+            "example": {
+              "code": 405,
+              "message": "Requested resource does not support the method"
+            }
+          }
+        }
+      },
+      "429": {
+        "description": "Too Many Requests",
+        "headers": {
+          "Correlation-ID": {
+            "$ref": "#/components/parameters/Correlation-ID"
+          },
+          "Content-Type": {
+            "$ref": "#/components/headers/Content-Type"
+          },
+          "Date": {
+            "$ref": "#/components/headers/Date"
+          },
+          "Version": {
+            "$ref": "#/components/headers/Version"
+          }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/GatewayError"
+            },
+            "example": {
+              "code": 429,
+              "message": "Too Many Requests"
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "Internal server error",
+        "headers": {
+          "Correlation-ID": {
+            "$ref": "#/components/parameters/Correlation-ID"
+          },
+          "Content-Type": {
+            "$ref": "#/components/headers/Content-Type"
+          },
+          "Date": {
+            "$ref": "#/components/headers/Date"
+          },
+          "Version": {
+            "$ref": "#/components/headers/Version"
+          }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/GatewayError"
+            },
+            "example": {
+              "code": 500,
+              "message": "Internal server error"
+            }
+          }
+        }
+      },
+      "503": {
+        "description": "Service Temporarily Unavailable",
+        "headers": {
+          "Correlation-ID": {
+            "$ref": "#/components/parameters/Correlation-ID"
+          },
+          "Content-Type": {
+            "$ref": "#/components/headers/Content-Type"
+          },
+          "Date": {
+            "$ref": "#/components/headers/Date"
+          },
+          "Version": {
+            "$ref": "#/components/headers/Version"
+          }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/GatewayError"
+            },
+            "example": {
+              "code": 503,
+              "message": "Service temporarily unavailable"
+            }
+          }
+        }
+      }
+    },
+    "parameters": {
+      "Correlation-ID": {
+        "name": "Correlation-ID",
+        "in": "header",
+        "description": "Unique identifier for every request-response pair. Allows to trace full path of interactions through multiple sub-systems.",
+        "required": true,
+        "style": "simple",
+        "explode": false,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "Authorization": {
+        "name": "Authorization",
+        "in": "header",
+        "description": "OAuth Bearer Token",
+        "required": true,
+        "style": "simple",
+        "explode": false,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "Accept": {
+        "name": "Accept",
+        "in": "header",
+        "description": "Indicates the acceptable response format. Recommended to use application/json.",
+        "required": true,
+        "style": "simple",
+        "explode": false,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "Content-Type": {
+        "name": "Content-Type",
+        "in": "header",
+        "description": "Indicates request payload format of 'application/json'.",
+        "required": true,
+        "style": "simple",
+        "explode": false,
+        "schema": {
+          "type": "string",
+          "example": "application/json"
+        }
+      }
+    },
+    "headers": {
+      "Correlation-ID": {
+        "description": "Unique ID for request-response pair used for end-to-end tracing. Apigee Gateway auto-populates the value if the consuming application is unable to send a value.",
+        "required": true,
+        "style": "simple",
+        "explode": false,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "Content-Type": {
+        "description": "Content type required when accept-encoding is passed in the request.",
+        "required": false,
+        "style": "simple",
+        "explode": false,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "Date": {
+        "description": "Date",
+        "required": false,
+        "style": "simple",
+        "explode": false,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "Version": {
+        "description": "Version of the API.",
+        "required": false,
+        "style": "simple",
+        "explode": false,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "Accept": {
+        "description": "Indicates the acceptable response format.",
+        "required": true,
+        "style": "simple",
+        "explode": false,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "Accept-Charset": {
+        "description": "Indicate which character sets are acceptable for the response.",
+        "required": false,
+        "style": "simple",
+        "explode": false,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "Accept-Encoding": {
+        "description": "Indicates acceptable compression encodings in the response.",
+        "required": false,
+        "style": "simple",
+        "explode": false,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "Authorization": {
+        "description": "OAuth Bearer Token",
+        "required": true,
+        "style": "simple",
+        "explode": false,
+        "schema": {
+          "type": "string",
+          "example": "Bearer kobFjc3EcRedjMHK37wQYXn0ZKGc"
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      },
+      "OAuth2": {
+        "type": "oauth2",
+        "description": "Given your client credentials, this endpoint returns an access token.  See the security guide for details.",
+        "flows": {
+          "clientCredentials": {
+            "tokenUrl": "https://api2.usbank.com/auth/oauth2/v1/token",
+            "scopes": {}
+          }
+        }
+      }
+    }
+  }
+}

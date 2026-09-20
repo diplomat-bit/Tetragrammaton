@@ -1,0 +1,217 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "User's profile and metadata",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "title": { "type": "string" },
+        "email": { "type": "string" },
+        "phone": { "type": "string" },
+        "loyaltyTier": { "type": "string" },
+        "avatarUrl": { "type": "string" },
+        "usdBalance": { "type": "number" },
+        "fiatBalance": { "type": "number" },
+        "cryptoBalance": { "type": "number" },
+        "app_metadata": {
+          "type": "object",
+          "properties": {
+            "stripe_customer_id": { "type": "string" },
+            "subscription_status": { "type": "string", "enum": ["active", "past_due", "unpaid", "none"] },
+            "is_pro": { "type": "boolean" }
+          }
+        },
+        "user_metadata": {
+          "type": "object",
+          "properties": {
+            "theme": { "type": "string" },
+            "discovery_source": { "type": "string" }
+          }
+        }
+      },
+      "required": ["id", "name", "email"]
+    },
+    "Transaction": {
+      "title": "Transaction",
+      "description": "Financial transaction record",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "date": { "type": "string", "format": "date-time" },
+        "amount": { "type": "number" },
+        "currency": { "type": "string" },
+        "type": { "type": "string" },
+        "category": { "type": "string" },
+        "description": { "type": "string" },
+        "metadata": {
+          "type": "object",
+          "properties": {
+            "merchantName": { "type": "string" },
+            "carbonFootprint": { "type": "number" },
+            "tags": { "type": "array", "items": { "type": "string" } },
+            "aiClassification": { "type": "string" }
+          }
+        }
+      },
+      "required": ["id", "date", "amount", "currency", "type", "category", "description"]
+    },
+    "InternalAccount": {
+      "title": "InternalAccount",
+      "description": "Internal or linked bank account",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "bestName": { "type": "string" },
+        "currency": { "type": "string" },
+        "operationalStatus": { "type": "string" },
+        "balance": { "type": "number" },
+        "bankName": { "type": "string" }
+      },
+      "required": ["id", "bestName", "currency", "balance"]
+    },
+    "PortfolioAsset": {
+      "title": "PortfolioAsset",
+      "description": "Asset in user's investment portfolio",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "value": { "type": "number" },
+        "assetClass": { "type": "string" },
+        "performanceYTD": { "type": "number" },
+        "color": { "type": "string" },
+        "riskLevel": { "type": "string", "enum": ["Low", "Medium", "High"] }
+      },
+      "required": ["id", "name", "value", "assetClass"]
+    },
+    "Notification": {
+      "title": "Notification",
+      "description": "System notification for user",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "message": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" },
+        "read": { "type": "boolean" },
+        "severity": { "type": "string", "enum": ["info", "warning", "error", "critical"] },
+        "view": { "type": "string" }
+      },
+      "required": ["id", "message", "timestamp", "read", "severity"]
+    },
+    "AIInsight": {
+      "title": "AIInsight",
+      "description": "AI-generated financial insight",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "summary": { "type": "string" },
+        "confidence": { "type": "number" },
+        "urgency": { "type": "string", "enum": ["LOW", "MEDIUM", "HIGH", "CRITICAL"] }
+      },
+      "required": ["id", "title", "summary", "confidence", "urgency"]
+    },
+    "BudgetCategory": {
+      "title": "BudgetCategory",
+      "description": "Budget allocation for a category",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "limit": { "type": "number" },
+        "spent": { "type": "number" },
+        "color": { "type": "string" },
+        "category": { "type": "string" },
+        "remaining": { "type": "number" }
+      },
+      "required": ["id", "name", "limit", "spent"]
+    },
+    "RewardItem": {
+      "title": "RewardItem",
+      "description": "Item available for redemption in rewards hub",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "cost": { "type": "number" },
+        "type": { "type": "string" },
+        "description": { "type": "string" },
+        "iconName": { "type": "string" }
+      },
+      "required": ["id", "name", "cost", "type", "description"]
+    },
+    "FinancialGoal": {
+      "title": "FinancialGoal",
+      "description": "User's financial goal",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "targetAmount": { "type": "number" },
+        "currentAmount": { "type": "number" },
+        "targetDate": { "type": "string", "format": "date" },
+        "iconName": { "type": "string" },
+        "status": { "type": "string", "enum": ["on_track", "needs_attention", "achieved", "behind"] }
+      },
+      "required": ["id", "name", "targetAmount", "currentAmount", "status"]
+    },
+    "Recipient": {
+      "title": "Recipient",
+      "description": "A recipient for money transfers",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "email": { "type": "string" },
+        "avatar": { "type": "string" },
+        "accountNumber": { "type": "string" },
+        "bankName": { "type": "string" }
+      },
+      "required": ["id", "name", "email"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "UserProfile",
+      "description": "User profile data"
+    },
+    "/users/{userId}/transactions/{transactionId}": {
+      "schema": "Transaction",
+      "description": "User's financial transactions"
+    },
+    "/users/{userId}/accounts/{accountId}": {
+      "schema": "InternalAccount",
+      "description": "User's bank accounts"
+    },
+    "/users/{userId}/portfolio/{assetId}": {
+      "schema": "PortfolioAsset",
+      "description": "User's investment portfolio assets"
+    },
+    "/users/{userId}/notifications/{notificationId}": {
+      "schema": "Notification",
+      "description": "User's notifications"
+    },
+    "/users/{userId}/insights/{insightId}": {
+      "schema": "AIInsight",
+      "description": "AI-generated insights for the user"
+    },
+    "/users/{userId}/budgets/{budgetId}": {
+      "schema": "BudgetCategory",
+      "description": "User's budget categories"
+    },
+    "/users/{userId}/goals/{goalId}": {
+      "schema": "FinancialGoal",
+      "description": "User's financial goals"
+    },
+    "/users/{userId}/recipients/{recipientId}": {
+      "schema": "Recipient",
+      "description": "User's saved recipients"
+    },
+    "/rewards/{rewardId}": {
+      "schema": "RewardItem",
+      "description": "Global rewards catalog"
+    }
+  }
+}

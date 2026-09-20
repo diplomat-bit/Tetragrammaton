@@ -1,0 +1,404 @@
+openapi: 3.0.1
+info:
+  title: Account Statements
+  description: "Account Documents APIs Version 2.0. These APIs will be used by Citi\
+    \ Partners to retrieve account statements for existing Accounts from various regions\
+    \ .  PCF Deployment Reference name --> DM-O-DocumentServices-Statements. </br>Version\
+    \ 2.0.0 Added new Statement, reponse modified to encrypted binary data."
+  version: 1.0.0
+servers:
+- url: /api/docmgmt/acctStmt/v1
+paths:
+  /statements:
+    get:
+      tags:
+      - Statements
+      summary: OB Returns list of account statements for a given product
+      description: "This API is used to retrieve list of statements for given parameters.\
+        \ This global API uses country fields to identify the appropriate regional\
+        \ services. Product fields filter statements based on product family (bank,\
+        \ loan, credit)."
+      operationId: getStatementList
+      parameters:
+      - name: Authorization
+        in: header
+        description: The authorization token received in earlier API call. This will
+          contain the access token and partner identity. This header is populated
+          only for third-party partners.
+        required: true
+        schema:
+          type: string
+      - name: Accept
+        in: header
+        description: Content types that are acceptable for the response. Currently
+          we support application/json
+        required: true
+        schema:
+          type: string
+          default: application/json
+      - name: uuid
+        in: header
+        description: 128 bit random UUID generated uniquely for every request
+        required: true
+        schema:
+          type: string
+          default: 4468adf1-adfe-4f85-a2c1-f29beaa1f6ee
+      - name: client_id
+        in: header
+        description: The client ID received during application registration in the
+          developer portal.
+        required: true
+        schema:
+          type: string
+          default: 1c5f30d9-043c-49ff-b9c4-255a923278b2
+      - name: countryCode
+        in: header
+        description: Two character ISO format country code.
+        schema:
+          type: string
+      - name: productFamily
+        in: query
+        description: "Product Family  - BANK, CREDIT_CARDS, LOANS, INVESTMENT. If\
+          \ not present API will return all available statements for all products."
+        schema:
+          type: string
+          enum:
+          - BANK
+          - CREDIT_CARDS
+          - LOANS
+          - INVESTMENT
+      responses:
+        "200":
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatementsResponse'
+            charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/StatementsResponse'
+        "204":
+          description: No Content
+          content: {}
+        "400":
+          description: If Authorization header is empty or If clientId is wrong
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadResponse'
+            charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/BadResponse'
+        "401":
+          description: If wrong access token is used or If AccessToken is expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnAuthorizedCredentialResponse'
+            charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/UnAuthorizedCredentialResponse'
+        "403":
+          description: If clientId is correct but token was generated for different
+            clientId
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenResponse'
+            charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/ForbiddenResponse'
+        "404":
+          description: If AccessToken is not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundResponse'
+            charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/NotFoundResponse'
+        "500":
+          description: If request failed due to an internal error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerErrorResponse'
+            charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/ServerErrorResponse'
+  /statements/{statementId}:
+    get:
+      tags:
+      - Statements
+      summary: OB Return the statement for the given statement ID
+      description: "This API retrieves a statement for the given statement ID. This\
+        \ global API uses country fields to identify the appropriate regional services.\
+        \ Product fields filter statements based on product family (bank, loan, credit\
+        \ and tax)."
+      operationId: getStatement
+      parameters:
+      - name: Authorization
+        in: header
+        description: The authorization token received in earlier API call. This will
+          contain the access token and partner identity. This header is populated
+          only for third-party partners.
+        required: true
+        schema:
+          type: string
+      - name: Accept
+        in: header
+        description: Content types that are acceptable for the response. Currently
+          we support application/json
+        required: true
+        schema:
+          type: string
+          default: application/json
+      - name: uuid
+        in: header
+        description: 128 bit random UUID generated uniquely for every request.
+        required: true
+        schema:
+          type: string
+          default: 4468adf1-adfe-4f85-a2c1-f29beaa1f6ee
+      - name: client_id
+        in: header
+        description: The client ID received during customer onboarding.
+        required: true
+        schema:
+          type: string
+          default: 1c5f30d9-043c-49ff-b9c4-255a923278b2
+      - name: countryCode
+        in: header
+        description: Two character ISO format country code.
+        schema:
+          type: string
+      - name: statementId
+        in: path
+        description: Unique id that maps to the specific statement to be downloaded.
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatementResponse'
+            charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/StatementResponse'
+        "400":
+          description: If Authorization header is empty or If clientId is wrong
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadResponse'
+            charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/BadResponse'
+        "401":
+          description: If wrong access token is used or If AccessToken is expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnAuthorizedCredentialResponse'
+            charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/UnAuthorizedCredentialResponse'
+        "403":
+          description: If clientId is correct but token was generated for different
+            clientId
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenResponse'
+            charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/ForbiddenResponse'
+        "404":
+          description: If AccessToken is not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundResponse'
+            charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/NotFoundResponse'
+        "500":
+          description: If request failed due to an internal error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerErrorResponse'
+            charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/ServerErrorResponse'
+components:
+  schemas:
+    StatementsResponse:
+      type: object
+      properties:
+        statements:
+          type: array
+          items:
+            $ref: '#/components/schemas/StatementDetails'
+    StatementDetails:
+      type: object
+      properties:
+        accountId:
+          type: string
+          description: Account ID.
+          example: 70551d2e-ad9e-4ba9-aee6-510afeb0c0cd-BNK
+        statementId:
+          type: string
+          description: Unique identifier for the statement.
+          example: 5d38d86704895841f8d6329b
+        statementType:
+          type: string
+          description: Type of statement. Call API to get list of all statement types.
+          example: "501"
+        documentFormat:
+          type: string
+          description: Currently only PDF format is supported
+          example: PDF
+        statementDate:
+          type: string
+          description: Date/Month/Year for which this statement was generated. Format
+            MM/DD/YYYY
+          format: date
+        productFamily:
+          type: string
+          description: "Product_Family_type - BANK, CREDIT_CARD, LOAN, BROKERAGE"
+          example: BANK
+    StatementResponse:
+      type: object
+      properties:
+        documentFormat:
+          type: string
+          description: The format for the document.
+          example: application/pdf
+        encodeType:
+          type: string
+          description: "Image Encoding Type e.g. base16, base64"
+          example: base64
+        dataPayload:
+          type: string
+          description: This field contains binary data for the statement.
+          example: "{\"encryptedPayload\":{\"header\":{\"alg\":\"RSA-OAEP\",\"enc\"\
+            :\"A256KW\",\"kid\":\"Citi_2020-02-10\",\"x5c\":\"9f02dfd3143e8202d774793902ca07e888462d5e\"\
+            ,\"cty\":\"application/pdf\"},\"iv\":\"fBglurNNzOplKdjH\",\"ciphertext\"\
+            :\"fBglurNNzOplKdjHXKCdSv4hQAAAAAAAAAAAAAA==\"}}"
+    ErrorResponse:
+      required:
+      - code
+      - type
+      type: object
+      properties:
+        error:
+          type: string
+          description: Text providing additional information used to assist the client
+            in understanding the error that occurred
+        error_description:
+          type: string
+          description: Text informing the client of the error
+        type:
+          type: string
+          description: |-
+            Mandatory.
+
+             error type
+        code:
+          type: string
+          description: |-
+            Mandatory.
+
+             Error code
+        details:
+          type: string
+          description: Verbose explanation of the error
+    BadResponse:
+      properties:
+        error:
+          type: object
+          example: invalid_request
+        error_description:
+          type: object
+          example: Missing or Invalid parameters or Invalid Client Identifier
+        type:
+          type: object
+          example: invalid or error
+        code:
+          type: object
+          example: invalidRequest or 400
+        details:
+          type: object
+          example: Missing or invalid parameters or Bad Request
+      allOf:
+      - $ref: '#/components/schemas/ErrorResponse'
+    UnAuthorizedCredentialResponse:
+      properties:
+        error:
+          type: object
+          example: invalid_token
+        error_description:
+          type: object
+          example: Invalid Token
+        type:
+          type: object
+          example: unAuthorized
+        code:
+          type: object
+          example: "401"
+        details:
+          type: object
+          example: Authorization credentials are missing or invalid or Access token
+            is expired
+      allOf:
+      - $ref: '#/components/schemas/ErrorResponse'
+    ForbiddenResponse:
+      properties:
+        error:
+          type: object
+          example: accessNotConfigured
+        error_description:
+          type: object
+          example: Insufficient permission to grant access
+        type:
+          type: object
+          example: error
+        code:
+          type: object
+          example: "403"
+        details:
+          type: object
+          example: accessNotConfigured
+      allOf:
+      - $ref: '#/components/schemas/ErrorResponse'
+    NotFoundResponse:
+      properties:
+        type:
+          type: object
+          example: error
+        code:
+          type: object
+          example: resourceNotFound
+        details:
+          type: object
+          example: Resource not found
+      allOf:
+      - $ref: '#/components/schemas/ErrorResponse'
+    ServerErrorResponse:
+      properties:
+        type:
+          type: object
+          example: fatal
+        code:
+          type: object
+          example: serverUnavailable
+        details:
+          type: object
+          example: The request failed due to an internal error
+      allOf:
+      - $ref: '#/components/schemas/ErrorResponse'
+x-original-swagger-version: "2.0"

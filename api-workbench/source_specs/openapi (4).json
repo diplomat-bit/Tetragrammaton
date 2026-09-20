@@ -1,0 +1,1948 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "version": "1.1.1",
+    "title": "Access Online Transactions and Orders",
+    "description": "This service provides Access Online Transaction and Order details, specifically\n\n- Read the details of a transaction\n- Retrieve the attachments of a transaction\n- Read the details of an order\n- Find orders matching search criteria\n\nUnless stated otherwise, strings allow the following special characters, including the 'space' character:\n\n**` - = \\ ] [ ' ; / . , ! @ # $ % & * ( ) _ + { } | : \" ? < >**\n\nLast updated Jan 26, 2026\n",
+    "contact": {
+      "url": "https://developer.usbank.com/support/create"
+    },
+    "license": {
+      "name": "Subject to U.S. Bank Developer Portal Terms of Use and API License Agreement. Access® Online is a registered trademark of U.S. Bank. © 2026 U.S. Bank.",
+      "url": "https://developer.usbank.com/terms"
+    }
+  },
+  "externalDocs": {
+    "url": "http://developer.usbank.com",
+    "description": "U.S. Bank Developer Portal"
+  },
+  "servers": [
+    {
+      "url": "https://apip2.usbank.com/access-online-transactions/v1",
+      "description": "Production gateway"
+    },
+    {
+      "url": "https://alpha-apip2.usbank.com/access-online-transactions/v1",
+      "description": "UAT gateway"
+    }
+  ],
+  "security": [
+    {
+      "BearerAuth": []
+    }
+  ],
+  "paths": {
+    "/transactions/{transactionID}": {
+      "get": {
+        "summary": "Retrieve transaction details.",
+        "description": "Given a transaction ID, return the transaction details.\n",
+        "tags": [
+          "Transactions"
+        ],
+        "operationId": "getTransaction",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Accept"
+          },
+          {
+            "$ref": "#/components/parameters/Authorization"
+          },
+          {
+            "$ref": "#/components/parameters/Correlation-ID"
+          },
+          {
+            "$ref": "#/components/parameters/Organization-Short-Name"
+          },
+          {
+            "in": "path",
+            "name": "transactionID",
+            "description": "The 29-digit Access Online Transaction Unique Identifier",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/ID_Transaction"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "headers": {
+              "Content-Type": {
+                "$ref": "#/components/headers/Content-Type"
+              },
+              "Correlation-ID": {
+                "$ref": "#/components/headers/Correlation-ID"
+              },
+              "Date": {
+                "$ref": "#/components/headers/Date"
+              },
+              "Version": {
+                "$ref": "#/components/headers/Version"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "transactionID": {
+                      "$ref": "#/components/schemas/ID_Transaction"
+                    },
+                    "transactionDetails": {
+                      "$ref": "#/components/schemas/TransactionDetails"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/XXXDefaultError"
+          }
+        }
+      }
+    },
+    "/transactions/{transactionID}/attachments": {
+      "get": {
+        "summary": "Retrieve transaction attachment.",
+        "description": "Given a transaction ID, return the transaction attachment as a PDF file. The maximum PDF file size is limited to 10MB.\n\nThe field **transactionInformation.hasAttachment** indicates whether an attachment is available.\n\nThe PDF file is returned as a byte array in the response. The contents should be saved to a file using the .pdf file extension.\n\nIf no attachment is available, 404 - Not Found is returned.\n",
+        "tags": [
+          "Transactions"
+        ],
+        "operationId": "getTransactionAttachment",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Accept-PDF"
+          },
+          {
+            "$ref": "#/components/parameters/Authorization"
+          },
+          {
+            "$ref": "#/components/parameters/Correlation-ID"
+          },
+          {
+            "$ref": "#/components/parameters/Organization-Short-Name"
+          },
+          {
+            "in": "path",
+            "name": "transactionID",
+            "description": "The 29-digit Access Online Transaction Unique Identifier",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/ID_Transaction"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Response is a PDF file attachment.\n",
+            "headers": {
+              "Content-Disposition": {
+                "$ref": "#/components/headers/Content-Disposition"
+              },
+              "Content-Type": {
+                "$ref": "#/components/headers/Content-Type-PDF"
+              },
+              "Correlation-ID": {
+                "$ref": "#/components/headers/Correlation-ID"
+              },
+              "Date": {
+                "$ref": "#/components/headers/Date"
+              },
+              "Version": {
+                "$ref": "#/components/headers/Version"
+              }
+            },
+            "content": {
+              "application/pdf": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary",
+                  "example": "Content-Type: application/pdf\nContent-Disposition: attachment; filename='12345678901234567890-11-2200003.pdf'\nContent-Length: 12345\n<PDF binary data stream>\n"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/XXXDefaultError"
+          }
+        }
+      }
+    },
+    "/orders/{orderID}": {
+      "get": {
+        "summary": "Retrieve order details.",
+        "description": "Given an order ID, return the order details.\n",
+        "tags": [
+          "Orders"
+        ],
+        "operationId": "getOrder",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Accept"
+          },
+          {
+            "$ref": "#/components/parameters/Authorization"
+          },
+          {
+            "$ref": "#/components/parameters/Correlation-ID"
+          },
+          {
+            "$ref": "#/components/parameters/Organization-Short-Name"
+          },
+          {
+            "in": "path",
+            "name": "orderID",
+            "description": "The 8 digit Access Online Order ID",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/ID_Order"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "headers": {
+              "Content-Type": {
+                "$ref": "#/components/headers/Content-Type"
+              },
+              "Correlation-ID": {
+                "$ref": "#/components/headers/Correlation-ID"
+              },
+              "Date": {
+                "$ref": "#/components/headers/Date"
+              },
+              "Version": {
+                "$ref": "#/components/headers/Version"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "orderID": {
+                      "$ref": "#/components/schemas/ID_Order"
+                    },
+                    "orderDetails": {
+                      "$ref": "#/components/schemas/OrderDetails"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/XXXDefaultError"
+          }
+        }
+      }
+    },
+    "/orders/search": {
+      "post": {
+        "summary": "Find orders matching the search criteria.",
+        "tags": [
+          "Orders"
+        ],
+        "operationId": "searchOrders",
+        "description": "\nFind orders that match the specified search criteria.\n\nOne or more of the following search criteria can be provided in the request. Multiple search criteria form a logical conjunction, meaning they are joined via the **AND** operator. See the **SearchOrder** schema for details of each criterion.\n\n- order amount range\n- control number\n- order date range\n- expiration date range\n- payment account ID\n- recipient email\n- order status\n- order type\n\nThe search can include an order date range and/or an expiration date range. If neither is specified, the results will include order dates within the the last 90 days. Up to 6 years of order history are retained, with a maximum search range of 90 days.\n\nIf no search parameters are provided (empty request body), then all orders created within the last 90 days are returned.\n\nThe result is a list of one or more order summaries sorted by orderID in ascending order. If there are no matches, status 200 and page.totalCount of zero are returned.\n\nThe page number and size are specified in the request body. A page number of 1 indicates a new search. The page size and search criteria should not change in subsequent requests.\n",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Accept"
+          },
+          {
+            "$ref": "#/components/parameters/Content-Type"
+          },
+          {
+            "$ref": "#/components/parameters/Authorization"
+          },
+          {
+            "$ref": "#/components/parameters/Correlation-ID"
+          },
+          {
+            "$ref": "#/components/parameters/Organization-Short-Name"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchOrder"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "headers": {
+              "Content-Type": {
+                "$ref": "#/components/headers/Content-Type"
+              },
+              "Correlation-ID": {
+                "$ref": "#/components/headers/Correlation-ID"
+              },
+              "Date": {
+                "$ref": "#/components/headers/Date"
+              },
+              "Version": {
+                "$ref": "#/components/headers/Version"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "page": {
+                      "$ref": "#/components/schemas/Page"
+                    },
+                    "orders": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/OrderSummary"
+                      }
+                    }
+                  }
+                },
+                "examples": {
+                  "1 or more matches": {
+                    "value": {
+                      "page": {
+                        "number": 2,
+                        "size": 20,
+                        "pageCount": 6,
+                        "totalCount": 115
+                      },
+                      "orders": [
+                        {
+                          "orderID": 87654321,
+                          "controlNumber": "KW01262021b",
+                          "orderDate": "2021-03-17",
+                          "paymentAccountNumber": "9272",
+                          "paymentAccountID": 123456789012,
+                          "recipientEmail": "abc@org.com",
+                          "recipientName": "ABC Company",
+                          "orderAmount": 3.65,
+                          "orderExpirationDate": "2020-12-13",
+                          "percentFulfilled": 55,
+                          "orderStatus": "Open",
+                          "orderType": "Purchase_Order",
+                          "transactionIDs": [
+                            "01425475187737822021-03-0900001",
+                            "01425475187737822021-03-0900002"
+                          ]
+                        },
+                        "...more orders..."
+                      ]
+                    }
+                  },
+                  "No matches": {
+                    "value": {
+                      "page": {
+                        "number": 1,
+                        "size": 0,
+                        "pageCount": 0,
+                        "totalCount": 0
+                      },
+                      "orders": null
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/XXXDefaultError"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "headers": {
+      "Content-Type": {
+        "required": true,
+        "description": "Indicates body format of 'application/json'",
+        "schema": {
+          "type": "string",
+          "example": "application/json"
+        }
+      },
+      "Content-Disposition": {
+        "required": true,
+        "description": "The intended use of the content (attachment)",
+        "schema": {
+          "type": "string",
+          "example": "attachment; filename='example.pdf'"
+        }
+      },
+      "Content-Type-PDF": {
+        "required": true,
+        "description": "Indicates body format of 'application/pdf'",
+        "schema": {
+          "type": "string",
+          "example": "application/pdf"
+        }
+      },
+      "Correlation-ID": {
+        "required": true,
+        "description": "Unique client request ID that is echoed in the response to aid end-to-end tracing.  This identifier should change with each request - including retries - so each attempt can be traced.",
+        "schema": {
+          "type": "string",
+          "example": "123e4567-e89b-12d3-a456-42766544abcd"
+        }
+      },
+      "Date": {
+        "required": true,
+        "description": "Date and time of the response",
+        "schema": {
+          "type": "string",
+          "example": "Sun, 14 Feb 2021 23:08:23 GMT"
+        }
+      },
+      "Version": {
+        "required": false,
+        "description": "Response version consisting of major.minor.patch",
+        "schema": {
+          "type": "string",
+          "example": "1.0.0"
+        }
+      }
+    },
+    "parameters": {
+      "Accept": {
+        "name": "Accept",
+        "in": "header",
+        "required": true,
+        "description": "Indicates the acceptable response format of 'application/json'",
+        "schema": {
+          "type": "string",
+          "example": "application/json"
+        }
+      },
+      "Accept-PDF": {
+        "name": "Accept",
+        "in": "header",
+        "required": true,
+        "description": "Indicates PDF file as the expected response format, or JSON in the event of an error",
+        "schema": {
+          "type": "string",
+          "example": "application/pdf, application/json"
+        }
+      },
+      "Authorization": {
+        "name": "Authorization",
+        "in": "header",
+        "required": true,
+        "description": "OAuth Bearer token",
+        "schema": {
+          "type": "string",
+          "example": "Bearer kobFjc3EcRedjMHK37wQYXn0ZKGc"
+        }
+      },
+      "Content-Type": {
+        "name": "Content-Type",
+        "in": "header",
+        "required": true,
+        "description": "Indicates body format of 'application/json'",
+        "schema": {
+          "type": "string",
+          "example": "application/json"
+        }
+      },
+      "Correlation-ID": {
+        "name": "Correlation-ID",
+        "in": "header",
+        "required": true,
+        "description": "Unique client request ID that is echoed in the response, to aid end-to-end tracing.  This identifier should change with each request - including retries - so each attempt can be traced.",
+        "schema": {
+          "type": "string",
+          "example": "123e4567-e89b-12d3-a456-42766544abcd"
+        }
+      },
+      "Organization-Short-Name": {
+        "name": "Organization-Short-Name",
+        "in": "header",
+        "required": true,
+        "description": "Identifier used to scope the request to a specific organization, a.k.a. Org Short Name. Alphanumeric and special characters permitted. An incorrect name results in '404 - Organization Short Name not found'.\n",
+        "schema": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 6,
+          "example": "OSNAME"
+        }
+      }
+    },
+    "responses": {
+      "XXXDefaultError": {
+        "description": "There are two error formats\n1) Gateway errors\n2) API service errors\n\n**Gateway errors** are formatted per the *USB_ErrorGateway* schema. Common gateway errors are\n- 401 - Access token has expired\n- 429 - Too many requests\n- 500 - Access token is invalid\n- 503 - The service is temporarily unavailable\n- 504 - Gateway timeout (API service has exceeded timeout period)\n\n**API service errors** are formatted per the *USB_ErrorService* schema. The primary content of a service error is\n\n- **code** - 3 part error code AAA.0709.CCCC\n  * AAA = 3-Digit HTTP status code\n  * 0709 = 4-Digit code assigned to this service\n  * CCCC = 4-Digit reason code from the service\n\n- **message** - a description of the error condition\n\nRefer to the schema definition for optional detail possibly returned.\n\nFollowing is a list of possible service errors, including a description and example. This list is not exhaustive and other errors may be returned.\n\n- 400 Bad Request - The request format or parameters are invalid\n- 403 Forbidden - The client is not authorized to access the requested resource\n- 404 Not Found - The requested resource does not exist\n- 405 Method Not Allowed - The requested resource does not support the requested method\n- 406 Unacceptable - Accept header must be application/json\n- 409 Conflict - Often indicates duplicate Idempotency-Key detected\n- 415 Unsupported Media Type - Content-Type header must be application/json\n- 500 Internal Server Error - The server cannot process the request due to an internal error\n\n**NOTICE - The example values are approximate representations and not actual.  The example JSON structures are accurate, while some fields are optional.**\n",
+        "headers": {
+          "Date": {
+            "$ref": "#/components/headers/Date"
+          },
+          "Correlation-ID": {
+            "$ref": "#/components/headers/Correlation-ID"
+          },
+          "Content-Type": {
+            "$ref": "#/components/headers/Content-Type"
+          },
+          "Version": {
+            "$ref": "#/components/headers/Version"
+          }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/USB_ErrorGateway"
+                },
+                {
+                  "$ref": "#/components/schemas/USB_ErrorService"
+                }
+              ]
+            },
+            "examples": {
+              "400": {
+                "value": {
+                  "errors": [
+                    {
+                      "code": "400.0709.1000",
+                      "message": "Badly formed request",
+                      "details": [
+                        {
+                          "attributeName": "name.last",
+                          "reason": "Invalid characters",
+                          "code": "2000"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              },
+              "403": {
+                "value": {
+                  "errors": [
+                    {
+                      "code": "403.0709.1003",
+                      "message": "Insufficient access permission"
+                    }
+                  ]
+                }
+              },
+              "404": {
+                "value": {
+                  "errors": [
+                    {
+                      "code": "404.0709.2014",
+                      "message": "The requested transaction was not found."
+                    }
+                  ]
+                }
+              },
+              "405": {
+                "value": {
+                  "errors": [
+                    {
+                      "code": "405.0709.1005",
+                      "message": "Method not supported for this resource"
+                    }
+                  ]
+                }
+              },
+              "406": {
+                "value": {
+                  "errors": [
+                    {
+                      "code": "406.0709.2104",
+                      "message": "The request was unacceptable. The request cannot be fulfilled due to invalid data."
+                    }
+                  ]
+                }
+              },
+              "409": {
+                "value": {
+                  "errors": [
+                    {
+                      "code": "409.0709.1009",
+                      "message": "Duplicate Idempotency-Key detected"
+                    }
+                  ]
+                }
+              },
+              "415": {
+                "value": {
+                  "errors": [
+                    {
+                      "code": "415.0709.1015",
+                      "message": "Content-Type header must be application/json"
+                    }
+                  ]
+                }
+              },
+              "500": {
+                "value": {
+                  "errors": [
+                    {
+                      "code": "500.0709.1000",
+                      "message": "Unexpected error - contact support"
+                    }
+                  ]
+                }
+              },
+              "401 - Gateway Error": {
+                "value": {
+                  "code": "401-01",
+                  "message": "api key is invalid",
+                  "errors": [
+                    {
+                      "message": "Access Token expired"
+                    }
+                  ]
+                }
+              },
+              "429 - Gateway Error": {
+                "value": {
+                  "code": "429-01",
+                  "message": "rate limit has been exhausted",
+                  "errors": [
+                    {
+                      "message": "Too Many Requests"
+                    }
+                  ]
+                }
+              },
+              "500 - Gateway Error": {
+                "value": {
+                  "code": "500-01",
+                  "message": "internal server error",
+                  "errors": [
+                    {
+                      "message": "Invalid Access Token"
+                    }
+                  ]
+                }
+              },
+              "503 - Gateway Error": {
+                "value": {
+                  "code": "503-01",
+                  "message": "service unavailable",
+                  "errors": [
+                    {
+                      "message": "Service temporarily unavailable"
+                    }
+                  ]
+                }
+              },
+              "504 - Gateway Error": {
+                "value": {
+                  "code": "504-01",
+                  "message": "gateway timeout",
+                  "errors": [
+                    {
+                      "message": "Service exceeded timeout"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "AccountInformation": {
+        "type": "object",
+        "properties": {
+          "accountName": {
+            "type": "string",
+            "description": "Name on the Account",
+            "example": "Highlight Corporation"
+          },
+          "accountNumber": {
+            "type": "string",
+            "pattern": "^\\d{4}$",
+            "description": "Last 4 of the Account Number",
+            "example": "9272"
+          },
+          "managingAccountNumber": {
+            "type": "string",
+            "pattern": "^\\d{4}$",
+            "description": "Last 4 of the Managing Account's Number",
+            "example": "3631"
+          },
+          "managingAccountName": {
+            "type": "string",
+            "description": "The Managing Account's First and Last Name for the Account",
+            "example": "Jane Doe"
+          },
+          "managingAccountNameLine2": {
+            "type": "string",
+            "description": "The Managing Account's Organization Name",
+            "example": "MGROSN"
+          },
+          "socialSecurityNumber": {
+            "description": "Social Security Number on the account",
+            "type": "string",
+            "pattern": "^\\d{3}-\\d\\d-\\d{4}$",
+            "example": "123-45-6789"
+          },
+          "optional1": {
+            "type": "string",
+            "description": "Custom optional field for the Account",
+            "example": "ABCD"
+          },
+          "optional2": {
+            "type": "string",
+            "description": "Custom optional field for the Account",
+            "example": "5678"
+          },
+          "defaultAccountingCode": {
+            "type": "string",
+            "description": "Default accounting code",
+            "example": "03-550"
+          },
+          "lostStolenAccount": {
+            "type": "string",
+            "pattern": "^\\d{4}$",
+            "description": "Last 4 of Previous Account number if the Account was Lost/Stolen",
+            "example": "1111"
+          },
+          "replacementAccount": {
+            "type": "string",
+            "pattern": "^\\d{4}$",
+            "description": "Last 4 of Current Account number if the Previous Account was Lost/Stolen",
+            "example": "2222"
+          },
+          "bank": {
+            "type": "string",
+            "description": "Bank Number for the Processing Hierarchy",
+            "example": "0436"
+          },
+          "agent": {
+            "type": "string",
+            "description": "Agent Number for the Processing Hierarchy",
+            "example": "2454"
+          },
+          "company": {
+            "type": "string",
+            "description": "Company Number for the Processing Hierarchy",
+            "example": "14463"
+          },
+          "division": {
+            "type": "string",
+            "description": "Division Number for the Processing Hierarchy",
+            "example": "55055"
+          },
+          "department": {
+            "type": "string",
+            "description": "Department Number for the Processing Hierarchy",
+            "example": "4040"
+          },
+          "billingType": {
+            "type": "string",
+            "description": "Billing Type",
+            "example": "I"
+          }
+        }
+      },
+      "Allocations": {
+        "type": "object",
+        "properties": {
+          "accountingCode": {
+            "type": "string",
+            "description": "Accounting Code",
+            "example": "03-550"
+          },
+          "allocationAmount": {
+            "type": "number",
+            "description": "Allocation amount",
+            "example": 135
+          },
+          "allocationPercent": {
+            "type": "integer",
+            "description": "Percentage of transaction amount represented by this allocation",
+            "example": 50
+          },
+          "allocationSource": {
+            "type": "string",
+            "description": "Allocation source",
+            "example": "DAC"
+          },
+          "allocationLastChangedBy": {
+            "type": "string",
+            "description": "User this allocation was changed by last",
+            "example": "JohnD"
+          }
+        }
+      },
+      "AttachedTransactionList": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "transactionID": {
+              "$ref": "#/components/schemas/ID_Transaction"
+            },
+            "transactionDate": {
+              "type": "string",
+              "format": "date",
+              "pattern": "^\\d{4}-\\d\\d-\\d\\d$",
+              "description": "Date which the transaction occurred, YYYY-MM-DD",
+              "example": "2020-12-13"
+            },
+            "postingDate": {
+              "type": "string",
+              "format": "date",
+              "pattern": "^\\d{4}-\\d\\d-\\d\\d$",
+              "description": "Date which the transaction was posted to payment processing system, YYYY-MM-DD",
+              "example": "2020-11-29"
+            }
+          }
+        }
+      },
+      "AccountDetailsForOrders": {
+        "type": "object",
+        "properties": {
+          "accountName": {
+            "type": "string",
+            "description": "Name on the Account",
+            "example": "ACME Corporation"
+          },
+          "accountNumber": {
+            "type": "string",
+            "pattern": "^\\d{4}$",
+            "description": "Last 4 of the Account Number",
+            "example": "9272"
+          },
+          "accountID": {
+            "type": "integer",
+            "description": "Account Identifier",
+            "example": 616041000114
+          },
+          "managingAccountNumber": {
+            "type": "string",
+            "pattern": "^\\d{4}$",
+            "description": "Last 4 of the Managing Account's Number",
+            "example": "3631"
+          },
+          "managingAccountName": {
+            "type": "string",
+            "description": "The Managing Account's First and Last Name for the Account",
+            "example": "Jane Doe"
+          },
+          "managingAccountNameLine2": {
+            "type": "string",
+            "description": "The Managing Account's Organization Name",
+            "example": "MGROSN"
+          },
+          "bank": {
+            "type": "string",
+            "description": "Bank Number for the Processing Hierarchy",
+            "example": "0436"
+          },
+          "agent": {
+            "type": "string",
+            "description": "Agent Number for the Processing Hierarchy",
+            "example": "2454"
+          },
+          "company": {
+            "type": "string",
+            "description": "Company Number for the Processing Hierarchy",
+            "example": "14463"
+          },
+          "division": {
+            "type": "string",
+            "description": "Division Number for the Processing Hierarchy",
+            "example": "55055"
+          },
+          "department": {
+            "type": "string",
+            "description": "Department Number for the Processing Hierarchy",
+            "example": "4040"
+          }
+        }
+      },
+      "CustomOrderFieldsList": {
+        "description": "The custom order fields List",
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "MyKey1"
+          },
+          "value": {
+            "type": "string",
+            "example": "ValueOne"
+          }
+        },
+        "required": [
+          "name",
+          "value"
+        ]
+      },
+      "CustomOrderCommentList": {
+        "description": "The custom order comment List",
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "MyComment1"
+          },
+          "value": {
+            "type": "string",
+            "example": "This is the first comment"
+          },
+          "date": {
+            "type": "string",
+            "format": "date",
+            "pattern": "^\\d{4}-\\d\\d-\\d\\d$",
+            "description": "YYYY-MM-DD date of comment",
+            "example": "2020-02-13"
+          }
+        },
+        "required": [
+          "name",
+          "value"
+        ]
+      },
+      "DisputeInformation": {
+        "type": "object",
+        "properties": {
+          "disputedStatus": {
+            "type": "string",
+            "description": "Status of any dispute against the transaction",
+            "example": "No"
+          },
+          "disputedStatusDate": {
+            "type": "string",
+            "format": "date",
+            "pattern": "^\\d{4}-\\d\\d-\\d\\d$",
+            "description": "YYYY-MM-DD Date of the most recent dispute status change",
+            "example": "2020-01-30"
+          }
+        }
+      },
+      "FleetInformation": {
+        "type": "object",
+        "properties": {
+          "vehicleNumber": {
+            "type": "integer",
+            "description": "The Vehicle Number",
+            "example": 87658765
+          },
+          "driverNumber": {
+            "type": "integer",
+            "description": "The Driver Number",
+            "example": 12345
+          },
+          "odometer": {
+            "type": "integer",
+            "description": "Vehicle odometer reading",
+            "example": 100500
+          },
+          "fleetPurchaseType": {
+            "type": "string",
+            "description": "Type of purchase",
+            "example": "Fuel"
+          },
+          "fleetTransactionTime": {
+            "type": "string",
+            "format": "date-time",
+            "description": "HH:MM:SS US Central time of day the transaction took place",
+            "example": "09:35:00"
+          },
+          "fuelServiceType": {
+            "type": "string",
+            "description": "Type of service",
+            "example": "Self service"
+          },
+          "fuelType": {
+            "type": "string",
+            "description": "Type of fuel purchased",
+            "example": "Diesel"
+          },
+          "fuelUnitCost": {
+            "type": "string",
+            "description": "Per unit cost of fuel",
+            "example": "2.9009"
+          },
+          "fuelUnitOfMeasure": {
+            "type": "string",
+            "description": "Measurement unit",
+            "example": "Gallons"
+          },
+          "fuelQuantity": {
+            "type": "string",
+            "description": "Amount of fuel purchased",
+            "example": "4.29"
+          },
+          "grossFuelAmount": {
+            "type": "string",
+            "description": "Total fuel cost",
+            "example": "8.42"
+          },
+          "netFuelAmount": {
+            "type": "string",
+            "description": "Net cost of fuel purchased",
+            "example": "9.33"
+          },
+          "grossNonFuelAmount": {
+            "type": "string",
+            "description": "Amount of purchase not attributable to fuel",
+            "example": "3.29"
+          },
+          "netNonFuelAmount": {
+            "type": "string",
+            "description": "Net cost of non fuel items purchased",
+            "example": "3.75"
+          },
+          "totalFuelTaxAmount": {
+            "type": "string",
+            "description": "Total tax on fuel",
+            "example": "0.89"
+          },
+          "fleetTaxRate": {
+            "type": "string",
+            "description": "Tax Rate",
+            "example": "0.15"
+          },
+          "originalFuelTaxAmount": {
+            "type": "string",
+            "description": "Original fuel tax amount",
+            "example": "1.12"
+          },
+          "fleetItemQuantity": {
+            "type": "string",
+            "description": "Non fuel quantity",
+            "example": "1"
+          },
+          "nonFuelProductDescriptionList": {
+            "type": "array",
+            "description": "list of non fuel items",
+            "items": {
+              "type": "string",
+              "example": "Bottled Water"
+            }
+          }
+        }
+      },
+      "ID_Order": {
+        "description": "The Access Online Order ID",
+        "type": "string",
+        "minLength": 8,
+        "maxLength": 10,
+        "pattern": "^[0-9]{8,10}$",
+        "example": "87654321"
+      },
+      "ID_Transaction": {
+        "description": "The Access Online Transaction Unique Identifier",
+        "type": "string",
+        "minLength": 31,
+        "maxLength": 31,
+        "pattern": "^[0-9]{20}-[0-9]{2}-[0-9]{7}$",
+        "example": "12345678901234567890-11-2200003"
+      },
+      "MerchantInformation": {
+        "type": "object",
+        "properties": {
+          "merchantCategoryCodeGroupCode": {
+            "type": "string",
+            "description": "logical grouping of Merchant Category Codes (MCC) ",
+            "example": "20660"
+          },
+          "merchantCategoryCodeGroupDescription": {
+            "type": "string",
+            "description": "Merchant category group description",
+            "example": "AIRLINE"
+          },
+          "merchantCategoryCode": {
+            "type": "string",
+            "maxLength": 4,
+            "description": "a four character numeric merchant category code assigned by Visa or MC to each merchant",
+            "example": "7276"
+          },
+          "merchantCategoryCodeDescription": {
+            "type": "string",
+            "description": "The Visa defined description for the MCC attached ot this transaction",
+            "example": "TAX PREPARATION SERVICES"
+          },
+          "merchantName": {
+            "type": "string",
+            "description": "Name of Merchant",
+            "example": "Test Industries"
+          },
+          "merchantCity": {
+            "type": "string",
+            "description": "City of Merchant",
+            "example": "Chicago"
+          },
+          "merchantState": {
+            "type": "string",
+            "pattern": "^[A-Z]{2}$",
+            "description": "Merchant's State/Province",
+            "example": "IL"
+          },
+          "taxpayerIDNumber": {
+            "type": "string",
+            "description": "Taxpayer ID number. Government assigned for this merchant location (US only)",
+            "example": "XX-YYYZZZZ"
+          },
+          "merchantOrderNumber": {
+            "type": "integer",
+            "description": "Merchant Order Number",
+            "example": 988776501
+          }
+        }
+      },
+      "OrderDetails": {
+        "type": "object",
+        "properties": {
+          "orderItemList": {
+            "$ref": "#/components/schemas/OrderItemList"
+          },
+          "accountDetailsForOrders": {
+            "$ref": "#/components/schemas/AccountDetailsForOrders"
+          },
+          "orderInformation": {
+            "$ref": "#/components/schemas/OrderInformation"
+          }
+        }
+      },
+      "OrderItemList": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "lineItemSequenceNumber": {
+              "type": "string",
+              "description": "The order's line item Sequence number",
+              "example": "1"
+            },
+            "percentOrderAmount": {
+              "type": "integer",
+              "description": "The percent order amount",
+              "example": 55
+            },
+            "receivedAmount": {
+              "type": "number",
+              "description": "The received amount for the order",
+              "example": 1.5
+            },
+            "productCode": {
+              "type": "string",
+              "description": "The order's product code",
+              "example": "PC54321"
+            },
+            "itemDescription": {
+              "type": "string",
+              "description": "The order's item description",
+              "example": "This is the item's description"
+            },
+            "quantity": {
+              "type": "string",
+              "description": "The order's quantity",
+              "example": "120"
+            },
+            "unitOfMeasure": {
+              "type": "string",
+              "description": "The order's unit of measure",
+              "example": "lbs"
+            },
+            "unitCost": {
+              "type": "string",
+              "description": "The order's unit cost",
+              "example": "2.60"
+            },
+            "taxAmount": {
+              "type": "number",
+              "description": "The order's tax amount",
+              "example": 0.64
+            },
+            "commodityCode": {
+              "type": "string",
+              "description": "The order's commodity code",
+              "example": "commodity-code"
+            },
+            "usageCode": {
+              "type": "string",
+              "description": "The order usage code",
+              "example": "usage-code"
+            },
+            "destinationCode": {
+              "type": "string",
+              "description": "The order's destinationCode",
+              "example": "destination-code"
+            },
+            "lineItemTotalAmount": {
+              "type": "number",
+              "description": "The order's line item total amount",
+              "example": 1.64
+            },
+            "orderLineItemComment": {
+              "type": "string",
+              "description": "The order's order line item comment",
+              "example": "This is a comment"
+            },
+            "customOrderFieldsList": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/CustomOrderFieldsList"
+              }
+            }
+          }
+        }
+      },
+      "OrderInformation": {
+        "type": "object",
+        "properties": {
+          "attachedTransactionList": {
+            "$ref": "#/components/schemas/AttachedTransactionList"
+          },
+          "invoiceNumber": {
+            "type": "string",
+            "description": "The invoice number",
+            "example": "Inv01262021b"
+          },
+          "controlNumber": {
+            "type": "string",
+            "description": "The control number",
+            "example": "KW01262021b"
+          },
+          "orderSequenceNumber": {
+            "type": "string",
+            "description": "The order sequence number",
+            "example": "616041000114|2021-01-31|KW01262021b|82073351"
+          },
+          "orderSource": {
+            "type": "string",
+            "description": "The order source",
+            "example": "MANUAL"
+          },
+          "orderDate": {
+            "type": "string",
+            "format": "date",
+            "pattern": "^\\d{4}-\\d\\d-\\d\\d$",
+            "description": "The YYYY-MM-DD user-specified order date",
+            "example": "2021-03-17"
+          },
+          "orderCreationDate": {
+            "type": "string",
+            "format": "date",
+            "pattern": "^\\d{4}-\\d\\d-\\d\\d$",
+            "description": "The YYYY-MM-DD system-specified creation date",
+            "example": "2021-03-17"
+          },
+          "businessUnit": {
+            "type": "string",
+            "description": "The business unit ID",
+            "example": "business-unit"
+          },
+          "documentNumber": {
+            "type": "string",
+            "description": "The document number",
+            "example": "doc-number"
+          },
+          "orderMerchantName": {
+            "type": "string",
+            "description": "The Order Merchant name",
+            "example": "Mega Merchant"
+          },
+          "orderUserID": {
+            "type": "string",
+            "description": "Order User's ID",
+            "example": "order-user-ID"
+          },
+          "merchantCity": {
+            "type": "string",
+            "description": "The Order Merchant City",
+            "example": "Richfield"
+          },
+          "merchantState": {
+            "type": "string",
+            "description": "The Order Merchant State",
+            "example": "MN"
+          },
+          "merchantZip": {
+            "type": "string",
+            "description": "The Order Merchant zip code",
+            "example": "55423"
+          },
+          "merchantTaxID": {
+            "type": "string",
+            "description": "The Order Merchant Tax ID",
+            "example": null
+          },
+          "merchantDUNS": {
+            "type": "string",
+            "description": "The Merchant DUNS",
+            "example": null
+          },
+          "orderAmount": {
+            "type": "number",
+            "description": "The Order amount",
+            "example": 3.65
+          },
+          "billedAmount": {
+            "type": "number",
+            "description": "The Order billed amount",
+            "example": 1.01
+          },
+          "sourceCurrency": {
+            "type": "string",
+            "description": "The Order currency",
+            "example": "dollars"
+          },
+          "usageCode": {
+            "type": "string",
+            "description": "Usage code",
+            "example": "usage-code"
+          },
+          "shipFromCity": {
+            "type": "string",
+            "description": "The city the order is shipped from",
+            "example": "Richfield"
+          },
+          "shipFromState": {
+            "type": "string",
+            "description": "The state the order is shipped from",
+            "example": "MN"
+          },
+          "shipFromZip": {
+            "type": "string",
+            "description": "The zip code the order is shipped from",
+            "example": "55423"
+          },
+          "shipToCity": {
+            "type": "string",
+            "description": "The city the order is shipped to",
+            "example": "Saint Paul"
+          },
+          "shipToState": {
+            "type": "string",
+            "description": "The state the order is shipped to",
+            "example": "MN"
+          },
+          "shipToZip": {
+            "type": "string",
+            "description": "The zip code the order is shipped to",
+            "example": "55101"
+          },
+          "varianceAmount": {
+            "type": "string",
+            "description": "The order variance amount",
+            "example": "2.65"
+          },
+          "variancePercent": {
+            "type": "string",
+            "description": "The order variance percent",
+            "example": "55"
+          },
+          "toleranceAmount": {
+            "type": "number",
+            "description": "The order tolerance amount",
+            "example": 0.37
+          },
+          "percentFulfilled": {
+            "type": "integer",
+            "description": "The order percent fulfilled",
+            "example": 55
+          },
+          "taxability": {
+            "type": "string",
+            "description": "The order taxability",
+            "example": "Y"
+          },
+          "ediRoutingNumber": {
+            "type": "string",
+            "description": "The order routing number",
+            "example": "111111111111"
+          },
+          "taxTotal": {
+            "type": "number",
+            "description": "The order tax total",
+            "example": 1.01
+          },
+          "taxLineItem": {
+            "type": "number",
+            "description": "The tax line item",
+            "example": 0.64
+          },
+          "taxOrder": {
+            "type": "number",
+            "description": "The tax order",
+            "example": 0.36
+          },
+          "freight": {
+            "type": "number",
+            "description": "The order freight",
+            "example": 0.85
+          },
+          "numberOfMatchedTransactions": {
+            "type": "integer",
+            "description": "The number of matched transactions",
+            "example": 1
+          },
+          "orderStatus": {
+            "$ref": "#/components/schemas/OrderStatus"
+          },
+          "lastMatchUserID": {
+            "type": "string",
+            "description": "The order's last matched user id",
+            "example": "user-ID"
+          },
+          "lastMatchDate": {
+            "type": "string",
+            "format": "date",
+            "pattern": "^\\d{4}-\\d\\d-\\d\\d$",
+            "description": "The order's last matched date YYYY-MM-DD",
+            "example": "2021-04-01"
+          },
+          "nonUniqueOrderIndicator": {
+            "type": "string",
+            "description": "Indicator of a non unique order",
+            "example": "N"
+          },
+          "customOrderFieldsList": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CustomOrderFieldsList"
+            }
+          },
+          "customOrderCommentList": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CustomOrderCommentList"
+            }
+          }
+        }
+      },
+      "OrderType": {
+        "type": "string",
+        "description": "Order types\n\n- SUA - Single Use Account\n  - Payment Instruction\n  - Payment Request\n- PAL - Pre-Authorized Limits\n  - Payment Instruction\n  - Payment Request\n- Purchase Order\n- Credit Order\n",
+        "enum": [
+          "SUA_PAYMENT_INSTRUCTION",
+          "SUA_PAYMENT_REQUEST",
+          "PAL_PAYMENT_INSTRUCTION",
+          "PAL_PAYMENT_REQUEST",
+          "PURCHASE_ORDER",
+          "CREDIT_ORDER"
+        ],
+        "example": "SUA_PAYMENT_INSTRUCTION"
+      },
+      "OrderStatus": {
+        "type": "string",
+        "enum": [
+          "OPEN",
+          "PARTIAL",
+          "FULFILLED",
+          "SUSPENDED",
+          "EXPIRED",
+          "CANCELED",
+          "CLOSED"
+        ],
+        "example": "OPEN"
+      },
+      "OrderSummary": {
+        "type": "object",
+        "description": "Order Summary. \n",
+        "properties": {
+          "orderID": {
+            "$ref": "#/components/schemas/ID_Order"
+          },
+          "controlNumber": {
+            "type": "string",
+            "description": "The control number",
+            "example": "KW01262021b"
+          },
+          "orderDate": {
+            "type": "string",
+            "format": "date",
+            "pattern": "^\\d{4}-\\d\\d-\\d\\d$",
+            "description": "The YYYY-MM-DD date of the order request",
+            "example": "2021-03-17"
+          },
+          "paymentAccountNumber": {
+            "type": "string",
+            "pattern": "^\\d{4}$",
+            "description": "Last 4 of the Payment Account Number",
+            "example": "9272"
+          },
+          "paymentAccountID": {
+            "type": "string",
+            "pattern": "^[0-9]{12}$",
+            "description": "The account ID from which order payment has been made.\n",
+            "example": "123456789012"
+          },
+          "recipientEmail": {
+            "type": "string",
+            "description": "Recipient Email included in order details (if applicable).",
+            "example": "abc@org.com"
+          },
+          "recipientName": {
+            "type": "string",
+            "description": "Name of merchant or supplier.",
+            "example": "ABC Company"
+          },
+          "orderAmount": {
+            "type": "number",
+            "description": "The Order amount",
+            "example": 3.65
+          },
+          "orderExpirationDate": {
+            "type": "string",
+            "format": "date",
+            "pattern": "^\\d{4}-\\d\\d-\\d\\d$",
+            "description": "Expiration Date in YYYY-MM-DD format.\n",
+            "example": "2020-12-13"
+          },
+          "percentFulfilled": {
+            "type": "integer",
+            "description": "Percentage of the order that is fulfilled.",
+            "example": 55
+          },
+          "orderStatus": {
+            "$ref": "#/components/schemas/OrderStatus"
+          },
+          "orderType": {
+            "$ref": "#/components/schemas/OrderType"
+          },
+          "transactionIDs": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ID_Transaction"
+            }
+          }
+        }
+      },
+      "SearchAmount": {
+        "type": "object",
+        "description": "Compared to orderDetails.orderInformation.orderAmount\n\nSpecify an amount range within these limits -\n- Providing only the minimum matches amounts >= minimum.\n- Providing only the maximum matches amounts <= maximum.\n- Providing both matches amounts inbetween inclusive.\n- The minimum cannot exceed the maximum.\n",
+        "properties": {
+          "minimum": {
+            "type": "number",
+            "description": "Indicates the minimum order amount, inclusive.\n",
+            "default": 0,
+            "example": 0
+          },
+          "maximum": {
+            "type": "number",
+            "description": "Indicates the maximum order amount, inclusive.\n",
+            "example": 200
+          }
+        }
+      },
+      "SearchDate": {
+        "type": "object",
+        "properties": {
+          "start": {
+            "type": "string",
+            "format": "date",
+            "pattern": "^\\d{4}-\\d\\d-\\d\\d$",
+            "description": "YYYY-MM-DD indicates the lower limit of the date range, inclusive.\n",
+            "example": "2020-01-02"
+          },
+          "end": {
+            "type": "string",
+            "format": "date",
+            "pattern": "^\\d{4}-\\d\\d-\\d\\d$",
+            "description": "YYYY-MM-DD indicates the upper limit of the date range, inclusive.\n",
+            "example": "2021-03-04"
+          }
+        }
+      },
+      "SearchOrder": {
+        "type": "object",
+        "properties": {
+          "page": {
+            "type": "object",
+            "properties": {
+              "number": {
+                "type": "integer",
+                "description": "The page number to return, 1 to N",
+                "default": 1,
+                "example": 1
+              },
+              "size": {
+                "type": "integer",
+                "description": "The maximum number of items returned per page",
+                "minimum": 1,
+                "maximum": 100,
+                "default": 100,
+                "example": 25
+              }
+            }
+          },
+          "criteria": {
+            "type": "object",
+            "properties": {
+              "controlNumber": {
+                "type": "string",
+                "description": "Compared to orderDetails.orderInformation.controlNumber\n",
+                "example": "KW01262021b"
+              },
+              "orderDate": {
+                "allOf": [
+                  {
+                    "description": "Compared to orderDetails.orderInformation.orderDate\n\nSpecify an order date range within these limits -\n- The start and end dates are inclusive.\n- The range cannot exceed 90 days.\n- The start cannot exceed the end.\n- The start can be up to 6 years in the past.\n- *The end cannot be in the future.*\n- If start is not provided, it defaults to 90 days before the end.\n- If end is not provided, it defaults to 90 days after the start.\n- If neither orderDate or orderExpirationDate is provided, the default date range is the last 90 days.\n"
+                  },
+                  {
+                    "$ref": "#/components/schemas/SearchDate"
+                  }
+                ]
+              },
+              "orderExpirationDate": {
+                "allOf": [
+                  {
+                    "description": "Specify an expiration date range within these limits -\n- The start and end dates are inclusive.\n- The range cannot exceed 90 days.\n- The start cannot exceed the end.\n- The start can be up to 6 years in the past.\n- *The end can be up to 1 year in the future.*\n- If start is not provided, it defaults to 90 days before the end.\n- If end is not provided, it defaults to 90 days after the start.\n- There is no default orderExpirationDate range. If not provided, it is not a search criteria.\n"
+                  },
+                  {
+                    "$ref": "#/components/schemas/SearchDate"
+                  }
+                ]
+              },
+              "paymentAccountID": {
+                "type": "string",
+                "pattern": "^[0-9]{12}$",
+                "description": "Compared to orderDetails.accountDetailsForOrders.accountID\n\nThe account ID from which order payment has been made.\n",
+                "example": "123456789012"
+              },
+              "recipientEmail": {
+                "type": "string",
+                "description": "Email address to receive the remittance.\n",
+                "example": "supplier@company.com"
+              },
+              "orderStatus": {
+                "description": "Compared to orderDetails.orderInformation.orderStatus",
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/OrderStatus"
+                }
+              },
+              "orderType": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/OrderType"
+                }
+              },
+              "orderAmount": {
+                "allOf": [
+                  {
+                    "description": "Compared to orderDetails.orderInformation.orderAmount\n"
+                  },
+                  {
+                    "$ref": "#/components/schemas/SearchAmount"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "Page": {
+        "type": "object",
+        "description": "Pagination meta-data",
+        "properties": {
+          "number": {
+            "type": "integer",
+            "description": "Current page number = request.pageNumber",
+            "example": 2
+          },
+          "size": {
+            "type": "integer",
+            "description": "Number of items returned in this page <= request.pageSize",
+            "example": 20
+          },
+          "pageCount": {
+            "type": "integer",
+            "description": "Total number of pages in this search result",
+            "example": 6
+          },
+          "totalCount": {
+            "type": "integer",
+            "description": "Total number of items in this search result",
+            "example": 115
+          }
+        }
+      },
+      "TransactionInformation": {
+        "type": "object",
+        "properties": {
+          "transactionDate": {
+            "type": "string",
+            "format": "date",
+            "pattern": "^\\d{4}-\\d\\d-\\d\\d$",
+            "description": "YYYY-MM-DD Date which the transaction occurred",
+            "example": "2020-01-20"
+          },
+          "postingDate": {
+            "type": "string",
+            "format": "date",
+            "pattern": "^\\d{4}-\\d\\d-\\d\\d$",
+            "description": "YYYY-MM-DD Date which the transaction was posted to the payment processing system",
+            "example": "2020-01-22"
+          },
+          "cycleCloseDate": {
+            "type": "string",
+            "format": "date",
+            "pattern": "^\\d{4}-\\d\\d-\\d\\d$",
+            "description": "Cycle close date YYYY-MM-DD",
+            "example": "2020-02-13"
+          },
+          "transactionAmount": {
+            "type": "string",
+            "description": "Transaction Amount",
+            "example": "155.00"
+          },
+          "sourceCurrencyAmount": {
+            "type": "string",
+            "description": "Transaction Amount in currency appropriate to the transaction location",
+            "example": "155.00"
+          },
+          "sourceCurrencyCode": {
+            "type": "string",
+            "description": "The type of currency of the country in which the transaction occurred",
+            "example": "USD"
+          },
+          "salesTax": {
+            "type": "string",
+            "description": "Tax on sales",
+            "example": "0.00"
+          },
+          "nationalTax": {
+            "type": "string",
+            "description": "tax",
+            "example": "0.00"
+          },
+          "calculatedNationalTax": {
+            "type": "string",
+            "description": "tax",
+            "example": "0.00"
+          },
+          "regionalTax": {
+            "type": "string",
+            "description": "tax",
+            "example": "0.00"
+          },
+          "calculatedRegionalTax": {
+            "type": "string",
+            "description": "tax",
+            "example": "0.00"
+          },
+          "referenceNumber": {
+            "type": "string",
+            "description": "A unique number assigned to the transaction by the interchange.",
+            "example": "000000012212000230042"
+          },
+          "postingType": {
+            "type": "string",
+            "description": "Type of transaction, 'Memo' or 'Posted'",
+            "example": "Memo"
+          },
+          "purchaseID": {
+            "type": "string",
+            "description": "Typically the purchase order number. Can be other merchant information",
+            "example": "PO123"
+          },
+          "transactionStatus": {
+            "type": "string",
+            "description": "Description of transaction status.",
+            "example": "N"
+          },
+          "reviewedStatus": {
+            "type": "string",
+            "description": "Description of review status.",
+            "example": "Not Reviewed"
+          },
+          "transactionCommentList": {
+            "type": "array",
+            "description": "List of comments for the transaction",
+            "items": {
+              "type": "object",
+              "properties": {
+                "label": {
+                  "type": "string",
+                  "description": "The Label for the comment",
+                  "example": "Comment 1"
+                },
+                "comment": {
+                  "type": "string",
+                  "description": "The comment added by a user.",
+                  "example": "This transaction was reviewed."
+                },
+                "date": {
+                  "type": "string",
+                  "description": "The creation date of the comment.",
+                  "format": "date",
+                  "pattern": "^\\d{4}-\\d\\d-\\d\\d$",
+                  "example": "2021-05-17"
+                }
+              }
+            }
+          },
+          "transactionCustomFieldList": {
+            "type": "array",
+            "description": "List of custom fields for the transaction",
+            "items": {
+              "type": "object",
+              "properties": {
+                "label": {
+                  "type": "string",
+                  "description": "Label for the custom field",
+                  "example": "Was transaction on holiday"
+                },
+                "value": {
+                  "type": "string",
+                  "description": "The value entered by the user for the custom field",
+                  "example": "No"
+                }
+              }
+            }
+          },
+          "disputeInformation": {
+            "$ref": "#/components/schemas/DisputeInformation"
+          },
+          "hasAttachment": {
+            "type": "boolean",
+            "description": "True if an attachment is available",
+            "example": true
+          },
+          "billingType": {
+            "type": "string",
+            "description": "The type of bills",
+            "example": "Centrally Billed Account"
+          }
+        }
+      },
+      "TransactionDetails": {
+        "type": "object",
+        "properties": {
+          "accountInformation": {
+            "$ref": "#/components/schemas/AccountInformation"
+          },
+          "transactionInformation": {
+            "$ref": "#/components/schemas/TransactionInformation"
+          },
+          "merchantInformation": {
+            "$ref": "#/components/schemas/MerchantInformation"
+          },
+          "fleetInformation": {
+            "$ref": "#/components/schemas/FleetInformation"
+          },
+          "allocations": {
+            "$ref": "#/components/schemas/Allocations"
+          }
+        }
+      },
+      "USB_ErrorGateway": {
+        "description": "Gateway error response.\n\nThe error code and message are primary error indicators, and the optional errors[] array contains additional details.\n",
+        "type": "object",
+        "required": [
+          "code",
+          "message"
+        ],
+        "properties": {
+          "code": {
+            "type": "string",
+            "example": "401-01"
+          },
+          "message": {
+            "type": "string",
+            "example": "api key is invalid"
+          },
+          "errors": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Access Token expired"
+                }
+              }
+            }
+          }
+        }
+      },
+      "USB_ErrorService": {
+        "description": "API Service error response. Array of 1 or more error conditions. This is a common error structure used for most error responses, unless noted otherwise. Only the 'code' and 'message' fields are required. The example values are generic.\n",
+        "type": "object",
+        "required": [
+          "errors"
+        ],
+        "properties": {
+          "errors": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "code",
+                "message"
+              ],
+              "properties": {
+                "code": {
+                  "type": "string",
+                  "pattern": "^\\d{3}\\.\\d{4}\\.\\d{4}$",
+                  "description": "3 part error code AAA.0709.CCCC\n* AAA = 3-Digit HTTP status code\n* 0709 = 4-Digit code assigned to this service\n* CCCC = 4-Digit reason code from the service\n",
+                  "example": "400.0709.1005"
+                },
+                "message": {
+                  "type": "string",
+                  "description": "Description of the error",
+                  "example": "Badly formed request"
+                },
+                "details": {
+                  "description": "Optional array indicating 1 or more fields in error",
+                  "type": "array",
+                  "items": {
+                    "required": [
+                      "attributeName",
+                      "reason"
+                    ],
+                    "properties": {
+                      "attributeName": {
+                        "type": "string",
+                        "description": "Field name in error",
+                        "example": "lastName"
+                      },
+                      "reason": {
+                        "type": "string",
+                        "description": "Detailed explanation",
+                        "example": "Required field"
+                      },
+                      "code": {
+                        "type": "string",
+                        "description": "Optional diagnostic code",
+                        "example": 1010
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "OAuth2ClientCredentials": {
+        "type": "oauth2",
+        "description": "Given your client credentials, this endpoint returns an access token. \nSee the Security Guide for details.\n",
+        "flows": {
+          "clientCredentials": {
+            "tokenUrl": "https://apip2.usbank.com/auth/oauth2/v1/token",
+            "scopes": {}
+          }
+        }
+      },
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "description": "Each API request requires an Authorization header containing a valid Bearer access token.\nA 401 return status indicates an invalid or expired token.  Use the client credentials flow above to acquire a token."
+      }
+    }
+  }
+}

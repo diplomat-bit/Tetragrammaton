@@ -1,0 +1,7 @@
+{
+  "name": "Citibank Demo Business App - Open Bank Project & Treasury Platform",
+  "description": "Enterprise banking and treasury workstation integrating Open Bank Project API, Commercial Paper issuance, Modern Treasury connectivity, and Quantum Assistant AI.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
+

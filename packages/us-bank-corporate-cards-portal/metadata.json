@@ -1,0 +1,6 @@
+{
+  "name": "US Bank Corporate Cards Portal",
+  "description": "A dashboard for managing US Bank corporate credit cards, accounts, and transactions.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

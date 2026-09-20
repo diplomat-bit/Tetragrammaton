@@ -1,0 +1,200 @@
+openapi: 3.0.1
+info:
+  title: RewardLinkageShopWithPoints_OpenAPI
+  description: This API is used to link credit card to a merchant for rewards redemption.
+  version: 1.10.0
+  x-deployment-reference: "PPR-D-RwdPtsAcct-DGL-EA, PPR-D-RwdPtsAcct-DGL-EA-TW, PPR-D-RwdPtsAcct-DGL-EA-IN"
+  x-linked-api: RewardPointsAccount_Digital_Domain
+servers:
+- url: https://127.0.0.1/openapi/v1/rewards/shopWithPoints
+paths:
+  /linkage:
+    post:
+      tags:
+      - Rewards_Reward Management_Reward Enrollment
+      summary: Rewards Linkage For Shop with Point
+      description: This API is used to enroll the customer to Show With Points program
+        and returns a token which require activation and that will be used for subsequent
+        API Calls. Separate enrollment is required for each credit card.
+      operationId: ShopWithPointsRewardsLinkage
+      parameters:
+      - $ref: '#/components/parameters/Authorization'
+      - $ref: '#/components/parameters/uuid'
+      - $ref: '#/components/parameters/Accept'
+      - $ref: '#/components/parameters/Content-Type'
+      - $ref: '#/components/parameters/Accept-Language'
+      - $ref: '#/components/parameters/client_id'
+      - $ref: '#/components/parameters/clientDetails'
+      requestBody:
+        description: card information
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShopWithPointsRewardsLinkageRequest'
+        required: true
+      responses:
+        "200":
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShopWithPointsRewardsLinkageResponse'
+        "400":
+          description: <table><tr><td>Type</td><td>Code</td><td>Details</td></tr><tr><td>invalid</td><td>invalidRequest</td><td>Missing
+            or invalid parameters</td></tr><tr><td>error</td><td>invalidCardType</td><td>Card
+            type is invalid</td></tr><tr><td>error</td><td>registrationFailed</td><td>Registration
+            failed</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "401":
+          description: <table><tr><td>error</td><td>unAuthorized</td><td>Authorization
+            credentials are missing or invalid</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "403":
+          description: <table><tr><td>error</td><td>accessNotConfigured</td><td>Access
+            is not configured for this resource</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "500":
+          description: <table><tr><td>fatal</td><td>serverUnavailable</td><td>The
+            request failed due to an internal error/server unavailability</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      x-codegen-request-body-name: ShopWithPointsRewardsLinkageRequest
+components:
+  schemas:
+    ShopWithPointsRewardsLinkageRequest:
+      required:
+      - citiCardHolderPhoneNumber
+      - lastFourDigitsCardNumber
+      - merchantCustomerReferenceId
+      type: object
+      properties:
+        lastFourDigitsCardNumber:
+          type: string
+          description: Last four digits of the card number
+          example: "5212"
+        citiCardHolderPhoneNumber:
+          type: string
+          description: Citi registered primary mobile number of the credit card holder
+            with Country Code (without + sign).
+          example: "6563471895"
+        merchantCustomerReferenceId:
+          type: string
+          description: Denotes the unique reference identifier which merchant has
+            for a particular customer.
+          example: P125121001
+    ShopWithPointsRewardsLinkageResponse:
+      type: object
+      properties:
+        rewardLinkCode:
+          type: string
+          description: Unique link code issued during registration process. This is
+            to be used in all subsequent reward transactions
+          example: "9035268"
+    ErrorResponse:
+      required:
+      - code
+      - type
+      type: object
+      properties:
+        type:
+          type: string
+          description: Invalid - Request did not confirm to the specification and
+            was unprocessed and rejected. Please fix the value and try again
+          enum:
+          - error
+          - warn
+          - invalid
+          - fatal
+        code:
+          type: string
+          description: Error code which qualifies the error
+        details:
+          type: string
+          description: Human readable explanation specific to the occurrence of the
+            problem
+        location:
+          type: string
+          description: The name of the field that resulted in the error
+        moreInfo:
+          type: object
+          properties: {}
+          description: URI to human readable documentation of the erro
+  parameters:
+    Authorization:
+      name: Authorization
+      in: header
+      description: "The most recent Authorization token. This will have the format\
+        \ Bearer + {space} + {accessToken}. Example: Bearer KGNsaWVudF9pZDpjbGllbnRfc2VjcmV0KQ==."
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: string
+    uuid:
+      name: uuid
+      in: header
+      description: 128 bit random UUID generated uniquely for every request.
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: string
+    Accept:
+      name: Accept
+      in: header
+      description: Content-Type that are acceptable for the response.
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: string
+    Content-Type:
+      name: Content-Type
+      in: header
+      description: application/json
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: string
+    Accept-Language:
+      name: Accept-Language
+      in: header
+      description: Accept-Language header.
+      required: false
+      style: simple
+      explode: false
+      schema:
+        type: string
+    client_id:
+      name: client_id
+      in: header
+      description: The client ID  you received during application registration in
+        the developer portal
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: string
+    clientDetails:
+      name: clientDetails
+      in: header
+      description: "This field is used to capture device,browser and network information.\
+        \ Refer the developer portal for more information.These are the fields which\
+        \ will be passed as part of the header devicePrint,deviceTokenCookie,userIpAddress,userAgent,hardwareId,simId,deviceModel,deviceName,deviceOsName,deviceOsVersion,multitaskingSupportFlag,languageSupport,wifiMacAddress,cellTowerId,locationAreaCode,rsaApplicationKey,wapClientId,mobileCarrierCode,mobileCountryCode,osId,geoLongitude,geoLatitude,geoHorizontalAccuracy,geoAltitude,geoAltitudeAccuracy,geoSpeed,geoTimestamp,geoStatus,basicServiceSetId,signalStrength,wifiChannel,serviceSetId"
+      required: false
+      style: simple
+      explode: false
+      schema:
+        type: string

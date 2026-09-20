@@ -1,0 +1,638 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Kernel in the Cloud",
+    "description": "",
+    "version": "1"
+  },
+  "servers": [
+    {
+      "url": "https://sandbox.api.visa.com",
+      "description": "Sandbox server"
+    }
+  ],
+  "security": [],
+  "tags": [
+    {
+      "name": "KiC List",
+      "description": "KiC List"
+    }
+  ],
+  "paths": {
+    "/vacservices/v1/list/retrieve/{reportGuid}/{reportId}": {
+      "get": {
+        "tags": [
+          "KiC List"
+        ],
+        "summary": "Retrieve List",
+        "description": "Used to request a single page of a report of Stores/Devices.",
+        "operationId": "Retrieve List",
+        "parameters": [
+          {
+            "name": "reportGuid",
+            "in": "path",
+            "required": true,
+            "explode": false,
+            "schema": {
+              "minimum": 36,
+              "maxLength": 36,
+              "pattern": "^[a-zA-Z0-9-]*$",
+              "type": "string",
+              "example": "485e0de2-fd7c-8e52-b932-1dc3cb896101"
+            }
+          },
+          {
+            "name": "reportId",
+            "in": "path",
+            "required": true,
+            "explode": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/RetriveReportResponse"
+          },
+          "404": {
+            "$ref": "#/components/responses/404ErrorResponse"
+          }
+        },
+        "x-operationVersions": [
+          {
+            "label": "v1 - Latest",
+            "operationPointer": "#/paths/~1vacservices~1v1~1list~1retrieve~1{reportGuid}~1{reportId}/get",
+            "default": false
+          }
+        ],
+        "x-hideTryIt": true
+      }
+    },
+    "/vacservices/v1/list/device": {
+      "post": {
+        "tags": [
+          "KiC List"
+        ],
+        "summary": "Device List",
+        "description": "Clients can call this API to fetch a list of device that are onboarded to VAC by sending in the search criteria through request body.",
+        "operationId": "Device List",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeviceSearchRequest-1"
+              },
+              "examples": {
+                "Default": {
+                  "summary": "Default",
+                  "value": {
+                    "endDate": "2022-01-30 20:00:00",
+                    "merchantProfileIds": [
+                      "a6865734-7a07-cde0-7179-1d6e65aa3901"
+                    ],
+                    "recordsPerPage": 10,
+                    "startDate": "2020-01-01 13:00:00",
+                    "storeProfileIds": [
+                      "640fb5e8-0086-44d6-391a-18db50be4d01"
+                    ],
+                    "status": [
+                      "Active"
+                    ],
+                    "kernelProfileIds": [
+                      "cc40b26a-0d51-e301-7ac3-1207d58d1e01"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "$ref": "#/components/responses/SearchResponse"
+          },
+          "400": {
+            "$ref": "#/components/responses/400ErrorResponse"
+          }
+        },
+        "x-operationVersions": [
+          {
+            "label": "v1 - Latest",
+            "operationPointer": "#/paths/~1vacservices~1v1~1list~1device/post",
+            "default": false
+          }
+        ],
+        "x-hideTryIt": true
+      }
+    },
+    "/vacservices/v1/list/stores": {
+      "post": {
+        "tags": [
+          "KiC List"
+        ],
+        "summary": "Store List",
+        "description": "Clients can call this API to fetch a list of stores that are onboarded to VAC by sending in the search criteria through request body.",
+        "operationId": "Store List",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StoreSearchRequest-1"
+              },
+              "examples": {
+                "Default": {
+                  "summary": "Default",
+                  "value": {
+                    "endDate": "2021-12-19 20:00:00",
+                    "merchantProfileIds": [
+                      "582fa9be-2fc2-3e02-fe5c-1e283e538701"
+                    ],
+                    "recordsPerPage": 5,
+                    "startDate": "2021-01-17 13:00:00",
+                    "status": [
+                      "Active"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "$ref": "#/components/responses/SearchResponse"
+          },
+          "400": {
+            "$ref": "#/components/responses/400ErrorResponse"
+          }
+        },
+        "x-operationVersions": [
+          {
+            "label": "v1 - Latest",
+            "operationPointer": "#/paths/~1vacservices~1v1~1list~1stores/post",
+            "default": false
+          }
+        ],
+        "x-hideTryIt": true
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "DeviceSearchRequest": {
+        "required": [
+          "startDate"
+        ],
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "array",
+            "description": "Identifies the status of device to be filtered by.",
+            "items": {
+              "type": "string",
+              "enum": [
+                "Active",
+                "Disabled",
+                "Deleted"
+              ]
+            }
+          },
+          "endDate": {
+            "$ref": "#/components/schemas/Date"
+          },
+          "startDate": {
+            "$ref": "#/components/schemas/Date"
+          },
+          "recordsPerPage": {
+            "type": "integer",
+            "description": "Identifies the the numbers of records to be returned per page, Note -> VAC has default value of 200, if no limit mentioned"
+          },
+          "storeProfileIds": {
+            "type": "array",
+            "description": "Identifies list of StoreProfileIds used to filter all Devices associated to the Stores, Length should be 36 and match ^[a-zA-Z0-9-]*$ Pattern",
+            "items": {
+              "type": "string",
+              "example": "3424bd66-1ed2-9h21-4fg6-130a14bsrb01"
+            }
+          },
+          "kernelProfileIds": {
+            "type": "array",
+            "description": "Identifies list of KernelProfileId used to filter all Devices associated to the Kernel Profiles, Length should be 36 and match ^[a-zA-Z0-9-]*$ Pattern",
+            "items": {
+              "type": "string",
+              "example": "3424bd66-1ed2-9h21-4fg6-130a14bsrb01"
+            }
+          },
+          "merchantProfileIds": {
+            "type": "array",
+            "description": "Identifies list of MerchantProfileIds used to filter all Devices associated to the Merchants(Irrespective of Stores), Length should be 36 and match ^[a-zA-Z0-9-]*$ Pattern",
+            "items": {
+              "type": "string",
+              "example": "3424bd66-1ed2-9h21-4fg6-130a14bsrb01"
+            }
+          }
+        }
+      },
+      "StoreSearchRequest-1": {
+        "required": [
+          "startDate"
+        ],
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "array",
+            "description": "Identifies the status of Stores in VAC",
+            "items": {
+              "type": "string",
+              "enum": [
+                "Active",
+                "InActive"
+              ]
+            }
+          },
+          "endDate": {
+            "$ref": "#/components/schemas/DateTime"
+          },
+          "startDate": {
+            "$ref": "#/components/schemas/DateTime"
+          },
+          "recordsPerPage": {
+            "type": "integer",
+            "description": "Identifies the the numbers of records to be returned per page. Note -> VAC has default value of 200, if no limit mentioned"
+          },
+          "merchantProfileIds": {
+            "type": "array",
+            "description": "Identifies list of MerchantProfileIds used to filter all Stores associated to the Merchants(Irrespective of Stores), Length should be 36 and match ^[a-zA-Z0-9-]*$ Pattern",
+            "items": {
+              "type": "string",
+              "example": "3424bd66-1ed2-9h21-4fg6-130a14bsrb01"
+            }
+          }
+        }
+      },
+      "ListDeviceObject": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "Status of Device/Store in VAC."
+          },
+          "vacDeviceId": {
+            "type": "string",
+            "description": "VAC Device Id"
+          },
+          "storeProfileId": {
+            "type": "string",
+            "description": "Store profile Id associated to VAC Device/Merchant."
+          },
+          "kernelProfileId": {
+            "type": "string",
+            "description": "Kernel profile Id associated to VAC Device."
+          },
+          "merchantProfile": {
+            "type": "string",
+            "description": "Merchant profile Id to which the VAC Device belongs to."
+          },
+          "statusChangeDateTime": {
+            "type": "string",
+            "description": "Date on which the Status of Device/Store in VAC changed."
+          }
+        }
+      },
+      "guidString": {
+        "maxLength": 36,
+        "minLength": 36,
+        "pattern": "^[a-zA-Z0-9-]*$",
+        "type": "string",
+        "description": "String",
+        "example": "3424bd66-1ed2-9h21-4fg6-130a14bsrb01"
+      },
+      "ListStoreObject": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "Status of Device/Store in VAC."
+          },
+          "storeProfileId": {
+            "type": "string",
+            "description": "Store profile Id associated to VAC Device/Merchant."
+          },
+          "statusChangeDateTime": {
+            "type": "string",
+            "description": "Date on which the Status of Device/Store in VAC changed."
+          }
+        }
+      },
+      "DeviceSearchRequest-1": {
+        "required": [
+          "startDate"
+        ],
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "array",
+            "description": "Identifies the status of device to be filtered by.",
+            "items": {
+              "type": "string",
+              "enum": [
+                "Active",
+                "Disabled",
+                "Deleted"
+              ]
+            }
+          },
+          "endDate": {
+            "$ref": "#/components/schemas/DateTime"
+          },
+          "startDate": {
+            "$ref": "#/components/schemas/DateTime"
+          },
+          "recordsPerPage": {
+            "type": "integer",
+            "description": "Identifies the the numbers of records to be returned per page, Note -> VAC has default value of 200, if no limit mentioned"
+          },
+          "storeProfileIds": {
+            "type": "array",
+            "description": "Identifies list of StoreProfileIds used to filter all Devices associated to the Stores, Length should be 36 and match ^[a-zA-Z0-9-]*$ Pattern",
+            "items": {
+              "type": "string",
+              "example": "3424bd66-1ed2-9h21-4fg6-130a14bsrb01"
+            }
+          },
+          "kernelProfileIds": {
+            "type": "array",
+            "description": "Identifies list of KernelProfileId used to filter all Devices associated to the Kernel Profiles, Length should be 36 and match ^[a-zA-Z0-9-]*$ Pattern",
+            "items": {
+              "type": "string",
+              "example": "3424bd66-1ed2-9h21-4fg6-130a14bsrb01"
+            }
+          },
+          "merchantProfileIds": {
+            "type": "array",
+            "description": "Identifies list of MerchantProfileIds used to filter all Devices associated to the Merchants(Irrespective of Stores), Length should be 36 and match ^[a-zA-Z0-9-]*$ Pattern",
+            "items": {
+              "type": "string",
+              "example": "3424bd66-1ed2-9h21-4fg6-130a14bsrb01"
+            }
+          }
+        }
+      },
+      "StoreSearchRequest": {
+        "required": [
+          "startDate"
+        ],
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "array",
+            "description": "Identifies the status of Stores in VAC",
+            "items": {
+              "type": "string",
+              "enum": [
+                "Active",
+                "InActive"
+              ]
+            }
+          },
+          "endDate": {
+            "$ref": "#/components/schemas/Date"
+          },
+          "startDate": {
+            "$ref": "#/components/schemas/Date"
+          },
+          "recordsPerPage": {
+            "type": "integer",
+            "description": "Identifies the the numbers of records to be returned per page. Note -> VAC has default value of 200, if no limit mentioned"
+          },
+          "merchantProfileIds": {
+            "type": "array",
+            "description": "Identifies list of MerchantProfileIds used to filter all Stores associated to the Merchants(Irrespective of Stores), Length should be 36 and match ^[a-zA-Z0-9-]*$ Pattern",
+            "items": {
+              "type": "string",
+              "example": "3424bd66-1ed2-9h21-4fg6-130a14bsrb01"
+            }
+          }
+        }
+      },
+      "Links": {
+        "type": "object",
+        "properties": {
+          "next": {
+            "type": "object",
+            "properties": {
+              "href": {
+                "type": "string",
+                "format": "uri",
+                "example": "https://sandbox.api.visa.com/vacservices/v1/list/retrieve/3424bd66-1ed2-9h21-4fg6-130a14bsrb01/30001"
+              }
+            },
+            "description": "Link to get data for next page, Not present if this is result is the last page of results"
+          },
+          "self": {
+            "type": "object",
+            "properties": {
+              "href": {
+                "type": "string",
+                "format": "uri",
+                "example": "https://sandbox.api.visa.com/vacservices/v1/list/retrieve/3424bd66-1ed2-9h21-4fg6-130a14bsrb01/101"
+              }
+            },
+            "description": "Link to get data for current page"
+          }
+        }
+      },
+      "Date": {
+        "maxLength": 10,
+        "minLength": 10,
+        "pattern": "^\\d\\d\\d\\d\\-\\d\\d\\-\\d\\d$",
+        "type": "string",
+        "description": "Date (yyyy-MM-dd)",
+        "example": "1980-02-01T00:00:00.000Z"
+      },
+      "DateTime": {
+        "maxLength": 19,
+        "minLength": 10,
+        "pattern": "^\\d\\d\\d\\d-\\d\\d-\\d\\d( \\d\\d:\\d\\d:\\d\\d)?$",
+        "type": "string",
+        "description": "A date or date with GMT time. If only date is provided, the time will default to 00:00:00.",
+        "format": "date-time"
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "errorResponse": {
+            "required": [
+              "status"
+            ],
+            "type": "object",
+            "properties": {
+              "reason": {
+                "type": "string",
+                "description": "The short description of the error."
+              },
+              "status": {
+                "maxLength": 3,
+                "minLength": 3,
+                "type": "integer",
+                "description": "3 digit http status code",
+                "example": 400
+              },
+              "details": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "The long description of the specific error that occurred."
+                    },
+                    "location": {
+                      "type": "string",
+                      "description": "The place in the incoming message that the particular error occurred."
+                    }
+                  }
+                }
+              },
+              "message": {
+                "type": "string",
+                "description": "The long description of the error"
+              }
+            }
+          }
+        }
+      }
+    },
+    "responses": {
+      "400ErrorResponse": {
+        "description": "When any field validation fails or when any required field is missing or when request is inconsistent with the Request definitions.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                {
+                  "properties": {
+                    "errorResponse": {
+                      "properties": {
+                        "reason": {
+                          "example": "INVALID_PARAMETERS"
+                        },
+                        "status": {
+                          "example": 400
+                        },
+                        "message": {
+                          "example": "Input parameters validation failed"
+                        }
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      },
+      "404ErrorResponse": {
+        "description": "When any field validation fails or when any required field is missing or when request is inconsistent with the Request definitions.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                {
+                  "properties": {
+                    "errorResponse": {
+                      "properties": {
+                        "reason": {
+                          "example": "DATA_NOT_FOUND_ERROR"
+                        },
+                        "status": {
+                          "example": 404
+                        },
+                        "message": {
+                          "example": "No data yet, Please try again."
+                        }
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      },
+      "RetriveReportResponse": {
+        "description": "Retrieve Device/Store Data",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "_links": {
+                  "$ref": "#/components/schemas/Links"
+                },
+                "content": {
+                  "properties": {
+                    "stores": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/ListStoreObject"
+                      }
+                    },
+                    "devices": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/ListDeviceObject"
+                      }
+                    }
+                  },
+                  "description": "One of Devices/Stores Object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "SearchResponse": {
+        "description": "Device/Store search report response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "required": [
+                "reportLocation"
+              ],
+              "type": "object",
+              "properties": {
+                "reportLocation": {
+                  "type": "string",
+                  "description": "Location where the report can be found",
+                  "example": "https://sandbox.api.visa.com/vacservices/v1/list/retrieve/3424bd66-1ed2-9h21-4fg6-130a14bsrb01/101"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "parameters": {},
+    "examples": {},
+    "requestBodies": {},
+    "headers": {},
+    "callbacks": {}
+  },
+  "webhooks": {},
+  "x-tagGroups": [
+    {
+      "name": "API Reference",
+      "tags": [
+        "KiC List"
+      ]
+    }
+  ]
+}

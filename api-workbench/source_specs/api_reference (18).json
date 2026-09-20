@@ -1,0 +1,3110 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Visa Payment Passkey ",
+    "description": "",
+    "version": "1"
+  },
+  "servers": [
+    {
+      "url": "https://sandbox.api.visa.com",
+      "description": "Sandbox server"
+    }
+  ],
+  "security": [],
+  "tags": [
+    {
+      "name": "Visa Payment Passkey",
+      "description": "This bundle encompasses the APIs intended for Merchant led flows for Visa Payment Passkey Services"
+    }
+  ],
+  "paths": {
+    "/vpp/v1/passkeys/fido2/attestation": {
+      "post": {
+        "tags": [
+          "Visa Payment Passkey"
+        ],
+        "summary": "Register FIDO2 Attestation",
+        "description": "Register the Attestation Response given by the FIDO2 Authenticator to the Relying Party app after the successful creation of FIDO2 credentials.",
+        "x-operationVersions": [
+          {
+            "label": "v1 - Latest",
+            "operationPointer": "#/paths/~1vpp~1v1~1passkeys~1fido2~1attestation/post",
+            "default": false
+          }
+        ],
+        "x-hideTryIt": true
+      }
+    },
+    "/vpp/v1/passkeys/oauth2/authorization/request/pushed": {
+      "post": {
+        "tags": [
+          "Visa Payment Passkey"
+        ],
+        "summary": "Create Passkey",
+        "description": "Prepare the necessary data for a subsequent Authorization Request.\n",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/x-api-key"
+          },
+          {
+            "$ref": "#/components/parameters/X-VIA-HINT"
+          },
+          {
+            "$ref": "#/components/parameters/include"
+          },
+          {
+            "$ref": "#/components/parameters/X-SERVICE-CONTEXT"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PushedAuthorizationRequestInternal"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "$ref": "#/components/responses/VPPSPushedAuthorizationResponse"
+          },
+          "400": {
+            "$ref": "#/components/responses/VPPSInputValidationErrorResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/VPPSUnauthorizedErrorResponse"
+          },
+          "405": {
+            "$ref": "#/components/responses/VPPSMethodNotAllowedErrorResponse"
+          },
+          "415": {
+            "$ref": "#/components/responses/VPPSNotAcceptableContentError"
+          },
+          "500": {
+            "$ref": "#/components/responses/VPPSInternalServerError"
+          },
+          "503": {
+            "$ref": "#/components/responses/VPPSServiceUnavailableError"
+          }
+        },
+        "x-operationVersions": [
+          {
+            "label": "v1 - Latest",
+            "operationPointer": "#/paths/~1vpp~1v1~1passkeys~1oauth2~1authorization~1request~1pushed/post",
+            "default": false
+          }
+        ],
+        "x-hideTryIt": true
+      }
+    },
+    "/vpp/v1/passkeys/oauth2/token": {
+      "post": {
+        "tags": [
+          "Visa Payment Passkey"
+        ],
+        "summary": "VPP OAuth Token",
+        "description": "The /oauth2/token endpoint is used to issue, exchange, and refresh tokens for supported authentication flows. It enables scenarios such as device authentication, authorization code to access token or ID token exchange, ID token to access token exchange, and other supported token conversion and renewal operations. This endpoint serves as the central token-processing interface for clients that need to obtain secure tokens after authentication or exchange an existing credential for another token type.",
+        "x-operationVersions": [
+          {
+            "label": "v1 - Latest",
+            "operationPointer": "#/paths/~1vpp~1v1~1passkeys~1oauth2~1token/post",
+            "default": false
+          }
+        ],
+        "x-hideTryIt": true
+      }
+    },
+    "/vpp/v1/passkeys/lcm/subject": {
+      "post": {
+        "tags": [
+          "Visa Payment Passkey"
+        ],
+        "summary": "Device Registration for Enrollment",
+        "description": "Register a new device instance with authentication keys. Returns a subject_id (device identifier) along with a linkage_url.",
+        "x-operationVersions": [
+          {
+            "label": "v1 - Latest",
+            "operationPointer": "#/paths/~1vpp~1v1~1passkeys~1lcm~1subject/post",
+            "default": false
+          }
+        ],
+        "x-hideTryIt": true
+      }
+    },
+    "/vpp/v1/passkeys/fido2/assertion": {
+      "post": {
+        "tags": [
+          "Visa Payment Passkey"
+        ],
+        "summary": "Verify FIDO2 Assertion",
+        "description": "Verify the Assertion Response given by the FIDO2 Authenticator to the Relying Party app after a successful navigator.credentials.get() operation.",
+        "x-operationVersions": [
+          {
+            "label": "v1 - Latest",
+            "operationPointer": "#/paths/~1vpp~1v1~1passkeys~1fido2~1assertion/post",
+            "default": false
+          }
+        ],
+        "x-hideTryIt": true
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Account": {
+        "required": [
+          "id",
+          "scheme"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "maxLength": 50,
+            "type": "string",
+            "description": "The account id\n"
+          },
+          "icon": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "The icon for the account\n",
+            "format": "uri"
+          },
+          "name": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "Name for the account\n"
+          },
+          "scheme": {
+            "type": "string",
+            "description": "The scheme of the PAN Card or Token\nValues\n  com_visa_pan\n    A generic term that does not distinguish between card and token\n",
+            "enum": [
+              "com_visa_pan"
+            ]
+          },
+          "annotations": {
+            "$ref": "#/components/schemas/Annotations"
+          },
+          "secondary_id": {
+            "maxLength": 50,
+            "type": "string",
+            "description": "The secondary id for the account\n"
+          }
+        },
+        "description": "PAN Card or Token\n"
+      },
+      "ExpiresIn": {
+        "type": "integer",
+        "description": "The expiration of the access_token in seconds\n",
+        "format": "int32",
+        "default": 480
+      },
+      "CodeChallengeMethod": {
+        "maxLength": 25,
+        "type": "string",
+        "description": "Describes the transformation over the code_verifier.\nMandatory if code_challenge is non-null.\n- `plain`: Same as the value of code_verifier.\n- `S256`: Calculated as BASE64URL-ENCODE(SHA256(ASCII(code_verifier))).\n",
+        "example": "{\"S256\":null}",
+        "enum": [
+          "plain",
+          "S256"
+        ]
+      },
+      "SubjectEntity": {
+        "type": "string",
+        "description": "The type of the entity being authenticated\n",
+        "enum": [
+          "END_USER",
+          "CLIENT"
+        ]
+      },
+      "RedirectUri": {
+        "maxLength": 256,
+        "type": "string",
+        "description": "Where the token(s) will be delivered to the relying party.\n",
+        "example": "https://client.example.com/callback"
+      },
+      "Probe": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "maxItems": 10,
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProbeData"
+            }
+          },
+          "type": {
+            "$ref": "#/components/schemas/ProbeType"
+          },
+          "target_count": {
+            "$ref": "#/components/schemas/ProbeTargetCount"
+          }
+        },
+        "description": "A probe is a metaphor that means that the subject will be further checked to ensure the individual in the flow is really who he/she claims to be\n"
+      },
+      "ServerNonce": {
+        "type": "string",
+        "description": "Used as a way for the relying party to participate in the generation of the FIDO2 challenge\nThe nonce is used as an input to creating the challenge\n"
+      },
+      "AuthSourceHint": {
+        "type": "string",
+        "description": "Source hint based on the confinement type.\n- for Click to Pay use VXO\n- for VTS integration use VTS\n- for Cardinal use CRD\n- for issuer integration use CARD_ISSUER\n- for ICM use ICM\n",
+        "enum": [
+          "CRD",
+          "VTS",
+          "VXO",
+          "CARD_ISSUER",
+          "ICM"
+        ]
+      },
+      "DeviceChallenge": {
+        "maxLength": 128,
+        "type": "string",
+        "description": "A transformation over a transitory secret, known as code_verifier, needed to prove that the same software instance that initiated the flow is the same software instance that is using the outputted token(s).\n- Length: 43..128 (plain)\n- Length: 43 (S256)\n",
+        "example": "code_challenge_value"
+      },
+      "ActForObject": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/ActForId"
+          },
+          "realm": {
+            "$ref": "#/components/schemas/ActForRealm"
+          },
+          "entity": {
+            "$ref": "#/components/schemas/ActForEntity"
+          },
+          "id_type": {
+            "$ref": "#/components/schemas/ActForIdType"
+          }
+        },
+        "description": "Non-standard OIDC parameter to identify on behalf of relationships. The act_for parameter is used when the caller is the actor who is performing a task on behalf of some other entity\n"
+      },
+      "ActForEntity": {
+        "type": "string",
+        "description": "The type of the entity being authenticated\n",
+        "enum": [
+          "CLIENT"
+        ]
+      },
+      "BindingsByAuthorizationDetail": {
+        "type": "object",
+        "properties": {
+          "ref": {
+            "$ref": "#/components/schemas/AuthorizationDetailRef"
+          },
+          "type": {
+            "$ref": "#/components/schemas/AuthorizationDetailType"
+          },
+          "bindings": {
+            "maxItems": 20,
+            "minItems": 0,
+            "type": "array",
+            "description": "The bindings associated to the Resource(s) and Confinement(s) for the incoming authorization detail\n",
+            "items": {
+              "$ref": "#/components/schemas/PaymentCredentialBinding"
+            }
+          },
+          "isVPPSEligible": {
+            "type": "boolean",
+            "description": "If the account is eligible for VPPS binding\n",
+            "enum": [
+              true,
+              false
+            ]
+          }
+        },
+        "description": "Existing bindings associated to the Resource(s) and Confinement(s) for each of the elements in the incoming authorization details array\nMandatory if the include param specifies any binding data type\n"
+      },
+      "Annotations": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "Name for the account\n"
+          },
+          "icon_uri": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "The issuer's logo\n",
+            "format": "uri"
+          },
+          "logo_uri": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "The issuer's logo\n",
+            "format": "uri"
+          },
+          "masked_id": {
+            "maxLength": 15,
+            "type": "string",
+            "description": "The last 4 digits of the Masked PAN Card or Token\n"
+          },
+          "agent_logo_uri": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "The agent's logo\n",
+            "format": "uri"
+          },
+          "currency_exponent": {
+            "maxLength": 1,
+            "type": "string",
+            "description": "Indicates the implied position of the decimal point from the right of the transaction amount\nFor example, there are 100 cents in a USD, that is10 to the power of 2, so the exponent for the US dollar is 2\n"
+          }
+        },
+        "description": "USED BY B2CIAM ONLY\n"
+      },
+      "IDToken": {
+        "required": [
+          "expires_in",
+          "token",
+          "token_type",
+          "token_type_hint"
+        ],
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string",
+            "description": "Token Value"
+          },
+          "expires_in": {
+            "type": "integer",
+            "description": "Expiration Time",
+            "format": "int32"
+          },
+          "token_data": {
+            "type": "object",
+            "properties": {
+              "token_data": {
+                "type": "string",
+                "description": "Token state"
+              }
+            },
+            "description": "Token Data"
+          },
+          "token_type": {
+            "type": "string",
+            "description": "Token Type",
+            "enum": [
+              "Bearer"
+            ]
+          },
+          "token_type_hint": {
+            "type": "string",
+            "description": "Values\n<N/A> urn:ext:oauth:token-type-hint:attested_id_token\n<N/A> urn:ext:oauth:token-type-hint:attested_userinfo\nurn:ext:oauth:token-type-hint:secured_id_token\nurn:ext:oauth:token-type-hint:activity_ref\n",
+            "enum": [
+              "urn:ext:oauth:token-type-hint:server_state",
+              "urn:ext:oauth:token-type-hint:secured_id_token",
+              "urn:ext:oauth:token-type-hint:activity_ref"
+            ]
+          }
+        },
+        "description": ""
+      },
+      "ID": {
+        "type": "string",
+        "description": "The identifier of the FIDO2 credential\nThe base64Url encoded value of the FIDO2 Credential ID that is being registered.\nThis is the identifier of the FIDO2 credential that is being registered.\n"
+      },
+      "SourceImgIdHint": {
+        "type": "string",
+        "description": "Source image id hint based on the confinement type.\n"
+      },
+      "PARConfinements": {
+        "required": [
+          "device",
+          "origin"
+        ],
+        "type": "object",
+        "properties": {
+          "device": {
+            "$ref": "#/components/schemas/PARConfinement"
+          },
+          "origin": {
+            "$ref": "#/components/schemas/PARConfinement"
+          }
+        },
+        "description": "The confinements associated to the PAR request"
+      },
+      "ProbeTargetCount": {
+        "type": "integer",
+        "description": "The number of probes that need to be settled for completing the authentication\n",
+        "format": "int64",
+        "example": 1
+      },
+      "Status": {
+        "type": "string",
+        "description": "Its value is always 'ok' on this context",
+        "example": "ok",
+        "enum": [
+          "ok",
+          "failed"
+        ]
+      },
+      "ActForIdType": {
+        "type": "string",
+        "description": "The Act for id type of the entity being authenticated\n",
+        "enum": [
+          "RELATIONSHIP_ID"
+        ]
+      },
+      "PushedAuthorizationResponse": {
+        "type": "object",
+        "properties": {
+          "request": {
+            "$ref": "#/components/schemas/Response"
+          },
+          "expires_in": {
+            "$ref": "#/components/schemas/ExpiresIn"
+          },
+          "server_auth_data": {
+            "$ref": "#/components/schemas/ServerAuthData"
+          },
+          "authorization_endpoint": {
+            "$ref": "#/components/schemas/AuthorizationEndpoint"
+          }
+        },
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/VPPSWarning"
+          }
+        ]
+      },
+      "SourceIdMaskedHint": {
+        "type": "string",
+        "description": "Source ID Masked hint based on the confinement type.\n"
+      },
+      "SoftwareStatementClaimset": {
+        "required": [
+          "declared_origin",
+          "integrator_origin",
+          "tenancy_context",
+          "top_origin",
+          "uebas"
+        ],
+        "type": "object",
+        "properties": {
+          "uebas": {
+            "$ref": "#/components/schemas/ClaimSetUebas"
+          },
+          "client_kid": {
+            "type": "string",
+            "description": "The client key identifier.\n"
+          },
+          "top_origin": {
+            "type": "string",
+            "description": "The top origin. With SPC, this might be used as the 'payeeOrigin'\nThis origin must be found in the origin performing the fido2 authentication\nat, window.location.ancestorOrigins (typically it should be the last element in the array)\n"
+          },
+          "software_id": {
+            "type": "string",
+            "description": "A brief identifier for the software.\n",
+            "enum": [
+              "CRDW"
+            ]
+          },
+          "oauth2_version": {
+            "type": "string",
+            "description": "The OAuth2 version.\n"
+          },
+          "declared_origin": {
+            "type": "string",
+            "description": "The origin to which Visa is offering a service in this session.\n"
+          },
+          "tenancy_context": {
+            "required": [
+              "product_code"
+            ],
+            "type": "object",
+            "properties": {
+              "app_id": {
+                "type": "string",
+                "description": "If the tenancy is specific to an application within the product.\n"
+              },
+              "client_id": {
+                "type": "string",
+                "description": "If the tenancy is specific to a client within the product.\n"
+              },
+              "product_code": {
+                "type": "string",
+                "description": "The product owning the tenancy.\n"
+              }
+            },
+            "description": "Helps in resolving the tenancy on which this session will operate.\nThis is the software JWKS that is being used to exchange the authorization code for an access token.\n"
+          },
+          "software_version": {
+            "type": "string",
+            "description": "The version of the software.\n<major_version>.<minor_version>[.<patch_version>] (e.g. 1.0.0)\n"
+          },
+          "integrator_origin": {
+            "type": "string",
+            "description": "The integrator origin.\nNeeded to post messages, and to validate on the server whether we are ok with\nposting messages to this origin\nIf null, the integrator_origin is the same as top_origin\nTBD: This origin must be found in the origin performing the fido2 authentication\n      at, window.location.ancestorOrigins (typically it should be the last element in the array)\n      In some situations this might not be true. The authentication origin might be\n          directly embedded in the top_origin and effectively be a sibling of the integrator_origin,\n          which would not be included in this list\n"
+          },
+          "software_mode_hint": {
+            "type": "string",
+            "description": "The software mode hint.\n"
+          }
+        },
+        "description": "A description of the client software that will be used within the session\n"
+      },
+      "SourceUserId": {
+        "maxLength": 100,
+        "type": "string",
+        "description": "Another id for the confinement that is not created or managed by the binding system."
+      },
+      "ConfinementType": {
+        "type": "string",
+        "description": "The type of the confinement.",
+        "enum": [
+          "DEVICE",
+          "DOMAIN_NAME"
+        ]
+      },
+      "SigDeviceDynamicData": {
+        "type": "string",
+        "description": "The content of this field is a JSON Web Signature (JWS). \nRequired for Digital Authentication Framework (DAF). Not needed when the signature is generated by the FIDO device.\n1. The header of the JWS has these elements:\n  “alg”:“...”—Algorithm used for signature\n  “kid”:“1234”—Token requestors’s client device ID\n  “typ”:“JOSE”\n  “cty”:“application/json”—Content type of the content inside JWS\n  “iat”:“147...38”—Issued at the timestamp in UTC when the transaction was created and signed.\n2. Construct the body as JSON consisting of these:\n  vProvisionedTokenID\n  the nonce\n  clientDeviceID\n3. The Signature. When the signature is provided, use this algorithm: RSA-PSS with SHA-256 as the hash and the MGF. Set “algo” to “PS256”\n"
+      },
+      "Code": {
+        "maxLength": 8192,
+        "type": "string",
+        "description": "The code parameter as defined by OIDC\n+ The code parameter is used to exchange for an access token\n+ The code is a one-time use token\n",
+        "example": "4/0AY0e-g7Q1J1Q1J1Q1J1Q1J1Q1J1Q1J1Q1J1"
+      },
+      "SourceRootOfTrustData": {
+        "required": [
+          "anchor",
+          "surrogate"
+        ],
+        "type": "object",
+        "properties": {
+          "source_id_hint": {
+            "$ref": "#/components/schemas/ConfinementSourceIdHint"
+          },
+          "tokenReferenceData": {
+            "maxItems": 10,
+            "minItems": 0,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TokenReferenceData"
+            }
+          }
+        },
+        "description": "This Data Come from Token Requestor or Token Service Provider for PAR request with wallet account ids and\n"
+      },
+      "ServerAuthData": {
+        "type": "object",
+        "properties": {
+          "uebas": {
+            "$ref": "#/components/schemas/UEBAS"
+          },
+          "rootOfTrustData": {
+            "$ref": "#/components/schemas/SourceRootOfTrustData"
+          },
+          "assertion_options": {
+            "$ref": "#/components/schemas/AssertionOptionsResponse"
+          },
+          "attestation_options": {
+            "$ref": "#/components/schemas/AttestationOptionsResponse"
+          },
+          "bindings_by_authorization_detail": {
+            "$ref": "#/components/schemas/BindingsByAuthorizationDetails"
+          }
+        },
+        "description": "Mandatory if the include param specifies one or more data types to return.",
+        "nullable": true
+      },
+      "TransactionTokenType": {
+        "type": "string",
+        "description": "The type of the transaction token.",
+        "enum": [
+          "ECOM",
+          "HCE"
+        ]
+      },
+      "ProbeUse": {
+        "type": "string",
+        "description": "+ Provides the client with information regarding the usage of probe data\n+ Optional - the client can decide which probe to satisfy\n+ Recommended - the Open ID server recommends the satisfaction of this probe, but client can decide\n+ Required - the client has to satisfy the probe\n",
+        "enum": [
+          "OPTIONAL",
+          "RECOMMENDED",
+          "REQUIRED"
+        ]
+      },
+      "ResponseMode": {
+        "type": "string",
+        "description": "Blank space separated list of identifiers for how the requested token is to be handed over to the caller of this API\n  Values\n  urn:ext:oauth:response-mode:body\n<N/A> fragment: Not supported by this grant type\n<N/A> query: Not supported by this grant type\n<N/A> form_post: Not supported by this grant type\n<N/A> urn:ext:oauth:response-mode:ua_inspector: Not supported by this grant type\n<N/A> urn:ext:oauth:response-mode:ua_script: Not supported by this grant type\n  urn:ext:oauth:response-mode:cookie\nIMPORTANT: Cookies come at the expense of CSRF attacks. At this point in time, only secured_id_tokens are allowed to be sent back as cookies\n  This array may be of\n  Length 1 in which case the same way to hand over all the tokens applies\n  Same length of the response_types array in which case index 0 of the response_mode array refers to the index 0 of the response_types array and so on\n  Less length than the response_types array in which case the last response_mode is applicable to the rest of the response_types\n  Greater length than the response_types array in which case the extra response_mode entries in the array are ignored\n  Defaults to \"urn:ext:oauth:response-mode:body\"\n",
+        "enum": [
+          "com_visa_web_message",
+          "form_post",
+          "fragment"
+        ]
+      },
+      "PaymentCredentialBinding": {
+        "required": [
+          "status",
+          "type",
+          "uuid"
+        ],
+        "type": "object",
+        "properties": {
+          "time": {
+            "$ref": "#/components/schemas/BindingTime"
+          },
+          "type": {
+            "$ref": "#/components/schemas/BindingType"
+          },
+          "uuid": {
+            "$ref": "#/components/schemas/UUID"
+          },
+          "status": {
+            "$ref": "#/components/schemas/BindingStatus"
+          },
+          "resources": {
+            "$ref": "#/components/schemas/Resources"
+          },
+          "trustchain": {
+            "$ref": "#/components/schemas/TrustChain"
+          },
+          "confinements": {
+            "$ref": "#/components/schemas/Confinements"
+          },
+          "oauth2_state": {
+            "type": "string"
+          },
+          "accessible_from_hint": {
+            "$ref": "#/components/schemas/AccessibleFromHint"
+          },
+          "authorization_details": {
+            "$ref": "#/components/schemas/ProbeDataSpecAuthorizationDetails"
+          },
+          "transactionConfiguration": {
+            "$ref": "#/components/schemas/TransactionConfiguration"
+          }
+        }
+      },
+      "AssertionOptionsResponse": {
+        "required": [
+          "challenge",
+          "status"
+        ],
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "#/components/schemas/Code"
+          },
+          "data": {
+            "$ref": "#/components/schemas/Data"
+          },
+          "rpId": {
+            "$ref": "#/components/schemas/RPId"
+          },
+          "status": {
+            "$ref": "#/components/schemas/Status"
+          },
+          "timeout": {
+            "$ref": "#/components/schemas/Timeout"
+          },
+          "challenge": {
+            "$ref": "#/components/schemas/Challenge"
+          },
+          "sessionId": {
+            "$ref": "#/components/schemas/SessionId"
+          },
+          "errorMessage": {
+            "$ref": "#/components/schemas/ErrorMessage"
+          },
+          "rpExtensions": {
+            "$ref": "#/components/schemas/RpExtensions"
+          },
+          "allowCredentials": {
+            "type": "array",
+            "items": {
+              "required": [
+                "id",
+                "type"
+              ],
+              "type": "object",
+              "properties": {
+                "id": {
+                  "$ref": "#/components/schemas/ID"
+                },
+                "type": {
+                  "$ref": "#/components/schemas/Type"
+                },
+                "transports": {
+                  "$ref": "#/components/schemas/Transports"
+                }
+              }
+            }
+          },
+          "userVerification": {
+            "$ref": "#/components/schemas/UserVerification"
+          },
+          "attestationFormats": {
+            "$ref": "#/components/schemas/Attestationformat"
+          }
+        }
+      },
+      "factorB": {
+        "maxLength": 20,
+        "type": "string",
+        "description": "factorB value configured for issuer."
+      },
+      "factorA": {
+        "maxLength": 20,
+        "type": "string",
+        "description": "factorA value configured for issuer."
+      },
+      "Resources": {
+        "maxItems": 5,
+        "minItems": 0,
+        "type": "array",
+        "description": "The resources associated to the binding\n",
+        "items": {
+          "$ref": "#/components/schemas/Resource"
+        }
+      },
+      "ProbeData": {
+        "title": "Probe data",
+        "type": "object",
+        "properties": {
+          "ref": {
+            "$ref": "#/components/schemas/ProbeDataReference"
+          },
+          "use": {
+            "$ref": "#/components/schemas/ProbeUse"
+          },
+          "spec": {
+            "$ref": "#/components/schemas/ProbeDataSpec"
+          },
+          "type": {
+            "$ref": "#/components/schemas/ProbeDataType"
+          },
+          "value": {
+            "$ref": "#/components/schemas/ProbeDataValue"
+          }
+        },
+        "description": "Data for each probe is represented in this object\n  + ref or type will be present which can uniquely identify the probe\n  + ref or type must be sent for subsequent interactions for settling the probe.\n"
+      },
+      "ProbeDataValue": {
+        "title": "Value of probe Reference",
+        "type": "string",
+        "description": "+ Value of probe reference\n+ For example, in case of OTP validation, this field carries the value of OTP\n"
+      },
+      "ActForId": {
+        "type": "string",
+        "description": "Value of the Id that uniquely defines the relationship who is authenticated\n For example in case of authentication using RelationshipID\n",
+        "example": "10086502-40010086502"
+      },
+      "ConfinementSourceHint": {
+        "type": "string",
+        "description": "Source hint based on the confinement type.",
+        "enum": [
+          "VDI"
+        ]
+      },
+      "AttestationOptionsResponse": {
+        "required": [
+          "attestation",
+          "authenticatorSelection",
+          "challenge",
+          "code",
+          "errorMessage",
+          "excludeCredentials",
+          "pubKeyCredParams",
+          "rp",
+          "serverNonce",
+          "status",
+          "timeout",
+          "user"
+        ],
+        "type": "object",
+        "properties": {
+          "rp": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "$ref": "#/components/schemas/RPId"
+              },
+              "name": {
+                "$ref": "#/components/schemas/RPName"
+              },
+              "relatedId": {
+                "$ref": "#/components/schemas/RelatedId"
+              }
+            },
+            "description": "The relying party responsible for the request"
+          },
+          "code": {
+            "$ref": "#/components/schemas/Code"
+          },
+          "data": {
+            "$ref": "#/components/schemas/Data"
+          },
+          "user": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "$ref": "#/components/schemas/ID"
+              },
+              "name": {
+                "$ref": "#/components/schemas/Name"
+              },
+              "displayName": {
+                "$ref": "#/components/schemas/DisplayName"
+              }
+            }
+          },
+          "status": {
+            "$ref": "#/components/schemas/Status"
+          },
+          "timeout": {
+            "$ref": "#/components/schemas/Timeout"
+          },
+          "challenge": {
+            "$ref": "#/components/schemas/Challenge"
+          },
+          "attestation": {
+            "$ref": "#/components/schemas/AttestationConveyancePreference"
+          },
+          "serverNonce": {
+            "$ref": "#/components/schemas/ServerNonce"
+          },
+          "errorMessage": {
+            "$ref": "#/components/schemas/ErrorMessage"
+          },
+          "rpExtensions": {
+            "$ref": "#/components/schemas/RpExtensions"
+          },
+          "pubKeyCredParams": {
+            "type": "array",
+            "description": "Preferences about the credential key to be created Ordered from most preferred to least",
+            "items": {
+              "type": "object",
+              "properties": {
+                "alg": {
+                  "type": "integer",
+                  "description": "The algorithm of the public key credential.\nThis is the algorithm of the public key credential that is being registered.\nValues\n  -8 → (EdDSA)\n      crv is Ed25519\n      is compressed\n      EdDSA using Ed25519\n  -7 → (ES256)\n      crv is 1 → P-256\n      ECDSA using P-256 and SHA-256\n      is not compressed\n  -257 → (RS256)\n    RSASSA-PKCS1-v1_5 using SHA-256\n",
+                  "format": "int32",
+                  "enum": [
+                    8,
+                    7,
+                    257
+                  ]
+                },
+                "type": {
+                  "type": "string",
+                  "description": "The type of the public key credential.\nThis is the type of the public key credential that is being registered.\n"
+                }
+              }
+            }
+          },
+          "attestationFormats": {
+            "$ref": "#/components/schemas/Attestationformat"
+          },
+          "excludeCredentials": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "$ref": "#/components/schemas/ID"
+                },
+                "type": {
+                  "$ref": "#/components/schemas/Type"
+                },
+                "transports": {
+                  "$ref": "#/components/schemas/Transports"
+                }
+              }
+            }
+          },
+          "authenticatorSelection": {
+            "$ref": "#/components/schemas/AuthenticatorSelectionCriteria"
+          }
+        }
+      },
+      "SourceId": {
+        "maxLength": 100,
+        "type": "string",
+        "description": "Another id for the confinement that is not created or managed by the binding system."
+      },
+      "SourceUserIdHint": {
+        "type": "string",
+        "description": "The type of id that identifies the user\nValues\n  ACCOUNT_ID\n",
+        "enum": [
+          "ACCOUNT_ID"
+        ]
+      },
+      "Challenge": {
+        "type": "string",
+        "description": "A base64url encoded randomized byte string that is to be signed by the authenticator with\nThe attestation key (associated to an authenticator), during a registration\nThe credential key (associated to an end-user), during an authentication\nAccording to the Webauthn Spec, this value must have at least 16 bytes of entropy (2^128 bits)\n16 random bytes encoded in base64url makes 22 bytes, but it is still only 2^128 bits of entropy\nAccording to the FIDO2 Server Certification documentation, this value must be at most 64 bytes long\nBefore this value is passed to the FIDO2 authenticator, it must be base64url decoded. This decoded value is the actual challenge given to the authenticator\n"
+      },
+      "SourceImgHint": {
+        "type": "string",
+        "description": "Source image hint based on the confinement type.\n"
+      },
+      "BindingType": {
+        "type": "string",
+        "description": "The type of the binding.",
+        "enum": [
+          "com_visa_payment_credential_binding",
+          "com_visa_payment_transaction",
+          "com_visa_c2p_migration_and_transaction",
+          "None"
+        ]
+      },
+      "Protocol": {
+        "type": "string",
+        "description": "If the authentication was delegated to some other party, what protocol was used",
+        "enum": [
+          "TDS",
+          "OIDC",
+          "VTS_IDV"
+        ]
+      },
+      "TokenReferenceData": {
+        "type": "object",
+        "properties": {
+          "tokenId": {
+            "$ref": "#/components/schemas/VProvisionTokenId"
+          },
+          "clientDeviceId": {
+            "$ref": "#/components/schemas/ClientDeviceId"
+          },
+          "relationshipId": {
+            "$ref": "#/components/schemas/RelationshipId"
+          },
+          "srcDigitalCardId": {
+            "$ref": "#/components/schemas/SrcDigitalCardId"
+          },
+          "tokenRequestorId": {
+            "$ref": "#/components/schemas/TokenRequestorId"
+          },
+          "sigDeviceDynamicData": {
+            "$ref": "#/components/schemas/SigDeviceDynamicData"
+          },
+          "clientWalletAccountId": {
+            "$ref": "#/components/schemas/ClientWalletAccountId"
+          },
+          "paymentAccountReference": {
+            "$ref": "#/components/schemas/PaymentAccountReference"
+          }
+        }
+      },
+      "TransactionConfiguration": {
+        "type": "object",
+        "properties": {
+          "tokenType": {
+            "$ref": "#/components/schemas/TransactionTokenType"
+          },
+          "dafIndicator": {
+            "$ref": "#/components/schemas/DafIndicator"
+          }
+        },
+        "description": "The configuration to capture token type and DAF indicators for issuer"
+      },
+      "DeviceChallengeMethod": {
+        "maxLength": 25,
+        "type": "string",
+        "description": "Describes the transformation over the code_verifier.\nMandatory if code_challenge is non-null.\n- `plain`: Same as the value of code_verifier.\n- `S256`: Calculated as BASE64URL-ENCODE(SHA256(ASCII(code_verifier))).\n",
+        "example": "{\"S256\":null}",
+        "enum": [
+          "plain",
+          "S256"
+        ]
+      },
+      "ProbeDataType": {
+        "title": "Type of probe Reference",
+        "maxLength": 20,
+        "type": "string",
+        "description": "+ Provides the client with information regarding the type of probe reference\n+ Mandatory if ref is not present\n\n+ OTP#EMAIL - OTP is delivered via Email\n+ OTP#SMS - OTP is delivered via SMS\n",
+        "enum": [
+          "OTP#EMAIL",
+          "OTP#SMS",
+          "FIDO2"
+        ]
+      },
+      "PaymentAccountReference": {
+        "maxLength": 50,
+        "type": "string",
+        "description": "Payment Account Reference."
+      },
+      "ServerState": {
+        "maxLength": 4026,
+        "type": "string",
+        "description": "If the authorization server already has previous state related to this request.\n",
+        "example": "1234567890"
+      },
+      "TokenRequestorId": {
+        "maxLength": 11,
+        "minLength": 0,
+        "type": "string",
+        "description": "(Conditional) Token Requestor Id, which identifies the owner of the token.\nFormat: Numberic, 11\nConditionality: Required for Token for Token use-case or deferred authentication flows.\n",
+        "format": "number"
+      },
+      "ResourceType": {
+        "type": "string",
+        "description": "The type of the Resource.",
+        "enum": [
+          "PAN"
+        ]
+      },
+      "PARConfinement": {
+        "required": [
+          "source_hint",
+          "source_id",
+          "source_id_hint"
+        ],
+        "type": "object",
+        "properties": {
+          "source_id": {
+            "$ref": "#/components/schemas/SourceId"
+          },
+          "source_hint": {
+            "$ref": "#/components/schemas/ConfinementSourceHint"
+          },
+          "source_id_hint": {
+            "$ref": "#/components/schemas/ConfinementSourceIdHint"
+          },
+          "sourceRootOfTrust": {
+            "$ref": "#/components/schemas/SourceRootOfTrustData"
+          }
+        }
+      },
+      "AuthorizationEndpoint": {
+        "maxLength": 256,
+        "type": "string",
+        "description": "Used by the relying party to redirect the end-user to the identity provider to obtain authorization to access the requested resources.",
+        "format": "uri"
+      },
+      "ClientWalletAccountId": {
+        "maxLength": 24,
+        "type": "string",
+        "description": "Client-provided consumer ID that identifies the wallet account holder entity. \nFormat: Alphabetic, numeric, hyphens ( - ), and underscores ( _ ), e.g. spaces are not allowed; maximum 24 characters.\n"
+      },
+      "Type": {
+        "type": "string",
+        "description": "The type of the FIDO2 credential\nThe type of the FIDO2 credential that is being registered.\nThis value is always 'public-key'\n",
+        "enum": [
+          "public-key",
+          "strong-key"
+        ]
+      },
+      "VPPSFIDO2ServerStandardError": {
+        "title": "VPPS FIDO2 Server Standard Error Response Structure",
+        "required": [
+          "errorMessage",
+          "status"
+        ],
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "3-digit HTTP Status Code",
+            "example": "failed",
+            "enum": [
+              "ok",
+              "failed"
+            ]
+          },
+          "errorMessage": {
+            "type": "string",
+            "description": "The message for the error Must be the same value as 'error_description'",
+            "example": "invalid_request"
+          }
+        },
+        "description": "API errors are reported using a Standard Error Response structure. All errors are categorized into Standard errors and Business errors. Standard errors can be returned by any API and should be handled in a common way. Business errors are returned only by some APIs and are documented for each API."
+      },
+      "Confinements": {
+        "maxItems": 10,
+        "minItems": 0,
+        "type": "array",
+        "description": "The confinements associated to the binding",
+        "items": {
+          "$ref": "#/components/schemas/Confinement"
+        }
+      },
+      "Authentication": {
+        "required": [
+          "source_id",
+          "source_id_hint",
+          "time"
+        ],
+        "type": "object",
+        "properties": {
+          "amr": {
+            "$ref": "#/components/schemas/AMR"
+          },
+          "time": {
+            "$ref": "#/components/schemas/Time"
+          },
+          "proof": {
+            "$ref": "#/components/schemas/Proof"
+          },
+          "protocol": {
+            "$ref": "#/components/schemas/Protocol"
+          },
+          "source_id": {
+            "$ref": "#/components/schemas/SourceId"
+          },
+          "amr_values": {
+            "$ref": "#/components/schemas/AMR_VALUES"
+          },
+          "source_hint": {
+            "$ref": "#/components/schemas/AuthSourceHint"
+          },
+          "source_id_hint": {
+            "$ref": "#/components/schemas/AuthSourceIdHint"
+          },
+          "source_user_id": {
+            "$ref": "#/components/schemas/SourceUserId"
+          },
+          "source_user_id_hint": {
+            "$ref": "#/components/schemas/SourceUserIdHint"
+          }
+        }
+      },
+      "UILocales": {
+        "type": "array",
+        "description": "The UI Locales that the user has selected\nThe UI Locales are the languages that the user has selected to use for\n",
+        "items": {
+          "type": "string"
+        }
+      },
+      "AttestationObject": {
+        "type": "string",
+        "description": "The attestation object\nThe base64Url encoded value of the attestation object that is being registered.\nThis is the attestation object that is being registered.\nIt's a structured value as per the WebAuthn specification\nIt consists of the following\n  fmt: the format type in which the attestation is expressed\n  attStmt: the attestation statement\n    Its contents are specific to the format being used\n    Always includes the attestation signature\nauthData: the authenticator data\n    rpIdHash: the sha-256 hash of the rpId (the origin)\n    flags: defining bit flags for user present, user verified, backup eligibility (0 - single, 1 - multi device), backup state (0 - not backed up, 1 -backed up), attested credential data present, and extension data present\n    signCount: the signature counter (increases with each signature)\n   attestedCredentialData\n      aaguid: the AAGUID of the authenticator\n      credentialIdLength: byte length of the credential id\n      credentialId: the FIDO2 credential id\n      credentialPublicKey: the COSE encoded public key\n   extensions: map with extension identifiers as keys and authenticator extension outputs as values\n"
+      },
+      "AuthenticatorSelectionCriteria": {
+        "type": "object",
+        "properties": {
+          "residentKey": {
+            "type": "string",
+            "description": "The extent to which a client-side discoverable credential is desired.\nValues:\n- discouraged\n- preferred\n- required\nDefaults to required when requireResidentKey is true.\nDefaults to discouraged when requireResidentKey is false or absent.\n",
+            "enum": [
+              "discouraged",
+              "preferred",
+              "required"
+            ]
+          },
+          "userVerification": {
+            "$ref": "#/components/schemas/UserVerificationRequirement"
+          },
+          "requireResidentKey": {
+            "type": "boolean",
+            "description": "Whether a resident key is desired.\nRetained only for backward compatibility with webauthn level 1.\nDefaults to false.\nMapping between residentKey and requireResidentKey:\n- residentKey = discouraged → requireResidentKey = false\n- residentKey = required → requireResidentKey = true\n- residentKey = preferred → requireResidentKey = false (not clear)\n"
+          },
+          "authenticatorAttachment": {
+            "$ref": "#/components/schemas/AuthenticatorAttachment"
+          }
+        },
+        "description": "Specifies requirements for the authenticator that affect how the FIDO2 credential is created."
+      },
+      "Prompt": {
+        "maxLength": 25,
+        "type": "string",
+        "description": "Specifies how the end-user must be involved during the authentication process.\nIts value is a space-delimited string.\nPossible values include:\n- 'login': The end-user must be actively authenticated.\n- 'create`: The end-user is to be enrolled.\n- 'none': The end-user is authenticated silently, without their active participation (not implemented).\n- 'consent': The end-user must consent before returning any information to the Client (not implemented).\n- 'select_account': The end-user might select an account if multiple sessions with different accounts are already available (not implemented).\n",
+        "example": "login consent",
+        "enum": [
+          "login",
+          "create",
+          "none",
+          "consent",
+          "select_account"
+        ]
+      },
+      "CodeChallenge": {
+        "maxLength": 128,
+        "type": "string",
+        "description": "A transformation over a transitory secret, known as code_verifier, needed to prove that the same software instance that initiated the flow is the same software instance that is using the outputted token(s).\n- Length: 43..128 (plain)\n- Length: 43 (S256)\n",
+        "example": "code_challenge_value"
+      },
+      "AccessibleFromHint": {
+        "type": "string",
+        "description": "Defaults to UNKNOWN if not present.",
+        "nullable": true,
+        "enum": [
+          "LOCAL",
+          "REMOTE"
+        ]
+      },
+      "ErrorMessage": {
+        "type": "string",
+        "description": "An empty string as there is no error",
+        "example": ""
+      },
+      "RelatedId": {
+        "type": "string",
+        "description": "The relying party identifier.\nA domain string identifying the relying party for which the FIDO2 credential is created\n  The FIDO2 credential will be scoped to this id\nDefaults to the origin's domain\n  It can only be overridden to a suffix of the origin's domain\n  For example, if the browser's origin is 'secure.checkout.visa.com' then the value of rp.id might be\n    secure.checkout.visa.com (default, when rp.id = null)\n    checkout.visa.com\n    visa.com\n"
+      },
+      "ProbeDataSpecContractDetails": {
+        "maxItems": 10,
+        "minItems": 1,
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/ProbeDataSpecContractDetail"
+        }
+      },
+      "ProbeType": {
+        "type": "string",
+        "description": "The type of probe being performed on the subject\n+ PROVE_PROMISE\n  + The OIDC flow, by presenting a login_hint, is claiming to have interacting in the flow with the individual identified by the login_hint value\n  + That is another metaphor and is called a promise; the subject needs to prove the promise made\n",
+        "enum": [
+          "PROVE_PROMISE",
+          "ACCEPT_CONTRACT",
+          "ACCEPT_TNC"
+        ]
+      },
+      "UserVerification": {
+        "type": "string",
+        "description": "The user verification of the authenticator.\nThis is the user verification of the authenticator that is being requested.\nValues\n  - required\n  - preferred\n  - discouraged\n  - default\n",
+        "enum": [
+          "required",
+          "preferred",
+          "discouraged",
+          "default"
+        ]
+      },
+      "Name": {
+        "type": "string",
+        "description": "The name attribute takes a traditional username or the like, to disambiguate accounts with similar displayNames Authenticators must allow at least a length of 64 bytes (more than that might be truncated)"
+      },
+      "RPName": {
+        "type": "string",
+        "description": "The human-readable name of the relying party.\nThis is the name of the relying party that is requesting the FIDO2 credential.\nAuthenticators must allow at least a length of 64 bytes (more than that might be truncated)\n"
+      },
+      "IDTokens": {
+        "maxItems": 10,
+        "minItems": 0,
+        "type": "array",
+        "description": "ID Tokens are used to authenticate the user and provide access to the user's profile information.\n",
+        "items": {
+          "$ref": "#/components/schemas/IDToken"
+        }
+      },
+      "FIDO2": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "description": "Type of the Fido2 Key. Possible values include public-key, strong-key.\n"
+          },
+          "user_handle": {
+            "type": "string",
+            "description": "The user handle\nThis is the user handle that is being registered.\n"
+          },
+          "credential_id": {
+            "$ref": "#/components/schemas/ID"
+          },
+          "client_data_json": {
+            "$ref": "#/components/schemas/ClientDataJSON"
+          },
+          "attestation_object": {
+            "$ref": "#/components/schemas/AttestationObject"
+          },
+          "authenticator_data": {
+            "type": "string",
+            "description": "The authenticator data\nThe base64Url encoded value of the authenticator data that is being registered.\nThis is the authenticator data that is being registered.\nIt's a structured value as per the WebAuthn specification\nIt consists of the following\n  rpIdHash: the sha-256 hash of the rpId (the origin)\n  flags: defining bit flags for user present, user verified, backup eligibility (0 - single, 1 - multi device), backup state (0 - not backed up, 1 -backed up), attested credential data present, and extension data present\n  signCount: the signature counter (increases with each signature)\n  extensions: map with extension identifiers as keys and authenticator extension outputs as values\n"
+          },
+          "assertion_signature": {
+            "type": "string",
+            "description": "The signature\n This is the signature that is being registered.\n"
+          }
+        }
+      },
+      "BindingsByAuthorizationDetails": {
+        "maxItems": 10,
+        "minItems": 0,
+        "type": "array",
+        "description": "Existing bindings associated to the Resource(s) and Confinement(s) for each of the elements in the incoming authorization details array\nMandatory if the include param specifies any binding data type\n",
+        "items": {
+          "$ref": "#/components/schemas/BindingsByAuthorizationDetail"
+        }
+      },
+      "UUID": {
+        "type": "string",
+        "description": "The unique id of the confinement created by the binding system.",
+        "format": "uuid"
+      },
+      "Subjects": {
+        "maxItems": 10,
+        "minItems": 1,
+        "type": "array",
+        "description": "This is an array of all the subjects being authenticated in this interaction\n",
+        "items": {
+          "$ref": "#/components/schemas/Subject"
+        }
+      },
+      "SessionId": {
+        "type": "string",
+        "description": "The session identifier.\nThis is the identifier of the session that is being created.\n"
+      },
+      "AMR_VALUES": {
+        "type": "array",
+        "description": "The authentication methods being requested.\nNote: For VPPS only `pop#fido2` is used.\nValues from OIDC:\n- `pop`: Proof of Possession. Similar to swk and hwk without specifying if it is through software or hardware.\nCustom Values:\n- `fed`: Federated.\nThese values might be qualified for more granularity:\nQualifier Values:\n- When `amr` is 'otp':\n  - `otp#time`: Time-based OTP.\n  - `otp#hash`: Hash-based OTP.\n  - `otp#email`: OTP via email.\n  - `otp#sms`: OTP via SMS.\n  - `otp#txn`: OTP with a payment transaction amount.\n- When `amr` is 'pin':\n  - `pin#cvv`: PIN with CVV.\n- When `amr` is 'tel':\n  - `tel#csr`: Telephone with customer service representative.\n  - `tel#cb`: Telephone callback.\n- When `amr` is 'rba':\n  - `rba#rf`: Risk-Based Authentication with refresh token.\n  - `rba#aref`: Risk-Based Authentication with activity reference.\n  - `rba#sidt`: Risk-Based Authentication with secured ID token.\n  - `rba#csrt`: Risk-Based Authentication with cross-site recognition token.\n  - `rba#tpt`: Risk-Based Authentication with third-party token.\n- When `amr` is 'pop':\n  - `pop#fido2`: Proof of Possession with FIDO2.\n- When `amr` is 'fed':\n  - `fed#oidc`: Federated with OpenID Connect protocol.\n  - `fed#tds`: Federated with 3DS protocol.\n  - `fed#saml2`: Federated with SAML2 protocol.\n  - `fed#vtsiss`: Federated with VTS IdV specification.\n",
+        "items": {
+          "type": "string"
+        }
+      },
+      "SubjectAuthStatus": {
+        "type": "string",
+        "description": "Authentication status of the subject\n+ A - AUTHENTICATED\n+ P - PROBE\n",
+        "enum": [
+          "A",
+          "P"
+        ]
+      },
+      "AuthorizationDetailRef": {
+        "type": "integer",
+        "description": "Typically, a one-digit number\nA reference or a label optionally set by the creator of the authorization detail and acknowledged by B2C IAM, to uniquely refer to one element in an array of authorization details\nIf not specified its value is the 1-based index on the array (index starts from one)\nMandatory when a Binding data type is part of a response\n",
+        "format": "int32"
+      },
+      "AMR": {
+        "type": "array",
+        "description": "Authentication methods that were used during the authentication process of the user. These methods can include various types of authentication like passwords, biometrics, OTPs (One-Time Passwords), etc. The amr claim is part of the token payload and helps the relying party (RP) understand how the user was authenticated, which can impact the level of trust and security associated with the token.\nValues from RFC:\n- `pwd`: Password.\n- `otp`: One Time Password. Without qualifier it means totp.\n- `pin`: Personal Identification Number.\n- `kba`: Knowledge Based Authentication.\n- `swk`: Software Secured Key.\n- `hwk`: Hardware Secured Key.\n- `sc`: Smart Card.\n- `fpt`: Fingerprint.\n- `face`: Faceprint.\n- `iris`: Irisprint.\n- `retina`: Retinaprint.\n- `vbm`: Voiceprint.\n- `rba`: Risk Based Authentication.\n- `user`: User Presence.\n- `sms`: Short Message Service.\n- `tel`: Telephone.\n- `geo`: Geolocation.\n- `mca`: Multiple Channel Authentication.\n- `mfa`: Multiple Factor Authentication.\n- `wia`: Windows Integrated Authentication.\n- values from OIDC:\n- `pop`: Proof of Possession. Similar to swk and hwk without specifying if it is through software or hardware.\n- custom values:\n- `fed`: Federated.\n- When `amr` is 'otp':\n  - `otp#time`: Time-based OTP.\n  - `otp#hash`: Hash-based OTP.\n  - `otp#email`: OTP via email.\n  - `otp#sms`: OTP via SMS.\n  - `otp#txn`: OTP with a payment transaction amount.\n- When `amr` is 'pin':\n    - `pin#cvv`: PIN with CVV.\n- When `amr` is 'tel':\n    - `tel#csr`: Telephone with customer service representative.\n    - `tel#cb`: Telephone callback.\n- When `amr` is 'rba':\n    - `rba#rf`: Risk-Based Authentication with refresh token.\n    - `rba#aref`: Risk-Based Authentication with activity reference.\n    - `rba#sidt`: Risk-Based Authentication with secured ID token.\n    - `rba#csrt`: Risk-Based Authentication with cross-site recognition token.\n    - `rba#tpt`: Risk-Based Authentication with third-party token.\n- When `amr` is 'pop':\n    - `pop#fido2`: Proof of Possession with FIDO2.\n- When `amr` is 'fed':\n    - `fed#oidc`: Federated with OpenID Connect protocol.\n    - `fed#tds`: Federated with 3DS protocol.\n    - `fed#saml2`: Federated with SAML2 protocol.\n    - `fed#vtsiss`: Federated with VTS IdV specification.\n",
+        "items": {
+          "type": "string"
+        }
+      },
+      "Timeout": {
+        "type": "integer",
+        "description": "The timeout of the FIDO2 registration flow.\nThis is the timeout of the FIDO2 registration flow that is being requested.\n",
+        "format": "int32"
+      },
+      "Resource": {
+        "required": [
+          "source_hint",
+          "source_id",
+          "source_id_hint",
+          "type",
+          "uuid"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "$ref": "#/components/schemas/ConfinementResourceName"
+          },
+          "type": {
+            "$ref": "#/components/schemas/ResourceType"
+          },
+          "uuid": {
+            "$ref": "#/components/schemas/UUID"
+          },
+          "source_id": {
+            "$ref": "#/components/schemas/SourceId"
+          },
+          "source_hint": {
+            "$ref": "#/components/schemas/SourceHint"
+          },
+          "source_img_id": {
+            "$ref": "#/components/schemas/SourceImgId"
+          },
+          "source_id_hint": {
+            "$ref": "#/components/schemas/SourceIdHint"
+          },
+          "source_img_hint": {
+            "$ref": "#/components/schemas/SourceImgHint"
+          },
+          "source_id_masked": {
+            "$ref": "#/components/schemas/SourceIdMasked"
+          },
+          "source_img_id_hint": {
+            "$ref": "#/components/schemas/SourceImgIdHint"
+          },
+          "source_id_masked_hint": {
+            "$ref": "#/components/schemas/SourceIdMaskedHint"
+          }
+        }
+      },
+      "UEBAS": {
+        "maxItems": 10,
+        "minItems": 0,
+        "type": "array",
+        "description": "The user entity behavior analytics, Mandatory if the include param specifies UEBA\n",
+        "items": {
+          "$ref": "#/components/schemas/UEBA"
+        }
+      },
+      "ConfinementResourceName": {
+        "maxLength": 50,
+        "type": "string",
+        "description": "A name given to the confinement.",
+        "nullable": true
+      },
+      "ResponseType": {
+        "type": "string",
+        "description": "description: |\nTells which tokens are expected after a successful authentication. The redirect URI.\n    code\n",
+        "enum": [
+          "code"
+        ]
+      },
+      "SubjectKind": {
+        "type": "string",
+        "description": "Kind of the subject authenticated\n",
+        "enum": [
+          "VCARD_ID"
+        ]
+      },
+      "ClaimSetUebas": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/ClaimSetUeba"
+        }
+      },
+      "TokenResponse": {
+        "required": [
+          "access_token",
+          "expires_in",
+          "response",
+          "token_type"
+        ],
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/Data"
+          },
+          "scope": {
+            "type": "string",
+            "description": "Per the RFC, needed if the scope being granted is not exactly the same the client/caller is requesting\nThe OAuth2 RFC defines the scope as a list of space-delimited strings (URIs in our case)\n"
+          },
+          "response": {
+            "type": "string",
+            "description": "When this attribute is present, no other attribute must be directly declared as part of the response, but rather they must be included as part of the claimset of this JWT\nMight be either a JWS or JWE\nInitially only JWE is implemented\n"
+          },
+          "subjects": {
+            "$ref": "#/components/schemas/Subjects"
+          },
+          "auth_data": {
+            "type": "object",
+            "properties": {
+              "nonce": {
+                "type": "string",
+                "description": "Might be issued when the JWT includes a key derivation method claim (key_dm)\n"
+              },
+              "mac_tag": {
+                "type": "string",
+                "description": "Might be issued when the JWT includes a key derivation method claim (key_dm)\n"
+              },
+              "server_nonce": {
+                "type": "string",
+                "description": "Might be issued when the JWT includes a key derivation method claim (key_dm)\n"
+              },
+              "tenancy_hint": {
+                "type": "string",
+                "description": "Used in cases where disambiguating the tenancy is needed\n"
+              }
+            },
+            "description": "Used to communicate any additional data that results from the authentication\nKey Establishment\nIf the credential used to authenticate includes key establishment parameters (key_agr and key_dm), then this map is used to output parameters related to the key establishment\n"
+          },
+          "expires_in": {
+            "type": "integer",
+            "description": "The number of seconds until the access token expires.\nThis is the number of seconds until the access token expires.\n",
+            "format": "int32"
+          },
+          "token_type": {
+            "type": "string",
+            "description": "Might be\n  Bearer\n  PoP\nThe server decides based on contextual data what token type to create\n",
+            "enum": [
+              "Bearer",
+              "PoP"
+            ]
+          },
+          "auth_status": {
+            "type": "string",
+            "description": "The authentication status.\nThis is the authentication status that is being returned.\n",
+            "enum": [
+              "FULL",
+              "PARTIAL"
+            ]
+          },
+          "access_token": {
+            "type": "string",
+            "description": "Only access tokens are placed here; not any other type of token.\nThis is the access token that is being returned.\n"
+          },
+          "issued_tokens": {
+            "$ref": "#/components/schemas/IDTokens"
+          }
+        }
+      },
+      "AuthenticatorAttachment": {
+        "type": "string",
+        "description": "The attachment modality of the authenticator that is eligible for the registration.\nValues:\n        - platform\n        - cross-platform\nIf <null> or empty then any attachment is acceptable\n",
+        "example": "platform",
+        "enum": [
+          "platform",
+          "cross-platform"
+        ]
+      },
+      "State": {
+        "maxLength": 32,
+        "type": "string",
+        "description": "If the relying party would like to pass data that when the flow concludes and tokens are delivered, can be used to remember what exact instance this flow is.\n",
+        "example": "1234567890"
+      },
+      "SourceIdHint": {
+        "type": "string",
+        "description": "Source ID hint based on the confinement type.\nValues:\n\nWhen Type is DEVICE:\n  - VDID - Visa Device ID\n  - ClientDeviceID - Client-provided device identifier\n  - IP_ADDRESS - IP address of the device\n  - DFP_SID - Device Fingerprinting Session ID\n\nWhen Type is DOMAIN_NAME:\n  - HOSTNAME - Domain name used for the confinement\n\nWhen Type is PAN:\n  - VCARDID - Visa Card ID\n  - PAYMENT_ACCOUNT_REFERENCE - Payment Account Reference (PAR) value\n  - PAN_REFERENCE_ID - Unique reference to a PAN\n  - ACCOUNT_ID_HASH - Hashed version of the account identifier\n\nWhen protocol is TDS:\n  - ACS_TNX_ID - Access Control Server Transaction ID\n\nWhen protocol is OIDC:\n  - IDT_JTI - JWT ID from an Identity Token\n\nWhen protocol is VTS_IDV:\n  - VTS_IDV - Visa Token Service Identity Verification reference\n",
+        "enum": [
+          "VDID",
+          "ClientDeviceID",
+          "HOSTNAME",
+          "VCARDID",
+          "ACS_TNX_ID",
+          "IDT_JTI",
+          "VTS_IDV",
+          "ACCOUNT_ID",
+          "AUTHENTICATOR_CREDENTIAL_ID",
+          "DFP_SID",
+          "ACCOUNT_ID_HASH",
+          "PAYMENT_ACCOUNT_REFERENCE",
+          "PAN_REFERENCE_ID",
+          "IP_ADDRESS"
+        ]
+      },
+      "Proof": {
+        "type": "object",
+        "properties": {
+          "fido2": {
+            "$ref": "#/components/schemas/FIDO2"
+          }
+        },
+        "description": "If the creation or declaration of the new authentication credential, outputted any cryptographically protected object\nExamples might be\n  Id Token (JWS signed by Visa)\n  FIDO2 Attestation / Assertion (a blob signed by the FIDO2 authenticator)\n"
+      },
+      "DafIndicator": {
+        "type": "object",
+        "properties": {
+          "factorA": {
+            "$ref": "#/components/schemas/factorA"
+          },
+          "factorB": {
+            "$ref": "#/components/schemas/factorB"
+          }
+        },
+        "description": "configuration to hold factorA, factorB values"
+      },
+      "BindingTime": {
+        "type": "string",
+        "description": "The time the binding was created. ISO 8601",
+        "format": "date-time"
+      },
+      "AttestationConveyancePreference": {
+        "type": "string",
+        "description": "Standard error response body provided when there is an error.\nValues\n  none\n    Might be used to avoid\n    A user consent to give data to the relying party\n    A roundtrip to an Attestation or Anonymization CA\n  indirect\n    The client (the browser) decides how to obtain the attestation\n    The client may replace the authenticator's attestation with one generated by an Anonymization CA to preserve privacy\n  direct\n    The relying party prefers the client to relay the attestation as generated by the authenticator\n  Defaults to 'none'\n",
+        "example": "direct",
+        "enum": [
+          "none",
+          "indirect",
+          "direct"
+        ]
+      },
+      "Confinement": {
+        "required": [
+          "source_id",
+          "source_id_hint",
+          "type",
+          "uuid"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "$ref": "#/components/schemas/ConfinementResourceName"
+          },
+          "type": {
+            "$ref": "#/components/schemas/ConfinementType"
+          },
+          "uuid": {
+            "$ref": "#/components/schemas/UUID"
+          },
+          "nickname": {
+            "$ref": "#/components/schemas/ConfinementResourceName"
+          },
+          "source_id": {
+            "$ref": "#/components/schemas/SourceId"
+          },
+          "source_hint": {
+            "$ref": "#/components/schemas/SourceHint"
+          },
+          "source_id_hint": {
+            "$ref": "#/components/schemas/SourceIdHint"
+          },
+          "sourceRootOfTrust": {
+            "$ref": "#/components/schemas/SourceRootOfTrustData"
+          }
+        }
+      },
+      "UserVerificationRequirement": {
+        "type": "string",
+        "description": "Whether the authenticator should locally verify the end-user in order to authorize the registration.\nValues:\n- required: The client (the browser) must return an error if a user verification cannot be performed.\n- preferred: The relying party will accept a registration response that includes the UV flag not set.\n- discouraged: Possibly to minimize disruption to the end-user.\nDefaults to 'preferred'\n",
+        "enum": [
+          "required",
+          "preferred",
+          "discouraged"
+        ]
+      },
+      "ActForRealm": {
+        "type": "string",
+        "description": "The entity who authenticated the relationship\n",
+        "enum": [
+          "B2B_PLATFORM"
+        ]
+      },
+      "PushedAuthorizationRequestInternal": {
+        "required": [
+          "code_challenge",
+          "code_challenge_method",
+          "prompt",
+          "response_mode",
+          "response_type",
+          "scope",
+          "ui_locales"
+        ],
+        "type": "object",
+        "properties": {
+          "scope": {
+            "$ref": "#/components/schemas/Scope"
+          },
+          "state": {
+            "$ref": "#/components/schemas/State"
+          },
+          "prompt": {
+            "$ref": "#/components/schemas/Prompt"
+          },
+          "amr_values": {
+            "$ref": "#/components/schemas/AMR_VALUES"
+          },
+          "ui_locales": {
+            "$ref": "#/components/schemas/UILocales"
+          },
+          "redirect_uri": {
+            "$ref": "#/components/schemas/RedirectUri"
+          },
+          "server_state": {
+            "$ref": "#/components/schemas/ServerState"
+          },
+          "response_mode": {
+            "$ref": "#/components/schemas/ResponseMode"
+          },
+          "response_type": {
+            "$ref": "#/components/schemas/ResponseType"
+          },
+          "code_challenge": {
+            "$ref": "#/components/schemas/CodeChallenge"
+          },
+          "device_challenge": {
+            "$ref": "#/components/schemas/DeviceChallenge"
+          },
+          "authorization_details": {
+            "$ref": "#/components/schemas/ProbeDataSpecAuthorizationDetails"
+          },
+          "code_challenge_method": {
+            "$ref": "#/components/schemas/CodeChallengeMethod"
+          },
+          "device_challenge_method": {
+            "$ref": "#/components/schemas/DeviceChallengeMethod"
+          },
+          "software_statement_claimset": {
+            "$ref": "#/components/schemas/SoftwareStatementClaimset"
+          }
+        },
+        "allOf": [
+          {
+            "anyOf": [
+              {
+                "required": [
+                  "server_state"
+                ]
+              },
+              {
+                "required": [
+                  "software_statement_claimset"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "ProbeDataReference": {
+        "title": "Type of probe Reference",
+        "type": "integer",
+        "description": "A unique identifier to the probe item being attached to the authentication\n + Mandatory if type is not present\n",
+        "format": "int32",
+        "example": 1
+      },
+      "ProbeDataSpecAuthorizationDetails": {
+        "maxItems": 10,
+        "minItems": 1,
+        "type": "array",
+        "description": "The authorization details for the probe\n",
+        "items": {
+          "$ref": "#/components/schemas/ProbeDataSpecAuthorizationDetail"
+        }
+      },
+      "Time": {
+        "type": "string",
+        "description": "The time the authentication took place\nThe use of the last authentication where the user actively participated of it is much preferred\nFor example, an authentication with a cookie\nIt is preferred, rather than the time the cookie authentication happened,\nTo use the time of the original authentication that resulted in the creation of the cookie\n",
+        "format": "date-time"
+      },
+      "Surrogate": {
+        "required": [
+          "authentication"
+        ],
+        "type": "object",
+        "properties": {
+          "time": {
+            "$ref": "#/components/schemas/Time"
+          },
+          "proof": {
+            "$ref": "#/components/schemas/Proof"
+          },
+          "authentication": {
+            "maxItems": 10,
+            "minItems": 0,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Authentication"
+            }
+          }
+        },
+        "description": "The chain link that defines a new authentication credential that\nWill replace the authentication credential described in the anchor\n"
+      },
+      "VProvisionTokenId": {
+        "maxLength": 50,
+        "type": "string",
+        "description": "Token Reference Id assigned by VISA."
+      },
+      "ProbesArray": {
+        "maxItems": 10,
+        "minItems": 1,
+        "type": "array",
+        "description": "This is an array of all the probes part of this authentication\n",
+        "items": {
+          "$ref": "#/components/schemas/Probe"
+        }
+      },
+      "TrustChain": {
+        "type": "object",
+        "properties": {
+          "anchor": {
+            "type": "object",
+            "properties": {
+              "time": {
+                "$ref": "#/components/schemas/Time"
+              },
+              "authentication": {
+                "maxItems": 10,
+                "minItems": 0,
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Authentication"
+                }
+              }
+            },
+            "description": "The chain link that encompasses the justification to create the binding\n"
+          },
+          "surrogate": {
+            "$ref": "#/components/schemas/Surrogate"
+          }
+        },
+        "description": "The authentication proof that justifies the creation of the authentication credential \nthat will be leveraged by the binding\n"
+      },
+      "ConfinementSourceIdHint": {
+        "type": "string",
+        "description": "Source ID hint based on the confinement type.",
+        "enum": [
+          "VDID",
+          "HOSTNAME",
+          "DFP_SID",
+          "GOOGLE_DEVICE_ID"
+        ]
+      },
+      "AuthSourceIdHint": {
+        "type": "string",
+        "description": "Source ID hint based on the Authentication type. When protocol is TDS ACS_TNX_ID - Access Control Server Transaction ID IDT_JTI- Identity Token JWT ID VTS_IDV- Visa Transaction System Identity Document Verification AUTHENTICATOR_CREDENTIAL_ID - Credential ID this will be available only for the authenticator in response",
+        "enum": [
+          "ACS_TNX_ID",
+          "IDT_JTI",
+          "VTS_IDV",
+          "AUTHENTICATOR_CREDENTIAL_ID"
+        ]
+      },
+      "Attestationformat": {
+        "type": "string",
+        "description": "The preference for how the attestation is formatted.\nThis is the attestation format that is being requested.\nValues\n  - packed\n  - fido-u2f\n  - tpm\n  - android-key\n  - android-safetynet\n  - none\n",
+        "enum": [
+          "packed",
+          "fido-u2f",
+          "tpm",
+          "android-key",
+          "android-safetynet",
+          "none"
+        ]
+      },
+      "DisplayName": {
+        "type": "string",
+        "description": "Corresponds to the 'user.displayName' field of a webauthn option.\nThe displayName attribute takes a human-readable name for the user.\nThis name is intended only for display purposes and does not have to be unique.\nNote: In this context, the reason this is a mandatory parameter is only due to the requirements for a certifiable FIDO2 Server.\n",
+        "example": "John Doe"
+      },
+      "SourceIdMasked": {
+        "type": "string",
+        "description": "Masked version of the source id"
+      },
+      "ProbeDataSpecContractDetail": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "description": "The type of contract detail\n",
+            "enum": [
+              "TNC"
+            ]
+          },
+          "parts": {
+            "maximum": 5,
+            "minimum": 1,
+            "type": "array",
+            "description": "The parts of the contract detail\n",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "description": "The value of the contract detail\n"
+                },
+                "uri": {
+                  "type": "string",
+                  "description": "The URI of the contract detail\n",
+                  "format": "uri"
+                },
+                "type": {
+                  "type": "string",
+                  "description": "The label of the contract detail\n",
+                  "enum": [
+                    "TR",
+                    "PR"
+                  ]
+                }
+              },
+              "description": "The part of the contract detail\n"
+            }
+          }
+        },
+        "description": ""
+      },
+      "ClaimSetUeba": {
+        "type": "object",
+        "properties": {
+          "ueba_ref": {
+            "$ref": "#/components/schemas/UUID"
+          },
+          "ueba_source": {
+            "type": "string",
+            "description": "Source of the user entity behavior analytics.\n",
+            "enum": [
+              "VDI",
+              "THREAT_METRIX",
+              "VBA"
+            ]
+          }
+        }
+      },
+      "RPId": {
+        "type": "string",
+        "description": "The relying party identifier.\nA domain string identifying the relying party for which the FIDO2 credential is created\n  The FIDO2 credential will be scoped to this id\nDefaults to the origin's domain\n  It can only be overridden to a suffix of the origin's domain\n  For example, if the browser's origin is 'secure.checkout.visa.com' then the value of rp.id might be\n    secure.checkout.visa.com (default, when rp.id = null)\n    checkout.visa.com\n    visa.com\n"
+      },
+      "ServerResponse": {
+        "required": [
+          "errorMessage",
+          "status"
+        ],
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "#/components/schemas/AuthCode"
+          },
+          "status": {
+            "$ref": "#/components/schemas/Status"
+          },
+          "errorMessage": {
+            "$ref": "#/components/schemas/ErrorMessage"
+          }
+        }
+      },
+      "AuthorizationDetailType": {
+        "type": "string",
+        "description": "The type of authorization detail\n",
+        "enum": [
+          "com_visa_payment_transaction",
+          "com_visa_binding_lookup",
+          "com_visa_binding"
+        ]
+      },
+      "AuthCode": {
+        "maxLength": 2048,
+        "minLength": 0,
+        "type": "string",
+        "description": "A token that grants access only to internal APIs\n"
+      },
+      "ProbeDataSpec": {
+        "title": "Probe Data Spec",
+        "type": "object",
+        "properties": {
+          "contract": {
+            "$ref": "#/components/schemas/ProbeDataSpecContractDetails"
+          },
+          "authorization_details": {
+            "$ref": "#/components/schemas/ProbeDataSpecAuthorizationDetails"
+          }
+        },
+        "description": "Data specification for the probe.\n+ Probe data type delivery for OTP\n"
+      },
+      "Transports": {
+        "type": "array",
+        "description": "The transports of the public key credential. This is a hint for how the client (the browser) might communicate with the authenticator\nThe value of this array corresponds to the 'transports' response field of the Attestation API from which this credential originated\nThis is the transports of the public key credential that is being excluded.\nValues\n  - usb\n  - nfc\n  - ble\n  - internal\n  - hybrid\n",
+        "items": {
+          "type": "string",
+          "enum": [
+            "usb",
+            "nfc",
+            "ble",
+            "internal",
+            "hybrid"
+          ]
+        }
+      },
+      "SourceImgId": {
+        "type": "string",
+        "description": "Source image id based on the confinement type.\n"
+      },
+      "UEBA": {
+        "type": "object",
+        "properties": {
+          "source": {
+            "type": "string",
+            "description": "Finger Printing Source values.",
+            "enum": [
+              "VDI",
+              "THREAT_METRIX",
+              "VBA"
+            ]
+          },
+          "source_id": {
+            "maxLength": 100,
+            "type": "string",
+            "description": "What is known as device fingerprint session id."
+          },
+          "source_ueba_id": {
+            "maxLength": 100,
+            "type": "string",
+            "description": "The id outputted by the UEBA tool, typically known as device id."
+          }
+        },
+        "description": "The user entity behavior analytics"
+      },
+      "Data": {
+        "type": "string",
+        "description": "Data defined by the application and opaque to IAM\nIf the app front-end would like to share data with the app back-end then this is the mechanism\nThese data will be shared to the app back-end through the use of B2C IAM Events\n"
+      },
+      "ProbeDataSpecAuthorizationDetail": {
+        "required": [
+          "payee",
+          "payer",
+          "preferences",
+          "type"
+        ],
+        "type": "object",
+        "description": "The authorization detail for the probe.\nThis object has two variations:\n1. Transaction types (com_visa_payment_transaction, com_visa_payment_transaction_or_binding):\n  The 'details' field is MANDATORY.\n2. Binding types (com_visa_binding_lookup, com_visa_payment_credential_binding, com_visa_c2p_migration_and_transaction):\n  The 'details' field is OPTIONAL.\n",
+        "oneOf": [
+          {
+            "required": [
+              "details"
+            ],
+            "properties": {
+              "ref": {
+                "type": "integer",
+                "description": "Typically, a one-digit number\n\nA reference or a label optionally set by the creator of the authorization detail and acknowledged by B2C IAM, to uniquely refer to one element in an array of authorization details\nIf not specified its value will be the 1-based index on the array (index starts from one)\nMandatory when a Binding data type is part of a responseTypically, a one-digit number\nA reference or a label optionally set by the creator of the authorization detail and acknowledged by B2C IAM, to uniquely refer to one element in an array of authorization details\n\nIf not specified its value will be the 1-based index on the array (index starts from one)\n\nMandatory when a Binding data type is part of a response\n",
+                "format": "int32"
+              },
+              "type": {
+                "type": "string",
+                "description": "The type of authorization detail\n",
+                "enum": [
+                  "com_visa_payment_transaction",
+                  "com_visa_payment_transaction_or_binding"
+                ]
+              },
+              "payee": {
+                "required": [
+                  "name",
+                  "origin"
+                ],
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "maxLength": 75,
+                    "type": "string",
+                    "description": "merchant name\n"
+                  },
+                  "origin": {
+                    "maxLength": 75,
+                    "type": "string",
+                    "description": "merchant origin\n",
+                    "format": "url"
+                  },
+                  "annotations": {
+                    "$ref": "#/components/schemas/Annotations"
+                  }
+                },
+                "description": "The payee of the authorization\n"
+              },
+              "payer": {
+                "required": [
+                  "account"
+                ],
+                "type": "object",
+                "properties": {
+                  "account": {
+                    "$ref": "#/components/schemas/Account"
+                  }
+                },
+                "description": "The payer of the authorization\n"
+              },
+              "details": {
+                "required": [
+                  "amount",
+                  "currency",
+                  "label"
+                ],
+                "type": "object",
+                "properties": {
+                  "label": {
+                    "maxLength": 50,
+                    "type": "string",
+                    "description": "The label of the authorization\n"
+                  },
+                  "amount": {
+                    "maxLength": 20,
+                    "type": "string",
+                    "description": "The amount of the authorization\n"
+                  },
+                  "currency": {
+                    "maxLength": 3,
+                    "type": "string",
+                    "description": "The currency of the authorization\nhttps://www.iban.com/currency-codes\n"
+                  },
+                  "annotations": {
+                    "type": "object",
+                    "properties": {
+                      "currency_number": {
+                        "maxLength": 3,
+                        "type": "string",
+                        "description": "Similar to currency code but with digits\nhttps://www.iban.com/currency-codes\n"
+                      },
+                      "currency_exponent": {
+                        "maxLength": 1,
+                        "type": "string",
+                        "description": "Indicates the implied position of the decimal point from the right of the transaction amount\nFor example, there are 100 cents in a USD, that is10 to the power of 2, so the exponent for the US dollar is 2\n"
+                      }
+                    },
+                    "description": "USED BY B2CIAM ONLY\n"
+                  }
+                },
+                "description": "The details of the authorization\n"
+              },
+              "trustchain": {
+                "$ref": "#/components/schemas/TrustChain"
+              },
+              "preferences": {
+                "type": "object",
+                "properties": {
+                  "locale": {
+                    "maxItems": 10,
+                    "minItems": 1,
+                    "type": "array",
+                    "description": "The locale preferences for the authorization",
+                    "items": {
+                      "maxLength": 10,
+                      "type": "string"
+                    }
+                  },
+                  "notification": {
+                    "type": "object",
+                    "properties": {
+                      "email": {
+                        "maxLength": 75,
+                        "type": "string",
+                        "description": "The email address for the notification\n"
+                      },
+                      "phone": {
+                        "maxLength": 15,
+                        "type": "string",
+                        "description": "The phone number for the notification\n"
+                      }
+                    },
+                    "description": "The notification preferences for the authorization\n"
+                  },
+                  "enduser_approval": {
+                    "maxLength": 10,
+                    "type": "string",
+                    "description": "The end user approval preferences for the authorization\n"
+                  }
+                },
+                "description": "USED BY B2CIAM ONLY\n"
+              },
+              "confinements": {
+                "$ref": "#/components/schemas/PARConfinements"
+              }
+            }
+          },
+          {
+            "properties": {
+              "ref": {
+                "type": "integer",
+                "description": "Typically, a one-digit number\n\nA reference or a label optionally set by the creator of the authorization detail and acknowledged by B2C IAM, to uniquely refer to one element in an array of authorization details\nIf not specified its value will be the 1-based index on the array (index starts from one)\nMandatory when a Binding data type is part of a responseTypically, a one-digit number\nA reference or a label optionally set by the creator of the authorization detail and acknowledged by B2C IAM, to uniquely refer to one element in an array of authorization details\n\nIf not specified its value will be the 1-based index on the array (index starts from one)\n\nMandatory when a Binding data type is part of a response\n",
+                "format": "int32"
+              },
+              "type": {
+                "type": "string",
+                "description": "The type of authorization detail\n",
+                "enum": [
+                  "com_visa_binding_lookup",
+                  "com_visa_c2p_migration_and_transaction",
+                  "com_visa_payment_credential_binding"
+                ]
+              },
+              "payee": {
+                "required": [
+                  "name",
+                  "origin"
+                ],
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "maxLength": 75,
+                    "type": "string",
+                    "description": "merchant name\n"
+                  },
+                  "origin": {
+                    "maxLength": 75,
+                    "type": "string",
+                    "description": "merchant origin\n",
+                    "format": "url"
+                  },
+                  "annotations": {
+                    "$ref": "#/components/schemas/Annotations"
+                  }
+                },
+                "description": "The payee of the authorization\n"
+              },
+              "payer": {
+                "required": [
+                  "account"
+                ],
+                "type": "object",
+                "properties": {
+                  "account": {
+                    "$ref": "#/components/schemas/Account"
+                  }
+                },
+                "description": "The payer of the authorization\n"
+              },
+              "details": {
+                "type": "object",
+                "properties": {
+                  "label": {
+                    "maxLength": 50,
+                    "type": "string",
+                    "description": "The label of the authorization\n"
+                  },
+                  "amount": {
+                    "maxLength": 20,
+                    "type": "string",
+                    "description": "The amount of the authorization\n"
+                  },
+                  "currency": {
+                    "maxLength": 3,
+                    "type": "string",
+                    "description": "The currency of the authorization\nhttps://www.iban.com/currency-codes\n"
+                  },
+                  "annotations": {
+                    "type": "object",
+                    "properties": {
+                      "currency_number": {
+                        "maxLength": 3,
+                        "type": "string",
+                        "description": "Similar to currency code but with digits\nhttps://www.iban.com/currency-codes\n"
+                      },
+                      "currency_exponent": {
+                        "maxLength": 1,
+                        "type": "string",
+                        "description": "Indicates the implied position of the decimal point from the right of the transaction amount\nFor example, there are 100 cents in a USD, that is10 to the power of 2, so the exponent for the US dollar is 2\n"
+                      }
+                    },
+                    "description": "USED BY B2CIAM ONLY\n"
+                  }
+                },
+                "description": "The details of the authorization\n"
+              },
+              "trustchain": {
+                "$ref": "#/components/schemas/TrustChain"
+              },
+              "preferences": {
+                "type": "object",
+                "properties": {
+                  "locale": {
+                    "maxItems": 10,
+                    "minItems": 1,
+                    "type": "array",
+                    "description": "The locale preferences for the authorization",
+                    "items": {
+                      "maxLength": 10,
+                      "type": "string"
+                    }
+                  },
+                  "notification": {
+                    "type": "object",
+                    "properties": {
+                      "email": {
+                        "maxLength": 75,
+                        "type": "string",
+                        "description": "The email address for the notification\n"
+                      },
+                      "phone": {
+                        "maxLength": 15,
+                        "type": "string",
+                        "description": "The phone number for the notification\n"
+                      }
+                    },
+                    "description": "The notification preferences for the authorization\n"
+                  },
+                  "enduser_approval": {
+                    "maxLength": 10,
+                    "type": "string",
+                    "description": "The end user approval preferences for the authorization\n"
+                  }
+                },
+                "description": "USED BY B2CIAM ONLY\n"
+              },
+              "confinements": {
+                "$ref": "#/components/schemas/PARConfinements"
+              }
+            }
+          }
+        ]
+      },
+      "Subject": {
+        "type": "object",
+        "properties": {
+          "probes": {
+            "$ref": "#/components/schemas/ProbesArray"
+          },
+          "act_for": {
+            "$ref": "#/components/schemas/ActForObject"
+          },
+          "subject_id": {
+            "$ref": "#/components/schemas/SubjectID"
+          },
+          "subject_kind": {
+            "$ref": "#/components/schemas/SubjectKind"
+          },
+          "subject_realm": {
+            "$ref": "#/components/schemas/SubjectRealm"
+          },
+          "subject_entity": {
+            "$ref": "#/components/schemas/SubjectEntity"
+          },
+          "subject_auth_status": {
+            "$ref": "#/components/schemas/SubjectAuthStatus"
+          }
+        },
+        "description": "Subject is an individual or an entity that is being authenticated in this interaction\n"
+      },
+      "ClientDataJSON": {
+        "type": "string",
+        "description": "The client data JSON\nThe base64Url encoded value of the client data JSON that is being registered.\nThis is the client data JSON that is being registered.\nIt's a structured value as per the WebAuthn specification\n    It consists of the following\n       type: on a registration this value is always 'webauthn.create'\n      challenge: the challenge previously generated at the server\n      origin: the origin associated to the FIDO2 credential\n      crossOrigin: <not sure about the meaning of this in this context>\n      tokenBinding: information about the token binding protocol\n        status: supported or present\n        id: the base64url encoded value of the token binding id\n"
+      },
+      "ClientDeviceId": {
+        "maxLength": 24,
+        "type": "string",
+        "description": "Stable and unique device identification set by the wallet provider. By default, this field should be considered required. \nIt is optional for the following presentation types: ECOM, MERCHANT_PRESENTED_QR, QR_CONSUMER_CLOUD, and RECEIVE_ONLY. \nAn Enroll PAN request for a card on file will not have a device ID\nFormat: Alphabetic, numeric, hyphens ( - ), and underscores ( _ ), e.g. spaces are not allowed; 24 characters\n"
+      },
+      "SourceHint": {
+        "type": "string",
+        "description": "Source hint based on the confinement type.",
+        "enum": [
+          "CRD",
+          "VTS",
+          "VXO",
+          "CARD_ISSUER"
+        ]
+      },
+      "Response": {
+        "maxLength": 6168,
+        "type": "string",
+        "description": "An Authorization Request Object as a JWT in the form of a JWS, with compact serialization, signed by B2C IAM.",
+        "format": "JWT"
+      },
+      "Scope": {
+        "type": "string",
+        "description": "The scope of the access request. Its value is a space-delimited string. Must include the value `openid`.\n",
+        "example": "openid profile email",
+        "enum": [
+          "openid"
+        ]
+      },
+      "SubjectRealm": {
+        "type": "string",
+        "description": "The entity who authenticated the subject\n",
+        "enum": [
+          "BANK"
+        ]
+      },
+      "RelationshipId": {
+        "maxLength": 50,
+        "type": "string",
+        "description": "The ID identifying the relationship between a token requestor and the caller of this API, which is a token service provider (TR-TSP) with which the token requestor has a relationship.\nThe relationship is defined at the time of onboarding; contact your Visa representative for more information.\nFormat: String. Alphanumeric; maximum 100 characters\n"
+      },
+      "VPPSWarning": {
+        "type": "object",
+        "properties": {
+          "warnings": {
+            "type": "array",
+            "description": "Array of warnings\n",
+            "items": {
+              "type": "object",
+              "properties": {
+                "warning": {
+                  "maxLength": 40,
+                  "type": "string",
+                  "description": "warning.\n"
+                },
+                "warning__details": {
+                  "type": "array",
+                  "description": "Array of fields - Data validation errors should use this array to specify  fields that failed validation using the location field\n",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "warning": {
+                        "maxLength": 40,
+                        "type": "string",
+                        "description": "The value of this field is using an expression to point to a field that failed validation.\nThis field is required if error details are specified and for For non-standard error codes.\n",
+                        "example": "notfound_amr_values"
+                      },
+                      "warning_description": {
+                        "maxLength": 256,
+                        "type": "string",
+                        "description": "The specific warning description for this field",
+                        "example": "Must be a non-empty value"
+                      }
+                    }
+                  }
+                },
+                "warning_description": {
+                  "maxLength": 256,
+                  "type": "string",
+                  "description": "warning description.\n"
+                }
+              }
+            }
+          }
+        },
+        "description": "This section does not exist by itself, it always accompanies either a SUCCESS or an ERROR.\n"
+      },
+      "SrcDigitalCardId": {
+        "maxLength": 50,
+        "type": "string",
+        "description": "Pan Reference Id assigned by VISA. Also known as vPanEnrollmentId."
+      },
+      "BindingStatus": {
+        "type": "string",
+        "description": "Dictates whether the binding can be used Only ACTIVE and PENDING bindings are usable By default, a binding is created with an ACTIVE status Unless not all the necessary data to create the binding is readily available In such case, a binding is created as PENDING Values ACTIVE The binding is ready to be used Valid transitions to INACTIVE DELETED INACTIVE The use of the binding has been suspended Valid transitions to ACTIVE DELETED DELETED The binding is no longer available Valid transitions to <none> (it is a terminal state) PENDING The binding is in the process of being created Valid transitions to ACTIVE DELETED. NOT_ELIGIBLE This Payment Instrument is not Eligible for Binding.",
+        "enum": [
+          "ACTIVE",
+          "INACTIVE",
+          "DELETED",
+          "PENDING",
+          "NOT_ELIGIBLE",
+          "NOT_APPLICABLE"
+        ]
+      },
+      "SubjectID": {
+        "type": "string",
+        "description": "Id of the subject who is authenticated\n+ For example in case of authentication using vCardID, the value of vCardID\n",
+        "example": "453e4567-e89b-45ab-a486-424825174827"
+      },
+      "VPPSNonFIDO2ServerStandardError": {
+        "title": "VPPS NON FIDO2 Server Standard Error Response Structure",
+        "required": [
+          "errorMessage",
+          "status"
+        ],
+        "properties": {
+          "error": {
+            "type": "string",
+            "description": "As this is not an OAuth2 API, the possible values must be a subset of those APIs\nValues\n  -invalid_request\n  -invalid_client\n  -server_error\n  -temporarily_unavailable\n",
+            "example": "failed",
+            "enum": [
+              "invalid_request",
+              "invalid_client",
+              "server_error",
+              "temporarily_unavailable"
+            ]
+          },
+          "error_details": {
+            "type": "object",
+            "properties": {
+              "error": {
+                "type": "string",
+                "description": "The value of this field is using an expression to point to a field that failed validation.\nThis field is required if error details are specified and for For non-standard error codes.\nexample: notfound_amr_values\n"
+              },
+              "error_description": {
+                "maxLength": 256,
+                "type": "string",
+                "description": "The specific error description for this field",
+                "example": "Must be a non-empty value"
+              }
+            },
+            "description": "Array of fields - Data validation errors should use this array to specify  fields that failed validation using the location field\n"
+          },
+          "error_description": {
+            "type": "string",
+            "description": "The message for the error Must be the same value as 'error_description'",
+            "example": "invalid_request"
+          }
+        },
+        "description": "API errors are reported using a Standard Error Response structure. All errors are categorized into Standard errors and Business errors. Standard errors can be returned by any API and should be handled in a common way. Business errors are returned only by some APIs and are documented for each API."
+      },
+      "RpExtensions": {
+        "type": "object",
+        "properties": {
+          "visaDevicePublicKey": {
+            "type": "object",
+            "properties": {
+              "rpOutput": {
+                "type": "string",
+                "description": "The relying rpOutput"
+              },
+              "signature": {
+                "type": "string",
+                "description": "The relying party signature"
+              }
+            },
+            "description": "The public key of the device\n"
+          }
+        },
+        "description": "The relying party extensions"
+      }
+    },
+    "responses": {
+      "VPPSPushedAuthorizationResponse": {
+        "description": "An Authorization Request Object as a JWT in the form of a JWS, with compact serialization",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/PushedAuthorizationResponse"
+            },
+            "examples": {
+              "example1": {
+                "summary": "Sample Http Response for Payment Transaction",
+                "value": {
+                  "request": "ewoJImFsZyI6ICJFUzI1NiIsCgkia2lkIjogIjFYQVNQVk1RRT Q5UElSQjBUM1ExMTczTGo2SUJXUzJDWUM2b2RqT3VVY2JNRHFhNCIsCgkidHlw IjogIm9hdXRoLWF1dGh6LXJlcStqd3QiCn0. ewoJImlzcyI6ICJodHRwczovL3d3dy52aXNhLmNvbSIsCgkiYXVkIjogImh0dH BzOi8vd3d3LnZpc2EuY29tIiwKCSJpYXQiOiAwLAoJImV4cCI6IDAsCgkibWF4 X2FnZSI6IDAsCgkiYW1yX3ZhbHVlcyI6IFsgInBvcCNmaWRvMiIgXSwKCSJjbG llbnRfaWQiOiAiPG1jc19jbGllbnRfaWQ-IiwKCSJyZXNwb25zZV90eXBlIjog ImNvZGUiLAoJInJlc3BvbnNlX21vZGUiOiAid2ViX21lc3NhZ2UiLAoJInJlZG lyZWN0X3VyaSI6ICJodHRwczovL2NhcmRpbmFsY29tbWVyY2UuY29tIiwKCSJz Y29wZSI6ICJvcGVuaWQiLAoJInN0YXRlIjogIjxzdGF0ZT4iLAoJInNlcnZlcl 9zdGF0ZSI6ICI8c2VydmVyX3N0YXRlPiIsCgkibm9uY2UiOiAiPHJhbmRvbV91 dWlkPiIsCgkiYXV0aG9yaXphdGlvbl9kZXRhaWxzIjogWwoJCXsKCQkJInR5cG UiOiAiY29tX3Zpc2FfcGF5bWVudF90cmFuc2FjdGlvbiIsCgkJCSJwYXllciI6 IHsKCQkJCSJhY2NvdW50IjogewoJCQkJCSJzY2hlbWUiOiAiY29tX3Zpc2FfcG FuX2NyZWRlbnRpYWwiLAoJCQkJCSJtYXNrZWRfaWQiOiAiPGxhc3RfNF9kaWdp dHM-IiwKCQkJCQkiaWNvbl91cmkiOiAiPHVyaV90b19jYXJkX2FydD4iCgkJCQ l9CgkJCX0sCgkJCSJwYXllZSI6IHsKCQkJCSJuYW1lIjogIk1lcmNoYW50IiwK CQkJCSJvcmlnaW4iOiAiaHR0cHM6Ly93d3cubWVyY2hhbnQuY29tIgoJCQl9LA oJCQkiZGV0YWlscyI6IHsKCQkJCSJsYWJlbCI6ICJUb3RhbCIsCgkJCQkiYW1v dW50IjogIjIwLjAwIiwKCQkJCSJjdXJyZW5jeSI6ICJFVVIiCgkJCX0sCgkJCS JwcmVmZXJlbmNlcyI6IHsKCQkJCSJsb2NhbGUiOiBbICJlbiIgXQoJCQl9LAoJ CQkiY29uZmluZW1lbnRzIjogewoJCQkJImRldmljZSI6IHsKCQkJCQkic291cm NlIjogInRva2VuIgoJCQkJfSwKCQkJCSJvcmlnaW4iOiB7CgkJCQkJInNvdXJj ZSI6ICJ0b2tlbiIKCQkJCX0KCQkJfQoJCX0KCV0KfQ. BVDDEqBS5G2Cbeeg9YlUM-nC3FY3dut_MbnceZHpkKg_ANQtqoOJ9xsqzGTBs- 5ZI-aJXo8ilQ-M0uQH4vAGyMpwtIRTGsQ_P6WeXaYuU7WiJhMNvFtutRtHjwXe VCapkwChgAMgFWNckGLSTex4_ZUyMTJszPGJp2xZz5f39IQ",
+                  "expires_in": 480,
+                  "authorization_endpoint": "https://auth.visa.com/authorization/request/payment-credential-authentication"
+                }
+              },
+              "example2": {
+                "summary": "Success Response Payment Credential Binding",
+                "value": {
+                  "request": "ewoJImFsZyI6ICJFUzI1NiIsCgkia2lkIjogIjFYQVNQVk1RRT Q5UElSQjBUM1ExMTczTGo2SUJXUzJDWUM2b2RqT3VVY2JNRHFhNCIsCgkidHlw IjogIm9hdXRoLWF1dGh6LXJlcStqd3QiCn0. ewoJImlzcyI6ICJodHRwczovL3d3dy52aXNhLmNvbSIsCgkiYXVkIjogImh0dH BzOi8vd3d3LnZpc2EuY29tIiwKCSJpYXQiOiAwLAoJImV4cCI6IDAsCgkibWF4 X2FnZSI6IDAsCgkiYW1yX3ZhbHVlcyI6IFsgInBvcCNmaWRvMiIgXSwKCSJjbG llbnRfaWQiOiAiPG1jc19jbGllbnRfaWQ-IiwKCSJyZXNwb25zZV90eXBlIjog ImNvZGUiLAoJInJlc3BvbnNlX21vZGUiOiAid2ViX21lc3NhZ2UiLAoJInJlZG lyZWN0X3VyaSI6ICJodHRwczovL2NhcmRpbmFsY29tbWVyY2UuY29tIiwKCSJz Y29wZSI6ICJvcGVuaWQiLAoJInN0YXRlIjogIjxzdGF0ZT4iLAoJInNlcnZlcl 9zdGF0ZSI6ICI8c2VydmVyX3N0YXRlPiIsCgkibm9uY2UiOiAiPHJhbmRvbV91 dWlkPiIsCgkiYXV0aG9yaXphdGlvbl9kZXRhaWxzIjogWwoJCXsKCQkJInR5cG UiOiAiY29tX3Zpc2FfcGF5bWVudF90cmFuc2FjdGlvbiIsCgkJCSJwYXllciI6 IHsKCQkJCSJhY2NvdW50IjogewoJCQkJCSJzY2hlbWUiOiAiY29tX3Zpc2FfcG FuX2NyZWRlbnRpYWwiLAoJCQkJCSJtYXNrZWRfaWQiOiAiPGxhc3RfNF9kaWdp dHM-IiwKCQkJCQkiaWNvbl91cmkiOiAiPHVyaV90b19jYXJkX2FydD4iCgkJCQ l9CgkJCX0sCgkJCSJwYXllZSI6IHsKCQkJCSJuYW1lIjogIk1lcmNoYW50IiwK CQkJCSJvcmlnaW4iOiAiaHR0cHM6Ly93d3cubWVyY2hhbnQuY29tIgoJCQl9LA oJCQkiZGV0YWlscyI6IHsKCQkJCSJsYWJlbCI6ICJUb3RhbCIsCgkJCQkiYW1v dW50IjogIjIwLjAwIiwKCQkJCSJjdXJyZW5jeSI6ICJFVVIiCgkJCX0sCgkJCS JwcmVmZXJlbmNlcyI6IHsKCQkJCSJsb2NhbGUiOiBbICJlbiIgXQoJCQl9LAoJ CQkiY29uZmluZW1lbnRzIjogewoJCQkJImRldmljZSI6IHsKCQkJCQkic291cm NlIjogInRva2VuIgoJCQkJfSwKCQkJCSJvcmlnaW4iOiB7CgkJCQkJInNvdXJj ZSI6ICJ0b2tlbiIKCQkJCX0KCQkJfQoJCX0KCV0KfQ. BVDDEqBS5G2Cbeeg9YlUM-nC3FY3dut_MbnceZHpkKg_ANQtqoOJ9xsqzGTBs- 5ZI-aJXo8ilQ-M0uQH4vAGyMpwtIRTGsQ_P6WeXaYuU7WiJhMNvFtutRtHjwXe VCapkwChgAMgFWNckGLSTex4_ZUyMTJszPGJp2xZz5f39IQ",
+                  "expires_in": 480,
+                  "authorization_endpoint": "https://auth.visa.com/authorization/request/payment-credential-binding"
+                }
+              }
+            }
+          }
+        }
+      },
+      "VPPSMethodNotAllowedErrorResponse": {
+        "description": "405 (Method Not Allowed) HTTP Status code indicates that this Visa Developer Center project does not have permission to use this http \n",
+        "content": {
+          "application/problem+json": {
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/VPPSFIDO2ServerStandardError"
+                },
+                {
+                  "$ref": "#/components/schemas/VPPSNonFIDO2ServerStandardError"
+                }
+              ]
+            }
+          }
+        }
+      },
+      "VPPSForbiddenErrorResponse": {
+        "description": "The 403 (Forbidden) HTTP Status code indicates that this Visa Developer Center project does not have permission to access the requested resource.\nThis can happen if you are trying to invoke an API request for a resource that is not part of your project.\n\nCheck for the following:\n  + You are using a project and the credential for the project that includes the API being accessed.\n  + You created a project and received sandbox credentials for the API’s being called.\n  + You added the API being called to the project (if not already present) with the credentials that are being used.\n",
+        "content": {
+          "application/problem+json": {
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/VPPSFIDO2ServerStandardError"
+                },
+                {
+                  "$ref": "#/components/schemas/VPPSNonFIDO2ServerStandardError"
+                }
+              ]
+            },
+            "example": {
+              "error": "forbidden",
+              "error_description": "API is not authorized for use"
+            }
+          }
+        }
+      },
+      "IAMTokenSuccessResponse": {
+        "description": "Default Success VPPS Response",
+        "headers": {
+          "Server-Authorization": {
+            "$ref": "#/components/headers/SERVER-AUTHORIZATION-IN-RESPONSE"
+          }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/TokenResponse"
+            }
+          }
+        }
+      },
+      "VPPSAPINoLongerSupportedError": {
+        "description": "Gone - Indicates that the resource at this end point is no longer available.\nThis is usually returned for old API versions that are not available anymore - EOL (End-of-Life). The content-type header in the response indicates the latest supported API version.\n",
+        "content": {
+          "application/problem+json": {
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/VPPSFIDO2ServerStandardError"
+                },
+                {
+                  "$ref": "#/components/schemas/VPPSNonFIDO2ServerStandardError"
+                }
+              ]
+            },
+            "example": {
+              "error": "api_no_longer_supported",
+              "error_description": "API is no longer supported"
+            }
+          }
+        }
+      },
+      "VPPSServiceUnavailableError": {
+        "description": "The Visa system is currently unable to handle the request due to a temporary overloading or maintenance of the server.\n\nThere may be a Retry-After header field to suggest an appropriate amount of time for the client to wait before retrying the request.\nThe value of this field can be either an HTTP-date or a number of seconds to delay after the response is received.\n<code>Retry-After = HTTP-date || delay-seconds</code>\nexamples:\n+ <code>Retry-After: Thu, 31 Dec 2020 23:59:59 GMT</code>\n+ <code>Retry-After: 120</code>\n\nPlease contact Visa Support at developer@visa.com if the issue persists.\n",
+        "content": {
+          "application/problem+json": {
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/VPPSFIDO2ServerStandardError"
+                },
+                {
+                  "required": [
+                    "status"
+                  ]
+                },
+                {
+                  "properties": {
+                    "reason": {
+                      "type": "string",
+                      "example": "temporarily_unavailable"
+                    },
+                    "status": {
+                      "type": "integer",
+                      "format": "int32",
+                      "example": 503
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      },
+      "VPPSTooManyRequestsError": {
+        "description": "The Visa Developer Center project has clocked too many requests in a given amount of time.\nPlease contact Visa Support at developer@visa.com if you want to increase the time limits.\n",
+        "content": {
+          "application/problem+json": {
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/VPPSFIDO2ServerStandardError"
+                },
+                {
+                  "$ref": "#/components/schemas/VPPSNonFIDO2ServerStandardError"
+                }
+              ]
+            },
+            "example": {
+              "error": "too_many_requests",
+              "error_description": "VDP clocked too many requests in a given amount of time"
+            }
+          }
+        }
+      },
+      "VPPSUnSupportedMediaTypeError": {
+        "description": "415  - Indicates that the Media Type is not Supported.\n",
+        "content": {
+          "application/problem+json": {
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/VPPSFIDO2ServerStandardError"
+                },
+                {
+                  "$ref": "#/components/schemas/VPPSNonFIDO2ServerStandardError"
+                }
+              ]
+            },
+            "example": {
+              "error": "media_type_supported",
+              "error_description": "media_type_supported"
+            }
+          }
+        }
+      },
+      "VPPSStandardSuccessResponse": {
+        "description": "Default Success VPPS Response",
+        "headers": {
+          "X-IAM-SESSION-QUALIFIER": {
+            "$ref": "#/components/parameters/X-IAM-SESSION-QUALIFIER"
+          }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ServerResponse"
+            }
+          }
+        }
+      },
+      "VPPSNotFoundErrorResponse": {
+        "description": "The specified resource was not found",
+        "content": {
+          "application/problem+json": {
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/VPPSFIDO2ServerStandardError"
+                },
+                {
+                  "$ref": "#/components/schemas/VPPSNonFIDO2ServerStandardError"
+                }
+              ]
+            },
+            "example": {
+              "error": "not_found",
+              "error_description": "Request fields could not be validated"
+            }
+          }
+        }
+      },
+      "VPPSAssertionOptionsResponse": {
+        "description": "",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/AssertionOptionsResponse"
+            },
+            "examples": {
+              "example1": {
+                "summary": "Sample Http Response",
+                "value": {
+                  "rpId": null,
+                  "status": "ok",
+                  "timeout": 3600,
+                  "challenge": "swn4EfknPKEcU-k6L0JFCEFK0R8_Eb1r8ZlzSMGZktk",
+                  "errorMessage": "",
+                  "allowCredentials": [
+                    {
+                      "id": "ABJcniVJwrH45aueEJJsD0LFTGMUxot1sHCOttym_p7rNPF72Zc_NcGo05j3KzDkU5fWELqRz7h9",
+                      "type": "public-key",
+                      "transports": [
+                        "internal"
+                      ]
+                    }
+                  ],
+                  "userVerification": "required"
+                }
+              }
+            }
+          }
+        }
+      },
+      "VPPSInputValidationErrorResponse": {
+        "description": "The API server could not understand the request;\n",
+        "content": {
+          "application/problem+json": {
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/VPPSFIDO2ServerStandardError"
+                },
+                {
+                  "$ref": "#/components/schemas/VPPSNonFIDO2ServerStandardError"
+                }
+              ]
+            }
+          }
+        }
+      },
+      "VPPSBaseErrorResponse": {
+        "description": "Default Error Response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/VPPSFIDO2ServerStandardError"
+            }
+          }
+        }
+      },
+      "VPPSAttestationOptionsResponse": {
+        "description": "Creation options for `navigatior.credentials.create()",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/AttestationOptionsResponse"
+            },
+            "examples": {
+              "example1": {
+                "summary": "Sample SUCCESS Http Response",
+                "value": {
+                  "rp": {
+                    "id": "https://auth.visa.com",
+                    "name": "Visa Inc."
+                  },
+                  "user": {
+                    "id": "<encoded_base64url_encrypted_subject_ref>",
+                    "name": "Joh*****@*****.***",
+                    "displayName": "Joh*****@*****.***"
+                  },
+                  "status": "ok",
+                  "timeout": 360000,
+                  "challenge": "ianAGHhVcAwyPcGpzlhTO5gXH7lg17v-6sbXTQJOJPQ",
+                  "attestation": "direct",
+                  "errorMessage": "",
+                  "pubKeyCredParams": [
+                    {
+                      "alg": -7,
+                      "type": "public-key"
+                    },
+                    {
+                      "alg": -257,
+                      "type": "public-key"
+                    }
+                  ],
+                  "excludeCredentials": [
+                    {
+                      "id": "ABJcniVJwrH45aueEJJsD0LFTGMUxot1sHCOttym_p7rNPF72Zc_NcGo05j3KzDkU5fWELqRz7h9",
+                      "type": "public-key",
+                      "transports": [
+                        "internal"
+                      ]
+                    }
+                  ],
+                  "authenticatorSelection": {
+                    "residentKey": "required",
+                    "userVerification": "required",
+                    "requireResidentKey": true,
+                    "authenticatorAttachment": "platform"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "VPPSInternalServerError": {
+        "description": "Internal Server Error.\n\nPlease contact Visa Support at developer@visa.com with a complete error message, full http request and response details.\n",
+        "content": {
+          "application/problem+json": {
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/VPPSFIDO2ServerStandardError"
+                },
+                {
+                  "$ref": "#/components/schemas/VPPSNonFIDO2ServerStandardError"
+                }
+              ]
+            },
+            "example": {
+              "error": "temporarily_unavailable",
+              "error_description": "Service is not available"
+            }
+          }
+        }
+      },
+      "VPPSNotAcceptableContentError": {
+        "description": "Not Acceptable - Indicates that the \"Accept:\" header field is present in a request and none of the available representations for the response have a media type that is listed as acceptable.\nThis can happen when the requested API version is not available or unsupported; for example, when the version requested in the Accept: header is newer than the currently live/supported version.\n",
+        "content": {
+          "application/problem+json": {
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/VPPSFIDO2ServerStandardError"
+                },
+                {
+                  "$ref": "#/components/schemas/VPPSNonFIDO2ServerStandardError"
+                }
+              ]
+            },
+            "example": {
+              "error": "not_acceptable",
+              "error_description": "Content not acceptable"
+            }
+          }
+        }
+      },
+      "VPPSUnauthorizedErrorResponse": {
+        "description": "API authorized error caused due to any of the following reasons:\n+ x-pay-token is not present, blank, or not in a valid format.\n+ Timestamp field not in valid UTC timestamp format.\n+ Version field is invalid.\n+ Token's timestamp is more than 8 minutes off from the current time.\n+ Token hash mismatch.\n+ APIKey not present in request.\n+ APIKey is not active.\n+ APIKey not valid.\n+ APIKey not active.\n+ Request has more than one authentication token, which is not supported\n",
+        "content": {
+          "application/problem+json": {
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/VPPSFIDO2ServerStandardError"
+                },
+                {
+                  "$ref": "#/components/schemas/VPPSNonFIDO2ServerStandardError"
+                },
+                {
+                  "required": [
+                    "status"
+                  ]
+                }
+              ]
+            },
+            "example": {
+              "error": "unauthorized",
+              "error_description": "API key is not active"
+            }
+          }
+        }
+      }
+    },
+    "parameters": {
+      "include": {
+        "name": "include",
+        "in": "query",
+        "description": "The include query parameter is used to specify the additional fields that should be included in the response.\nThe include query parameter is optional. If the include query parameter is not provided, the response will include the default set of fields.\n",
+        "required": false,
+        "explode": false,
+        "schema": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "example": "TXN_PROOF BINDING RESOURCE CONFINEMENT TRUSTCHAIN",
+            "enum": [
+              "UEBA",
+              "BINDING",
+              "CONFINEMENT",
+              "RESOURCE",
+              "PROOF",
+              "TRUSTCHAIN",
+              "ENTITY",
+              "TXN",
+              "TXN_PROOF",
+              "TXN_ENTITY",
+              "ATTESTATION_OPTIONS",
+              "ASSERTION_OPTIONS"
+            ]
+          }
+        }
+      },
+      "X-VIA-HINT": {
+        "name": "X-VIA-HINT",
+        "in": "header",
+        "description": "The X-VIA-HINT header is used to provide a hint to the Visa network about the location of the client. This hint is used to optimize the routing of the request to the nearest Visa data center.\nThe value of the X-VIA-HINT header is a two-letter country code (ISO 3166-1 alpha-2) that represents the country where the client is located.\nThe X-VIA-HINT header is optional. If the header is not provided, the Visa network will use other methods to determine the location of the client.\n",
+        "required": false,
+        "explode": false,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "ACTIVITY-REF": {
+        "name": "activity_ref",
+        "in": "cookie",
+        "description": "The cookie must be marked \"secure\"\n   The cookie must be marked \"httponly\"\n   Each security token created as a cookie must be in its own cookie\n",
+        "required": false,
+        "explode": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "DEVICE-ID": {
+        "name": "confinementId",
+        "in": "path",
+        "description": "Visa Common device Intelligence device id",
+        "required": true,
+        "explode": false,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "NAME-SPACE": {
+        "name": "namespace",
+        "in": "path",
+        "description": "Namespace of the relying party",
+        "required": true,
+        "explode": false,
+        "schema": {
+          "type": "string"
+        },
+        "example": "odeb2b"
+      },
+      "ACTIVITY-REF-SSI": {
+        "name": "activity_ref_ssi",
+        "in": "cookie",
+        "description": "The cookie must be marked \"secure\"\nThe cookie must be marked \"httponly\"\nEach security token created as a cookie must be in its own cookie\n",
+        "required": false,
+        "explode": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "X-SERVICE-CONTEXT": {
+        "name": "X-SERVICE-CONTEXT",
+        "in": "header",
+        "description": "The apn enables the identification of the metadata/configuration to use while servicing this request\"\n",
+        "required": true,
+        "explode": false,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "X-IAM-SESSION-QUALIFIER": {
+        "name": "X-IAM-SESSION-QUALIFIER",
+        "in": "header",
+        "description": "The X-IAM-SESSION-QUALIFIER header is used to provide a hint to the Visa network about the type of session that is being used to access the API. This hint is used to optimize the routing of the request to the nearest Visa data center.\nThe value of the X-IAM-SESSION-QUALIFIER header is a string that represents the type of session that is being used. The value can be one of the following:\n- `IAM` - The request is being made using an IAM session.\n- `NON-IAM` - The request is being made using a non-IAM session.\nThe X-IAM-SESSION-QUALIFIER header is optional. If the header is not provided, the Visa network will use other methods to determine the type of session that is being used.\n",
+        "required": false,
+        "explode": false,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "VCARD-ID": {
+        "name": "resourceId",
+        "in": "path",
+        "description": "Virtual card id for the PAN",
+        "required": true,
+        "explode": false,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "x-api-key": {
+        "name": "x-api-key",
+        "in": "header",
+        "description": "API Key for authentication provided during onboarding.  (<code>apiKey=M93HLKI2M55ST8QR9RYW3PUFG42mrpN0CsMeLNWbFWPAteAGA</code>)\nrequired: true\n",
+        "required": true,
+        "explode": false,
+        "schema": {
+          "type": "string",
+          "example": "M93HLKI2M55ST8QR9RYW3PUFG42mrpN0CsMeLNWbFWPAteAGA"
+        }
+      },
+      "BINDING-ID": {
+        "name": "bindingId",
+        "in": "path",
+        "description": "binding id of the cardholder information",
+        "required": true,
+        "explode": false,
+        "schema": {
+          "type": "string",
+          "format": "UUID"
+        }
+      },
+      "CONFINEMENT-TYPE": {
+        "name": "confinementType",
+        "in": "path",
+        "description": "Confinement type of the cardholder information",
+        "required": true,
+        "explode": false,
+        "schema": {
+          "type": "string",
+          "enum": [
+            "DEVICE",
+            "DOMAIN_NAME"
+          ]
+        }
+      },
+      "RESOURCE-TYPE": {
+        "name": "resourceType",
+        "in": "path",
+        "description": "Resource type of the cardholder information",
+        "required": true,
+        "explode": false,
+        "schema": {
+          "type": "string",
+          "enum": [
+            "PAN"
+          ]
+        }
+      },
+      "DOMAIN-NAME": {
+        "name": "hostName",
+        "in": "path",
+        "description": "Origin of the Binding",
+        "required": true,
+        "explode": false,
+        "schema": {
+          "type": "string"
+        }
+      }
+    },
+    "examples": {},
+    "requestBodies": {},
+    "headers": {
+      "SERVER-AUTHORIZATION-IN-RESPONSE": {
+        "description": "Used when the response is protected for integrity and authenticity\nFollows the same notation as the Authorization header; for example\nServer-Authorization: PoP <token>; ct=\"AUTHENTICATED_MESSAGE\"\n",
+        "required": false,
+        "style": "simple",
+        "explode": false,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "TRACE-HEADER-IN-RESPONSE": {
+        "description": "Unique ID for the API response; <code>V-C-Client-Correlation-Id</code> is echoed back. Used for end-to-end tracing/debugging.",
+        "style": "simple",
+        "explode": false,
+        "schema": {
+          "maxLength": 36,
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "RETRY-AFTER-HEADER-IN-RESPONSE": {
+        "description": "Header field to suggest an appropriate amount of time for the client to wait before retrying the request, typically after a 503 error or after a batch request when the batch job is not completed.\nThe value of this field can be either an HTTP-date or a number of seconds to delay after the response is received.\n<code>Retry-After = HTTP-date || delay-seconds</code>\nexamples:\n+ <code>Retry-After: Thu, 31 Dec 2020 23:59:59 GMT</code>\n+ <code>Retry-After: 120</code>\n",
+        "style": "simple",
+        "explode": false,
+        "schema": {
+          "maxLength": 30,
+          "minLength": 1,
+          "type": "string"
+        }
+      }
+    },
+    "callbacks": {}
+  },
+  "webhooks": {},
+  "x-tagGroups": [
+    {
+      "name": "API Reference",
+      "tags": [
+        "Visa Payment Passkey"
+      ]
+    }
+  ]
+}

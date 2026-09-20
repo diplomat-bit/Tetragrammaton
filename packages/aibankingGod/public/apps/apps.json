@@ -1,0 +1,794 @@
+[
+  {
+    "app": "PROD Microsoft Defender For Cloud XDR",
+    "appId": "bff526e7-323a-4ab1-8378-1afdf6936639",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "Microsoft Rights Management Services",
+    "appId": "6479f41a-65ff-4a41-b5fa-c966f8a5f6ff",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "Microsoft.CodeSigning",
+    "appId": "9ad94876-7277-4c50-b94e-0ce18aae41d5",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "Appliance Resource Provider",
+    "appId": "02641efb-4339-400e-a563-2c1c2534d417",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "Azure Credential Configuration Endpoint Service",
+    "appId": "e540267f-73b5-427e-9afd-118164dd4fc7",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "RPSaaS MetaRP for Wandisco.Fusion",
+    "appId": "5c49ba46-c5d3-4c2e-ab34-70d643ed274d",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "Liftr Datadog RPaaS",
+    "appId": "00514e87-7f17-4c05-b91b-90fe133e849f",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "CPIM Service",
+    "appId": "ff42400a-a27a-469c-b43c-d496971e134e",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "GitHub Actions API - Dev",
+    "appId": "9af357fa-5ed0-4b4b-9e40-e61d7ab87253",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "Office365DirectorySynchronizationService",
+    "appId": "3342ef4c-e991-4d03-9834-dfa02f6a550c",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "Azure Data Factory",
+    "appId": "d1bea402-838c-4db0-8129-f198796f7b02",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "Microsoft.Azure.SyncFabric.CrossCloud.Government2Commercial",
+    "appId": "5cbae48e-438d-4013-8ada-2775e2ebbd63",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "AzureDatabricks",
+    "appId": "35f7511d-8101-425e-8948-806c7c5de3b0",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "KCS-UserRP",
+    "appId": "2e245d27-a172-492d-8f26-8c651e2a4510",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "Microsoft.Relay",
+    "appId": "c45402d6-9cac-466f-aea8-7e7880d5b4de",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "Intuit",
+    "appId": "cb7e27c5-eae8-44d1-9ee2-1decd9b4f9e3",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "Microsoft Mixed Reality",
+    "appId": "4450615f-ed28-4751-9801-e44ae4761aa6",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "Microsoft password reset service",
+    "appId": "701f3f8a-611e-4c20-9437-9cdcbfb67aa3",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "Application Insights Configuration Service",
+    "appId": "ce7f53a8-dd69-4d95-894d-e6b7862be620",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "DiscoverOrg",
+    "appId": "42c5f54a-0d86-4f85-97f6-d309a567de19",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "Azure Multi-Factor Auth Connector",
+    "appId": "4e9fe6dd-21ae-455f-bade-de0c8e83f228",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "Azure Machine Learning Services Asset Notification",
+    "appId": "818a8c03-18ff-4723-9fd5-11104505a5c5",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "LexisNexis Law Schools",
+    "appId": "a2ba159a-ea98-4a68-99f5-f725e161c822",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "Office 365 Configure",
+    "appId": "ba277803-fbdf-4844-b406-a3f904265656",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "Azure Container Instance Service",
+    "appId": "99a5b00d-1d60-4a09-adde-e557791c09c4",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "Microsoft Azure Container Apps - Control Plane",
+    "appId": "18c394d5-56c5-48f9-801b-6dd219bf8206",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "Microsoft Graph",
+    "appId": "5fef4d51-5dab-4c67-9933-bd14a58a98c3",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "Azure Bastion",
+    "appId": "3bea635a-26ce-4995-8e04-41b2a686ba7d",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "DNC",
+    "appId": "d89d6894-488c-4008-b9c8-de509e14a21a",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "Microsoft Graph",
+    "appId": "753654f2-a6d0-40b4-8123-fdc71cbea1a0",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "Quickbooks Online Backup",
+    "appId": "be446690-e9e1-49e0-953d-eae5db15c806",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "App Protection",
+    "appId": "4bebc04b-9913-4da7-baf9-e95416151631",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "CosmosDB Dedicated Instance",
+    "appId": "c9d5ec13-ad17-42f3-a8f2-6d65e89a9f92",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "Microsoft Azure Container Apps - Data Plane",
+    "appId": "b945f59b-1491-422d-a399-d378845e870d",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "asmcontainerimagescanner",
+    "appId": "41d4ae65-78f9-4ee3-b7bb-0b5f25e77622",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "CosmosDBMongoClusterPrivateEndpoint",
+    "appId": "8cde08de-dc55-42e1-8fd2-1a3a330445dc",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "Office Change Management",
+    "appId": "cb99274b-5456-4720-95cd-b0c776433404",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "Microsoft Intune AAD BitLocker Recovery Key Integration",
+    "appId": "7131aaca-fe2b-4d94-896d-19675309787b",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "Power BI Premium",
+    "appId": "4ef594b5-01b3-4237-845d-5527fe68b9cb",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "AzureContainerService",
+    "appId": "6ac174a3-4aab-4c21-8913-f7effdad7fef",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "Fidalgo Dev Portal Public",
+    "appId": "e06b381b-9cc3-4c02-9c7f-96d228cc0455",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "Azure Virtual Desktop",
+    "appId": "714714c3-e6f5-4047-b2c1-32ca7680ac4b",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "Microsoft Cognitive Services",
+    "appId": "6f924ab2-3b2a-4fef-b8bf-48103003d222",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "CosmosDB Dedicated Instance",
+    "appId": "0b08d3d3-5ed0-4f40-aa2b-a2b975dd71b8",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "SonarDaaSAPI",
+    "appId": "3b673147-958c-466f-a811-9a9dc6f6a8c9",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "Azure DNS",
+    "appId": "811833e3-9bac-43ef-b8e0-ab061caf4548",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "Marketplace Catalog",
+    "appId": "632ed487-e99a-4d7a-b47a-dd863a936217",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "Logicalicak",
+    "appId": "d87c5684-686c-4ed1-868c-561f3b6cd8d3",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "AzureSupportCenter",
+    "appId": "751fc234-0143-4874-be7e-9d264c45051f",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "Azure Monitor for SAP Solutions",
+    "appId": "f9e021af-442e-4c00-b17d-8538c406a30e",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "Azure DNS Managed Resolver",
+    "appId": "56917ff9-853e-48b8-9c2b-55014527516e",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "ExP Studio",
+    "appId": "6cf0932e-c844-4cc8-9139-b6d3f365b1d2",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "Microsoft People Cards Service",
+    "appId": "1a316c4c-2dba-4dc9-b80a-af9d07a051dd",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "Automanage API Access",
+    "appId": "20dc2f1a-b808-4609-950e-8e1da8797803",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "Azure Signup Api",
+    "appId": "2df6558a-0fd5-47a1-b8bc-4747683e0220",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "Azure Container Registry - Dataplane",
+    "appId": "ca8c5d22-4860-4820-b6d8-4b7b4719c857",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "Azure VMware Solution RP",
+    "appId": "9c810e55-9c37-40ff-9c67-bb0979150932",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "Microsoft Azure App Service",
+    "appId": "f431535a-49cf-43a3-ba0e-60090e371f2f",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "Azure Machine Learning Singularity",
+    "appId": "b0bdbd4e-0e1c-4554-af25-e8f8dc182adc",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "Microsoft Mobile Application Management Backend",
+    "appId": "9b093c9f-e554-484c-a1f9-aec5b3457469",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "Microsoft Azure Policy Insights",
+    "appId": "86f5d58d-9ab8-4fe5-8684-2840ab2633b0",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "CompliancePolicy",
+    "appId": "99f5bff5-9970-4a01-af56-eccfc9142951",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "aciapi",
+    "appId": "9a2231f2-15bf-44e8-b025-d7dfd397b030",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "Azure AD Identity Governance - Dynamics 365 Management",
+    "appId": "520286e2-ed3c-4e96-b18e-2f3489334a34",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "Office365 Shell SS-Server Default",
+    "appId": "5e8da7c8-7df5-4f8b-9459-6dd566195cbb",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "CCM TAGS",
+    "appId": "90b72ce3-5913-41b5-9f8f-0006cc98a818",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "Backup Management Service",
+    "appId": "5c42ab83-a91b-4000-81b8-d21a2339900c8",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "GatewayRP",
+    "appId": "2398f38c-291c-46ea-ab61-19cf438c7f4c",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "Microsoft Azure Signup Portal",
+    "appId": "a5b8a8f1-323b-4739-947d-90881baabcb5",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "AzureDataShare",
+    "appId": "17c5c518-3e42-46ca-ab12-fb735542adf6",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "Connectors",
+    "appId": "f0176dd5-d4bb-48cd-b05a-575b7e943936",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "Microsoft Azure Stack HCI Service",
+    "appId": "018a72db-f77d-4e04-b0fe-fe825287cc72",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "Azure Cosmos DB Virtual Network To Network Resource Provider",
+    "appId": "fed55412-a97b-4898-bd51-a46b79614ba7",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "Marketplace Caps API",
+    "appId": "bc63da30-e004-4db7-b112-7c8121eb12b1",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "Microsoft Intune SCCM Connector",
+    "appId": "14b69840-e253-4094-b4fa-210e64918a83",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "Office365 Zoom",
+    "appId": "9a70bb5f-7c51-4160-abdc-7c64da803ca2",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "NetworkVerifier",
+    "appId": "8b43f70a-62a7-4fd4-b0a5-0feb3d5e39f9",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "swissfranc",
+    "appId": "53bbc2c5-24eb-4ab8-939d-03d40facec84",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "MCVP Resource Provider",
+    "appId": "283ffa1d-e3bd-4d6d-869a-7b0e2dfad99c",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "Azure SQL Database Backup To Azure Backup Vault",
+    "appId": "f20fd48f-fe25-46ab-9fa8-bd10c4265a58",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "asmcontainerimagescanner",
+    "appId": "0b6ec04a-1423-4a83-9d65-a1008c2cb240",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "Diagnostic Services Trusted Storage Access",
+    "appId": "ae40a9e9-c8a0-44ec-92c9-d3a789a6d75f",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "Billing RP",
+    "appId": "cc30f49a-86c9-4186-812c-b32500547ce1",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "MarketplaceAPI ISV",
+    "appId": "8cd31786-78ce-4a3d-b6bd-fc2818d9c0e0",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "Dynamics CRM Online Administration",
+    "appId": "ed203833-0676-4219-9ce7-9e345911dc93",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "SAP Analytics Cloud",
+    "appId": "50ac6ef5-f33d-415f-903f-9a9ae6205363",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "abc",
+    "appId": "53130711-1b32-4e4c-85ac-dd60c4490e90",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "Microsoft.EventGrid",
+    "appId": "f0ea8d14-71ce-4195-b0a0-8249f6172b54",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "Device Registration Service",
+    "appId": "bde311b0-659f-4048-aa43-2d2ba5838177",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "code",
+    "appId": "125f1600-4a44-40c9-9c80-10d15caf74f5",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "Azure Iot Hub",
+    "appId": "ba83fce2-b010-4929-97a2-3cd90f41a3f9",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "CloudNativeTesting DP",
+    "appId": "8e0dd6aa-6328-4455-8645-7502eb6e0bf7",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "Policy Administration Service",
+    "appId": "eabff3ed-a89a-428c-a56a-304d6968246f",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "Azure Linux VM Sign-In",
+    "appId": "381dc07f-8793-4749-b952-3a3b3f352e2e",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "Graph Connector Service",
+    "appId": "59087b89-d9c6-4f55-a76c-286fb0bc78ba",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "Microsoft App Access Panel",
+    "appId": "5c47ca05-c651-4c2a-ac15-b0c2522b1c1f",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "Microsoft Visual Studio Codespaces API - Dev",
+    "appId": "05dbea6c-8f13-4d04-a8ce-f38dadbe5d11",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "Azure PHP Workloads Management",
+    "appId": "4bdbf4e1-9c9f-4ed2-93e4-be32683468c6",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "Bing Search APIs",
+    "appId": "3b7c4156-32ef-4e20-ab37-0e62ac8c20a8",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "DeploymentScheduler",
+    "appId": "da48f297-32f5-427f-ac0e-76e91cd41524",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "Microsoft Device Management EMM API",
+    "appId": "fdc301b1-425f-4ef7-a552-4d9a93ac0aba",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "Azure Synapse Studio",
+    "appId": "23a8a352-b663-4c59-8fd4-34f1e139d5c1",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "App",
+    "appId": "2c3ba2d7-110d-4e2f-8c18-2aa1e27970ce",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "Liftr-DT-FPA-ARM-AME",
+    "appId": "1170ece0-8b98-414c-bde3-5631192c874b",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "Office365 Shell WCSS-Server Default",
+    "appId": "a01a739e-e839-441d-81d6-5312a5f38740",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "Azure Kubernetes Service AAD Server",
+    "appId": "533a6461-763b-4902-a5c9-32275d2a5b31",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "Azure Storage",
+    "appId": "411ba356-111a-4ab3-96a3-ac4d442d0a85",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "Monitoring Account API",
+    "appId": "7f2235df-aa9f-4f31-9a91-6e9ccd5c9b2f",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "Azure AD Application Proxy",
+    "appId": "1e61b3a1-8130-485c-a0fc-210f1aa116d5",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "Azure Lab Services",
+    "appId": "36e9ca5e-0e1e-4999-8e01-9e4ff8e20515",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "Microsoft Defender for Cloud Servers Scanner Resource Provider",
+    "appId": "d40bb0ee-fab5-4cfb-80ec-44f066c0cf76",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "Microsoft Azure Container Apps - Data Plane",
+    "appId": "14d5ccff-0493-4f28-b046-2765ed9a49e2",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "Azure Spring Cloud DiagSettings App",
+    "appId": "04bffa23-b1e1-4c34-bc0c-5d784582aee2",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "Work",
+    "appId": "d4f1a19f-799d-4cca-9268-27c8bfac9a7a",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "NFV Resource Provider",
+    "appId": "45e801b9-a1fb-4612-8f22-2967cd86c8c2",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "Azure Blueprints",
+    "appId": "75fac8d2-10cd-4021-a20a-7d5032a55962",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "aibankinguniversity",
+    "appId": "91d97751-6589-4248-a6c4-972ea2516cc2",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "Microsoft.CustomProviders RP",
+    "appId": "e86d396c-30b5-45cf-a2df-4815424d1903",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "WindowsDefenderATP",
+    "appId": "abcb8ecc-3cd2-41e4-bc58-034958a6db3d",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "Microsoft Intune Service Discovery",
+    "appId": "afb0f931-78ff-40b9-a3d9-273ec178bd46",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "Microsoft.Azure.DomainRegistration",
+    "appId": "ebe59575-81a4-4328-b432-7ad0d94bfa60",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "Quickbooks Other Intuit Service QuickBooks Online",
+    "appId": "f4928e19-8bda-429f-bbd7-5909011dd4bc",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "Azure ESTS Service",
+    "appId": "7d4fbf19-af0a-4b1c-8db2-87de29f18d5b",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "Data Classification Service",
+    "appId": "2349b1aa-15cb-4805-853f-1c2e73bc216e",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "Targeted Messaging Service",
+    "appId": "34705eb3-a919-412d-a011-ee851be41c8d",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "admin",
+    "appId": "ae3dca17-184a-4da6-92c6-a0567df39576",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "Azure Key Vault",
+    "appId": "8adeddfd-7bd9-4fdd-a80f-7d5fd83f24d8",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "ProductsLifecycleApp",
+    "appId": "f5c19bb6-0624-4fa3-99d3-57bb097bb49a",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "Microsoft Power Platform Service",
+    "appId": "39662d89-bcad-4d95-967b-6eb0efb2637a",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "Azure Guest Container Update Manager",
+    "appId": "60e01ed1-d628-4c46-9031-44ac8b95ccc9",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "Azure Information Protection",
+    "appId": "ef3dcc9b-a889-4539-8c29-074b3e7ea008",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  },
+  {
+    "app": "SAP Concur Travel and Expense",
+    "appId": "7a2baf53-9265-42b4-a7ce-20db6197c4f0",
+    "servicePrincipal": "exists",
+    "owner": "exists"
+  }
+]

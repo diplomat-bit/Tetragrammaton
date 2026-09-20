@@ -1,0 +1,19 @@
+{
+  "name": "Remix Aquarius AI Sovereign Singularity",
+  "description": "A neural-fortress OS that makes centralized identity designs irrelevant through superior Aquarius Legion AI modules.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone",
+    "geolocation",
+    "identity-credentials-get"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ],
+  "protocol_handlers": [
+    {
+      "protocol": "web+aquarius",
+      "url": "/?portal\u003d%s"
+    }
+  ]
+}

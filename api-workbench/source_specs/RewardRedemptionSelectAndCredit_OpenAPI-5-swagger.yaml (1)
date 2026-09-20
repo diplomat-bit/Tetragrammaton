@@ -1,0 +1,278 @@
+openapi: 3.0.1
+info:
+  title: RewardRedemptionSelectAndCredit_OpenAPI
+  description: This API is used to redeem the credit card reward points.
+  version: 1.12.2
+  x-deployment-reference: PPR-D-RwdPtsAwardRed-DGL-EA
+  x-linked-api: RewardsPointsAwardsAndRedemption_Digital_Domain
+servers:
+- url: https://127.0.0.1/openapi/v1/rewards/selectAndCredit/redemption
+paths:
+  /:
+    post:
+      tags:
+      - Rewards_Reward Management_Reward Redemption and Fulfillment
+      summary: Redeem Statement Credit
+      description: This API is used to Redeem the statement Credit  for a particular
+        transaction  using the Point .
+      operationId: SelectAndCreditRedemption
+      parameters:
+      - $ref: '#/components/parameters/Authorization'
+      - $ref: '#/components/parameters/uuid'
+      - $ref: '#/components/parameters/Accept'
+      - $ref: '#/components/parameters/client_id'
+      - $ref: '#/components/parameters/Content-Type'
+      - $ref: '#/components/parameters/clientDetails'
+      requestBody:
+        description: Select And Credit Redemption Request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SelectAndCreditRedemptionRequest'
+        required: true
+      responses:
+        "200":
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SelectAndCreditRedemptionResponse'
+        "400":
+          description: <table><tr><td>Type</td><td>Code</td><td>Details</td></tr><tr><td>invalid</td><td>invalidRequest</td><td>Missing
+            or invalid parameters</td></tr><tr><td>error</td><td>inSufficientPointBalance</td><td>The
+            order points cannot be more than available balance of the member</td></tr>
+            <tr><td>error</td><td>exceedsMaximumPointsAllowed</td><td>Requested amount
+            or points are more than allowed equivalent points.</td></tr><tr><td>error</td><td>notEligibleToRedeem</td><td>Member
+            not eligible to order this item</td></tr><tr><td>error</td><td>belowMinimumPointsAllowed</td><td>Requested
+            amount or points are less than allowed equivalent points.</td></tr><tr><td>error</td><td>transactionAlreadyRedeemed</td><td>Transaction
+            is already redeemed</td></tr><tr><td>error</td><td>errorGeneratingOrderId</td><td>Order
+            Id is not generated</td></tr><tr><td>invalid</td><td>invalidPointsAndAmountCombination</td><td>Points
+            and amount combination are invalid</td></tr><tr><td>error</td><td>redemptionNotAllowed</td><td>Redemption
+            Not allowed</td></tr><tr><td>error</td><td>exceedsMaximumAmountAllowed</td><td>Requested
+            partial amount is greater than maximum transaction amount to be redeemed</td><tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "401":
+          description: <table><tr><td>Type</td><td>Code</td><td>Details</td></tr><tr><td>error</td><td>unAuthorized</td><td>Authorization
+            credential is missing or invalid</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "403":
+          description: <table><tr><td>Type</td><td>Code</td><td>Details</td></tr><tr><td>error</td><td>accessNotConfigured</td><td>Access
+            is not configured for this resource</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "404":
+          description: <table><tr><td>Type</td><td>Code</td><td>Details</td></tr><tr><td>error</td><td>resourceNotFound</td><td>Empty
+            resource/resource not found</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "422":
+          description: <table><tr><td>Type</td><td>Code</td><td>Details</td></tr><tr><td>error</td><td>businessValidationsFailed</td><td>Business
+            validations failed</td></tr><tr><td>error</td><td>invalidOffer</td><td>Offer
+            is invalid</td></tr><tr><td>error</td><td>mobileUnderEmbargo</td><td>Customer
+            mobile is under embargo</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "500":
+          description: <table><tr><td>Type</td><td>Code</td><td>Details</td></tr><tr><td>fatal</td><td>serverUnavailable</td><td>The
+            request failed due to an internal error</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      x-codegen-request-body-name: SelectAndCreditRedemptionRequest
+components:
+  schemas:
+    SelectAndCreditRedemptionRequest:
+      required:
+      - cardId
+      type: object
+      properties:
+        cardId:
+          type: string
+          description: The card id in encrypted format
+          example: 3255613852316f2b4d4d796c344e38756339654972776f663745446e6d4c32486f455a4165374a476858343d
+        transactionReferenceId:
+          type: array
+          description: 'Reference Id to uniquely identify the transaction.This array
+            is deprecated from version 1.1.0 onwards '
+          example: "10001278"
+          items:
+            type: string
+        transactions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Transactions'
+    SelectAndCreditRedemptionResponse:
+      required:
+      - redemptionDetails
+      type: object
+      properties:
+        redemptionDetails:
+          type: array
+          items:
+            $ref: '#/components/schemas/RedemptionDetails'
+        availablePointBalance:
+          type: integer
+          description: The new points or miles balance.
+          format: int64
+          example: 6000
+        actualAvailablePointBalance:
+          type: number
+          description: The new points or miles balance.
+          format: double
+          example: 6000.25
+    ErrorResponse:
+      required:
+      - code
+      - type
+      type: object
+      properties:
+        type:
+          type: string
+          description: Invalid - Request did not confirm to the specification and
+            was unprocessed and rejected. Please fix the value and try again
+          enum:
+          - error
+          - warn
+          - invalid
+          - fatal
+        code:
+          type: string
+          description: Error code which qualifies the error
+        details:
+          type: string
+          description: Human readable explanation specific to the occurrence of the
+            problem
+        location:
+          type: string
+          description: The name of the field that resulted in the error
+        moreInfo:
+          type: object
+          properties: {}
+          description: URI to human readable documentation of the error
+    Transactions:
+      required:
+      - transactionReferenceId
+      type: object
+      properties:
+        transactionReferenceId:
+          type: string
+          description: Reference Id to uniquely identify the transaction.
+          example: "10001278"
+        transactionAmount:
+          type: number
+          description: "Transaction amount,This field is required for partial rewards\
+            \ redemption."
+          format: double
+          example: 800.91
+        currencyCode:
+          type: string
+          description: The currency code of the account in ISO 4217 format
+          example: SGD
+        pointsToRedeem:
+          type: integer
+          description: "The points or miles that needs to redeemed. If both transactionAmount\
+            \ and pointsToRedeem are sent, it should be correct combination as per\
+            \ the below programConversionRate logic:pointsToRedeem = RoundOf (transactionAmount/programConversionRate)"
+          format: int64
+          example: 2500
+        transactionDescription:
+          type: string
+          description: Transaction description from the merchant
+          example: Completed
+    RedemptionDetails:
+      required:
+      - transactionReferenceId
+      type: object
+      properties:
+        orderId:
+          type: string
+          description: The unique order id.
+          example: T25100025
+        transactionReferenceId:
+          type: string
+          description: Reference Id to uniquely identify the transaction.
+          example: "10001278"
+        redemptionOrderStatus:
+          type: string
+          description: "This is the status code of the redemption order. This is a\
+            \ reference data field. Please use /v1/utilities/referenceData/{redemptionOrderStatus}\
+            \ resource to get valid value of this field with description."
+          example: SUCCESS
+        redemptionOrderFailureReason:
+          type: string
+          description: "This field is to indicate the reason of the failure of redemption\
+            \ order. Applicable only in case of any error in redemption.This is a\
+            \ reference data field. Please use /v1/utilities/referenceData/{redemptionOrderFailureReason}\
+            \ resource to get valid value of this field with description."
+          example: REDEMPTION_NOT_ALLOWE
+  parameters:
+    Authorization:
+      name: Authorization
+      in: header
+      description: "The most recent Authorization token. This will have the format\
+        \ Bearer + {space} + {accessToken}. Example: Bearer KGNsaWVudF9pZDpjbGllbnRfc2VjcmV0KQ=="
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: string
+    uuid:
+      name: uuid
+      in: header
+      description: 128 bit random UUID generated uniquely for every request.
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: string
+    Accept:
+      name: Accept
+      in: header
+      description: Content-Type that are acceptable for the response.
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: string
+    client_id:
+      name: client_id
+      in: header
+      description: Client ID generated during application registration.
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: string
+    Content-Type:
+      name: Content-Type
+      in: header
+      description: application/json
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: string
+    clientDetails:
+      name: clientDetails
+      in: header
+      description: "This field is used to capture device,browser and network information.\
+        \ Refer the developer portal for more information.These are the fields which\
+        \ will be passed as part of the header devicePrint,deviceTokenCookie,userIpAddress,userAgent,hardwareId,simId,deviceModel,deviceName,deviceOsName,deviceOsVersion,multitaskingSupportFlag,languageSupport,wifiMacAddress,cellTowerId,locationAreaCode,rsaApplicationKey,wapClientId,mobileCarrierCode,mobileCountryCode,osId,geoLongitude,geoLatitude,geoHorizontalAccuracy,geoAltitude,geoAltitudeAccuracy,geoSpeed,geoTimestamp,geoStatus,basicServiceSetId,signalStrength,wifiChannel,serviceSetId"
+      required: false
+      style: simple
+      explode: false
+      schema:
+        type: string

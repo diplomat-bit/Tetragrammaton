@@ -1,0 +1,2902 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Visa BIN Attribute Sharing Service",
+    "description": "",
+    "version": "1"
+  },
+  "servers": [
+    {
+      "url": "https://sandbox.api.visa.com",
+      "description": "Sandbox server"
+    }
+  ],
+  "security": [],
+  "tags": [
+    {
+      "name": "BIN File Transfer",
+      "description": "Transfer Account/Token Range File"
+    },
+    {
+      "name": "BIN Files Metadata",
+      "description": "Get Bin Files Metadata including number of files, file names, sizes, checksum, creation date."
+    },
+    {
+      "name": "Full BIN List",
+      "description": "Access a complete list of all of the Visa BINs and their associated BIN Attributes"
+    },
+    {
+      "name": "Issuer API",
+      "description": "API that enables issuers to source acquirer BIN data directly from Visa"
+    },
+    {
+      "name": "Single BIN Lookup",
+      "description": "Lookup BIN Attributes for a single Payment Account or BIN"
+    }
+  ],
+  "paths": {
+    "/filedeliveryservice/v1/binFilesMetadata": {
+      "post": {
+        "tags": [
+          "BIN Files Metadata"
+        ],
+        "summary": "BIN Files Metadata",
+        "description": "Get BIN Files Metadata including number of files, file names, sizes, checksum, creation date.",
+        "operationId": "BinFiles metadata lookup using POST",
+        "requestBody": {
+          "description": "BIN Files Metadata request payload",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/binFilesMetadataRequest"
+              },
+              "examples": {
+                "Request 1": {
+                  "summary": "Request 1",
+                  "value": {
+                    "requestHeader": {
+                      "requestTS": "2021-02-10T12:26:50.002",
+                      "requestMessageId": "reqstMsgID1"
+                    },
+                    "requestData": {
+                      "paymentAccountType": "P"
+                    }
+                  }
+                },
+                "Request 2": {
+                  "summary": "Request 2",
+                  "value": {
+                    "requestHeader": {
+                      "requestTS": "2021-02-10T12:26:50.002",
+                      "requestMessageId": "reqstMsgID1"
+                    },
+                    "requestData": {
+                      "paymentAccountType": "T"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "BinFilesMetadata Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/binFilesMetadataResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Request Data Invalid",
+            "content": {}
+          },
+          "500": {
+            "description": "Error Codes",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errorCodes"
+                }
+              }
+            }
+          }
+        },
+        "x-operationVersions": [
+          {
+            "label": "v1 - Latest",
+            "operationPointer": "#/paths/~1filedeliveryservice~1v1~1binFilesMetadata/post",
+            "default": false
+          }
+        ],
+        "x-codegen-request-body-name": "Bin Files Metadata Request"
+      }
+    },
+    "/vbass/v1/files/metadata": {
+      "post": {
+        "tags": [
+          "Issuer API"
+        ],
+        "summary": "Files Metadata",
+        "description": "Get the metadata for the VBASS files including the count of files, file names, size, checksum and creation date.",
+        "operationId": "VBASS Files metadata lookup using POST",
+        "requestBody": {
+          "description": "VBASS Files Metadata request payload",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/vbassFilesMetadataRequest"
+              },
+              "examples": {
+                "Default": {
+                  "summary": "Default",
+                  "value": {
+                    "requestHeader": {
+                      "requestTS": "2022-12-01T21:26:52.021",
+                      "requestMessageId": "TestGenFilesMetadata"
+                    },
+                    "requestData": {
+                      "fileType": "ACQ"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "VBASSFilesMetadata Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/vbassFilesMetadataResponse"
+                },
+                "examples": {
+                  "Default": {
+                    "summary": "Default",
+                    "value": {
+                      "responseHeader": {
+                        "responseTS": "2024-02-08T23:54:24.245",
+                        "responseMessageId": "108VDP41105220240208235424237",
+                        "requestMessageId": "TestGenFilesMetadata"
+                      },
+                      "responseData": {
+                        "fileDetails": [
+                          {
+                            "fileName": "VBASS_ACQ_02082024_1.csv",
+                            "fileSize": 2411325,
+                            "checkSum": "ae0d04247d2bb5fc0fb0f711af51ef29",
+                            "rowCount": 25318
+                          }
+                        ],
+                        "totalNumberOfFiles": 1,
+                        "filesCreationDate": "2024-02-08",
+                        "fileType": "ACQ"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Request Data Invalid",
+            "content": {}
+          },
+          "500": {
+            "description": "Error Codes",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errorCodes"
+                }
+              }
+            }
+          }
+        },
+        "x-operationVersions": [
+          {
+            "label": "v1 - Latest",
+            "operationPointer": "#/paths/~1vbass~1v1~1files~1metadata/post",
+            "default": false
+          }
+        ],
+        "x-codegen-request-body-name": "VBASS Files Metadata Request",
+        "x-hideTryIt": true
+      }
+    },
+    "/vbass/v1/files/transfers": {
+      "post": {
+        "tags": [
+          "Issuer API"
+        ],
+        "summary": "File Transfer",
+        "description": "The VBASS File Transfer API endpoint allows the download of VBASS File",
+        "operationId": "VBASS File Transfer - POST",
+        "requestBody": {
+          "description": "VBASS File Transfer request payload",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/vbassFileTransferRequest"
+              },
+              "examples": {
+                "Default": {
+                  "summary": "Default",
+                  "value": {
+                    "requestHeader": {
+                      "requestTS": "2021-02-10T21:26:52.021",
+                      "requestMessageId": "TestGenFileTransfers"
+                    },
+                    "requestData": {
+                      "fileName": "VBASS_ACQ_02082024_1.csv"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "VBASS File Transfer Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/vbassFileTransferResponse"
+                },
+                "examples": {
+                  "Default": {
+                    "summary": "Default",
+                    "value": "Sample response will contain csv file in a comma-separated format"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Request Data Invalid",
+            "content": {}
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "500": {
+            "description": "Error Codes",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errorCodes-1"
+                }
+              }
+            }
+          }
+        },
+        "x-operationVersions": [
+          {
+            "label": "v1 - Latest",
+            "operationPointer": "#/paths/~1vbass~1v1~1files~1transfers/post",
+            "default": false
+          }
+        ],
+        "x-codegen-request-body-name": "VBASS File Transfer Request",
+        "x-hideTryIt": true
+      }
+    },
+    "/v1/paymentAccountLookup": {
+      "post": {
+        "tags": [
+          "Single BIN Lookup"
+        ],
+        "summary": "PAN TOKEN Lookup Using POST",
+        "description": "Get all the values related to PAN/TOKEN",
+        "operationId": "PAN TOKEN Lookup Using POST V1",
+        "requestBody": {
+          "description": "PAN/TOKEN Lookup request payload",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/paymentAccountLookupRequest"
+              },
+              "examples": {
+                "Default": {
+                  "summary": "Default",
+                  "value": {
+                    "requestHeader": {
+                      "requestTS": "2024-01-15T22:05:00.000",
+                      "requestMessageID": "test123"
+                    },
+                    "requestData": {
+                      "paymentAccountType": "P",
+                      "paymentAccount": "4259077000001230"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/paymentAccountLookupResponseV1"
+                },
+                "examples": {
+                  "Default": {
+                    "summary": "Default",
+                    "value": {
+                      "wsStatus": {
+                        "statusDesc": "Success",
+                        "statusCode": "CDI000"
+                      },
+                      "responseData": {
+                        "platformCd": "GV",
+                        "accountFundingSourceCd": "R",
+                        "accountBusName": "ABD & COMPANY",
+                        "productID": "S2",
+                        "paymentAccountType": "P",
+                        "accountRegionCode": "06",
+                        "issuerBillingCurrCd": "MRO",
+                        "accountCtryAlpha2Code": "MR",
+                        "issuerBin": "425907",
+                        "productIDName": "Visa Government Purchasing",
+                        "accountFundingSourceSubtypeCd": "N"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "300": {
+            "description": "Requesting Client IP is invalid",
+            "content": {}
+          },
+          "400": {
+            "description": "Request Data Invalid",
+            "content": {}
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "500": {
+            "description": "Error Codes",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errorCodes-2"
+                }
+              }
+            }
+          }
+        },
+        "x-operationVersions": [
+          {
+            "label": "v1",
+            "operationPointer": "#/paths/~1v1~1paymentAccountLookup/post",
+            "default": false
+          },
+          {
+            "label": "v2 - Latest",
+            "operationPointer": "#/paths/~1v2~1paymentAccountLookup/post",
+            "default": false
+          }
+        ],
+        "x-codegen-request-body-name": "PAN TOKEN Lookup Request",
+        "x-hideTryIt": true
+      }
+    },
+    "/v2/paymentAccountLookup": {
+      "post": {
+        "tags": [
+          "Single BIN Lookup"
+        ],
+        "summary": "PAN TOKEN Lookup Using POST V2",
+        "description": "Get all the values related to PAN/TOKEN<br><br>Access to Visa BIN Attributes such as Issuer BIN, Issuer Country , Issuer Billing Currency and Product Identifiers such as Product ID/name, Product Platform, Card type, Card Subtype for any single payment account",
+        "operationId": "PAN TOKEN Lookup Using POST V2",
+        "requestBody": {
+          "description": "PAN/TOKEN Lookup request payload",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/paymentAccountLookupRequest-1"
+              },
+              "examples": {
+                "Default": {
+                  "summary": "Default",
+                  "value": {
+                    "requestHeader": {
+                      "requestTS": "2024-01-15T22:05:00.000",
+                      "requestMessageID": "test123"
+                    },
+                    "requestData": {
+                      "paymentAccountType": "P",
+                      "paymentAccount": "4259077000001230"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/paymentAccountLookupResponseV2-1"
+                },
+                "examples": {
+                  "Default": {
+                    "summary": "Default",
+                    "value": {
+                      "wsStatus": {
+                        "statusDesc": "Success",
+                        "statusCode": "CDI000"
+                      },
+                      "responseData": {
+                        "commrclCrdLvl3EnhInd": "N",
+                        "accountFundingSourceCd": "R",
+                        "binLength": "6",
+                        "productID": "S2",
+                        "paymentAccountType": "P",
+                        "accountRegionCode": "06",
+                        "accountCtryAlpha2Code": "MR",
+                        "posDomesticOnlyInd": "N",
+                        "onlineGamblBlockInd": "Y",
+                        "comboCrdCd": "N",
+                        "accountFundingSourceSubtypeCd": "N",
+                        "commrclCrdLvl2Ind": "N",
+                        "platformCd": "GV",
+                        "accountBusName": "ABD & COMPANY",
+                        "multiAccountAccessInd": "N",
+                        "issuerBillingCurrCd": "MRO",
+                        "almInd": "N",
+                        "vauInd": "N",
+                        "brandCd": "VISA",
+                        "autoSubstntnInd": "N",
+                        "issuerBin": "425907",
+                        "sharedBinInd": "Y",
+                        "productIDName": "Visa Government Purchasing",
+                        "regulatedBinCd": "R"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Request Data Invalid",
+            "content": {}
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "500": {
+            "description": "Error Codes",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errorCodes-2"
+                }
+              }
+            }
+          }
+        },
+        "x-codegen-request-body-name": "PAN TOKEN Lookup Request",
+        "x-hideTryIt": true
+      }
+    },
+    "/v2/binRangeDetails": {
+      "post": {
+        "tags": [
+          "Full BIN List"
+        ],
+        "summary": "Bin Range Details Using POST V2",
+        "description": "The Full BIN List API provides access to Visa BIN Attributes such as Issuer BIN, Issuer Country, Issuer Billing Currency and Product Identifiers such as Product ID/name, Product Platform, Card type , Card Subtype",
+        "operationId": "Bin Range Details Using POST V2",
+        "requestBody": {
+          "description": "Bin Range Details request payload",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BinRangeDetailsRequestV2"
+              },
+              "examples": {
+                "Default": {
+                  "summary": "Default",
+                  "value": {
+                    "requestHeader": {
+                      "requestTS": "2024-01-01T23:10:41.000",
+                      "requestMessageID": "test123"
+                    },
+                    "requestData": {
+                      "binRangeSearchIndex": "0",
+                      "paymentAccountType": "P",
+                      "binRangeCount": "100"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "BinRangeDetails Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BinRangeDetailsResponseV2"
+                },
+                "examples": {
+                  "Default": {
+                    "summary": "Default",
+                    "value": {
+                      "numRecordsReturned": "100",
+                      "areNextOffsetRecordsAvailable": "Y",
+                      "responseHeader": {
+                        "responseMessageID": "34CACCTDTL2750820220617223228171"
+                      },
+                      "responseData": [
+                        {
+                          "binRangeMaxNum": "401975999999999999999",
+                          "productID": "B",
+                          "binRangePaymentAccountType": "P",
+                          "accountRegionCode": "01",
+                          "accountCtryAlpha2Code": "TL",
+                          "posDomesticOnlyInd": "N",
+                          "comboCrdCd": "A",
+                          "accountFundingSourceSubtypeCd": "N",
+                          "multiAccountAccessInd": "N",
+                          "issuerBillingCurrCd": "TPE",
+                          "autoSubstntnInd": "Y",
+                          "issuerBin": "401975",
+                          "productIDName": "Visa Infinite Privilege",
+                          "commrclCrdLvl3EnhInd": "N",
+                          "accountFundingSourceCd": "R",
+                          "binLength": "6",
+                          "onlineGamblBlockInd": "N",
+                          "binRangeMinNum": "401975000000000000000",
+                          "commrclCrdLvl2Ind": "N",
+                          "platformCd": "CN",
+                          "accountBusName": "A2B2 BANK",
+                          "almInd": "N",
+                          "vauInd": "Y",
+                          "brandCd": "VISA",
+                          "sharedBinInd": "N",
+                          "regulatedBinCd": "N"
+                        },
+                        {
+                          "binRangeMaxNum": "402201050999999999999",
+                          "productID": "E",
+                          "binRangePaymentAccountType": "P",
+                          "accountRegionCode": "04",
+                          "accountCtryAlpha2Code": "US",
+                          "posDomesticOnlyInd": "N",
+                          "comboCrdCd": "C",
+                          "accountFundingSourceSubtypeCd": "",
+                          "multiAccountAccessInd": "N",
+                          "issuerBillingCurrCd": "USD",
+                          "autoSubstntnInd": "N",
+                          "issuerBin": "402201",
+                          "productIDName": "Visa Business",
+                          "commrclCrdLvl3EnhInd": "N",
+                          "accountFundingSourceCd": "D",
+                          "binLength": "6",
+                          "onlineGamblBlockInd": "N",
+                          "binRangeMinNum": "402201050000000000000",
+                          "commrclCrdLvl2Ind": "N",
+                          "platformCd": "BZ",
+                          "accountBusName": "ABD MARKETING",
+                          "almInd": "N",
+                          "vauInd": "N",
+                          "brandCd": "PROP",
+                          "sharedBinInd": "N",
+                          "regulatedBinCd": "N"
+                        },
+                        {
+                          "binRangeMaxNum": "414718009999999999999",
+                          "productID": "S5",
+                          "binRangePaymentAccountType": "P",
+                          "accountRegionCode": "05",
+                          "accountCtryAlpha2Code": "PE",
+                          "posDomesticOnlyInd": "N",
+                          "comboCrdCd": "N",
+                          "accountFundingSourceSubtypeCd": "N",
+                          "multiAccountAccessInd": "S",
+                          "issuerBillingCurrCd": "PEN",
+                          "autoSubstntnInd": "N",
+                          "issuerBin": "41471800",
+                          "productIDName": "Visa Signature",
+                          "commrclCrdLvl3EnhInd": "N",
+                          "accountFundingSourceCd": "R",
+                          "binLength": "8",
+                          "onlineGamblBlockInd": "N",
+                          "binRangeMinNum": "414718000000000000000",
+                          "commrclCrdLvl2Ind": "N",
+                          "platformCd": "CO",
+                          "accountBusName": "ABD BANK, NATIONAL ASSOCIATION",
+                          "almInd": "N",
+                          "vauInd": "N",
+                          "brandCd": "VISA",
+                          "sharedBinInd": "N",
+                          "regulatedBinCd": "N"
+                        }
+                      ],
+                      "responseStatus": {
+                        "statusDescription": "Success",
+                        "statusCode": "CDI000"
+                      },
+                      "totalRecordsCount": "8203810"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Request Data Invalid",
+            "content": {}
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "500": {
+            "description": "Error Codes",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errorCodes-3"
+                }
+              }
+            }
+          }
+        },
+        "x-operationVersions": [
+          {
+            "label": "v1",
+            "operationPointer": "#/paths/~1v1~1binRangeDetails/post",
+            "default": false
+          },
+          {
+            "label": "v2 - Latest",
+            "operationPointer": "#/paths/~1v2~1binRangeDetails/post",
+            "default": false
+          }
+        ],
+        "x-codegen-request-body-name": "Bin Range Details Request",
+        "x-hideTryIt": true
+      }
+    },
+    "/v1/binRangeDetails": {
+      "post": {
+        "tags": [
+          "Full BIN List"
+        ],
+        "summary": "Bin Range Details Using POST",
+        "description": "Full Bin List",
+        "operationId": "Bin Range Details Using POST V1",
+        "requestBody": {
+          "description": "Bin Range Details request payload",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BinRangeDetailsRequestV1-1"
+              },
+              "examples": {
+                "Default": {
+                  "summary": "Default",
+                  "value": {
+                    "requestHeader": {
+                      "requestTS": "2024-02-01T23:10:41.000",
+                      "requestMessageID": "test123"
+                    },
+                    "requestData": {
+                      "binRangeSearchIndex": "0",
+                      "binRangeCount": "100"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "BinRangeDetails Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BinRangeDetailsResponseV1-1"
+                },
+                "examples": {
+                  "Default": {
+                    "summary": "Default",
+                    "value": {
+                      "numRecordsReturned": "100",
+                      "areNextOffsetRecordsAvailable": "Y",
+                      "responseHeader": {
+                        "responseMessageID": "34CACCTDTL2750820220617223228171"
+                      },
+                      "responseData": [
+                        {
+                          "binRangeMaxNum": "401975999999999999999",
+                          "accountFundingSourceCd": "R",
+                          "productID": "B",
+                          "binRangePaymentAccountType": "P",
+                          "accountRegionCode": "01",
+                          "accountCtryAlpha2Code": "TL",
+                          "binRangeMinNum": "401975000000000000000",
+                          "accountFundingSourceSubtypeCd": "N",
+                          "platformCd": "CN",
+                          "accountBusName": "A2B2 BANK",
+                          "issuerBillingCurrCd": "TPE",
+                          "issuerBin": "401975",
+                          "productIDName": "Visa Infinite Privilege"
+                        },
+                        {
+                          "binRangeMaxNum": "402201050999999999999",
+                          "accountFundingSourceCd": "D",
+                          "productID": "E",
+                          "binRangePaymentAccountType": "P",
+                          "accountRegionCode": "04",
+                          "accountCtryAlpha2Code": "US",
+                          "binRangeMinNum": "402201050000000000000",
+                          "accountFundingSourceSubtypeCd": "",
+                          "platformCd": "BZ",
+                          "accountBusName": "ABD MARKETING",
+                          "issuerBillingCurrCd": "USD",
+                          "issuerBin": "402201",
+                          "productIDName": "Visa Business"
+                        },
+                        {
+                          "binRangeMaxNum": "414718009999999999999",
+                          "accountFundingSourceCd": "R",
+                          "productID": "S5",
+                          "binRangePaymentAccountType": "P",
+                          "accountRegionCode": "05",
+                          "accountCtryAlpha2Code": "PE",
+                          "binRangeMinNum": "414718000000000000000",
+                          "accountFundingSourceSubtypeCd": "N",
+                          "platformCd": "CO",
+                          "accountBusName": "ABD BANK, NATIONAL ASSOCIATION",
+                          "issuerBillingCurrCd": "PEN",
+                          "issuerBin": "41471800",
+                          "productIDName": "Visa Signature"
+                        }
+                      ],
+                      "responseStatus": {
+                        "statusDescription": "Success",
+                        "statusCode": "CDI000"
+                      },
+                      "totalRecordsCount": "8203810"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "300": {
+            "description": "Requesting Client IP is invalid",
+            "content": {}
+          },
+          "400": {
+            "description": "Request Data Invalid",
+            "content": {}
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "500": {
+            "description": "Error Codes",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errorCodes-3"
+                }
+              }
+            }
+          }
+        },
+        "x-codegen-request-body-name": "Bin Range Details Request"
+      }
+    },
+    "/filedeliveryservice/v1/binFileTransfer": {
+      "post": {
+        "tags": [
+          "BIN File Transfer"
+        ],
+        "summary": "BIN File Transfer",
+        "description": "Get access to a BIN Account/Token Range file in csv format",
+        "operationId": "Bin File Transfer - POST",
+        "requestBody": {
+          "description": "BIN File Transfer request payload",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BinFileTransferRequest"
+              },
+              "examples": {
+                "Default": {
+                  "summary": "Default",
+                  "value": {
+                    "requestHeader": {
+                      "requestTS": "2017-02-15T22:05:00.000",
+                      "requestMessageId": "testAnna"
+                    },
+                    "requestData": {
+                      "fileName": "VBASS_TR_LEVEL3_03252021_79.csv"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "BinFileTransfer Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BinFileTransferResponse"
+                },
+                "examples": {
+                  "Default": {
+                    "summary": "Default",
+                    "value": "Sample response will contain csv file in a comma-separated format"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Request Data Invalid",
+            "content": {}
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "500": {
+            "description": "Error Codes",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errorCodes-1"
+                }
+              }
+            }
+          }
+        },
+        "x-operationVersions": [
+          {
+            "label": "v1 - Latest",
+            "operationPointer": "#/paths/~1filedeliveryservice~1v1~1binFileTransfer/post",
+            "default": false
+          }
+        ],
+        "x-codegen-request-body-name": "BIN File Transfer Request",
+        "x-hideTryIt": true
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "BinRangeDetailsRequestV1-1": {
+        "title": "BinRangeDetailsRequest",
+        "type": "object",
+        "properties": {
+          "requestData": {
+            "$ref": "#/components/schemas/requestDataV1-1"
+          },
+          "requestHeader": {
+            "$ref": "#/components/schemas/requestHeader-4"
+          }
+        }
+      },
+      "vbassFilesMetadataRequest": {
+        "title": "VBASSFilesMetadataRequest",
+        "type": "object",
+        "properties": {
+          "requestData": {
+            "$ref": "#/components/schemas/requestData-1"
+          },
+          "requestHeader": {
+            "$ref": "#/components/schemas/requestHeader-1"
+          }
+        }
+      },
+      "vbassFileTransferRequest": {
+        "title": "vbassFileTransferRequest",
+        "type": "object",
+        "properties": {
+          "requestData": {
+            "$ref": "#/components/schemas/requestData-2"
+          },
+          "requestHeader": {
+            "$ref": "#/components/schemas/requestHeader-2"
+          }
+        }
+      },
+      "errorCodes": {
+        "title": "ErrorCodes",
+        "type": "object",
+        "properties": {
+          "CDI001": {
+            "type": "object",
+            "description": "Internal service failure"
+          },
+          "CDI003": {
+            "type": "object",
+            "description": "Missing Required Attributes"
+          },
+          "CDI012": {
+            "type": "object",
+            "description": "Request header length is invalid"
+          },
+          "CDI071": {
+            "type": "object",
+            "description": "Request data invalid"
+          },
+          "CDI092": {
+            "type": "object",
+            "description": "No data"
+          },
+          "CDI098": {
+            "type": "object",
+            "description": "Invalid RequestTS format"
+          },
+          "CDI251": {
+            "type": "object",
+            "description": "Client configuration incomplete, reach out to BINAttributes@visa.com"
+          }
+        }
+      },
+      "BinFileTransferResponse": {
+        "title": "BinFileTransferResponse",
+        "type": "object"
+      },
+      "responseHeader": {
+        "title": "responseHeader",
+        "type": "object",
+        "properties": {
+          "responseTS": {
+            "maxLength": 23,
+            "minLength": 23,
+            "type": "string",
+            "description": "Date and time at which Response is sent (up to milliseconds in UTC)",
+            "format": "YYYY-MM-DDThh:mm:ss.sss",
+            "example": "2023-02-17T06:31:31.194"
+          },
+          "requestMessageId": {
+            "maxLength": 30,
+            "minLength": 1,
+            "type": "string",
+            "description": "A string which uniquely identifies the service request. Requesting application need to create this unique message Id",
+            "example": "reqMsgId456"
+          },
+          "responseMessageId": {
+            "maxLength": 33,
+            "minLength": 33,
+            "type": "string",
+            "description": "A combination of Service Id, Application Id, an Integer and current Timestamp that uniquely identifies the current request-response processing",
+            "example": "106VDP87035320230217063131177"
+          }
+        }
+      },
+      "paymentAccountLookupRequest-1": {
+        "type": "object",
+        "properties": {
+          "requestData": {
+            "$ref": "#/components/schemas/paymentAccountLookupRequestData-1"
+          },
+          "requestHeader": {
+            "$ref": "#/components/schemas/paymentAccountLookupRequestHeader-1"
+          }
+        }
+      },
+      "responseDataV2-1": {
+        "type": "object",
+        "properties": {
+          "almInd": {
+            "maxLength": 1,
+            "minLength": 0,
+            "type": "string",
+            "description": "Indicates if BIN or Account Range participate in Account Level Management"
+          },
+          "vauInd": {
+            "maxLength": 1,
+            "minLength": 0,
+            "type": "string",
+            "description": "Visa Account Updater enabled indicator"
+          },
+          "brandCd": {
+            "maxLength": 4,
+            "minLength": 0,
+            "type": "string",
+            "description": "Identifies if the brand or brands is associated with the account range.<br>Refer to <a href=\"/capabilities/visa-bin-attribute-sharing-service/docs-request-response-codes#section8\">Brand Indicator</a>"
+          },
+          "binLength": {
+            "maxLength": 2,
+            "minLength": 0,
+            "type": "string",
+            "description": "Provides BIN length - 6 or 8 digits"
+          },
+          "issuerBin": {
+            "maxLength": 8,
+            "minLength": 0,
+            "type": "string",
+            "description": "Issuer BIN of requested PAN/TOKEN"
+          },
+          "productID": {
+            "maxLength": 2,
+            "minLength": 0,
+            "type": "string",
+            "description": "An identifier associated with a unique card product - combination of card brand, platform, class and scheme equates to a unique product ID.<br>Refer to <a href=\"/capabilities/visa-bin-attribute-sharing-service/docs-request-response-codes#section0\">Product ID</a>"
+          },
+          "comboCrdCd": {
+            "maxLength": 1,
+            "minLength": 0,
+            "type": "string",
+            "description": "Indicator for combo card <br>Refer to <a href=\"/capabilities/visa-bin-attribute-sharing-service/docs-request-response-codes#section6\">Combo Card Indicator</a>"
+          },
+          "platformCd": {
+            "maxLength": 2,
+            "minLength": 0,
+            "type": "string",
+            "description": "The code of product platform, e.g. Business, Consumer, Commercial, Government.<br>Refer to <a href=\"/capabilities/visa-bin-attribute-sharing-service/docs-request-response-codes#section3\">Product Platform Code</a>"
+          },
+          "sharedBinInd": {
+            "maxLength": 1,
+            "minLength": 0,
+            "type": "string",
+            "description": "Set to true if BIN shared by multiple issuers"
+          },
+          "productIDName": {
+            "maxLength": 50,
+            "minLength": 0,
+            "type": "string",
+            "description": "The name associated with the product ID, e.g. Visa Traditional, Visa Signature, Visa Government Purchasing, etc.<br>Refer to <a href=\"/capabilities/visa-bin-attribute-sharing-service/docs-request-response-codes#section0\">Product ID</a>"
+          },
+          "accountBusName": {
+            "maxLength": 240,
+            "minLength": 0,
+            "type": "string",
+            "description": "Issuer Name"
+          },
+          "regulatedBinCd": {
+            "maxLength": 1,
+            "minLength": 0,
+            "type": "string",
+            "description": "Indicator for regulated BINs <br>Refer to <a href=\"/capabilities/visa-bin-attribute-sharing-service/docs-request-response-codes#section7\">Regulated BINs Indicator</a>"
+          },
+          "autoSubstntnInd": {
+            "maxLength": 1,
+            "minLength": 0,
+            "type": "string",
+            "description": "Auto Substantiation enabled indicator"
+          },
+          "accountRegionCode": {
+            "maxLength": 2,
+            "minLength": 0,
+            "type": "string",
+            "description": "Issuer Region <br>Refer to <a href=\"/capabilities/visa-bin-attribute-sharing-service/docs-request-response-codes#section9\">Issuer Region Code</a>"
+          },
+          "commrclCrdLvl2Ind": {
+            "maxLength": 1,
+            "minLength": 0,
+            "type": "string",
+            "description": "Indicates if transaction qualifies for Level 2 interchange rates"
+          },
+          "paymentAccountType": {
+            "maxLength": 1,
+            "minLength": 0,
+            "type": "string",
+            "description": "Identifier for whether account is a PAN ('P') or Token ('T')"
+          },
+          "posDomesticOnlyInd": {
+            "maxLength": 1,
+            "minLength": 0,
+            "type": "string",
+            "description": "Domestic Only BIN or Account Ranges"
+          },
+          "issuerBillingCurrCd": {
+            "maxLength": 3,
+            "minLength": 0,
+            "type": "string",
+            "description": "Issuer Billing Currency Code <br>Refer to <a href=\"/capabilities/visa-bin-attribute-sharing-service/docs-request-response-codes#section5\">Currency Code</a>"
+          },
+          "onlineGamblBlockInd": {
+            "maxLength": 1,
+            "minLength": 0,
+            "type": "string",
+            "description": "Indicates whether Online Gambling permitted or not"
+          },
+          "commrclCrdLvl3EnhInd": {
+            "maxLength": 1,
+            "minLength": 0,
+            "type": "string",
+            "description": "Indicates if transaction qualifies for Level 3 interchange rates"
+          },
+          "accountCtryAlpha2Code": {
+            "maxLength": 2,
+            "minLength": 0,
+            "type": "string",
+            "description": "Country Code Alpha Code <br>Refer to <a href=\"/capabilities/visa-bin-attribute-sharing-service/docs-request-response-codes#section4\">Country Code</a>"
+          },
+          "multiAccountAccessInd": {
+            "maxLength": 1,
+            "minLength": 0,
+            "type": "string",
+            "description": "Multi Account Access indicator <br>Refer to <a href=\"/capabilities/visa-bin-attribute-sharing-service/docs-request-response-codes#section10\">Multi Account Access Indicator</a>"
+          },
+          "accountFundingSourceCd": {
+            "maxLength": 1,
+            "minLength": 0,
+            "type": "string",
+            "description": "The code of account funding source for the card, e.g. Credit, Debit, Prepaid, Charge, Deferred Debit.<br>Refer to <a href=\"/capabilities/visa-bin-attribute-sharing-service/docs-request-response-codes#section1\">Account Funding Source</a>"
+          },
+          "accountFundingSourceSubtypeCd": {
+            "maxLength": 1,
+            "minLength": 0,
+            "type": "string",
+            "description": "The code for account funding source subtype, such as reloadable and non-reloadable.<br>Refer to <a href=\"/capabilities/visa-bin-attribute-sharing-service/docs-request-response-codes#section2\">Account Funding Source Subtype</a>"
+          }
+        }
+      },
+      "responseDataV2-2": {
+        "title": "responseData",
+        "required": [
+          "binRangeMaxNum",
+          "binRangeMinNum",
+          "binRangePaymentAccountType"
+        ],
+        "type": "object",
+        "properties": {
+          "almInd": {
+            "maxLength": 1,
+            "minLength": 0,
+            "type": "string",
+            "description": "Indicates if BIN or Account Range participate in Account Level Management"
+          },
+          "vauInd": {
+            "maxLength": 1,
+            "minLength": 0,
+            "type": "string",
+            "description": "Visa Account Updater enabled indicator"
+          },
+          "brandCd": {
+            "maxLength": 4,
+            "minLength": 0,
+            "type": "string",
+            "description": "Identifies if the brand or brands is associated with the account range.<br>Refer to <a href=\"/capabilities/visa-bin-attribute-sharing-service/docs-request-response-codes#section8\">Brand Indicator</a>"
+          },
+          "binLength": {
+            "maxLength": 2,
+            "minLength": 0,
+            "type": "string",
+            "description": "Provides BIN length - 6 or 8 digits"
+          },
+          "issuerBin": {
+            "maxLength": 8,
+            "minLength": 0,
+            "type": "string",
+            "description": "Issuer BIN of requested PAN/TOKEN"
+          },
+          "productID": {
+            "maxLength": 2,
+            "minLength": 0,
+            "type": "string",
+            "description": "An identifier associated with a unique card product - combination of card brand, platform, class and scheme equates to a unique product ID.<br>Refer to <a href=\"/capabilities/visa-bin-attribute-sharing-service/docs-request-response-codes#section0\">Product ID</a>"
+          },
+          "comboCrdCd": {
+            "maxLength": 1,
+            "minLength": 0,
+            "type": "string",
+            "description": "Indicator for combo card <br>Refer to <a href=\"/capabilities/visa-bin-attribute-sharing-service/docs-request-response-codes#section6\">Combo Card Indicator</a>"
+          },
+          "platformCd": {
+            "maxLength": 2,
+            "minLength": 0,
+            "type": "string",
+            "description": "The code of product platform, e.g. Business, Consumer, Commercial, Government.<br>Refer to <a href=\"/capabilities/visa-bin-attribute-sharing-service/docs-request-response-codes#section3\">Product Platform Code</a>"
+          },
+          "sharedBinInd": {
+            "maxLength": 1,
+            "minLength": 0,
+            "type": "string",
+            "description": "Set to true if BIN shared by multiple issuers"
+          },
+          "productIDName": {
+            "maxLength": 50,
+            "minLength": 0,
+            "type": "string",
+            "description": "The name associated with the product ID, e.g. Visa Traditional, Visa Signature, Visa Government Purchasing, etc.<br>Refer to <a href=\"/capabilities/visa-bin-attribute-sharing-service/docs-request-response-codes#section0\">Product Name</a>"
+          },
+          "accountBusName": {
+            "maxLength": 240,
+            "minLength": 0,
+            "type": "string",
+            "description": "Issuer Name"
+          },
+          "binRangeMaxNum": {
+            "maxLength": 21,
+            "minLength": 0,
+            "type": "string",
+            "description": "maximum number of BIN range"
+          },
+          "binRangeMinNum": {
+            "maxLength": 21,
+            "minLength": 0,
+            "type": "string",
+            "description": "minimum number of BIN range"
+          },
+          "regulatedBinCd": {
+            "maxLength": 1,
+            "minLength": 0,
+            "type": "string",
+            "description": "Indicator for regulated BINs <br>Refer to <a href=\"/capabilities/visa-bin-attribute-sharing-service/docs-request-response-codes#section7\">Regulated BINs Indicator</a>"
+          },
+          "autoSubstntnInd": {
+            "maxLength": 1,
+            "minLength": 0,
+            "type": "string",
+            "description": "Auto Substantiation enabled indicator"
+          },
+          "accountRegionCode": {
+            "maxLength": 2,
+            "minLength": 0,
+            "type": "string",
+            "description": "Issuer Region <br>Refer to <a href=\"/capabilities/visa-bin-attribute-sharing-service/docs-request-response-codes#section9\">Issuer Region</a>"
+          },
+          "commrclCrdLvl2Ind": {
+            "maxLength": 1,
+            "minLength": 0,
+            "type": "string",
+            "description": "Indicates if transaction qualifies for Level 2 interchange rates"
+          },
+          "posDomesticOnlyInd": {
+            "maxLength": 1,
+            "minLength": 0,
+            "type": "string",
+            "description": "Domestic Only BIN or Account Ranges"
+          },
+          "issuerBillingCurrCd": {
+            "maxLength": 3,
+            "minLength": 0,
+            "type": "string",
+            "description": "Issuer Billing Currency Code <br>Refer to <a href=\"/capabilities/visa-bin-attribute-sharing-service/docs-request-response-codes#section5\">Currency Code</a>"
+          },
+          "onlineGamblBlockInd": {
+            "maxLength": 1,
+            "minLength": 0,
+            "type": "string",
+            "description": "Indicates whether Online Gambling permitted or not"
+          },
+          "commrclCrdLvl3EnhInd": {
+            "maxLength": 1,
+            "minLength": 0,
+            "type": "string",
+            "description": "Indicates if transaction qualifies for Level 3 interchange rates"
+          },
+          "accountCtryAlpha2Code": {
+            "maxLength": 2,
+            "minLength": 0,
+            "type": "string",
+            "description": "Country Code Alpha Code <br>Refer to <a href=\"/capabilities/visa-bin-attribute-sharing-service/docs-request-response-codes#section4\">Country Code</a>"
+          },
+          "multiAccountAccessInd": {
+            "maxLength": 1,
+            "minLength": 0,
+            "type": "string",
+            "description": "Multi Account Access indicator <br>Refer to <a href=\"/capabilities/visa-bin-attribute-sharing-service/docs-request-response-codes#section10\">Multi Account Access Indicator</a>"
+          },
+          "accountFundingSourceCd": {
+            "maxLength": 1,
+            "minLength": 0,
+            "type": "string",
+            "description": "The code of account funding source for the card, e.g. Credit, Debit, Prepaid, Charge, Deferred Debit.<br>Refer to <a href=\"/capabilities/visa-bin-attribute-sharing-service/docs-request-response-codes#section1\">Account Funding Source</a>"
+          },
+          "binRangePaymentAccountType": {
+            "maxLength": 1,
+            "minLength": 0,
+            "type": "string",
+            "description": "The type of account - value can either 'P' for PAN or 'T' for TOKEN"
+          },
+          "accountFundingSourceSubtypeCd": {
+            "maxLength": 1,
+            "minLength": 0,
+            "type": "string",
+            "description": "The code for account funding source subtype, such as reloadable and non-reloadable.<br>Refer to <a href=\"/capabilities/visa-bin-attribute-sharing-service/docs-request-response-codes#section2\">Account Funding Source Subtype</a>"
+          }
+        }
+      },
+      "paymentAccountLookupRequestHeader": {
+        "required": [
+          "requestMessageID",
+          "requestTS"
+        ],
+        "type": "object",
+        "properties": {
+          "requestTS": {
+            "maxLength": 23,
+            "type": "string",
+            "description": "Date and time at which Request is sent (up to milliseconds in GMT). Ex: 2008-09-19T00:00:00.000",
+            "format": "YYYY-MM-DDThh:mm:ss.sss"
+          },
+          "requestMessageID": {
+            "maxLength": 50,
+            "type": "string",
+            "description": "A string which uniquely identifies the service request. Requesting application need to create this unique message Id"
+          }
+        }
+      },
+      "responseDataV2-3": {
+        "title": "responseData",
+        "required": [
+          "binRangeMaxNum",
+          "binRangeMinNum",
+          "binRangePaymentAccountType"
+        ],
+        "type": "object",
+        "properties": {
+          "almInd": {
+            "type": "string",
+            "description": "Indicates if BIN or Account Range participate in Account Level Management"
+          },
+          "vauInd": {
+            "type": "string",
+            "description": "Visa Account Updater enabled indicator"
+          },
+          "brandCd": {
+            "type": "string",
+            "description": "Identifies if the brand or brands is associated with the account range.<br>Refer to <a href=\"/capabilities/visa-bin-attribute-sharing-service/docs-request-response-codes#brandindicator\">Brand Indicator</a>"
+          },
+          "binLength": {
+            "type": "string",
+            "description": "Provides BIN length - 6 or 8 digits"
+          },
+          "issuerBin": {
+            "type": "string",
+            "description": "Issuer Bin of requested PAN/TOKEN"
+          },
+          "productID": {
+            "type": "string",
+            "description": "An identifier associated with a unique card product - combination of card brand, platform, class and scheme equates to a unique product ID.<br>Refer to <a href=\"/capabilities/visa-bin-attribute-sharing-service/docs-request-response-codes#productid\">Product ID</a>"
+          },
+          "comboCrdCd": {
+            "type": "string",
+            "description": "Indicator for combo card <br>Refer to <a href=\"/capabilities/visa-bin-attribute-sharing-service/docs-request-response-codes#combocardindicator\">Combo Card Indicator</a>"
+          },
+          "platformCd": {
+            "type": "string",
+            "description": "The code of product platform, e.g. Business, Consumer, Commercial, Government.<br>Refer to <a href=\"/capabilities/visa-bin-attribute-sharing-service/docs-request-response-codes#platformcode\">Product Platform Code</a>"
+          },
+          "sharedBinInd": {
+            "type": "string",
+            "description": "Set to true if BIN shared by multiple issuers"
+          },
+          "productIDName": {
+            "type": "string",
+            "description": "The name associated with the product ID, e.g. Visa Traditional, Visa Signature, Visa Government Purchasing, etc.<br>Refer to <a href=\"/capabilities/visa-bin-attribute-sharing-service/docs-request-response-codes#productid\">Product Name</a>"
+          },
+          "accountBusName": {
+            "type": "string",
+            "description": "Issuer Name"
+          },
+          "binRangeMaxNum": {
+            "type": "string",
+            "description": "maximum number of bin range"
+          },
+          "binRangeMinNum": {
+            "type": "string",
+            "description": "minimum number of bin range"
+          },
+          "regulatedBinCd": {
+            "type": "string",
+            "description": "Indicator for regulated BINs <br>Refer to <a href=\"/capabilities/visa-bin-attribute-sharing-service/docs-request-response-codes#regulatedbinsindicator\">Regulated BINs Indicator</a>"
+          },
+          "settlmntMatchInd": {
+            "type": "string",
+            "description": "Settlement Match"
+          },
+          "accountRegionCode": {
+            "type": "string",
+            "description": "Issuer Region"
+          },
+          "commrclCrdLvl2Ind": {
+            "type": "string",
+            "description": "Indicates if transaction qualifies for Level 2 interchange rates"
+          },
+          "posDomesticOnlyInd": {
+            "type": "string",
+            "description": "Domestic Only BIN or Account Ranges"
+          },
+          "issuerBillingCurrCd": {
+            "type": "string",
+            "description": "Issuer Billing Currency Code <br>Refer to <a href=\"/capabilities/visa-bin-attribute-sharing-service/docs-request-response-codes#currencycode\">Currency Code</a>"
+          },
+          "onlineGamblBlockInd": {
+            "type": "string",
+            "description": "Indicates whether Online Gambling permitted or not"
+          },
+          "commrclCrdLvl3EnhInd": {
+            "type": "string",
+            "description": "Indicates if transaction qualifies for Level 3 interchange rates"
+          },
+          "accountCtryAlpha2Code": {
+            "type": "string",
+            "description": "Country Code Alpha Code <br>Refer to <a href=\"/capabilities/visa-bin-attribute-sharing-service/docs-request-response-codes#countrycode\">Country Code</a>"
+          },
+          "accountFundingSourceCd": {
+            "type": "string",
+            "description": "The code of account funding source for the card, e.g. Credit, Debit, Prepaid, Charge, Deferred Debit.<br>Refer to <a href=\"/capabilities/visa-bin-attribute-sharing-service/docs-request-response-codes#accountfundingsource\">Account Funding Source</a>"
+          },
+          "binRangePaymentAccountType": {
+            "type": "string",
+            "description": "The type of account - value can either 'P' for PAN or 'T' for TOKEN"
+          },
+          "accountFundingSourceSubtypeCd": {
+            "type": "string",
+            "description": "The code for account funding source subtype, such as reloadable and non-reloadable.<br>Refer to <a href=\"/capabilities/visa-bin-attribute-sharing-service/docs-request-response-codes#accountfundingsourcesubtype\">Account Funding Source Subtype</a>"
+          }
+        }
+      },
+      "BinRangeDetailsResponseV2-1": {
+        "title": "BinRangeDetailsResponse",
+        "required": [
+          "areNextOffsetRecordsAvailable",
+          "numRecordsReturned",
+          "totalRecordsCount"
+        ],
+        "type": "object",
+        "properties": {
+          "responseData": {
+            "$ref": "#/components/schemas/responseDataV2-3"
+          },
+          "responseHeader": {
+            "$ref": "#/components/schemas/responseHeader-3"
+          },
+          "responseStatus": {
+            "$ref": "#/components/schemas/responseStatus-4"
+          },
+          "totalRecordsCount": {
+            "type": "string",
+            "description": "total number of records present"
+          },
+          "numRecordsReturned": {
+            "type": "string",
+            "description": "number of records returned"
+          },
+          "areNextOffsetRecordsAvailable": {
+            "type": "string",
+            "description": "more records available?"
+          }
+        }
+      },
+      "paymentAccountLookupRequest": {
+        "type": "object",
+        "properties": {
+          "requestData": {
+            "$ref": "#/components/schemas/paymentAccountLookupRequestData"
+          },
+          "requestHeader": {
+            "$ref": "#/components/schemas/paymentAccountLookupRequestHeader"
+          }
+        }
+      },
+      "fileDetails-1": {
+        "title": "fileDetails",
+        "required": [
+          "checkSum",
+          "fileName",
+          "fileSize",
+          "rowCount"
+        ],
+        "type": "object",
+        "properties": {
+          "checkSum": {
+            "maxLength": 32,
+            "minLength": 32,
+            "type": "string",
+            "description": "File checksum",
+            "example": "bb8e4c75d51001dd35b40dc6209eccc2"
+          },
+          "fileName": {
+            "maxLength": 255,
+            "minLength": 30,
+            "type": "string",
+            "description": "File Name",
+            "example": "VBASS_ACQ_01282024_1.csv"
+          },
+          "fileSize": {
+            "minimum": 0,
+            "type": "number",
+            "description": "File Size in bytes (from Linux OS)",
+            "example": 1770048
+          },
+          "rowCount": {
+            "minimum": 0,
+            "type": "number",
+            "description": "Number of records in the file (excludes the column header record at the top of the csv file)",
+            "example": 30000
+          }
+        }
+      },
+      "paymentAccountLookupResponseV1-1": {
+        "type": "object",
+        "properties": {
+          "PanTokenLookupResponse": {
+            "type": "object",
+            "properties": {
+              "responseData": {
+                "$ref": "#/components/schemas/responseDataV1-1"
+              },
+              "responseStatus": {
+                "$ref": "#/components/schemas/responseStatus-2"
+              }
+            },
+            "description": "PanTokenLookup Response"
+          }
+        }
+      },
+      "binFilesMetadataResponse": {
+        "title": "BinFilesMetadataResponse",
+        "type": "object",
+        "properties": {
+          "responseData": {
+            "$ref": "#/components/schemas/responseData"
+          },
+          "responseHeader": {
+            "$ref": "#/components/schemas/responseHeader"
+          },
+          "responseStatus": {
+            "$ref": "#/components/schemas/responseStatus"
+          }
+        }
+      },
+      "vbassFileTransferResponse": {
+        "title": "vbassFileTransferResponse",
+        "type": "object"
+      },
+      "fileDetails": {
+        "title": "fileDetails",
+        "required": [
+          "checkSum",
+          "fileName",
+          "fileSize",
+          "rowCount"
+        ],
+        "type": "object",
+        "properties": {
+          "checkSum": {
+            "maxLength": 32,
+            "minLength": 32,
+            "type": "string",
+            "description": "File checksum",
+            "example": "bb8e4c75d51001dd35b40dc6209eccc2"
+          },
+          "fileName": {
+            "maxLength": 255,
+            "minLength": 30,
+            "type": "string",
+            "description": "File Name",
+            "example": "VBASS_AR_LEVEL1_04282021_20.csv"
+          },
+          "fileSize": {
+            "minimum": 0,
+            "type": "number",
+            "description": "File Size in bytes (from Linux OS)",
+            "example": 1770048
+          },
+          "rowCount": {
+            "minimum": 0,
+            "type": "number",
+            "description": "Number of records in the file (excludes the column header record at the top of the csv file)",
+            "example": 30000
+          }
+        }
+      },
+      "vbassFilesMetadataResponse": {
+        "title": "VBASSFilesMetadataResponse",
+        "type": "object",
+        "properties": {
+          "responseData": {
+            "$ref": "#/components/schemas/responseData-1"
+          },
+          "responseHeader": {
+            "$ref": "#/components/schemas/responseHeader-1"
+          },
+          "responseStatus": {
+            "$ref": "#/components/schemas/responseStatus"
+          }
+        }
+      },
+      "responseStatus": {
+        "title": "responseStatus",
+        "type": "object",
+        "properties": {
+          "statusCode": {
+            "maxLength": 6,
+            "minLength": 6,
+            "type": "string",
+            "description": "Status Code of the Service Request",
+            "example": "CDI000"
+          },
+          "statusDescription": {
+            "maxLength": 250,
+            "minLength": 0,
+            "type": "string",
+            "description": "A description of the Status Code. A brief description indicating the result of the Service Request",
+            "example": "Success"
+          }
+        }
+      },
+      "requestDataV1-1": {
+        "title": "requestDataV1",
+        "required": [
+          "binRangeCount",
+          "binRangeSearchIndex"
+        ],
+        "type": "object",
+        "properties": {
+          "binRangeCount": {
+            "type": "string",
+            "description": "Number of records being requested(maximum number of records to be displayed)"
+          },
+          "binRangeSearchIndex": {
+            "type": "string",
+            "description": "Starting index - to be used for paginating through the records. Starting possible values are 0, 100, 200, …, 500(multiples of hundred)"
+          }
+        }
+      },
+      "paymentAccountLookupResponseV1": {
+        "type": "object",
+        "properties": {
+          "PanTokenLookupResponse": {
+            "type": "object",
+            "properties": {
+              "responseData": {
+                "$ref": "#/components/schemas/responseDataV1"
+              },
+              "responseStatus": {
+                "$ref": "#/components/schemas/responseStatus-1"
+              }
+            },
+            "description": "PanTokenLookup Response"
+          }
+        }
+      },
+      "paymentAccountLookupResponseV2": {
+        "type": "object",
+        "properties": {
+          "PanTokenLookupResponse": {
+            "type": "object",
+            "properties": {
+              "responseData": {
+                "$ref": "#/components/schemas/responseDataV2"
+              },
+              "responseStatus": {
+                "$ref": "#/components/schemas/responseStatus-1"
+              }
+            },
+            "description": "PanTokenLookup Response"
+          }
+        }
+      },
+      "requestDataV2": {
+        "title": "requestDataV2",
+        "required": [
+          "binRangeCount",
+          "binRangeSearchIndex"
+        ],
+        "type": "object",
+        "properties": {
+          "binRangeCount": {
+            "minLength": 1,
+            "type": "string",
+            "description": "Number of records being requested (maximum number of records to be displayed)"
+          },
+          "paymentAccountType": {
+            "maxLength": 1,
+            "minLength": 0,
+            "type": "string",
+            "description": "Identifier for whether account is a PAN ('P') or Token ('T')"
+          },
+          "binRangeSearchIndex": {
+            "minLength": 1,
+            "type": "string",
+            "description": "Starting index - to be used for paginating through the records. Starting possible values are 0, 100, 200, …,500 (multiples of hundred)"
+          }
+        }
+      },
+      "requestDataV1": {
+        "title": "requestDataV1",
+        "required": [
+          "binRangeCount",
+          "binRangeSearchIndex"
+        ],
+        "type": "object",
+        "properties": {
+          "binRangeCount": {
+            "minLength": 1,
+            "type": "string",
+            "description": "Number of records being requested (maximum number of records to be displayed)"
+          },
+          "binRangeSearchIndex": {
+            "minLength": 1,
+            "type": "string",
+            "description": "Starting index - to be used for paginating through the records. Starting possible values are 0, 100, 200, …, 500 (multiples of hundred)"
+          }
+        }
+      },
+      "requestData-2": {
+        "title": "requestData",
+        "required": [
+          "fileName"
+        ],
+        "type": "object",
+        "properties": {
+          "fileName": {
+            "maxLength": 255,
+            "minLength": 1,
+            "type": "string",
+            "description": "Name of the file"
+          }
+        }
+      },
+      "requestData-1": {
+        "title": "requestData",
+        "required": [
+          "fileType"
+        ],
+        "type": "object",
+        "properties": {
+          "fileType": {
+            "maxLength": 100,
+            "minLength": 1,
+            "type": "string",
+            "description": "File Type Identifier",
+            "example": "ACQ"
+          }
+        }
+      },
+      "responseStatus-1": {
+        "type": "object",
+        "properties": {
+          "statusCode": {
+            "type": "string",
+            "description": "Status Code of the Service Request"
+          },
+          "statusDesc": {
+            "type": "string",
+            "description": "A description of the StatusCode. A brief description indicating the result of the Service Request"
+          }
+        }
+      },
+      "BinRangeDetailsRequestV2-1": {
+        "title": "BinRangeDetailsRequest",
+        "type": "object",
+        "properties": {
+          "requestData": {
+            "$ref": "#/components/schemas/requestDataV2-1"
+          },
+          "requestHeader": {
+            "$ref": "#/components/schemas/requestHeader-4"
+          }
+        }
+      },
+      "paymentAccountLookupRequestData": {
+        "required": [
+          "paymentAccount",
+          "paymentAccountType"
+        ],
+        "type": "object",
+        "properties": {
+          "paymentAccount": {
+            "type": "string",
+            "description": "The payment account number for which the  attributes are being requested - can be a PAN or Token"
+          },
+          "paymentAccountType": {
+            "type": "string",
+            "description": "The type of account - value can either 'P' for PAN or 'T' for TOKEN"
+          }
+        }
+      },
+      "responseDataV2": {
+        "type": "object",
+        "properties": {
+          "almInd": {
+            "type": "string",
+            "description": "Indicates if BIN or Account Range participate in Account Level Management"
+          },
+          "vauInd": {
+            "type": "string",
+            "description": "Visa Account Updater enabled indicator"
+          },
+          "brandCd": {
+            "type": "string",
+            "description": "Identifies if the brand or brands is associated with the account range.<br>Refer to <a href=\"/capabilities/visa-bin-attribute-sharing-service/docs-request-response-codes#brandindicator\">Brand Indicator</a>"
+          },
+          "binLength": {
+            "type": "string",
+            "description": "Provides BIN length - 6 or 8 digits"
+          },
+          "issuerBin": {
+            "type": "string",
+            "description": "Issuer Bin of requested PAN/TOKEN"
+          },
+          "productID": {
+            "type": "string",
+            "description": "An identifier associated with a unique card product - combination of card brand, platform, class and scheme equates to a unique product ID.<br>Refer to <a href=\"/capabilities/visa-bin-attribute-sharing-service/docs-request-response-codes#productid\">Product ID</a>"
+          },
+          "comboCrdCd": {
+            "type": "string",
+            "description": "Indicator for combo card <br>Refer to <a href=\"/capabilities/visa-bin-attribute-sharing-service/docs-request-response-codes#combocardindicator\">Combo Card Indicator</a>"
+          },
+          "platformCd": {
+            "type": "string",
+            "description": "The code of product platform, e.g. Business, Consumer, Commercial, Government.<br>Refer to <a href=\"/capabilities/visa-bin-attribute-sharing-service/docs-request-response-codes#platformcode\">Product Platform Code</a>"
+          },
+          "sharedBinInd": {
+            "type": "string",
+            "description": "Set to true if BIN shared by multiple issuers"
+          },
+          "productIDName": {
+            "type": "string",
+            "description": "The name associated with the product ID, e.g. Visa Traditional, Visa Signature, Visa Government Purchasing, etc.<br>Refer to <a href=\"/capabilities/visa-bin-attribute-sharing-service/docs-request-response-codes#productid\">Product ID</a>"
+          },
+          "accountBusName": {
+            "type": "string",
+            "description": "Issuer Name"
+          },
+          "regulatedBinCd": {
+            "type": "string",
+            "description": "Indicator for regulated BINs <br>Refer to <a href=\"/capabilities/visa-bin-attribute-sharing-service/docs-request-response-codes#regulatedbinsindicator\">Regulated BINs Indicator</a>"
+          },
+          "settlmntMatchInd": {
+            "type": "string",
+            "description": "Settlement Match"
+          },
+          "accountRegionCode": {
+            "type": "string",
+            "description": "Issuer Region"
+          },
+          "commrclCrdLvl2Ind": {
+            "type": "string",
+            "description": "Indicates if transaction qualifies for Level 2 interchange rates"
+          },
+          "paymentAccountType": {
+            "type": "string",
+            "description": "Identifier for whether account is a PAN ('P') or Token ('T')"
+          },
+          "posDomesticOnlyInd": {
+            "type": "string",
+            "description": "Domestic Only BIN or Account Ranges"
+          },
+          "issuerBillingCurrCd": {
+            "type": "string",
+            "description": "Issuer Billing Currency Code <br>Refer to <a href=\"/capabilities/visa-bin-attribute-sharing-service/docs-request-response-codes#currencycode\">Currency Code</a>"
+          },
+          "onlineGamblBlockInd": {
+            "type": "string",
+            "description": "Indicates whether Online Gambling permitted or not"
+          },
+          "commrclCrdLvl3EnhInd": {
+            "type": "string",
+            "description": "Indicates if transaction qualifies for Level 3 interchange rates"
+          },
+          "accountCtryAlpha2Code": {
+            "type": "string",
+            "description": "Country Code Alpha Code <br>Refer to <a href=\"/capabilities/visa-bin-attribute-sharing-service/docs-request-response-codes#countrycode\">Country Code</a>"
+          },
+          "accountFundingSourceCd": {
+            "type": "string",
+            "description": "The code of account funding source for the card, e.g. Credit, Debit, Prepaid, Charge, Deferred Debit.<br>Refer to <a href=\"/capabilities/visa-bin-attribute-sharing-service/docs-request-response-codes#accountfundingsource\">Account Funding Source</a>"
+          },
+          "accountFundingSourceSubtypeCd": {
+            "type": "string",
+            "description": "The code for account funding source subtype, such as reloadable and non-reloadable.<br>Refer to <a href=\"/capabilities/visa-bin-attribute-sharing-service/docs-request-response-codes#accountfundingsourcesubtype\">Account Funding Source Subtype</a>"
+          }
+        }
+      },
+      "responseDataV1": {
+        "type": "object",
+        "properties": {
+          "issuerBin": {
+            "type": "string",
+            "description": "Issuer BIN of requested PAN/TOKEN"
+          },
+          "productID": {
+            "type": "string",
+            "description": "An identifier associated with a unique card product - combination of card brand, platform, class and scheme equates to a unique product ID.<br>Refer to <a href=\"/capabilities/visa-bin-attribute-sharing-service/docs-request-response-codes#productid\">Product ID</a>"
+          },
+          "platformCd": {
+            "type": "string",
+            "description": "The code of product platform, e.g. Business, Consumer, Commercial, Government.<br>Refer to <a href=\"/capabilities/visa-bin-attribute-sharing-service/docs-request-response-codes#platformcode\">Product Platform Code</a>"
+          },
+          "productIDName": {
+            "type": "string",
+            "description": "The name associated with the product ID, e.g. Visa Traditional, Visa Signature, Visa Government Purchasing, etc.<br>Refer to <a href=\"/capabilities/visa-bin-attribute-sharing-service/docs-request-response-codes#productid\">Product Name</a>"
+          },
+          "accountBusName": {
+            "type": "string",
+            "description": "Issuer Name"
+          },
+          "accountRegionCode": {
+            "type": "string",
+            "description": "Issuer Region"
+          },
+          "paymentAccountType": {
+            "type": "string",
+            "description": "Identifier for whether account is a PAN ('P') or Token ('T')"
+          },
+          "issuerBillingCurrCd": {
+            "type": "string",
+            "description": "Issuer Billing Currency Code <br>Refer to <a href=\"/capabilities/visa-bin-attribute-sharing-service/docs-request-response-codes#currencycode\">Currency Code</a>"
+          },
+          "accountCtryAlpha2Code": {
+            "type": "string",
+            "description": "Country Code Alpha Code <br>Refer to <a href=\"/capabilities/visa-bin-attribute-sharing-service/docs-request-response-codes#countrycode\">Country Code</a>"
+          },
+          "accountFundingSourceCd": {
+            "type": "string",
+            "description": "The code of account funding source for the card, e.g. Credit, Debit, Prepaid, Charge, Deferred Debit.<br>Refer to <a href=\"/capabilities/visa-bin-attribute-sharing-service/docs-request-response-codes#accountfundingsource\">Account Funding Source</a>"
+          },
+          "accountFundingSourceSubtypeCd": {
+            "type": "string",
+            "description": "The code for account funding source subtype, such as reloadable and non-reloadable.<br>Refer to <a href=\"/capabilities/visa-bin-attribute-sharing-service/docs-request-response-codes#accountfundingsourcesubtype\">Account Funding Source Subtype</a>"
+          }
+        }
+      },
+      "responseData": {
+        "title": "responseData",
+        "required": [
+          "fileDetails",
+          "filesCreationDate",
+          "paymentAccountType",
+          "totalNumberOfFiles"
+        ],
+        "type": "object",
+        "properties": {
+          "fileDetails": {
+            "type": "array",
+            "description": "List of BinFiles MetaData",
+            "items": {
+              "$ref": "#/components/schemas/fileDetails"
+            }
+          },
+          "filesCreationDate": {
+            "maxLength": 10,
+            "minLength": 0,
+            "type": "string",
+            "description": "Files creation date in YYYY-MM-DD Format",
+            "format": "YYYY-MM-DD",
+            "example": "2023-02-17"
+          },
+          "paymentAccountType": {
+            "maxLength": 1,
+            "minLength": 1,
+            "type": "string",
+            "description": "Account Type for which file details have been retrieved, i.e., Account Range (PAN) or Token Range, Possible values - P or T",
+            "example": "P"
+          },
+          "totalNumberOfFiles": {
+            "minimum": 0,
+            "type": "integer",
+            "description": "Total number of files for a requested payment account type",
+            "example": 1
+          }
+        }
+      },
+      "responseDataV1-1": {
+        "type": "object",
+        "properties": {
+          "issuerBin": {
+            "maxLength": 8,
+            "minLength": 0,
+            "type": "string",
+            "description": "Issuer BIN of requested PAN/TOKEN"
+          },
+          "productID": {
+            "maxLength": 2,
+            "minLength": 0,
+            "type": "string",
+            "description": "An identifier associated with a unique card product - combination of card brand, platform, class and scheme equates to a unique product ID.<br>Refer to <a href=\"/capabilities/visa-bin-attribute-sharing-service/docs-request-response-codes#section0\">Product ID</a>"
+          },
+          "platformCd": {
+            "maxLength": 2,
+            "minLength": 0,
+            "type": "string",
+            "description": "The code of product platform, e.g. Business, Consumer, Commercial, Government.<br>Refer to <a href=\"/capabilities/visa-bin-attribute-sharing-service/docs-request-response-codes#section3\">Product Platform Code</a>"
+          },
+          "productIDName": {
+            "maxLength": 50,
+            "minLength": 0,
+            "type": "string",
+            "description": "The name associated with the product ID, e.g. Visa Traditional, Visa Signature, Visa Government Purchasing, etc.<br>Refer to <a href=\"/capabilities/visa-bin-attribute-sharing-service/docs-request-response-codes#section0\">Product Name</a>"
+          },
+          "accountBusName": {
+            "maxLength": 240,
+            "minLength": 0,
+            "type": "string",
+            "description": "Issuer Name"
+          },
+          "accountRegionCode": {
+            "maxLength": 2,
+            "minLength": 0,
+            "type": "string",
+            "description": "Issuer Region <br>Refer to <a href=\"/capabilities/visa-bin-attribute-sharing-service/docs-request-response-codes#section9\">Issuer Region Code</a>"
+          },
+          "paymentAccountType": {
+            "maxLength": 1,
+            "minLength": 0,
+            "type": "string",
+            "description": "Identifier for whether account is a PAN ('P') or Token ('T')"
+          },
+          "issuerBillingCurrCd": {
+            "maxLength": 3,
+            "minLength": 0,
+            "type": "string",
+            "description": "Issuer Billing Currency Code <br>Refer to <a href=\"/capabilities/visa-bin-attribute-sharing-service/docs-request-response-codes#section5\">Currency Code</a>"
+          },
+          "accountCtryAlpha2Code": {
+            "maxLength": 2,
+            "minLength": 0,
+            "type": "string",
+            "description": "Country Code Alpha Code <br>Refer to <a href=\"/capabilities/visa-bin-attribute-sharing-service/docs-request-response-codes#section4\">Country Code</a>"
+          },
+          "accountFundingSourceCd": {
+            "maxLength": 1,
+            "minLength": 0,
+            "type": "string",
+            "description": "The code of account funding source for the card, e.g. Credit, Debit, Prepaid, Charge, Deferred Debit.<br>Refer to <a href=\"/capabilities/visa-bin-attribute-sharing-service/docs-request-response-codes#section1\">Account Funding Source</a>"
+          },
+          "accountFundingSourceSubtypeCd": {
+            "maxLength": 1,
+            "minLength": 0,
+            "type": "string",
+            "description": "The code for account funding source subtype, such as reloadable and non-reloadable.<br>Refer to <a href=\"/capabilities/visa-bin-attribute-sharing-service/docs-request-response-codes#section2\">Account Funding Source Subtype</a>"
+          }
+        }
+      },
+      "responseDataV1-2": {
+        "title": "responseData",
+        "required": [
+          "binRangeMaxNum",
+          "binRangeMinNum",
+          "binRangePaymentAccountType"
+        ],
+        "type": "object",
+        "properties": {
+          "issuerBin": {
+            "maxLength": 8,
+            "minLength": 0,
+            "type": "string",
+            "description": "Issuer BIN of requested PAN/TOKEN"
+          },
+          "productID": {
+            "maxLength": 2,
+            "minLength": 0,
+            "type": "string",
+            "description": "An identifier associated with a unique card product - combination of card brand, platform, class and scheme equates to a unique product ID.<br>Refer to <a href=\"/capabilities/visa-bin-attribute-sharing-service/docs-request-response-codes#section0\">Product ID</a>"
+          },
+          "platformCd": {
+            "maxLength": 2,
+            "minLength": 0,
+            "type": "string",
+            "description": "The code of product platform, e.g. Business, Consumer, Commercial, Government.<br>Refer to <a href=\"/capabilities/visa-bin-attribute-sharing-service/docs-request-response-codes#section3\">Product Platform Code</a>"
+          },
+          "productIDName": {
+            "maxLength": 50,
+            "minLength": 0,
+            "type": "string",
+            "description": "The name associated with the product ID, e.g. Visa Traditional, Visa Signature, Visa Government Purchasing, etc.<br>Refer to <a href=\"/capabilities/visa-bin-attribute-sharing-service/docs-request-response-codes#section0\">Product Name</a>"
+          },
+          "accountBusName": {
+            "maxLength": 240,
+            "minLength": 0,
+            "type": "string",
+            "description": "Issuer Name"
+          },
+          "binRangeMaxNum": {
+            "maxLength": 21,
+            "minLength": 0,
+            "type": "string",
+            "description": "maximum number of bin range"
+          },
+          "binRangeMinNum": {
+            "maxLength": 21,
+            "minLength": 0,
+            "type": "string",
+            "description": "minimum number of bin range"
+          },
+          "accountRegionCode": {
+            "maxLength": 2,
+            "minLength": 0,
+            "type": "string",
+            "description": "Issuer Region <br>Refer to <a href=\"/capabilities/visa-bin-attribute-sharing-service/docs-request-response-codes#section9\">Issuer Region</a>"
+          },
+          "issuerBillingCurrCd": {
+            "maxLength": 3,
+            "minLength": 0,
+            "type": "string",
+            "description": "Issuer Billing Currency Code <br>Refer to <a href=\"/capabilities/visa-bin-attribute-sharing-service/docs-request-response-codes#section5\">Currency Code</a>"
+          },
+          "accountCtryAlpha2Code": {
+            "maxLength": 2,
+            "minLength": 0,
+            "type": "string",
+            "description": "Country Code Alpha Code <br>Refer to <a href=\"/capabilities/visa-bin-attribute-sharing-service/docs-request-response-codes#section4\">Country Code</a>"
+          },
+          "accountFundingSourceCd": {
+            "maxLength": 1,
+            "minLength": 0,
+            "type": "string",
+            "description": "The code of account funding source for the card, e.g. Credit, Debit, Prepaid, Charge, Deferred Debit.<br>Refer to <a href=\"/capabilities/visa-bin-attribute-sharing-service/docs-request-response-codes#section1\">Account Funding Source</a>"
+          },
+          "binRangePaymentAccountType": {
+            "maxLength": 1,
+            "minLength": 0,
+            "type": "string",
+            "description": "The type of account - value can either 'P' for PAN or 'T' for TOKEN"
+          },
+          "accountFundingSourceSubtypeCd": {
+            "maxLength": 1,
+            "minLength": 0,
+            "type": "string",
+            "description": "The code for account funding source subtype, such as reloadable and non-reloadable.<br>Refer to <a href=\"/capabilities/visa-bin-attribute-sharing-service/docs-request-response-codes#section2\">Account Funding Source Subtype</a>"
+          }
+        }
+      },
+      "responseData-1": {
+        "title": "responseData",
+        "required": [
+          "fileDetails",
+          "fileType",
+          "filesCreationDate",
+          "totalNumberOfFiles"
+        ],
+        "type": "object",
+        "properties": {
+          "fileType": {
+            "maxLength": 100,
+            "minLength": 1,
+            "type": "string",
+            "description": "File Type for which file details have been retrieved, i.e., Acquirer (ACQ)",
+            "example": "ACQ"
+          },
+          "fileDetails": {
+            "type": "array",
+            "description": "List of VBASS Files MetaData",
+            "items": {
+              "$ref": "#/components/schemas/fileDetails-1"
+            }
+          },
+          "filesCreationDate": {
+            "maxLength": 10,
+            "minLength": 0,
+            "type": "string",
+            "description": "Files creation date in YYYY-MM-DD Format",
+            "format": "YYYY-MM-DD",
+            "example": "2024-01-17"
+          },
+          "totalNumberOfFiles": {
+            "minimum": 0,
+            "type": "integer",
+            "description": "Total number of files for a requested payment account type",
+            "example": 1
+          }
+        }
+      },
+      "responseDataV1-3": {
+        "title": "responseData",
+        "required": [
+          "binRangeMaxNum",
+          "binRangeMinNum",
+          "binRangePaymentAccountType"
+        ],
+        "type": "object",
+        "properties": {
+          "issuerBin": {
+            "type": "string",
+            "description": "Issuer Bin of requested PAN/TOKEN"
+          },
+          "productID": {
+            "type": "string",
+            "description": "An identifier associated with a unique card product - combination of card brand, platform, class and scheme equates to a unique product ID.<br>Refer to <a href=\"/capabilities/visa-bin-attribute-sharing-service/docs-request-response-codes#productid\">Product ID</a>"
+          },
+          "platformCd": {
+            "type": "string",
+            "description": "The code of product platform, e.g. Business, Consumer, Commercial, Government.<br>Refer to <a href=\"/capabilities/visa-bin-attribute-sharing-service/docs-request-response-codes#platformcode\">Product Platform Code</a>"
+          },
+          "productIDName": {
+            "type": "string",
+            "description": "The name associated with the product ID, e.g. Visa Traditional, Visa Signature, Visa Government Purchasing, etc.<br>Refer to <a href=\"/capabilities/visa-bin-attribute-sharing-service/docs-request-response-codes#productid\">Product Name</a>"
+          },
+          "accountBusName": {
+            "type": "string",
+            "description": "Issuer Name"
+          },
+          "binRangeMaxNum": {
+            "type": "string",
+            "description": "maximum number of bin range"
+          },
+          "binRangeMinNum": {
+            "type": "string",
+            "description": "minimum number of bin range"
+          },
+          "accountRegionCode": {
+            "type": "string",
+            "description": "Issuer Region"
+          },
+          "issuerBillingCurrCd": {
+            "type": "string",
+            "description": "Issuer Billing Currency Code <br>Refer to <a href=\"/capabilities/visa-bin-attribute-sharing-service/docs-request-response-codes#currencycode\">Currency Code</a>"
+          },
+          "accountCtryAlpha2Code": {
+            "type": "string",
+            "description": "Country Code Alpha Code <br>Refer to <a href=\"/capabilities/visa-bin-attribute-sharing-service/docs-request-response-codes#countrycode\">Country Code</a>"
+          },
+          "accountFundingSourceCd": {
+            "type": "string",
+            "description": "The code of account funding source for the card, e.g. Credit, Debit, Prepaid, Charge, Deferred Debit.<br>Refer to <a href=\"/capabilities/visa-bin-attribute-sharing-service/docs-request-response-codes#accountfundingsource\">Account Funding Source</a>"
+          },
+          "binRangePaymentAccountType": {
+            "type": "string",
+            "description": "The type of account - value can either 'P' for PAN or 'T' for TOKEN"
+          },
+          "accountFundingSourceSubtypeCd": {
+            "type": "string",
+            "description": "The code for account funding source subtype, such as reloadable and non-reloadable.<br>Refer to <a href=\"/capabilities/visa-bin-attribute-sharing-service/docs-request-response-codes#accountfundingsourcesubtype\">Account Funding Source Subtype</a>"
+          }
+        }
+      },
+      "BinFileTransferRequest": {
+        "title": "BinFileTransferRequest",
+        "type": "object",
+        "properties": {
+          "requestData": {
+            "$ref": "#/components/schemas/requestData-2"
+          },
+          "requestHeader": {
+            "$ref": "#/components/schemas/requestHeader-5"
+          }
+        }
+      },
+      "responseStatus-4": {
+        "title": "responseStatus",
+        "type": "object",
+        "properties": {
+          "statusCode": {
+            "type": "string",
+            "description": "Status Code of the Service Request"
+          },
+          "statusDescription": {
+            "type": "string",
+            "description": "A description of the StatusCode. A brief description indicating the result of the Service Request"
+          }
+        }
+      },
+      "responseStatus-3": {
+        "title": "responseStatus",
+        "type": "object",
+        "properties": {
+          "statusCode": {
+            "maxLength": 6,
+            "minLength": 6,
+            "type": "string",
+            "description": "Status Code of the Service Request"
+          },
+          "statusDescription": {
+            "maxLength": 250,
+            "minLength": 10,
+            "type": "string",
+            "description": "A description of the StatusCode. A brief description indicating the result of the Service Request"
+          }
+        }
+      },
+      "responseStatus-2": {
+        "type": "object",
+        "properties": {
+          "statusCode": {
+            "maxLength": 6,
+            "minLength": 6,
+            "type": "string",
+            "description": "Status Code of the Service Request"
+          },
+          "statusDesc": {
+            "maxLength": 250,
+            "minLength": 10,
+            "type": "string",
+            "description": "A description of the StatusCode. A brief description indicating the result of the Service Request"
+          }
+        }
+      },
+      "paymentAccountLookupRequestData-1": {
+        "required": [
+          "paymentAccount",
+          "paymentAccountType"
+        ],
+        "type": "object",
+        "properties": {
+          "paymentAccount": {
+            "maxLength": 21,
+            "minLength": 14,
+            "type": "string",
+            "description": "The payment account number for which the  attributes are being requested - can be a PAN or Token"
+          },
+          "paymentAccountType": {
+            "maxLength": 1,
+            "minLength": 1,
+            "type": "string",
+            "description": "The type of account - value can either 'P' for PAN or 'T' for TOKEN"
+          }
+        }
+      },
+      "paymentAccountLookupRequestHeader-1": {
+        "required": [
+          "requestMessageID",
+          "requestTS"
+        ],
+        "type": "object",
+        "properties": {
+          "requestTS": {
+            "maxLength": 23,
+            "minLength": 0,
+            "type": "string",
+            "description": "Date and time at which Request is sent (up to milliseconds in GMT). Ex: 2024-01-19T00:00:00.000",
+            "format": "YYYY-MM-DDThh:mm:ss.sss"
+          },
+          "requestMessageID": {
+            "maxLength": 50,
+            "minLength": 0,
+            "type": "string",
+            "description": "A string which uniquely identifies the service request. Requesting application need to create this unique message Id"
+          }
+        }
+      },
+      "BinRangeDetailsResponseV1-1": {
+        "title": "BinRangeDetailsResponse",
+        "required": [
+          "areNextOffsetRecordsAvailable",
+          "numRecordsReturned",
+          "totalRecordsCount"
+        ],
+        "type": "object",
+        "properties": {
+          "responseData": {
+            "$ref": "#/components/schemas/responseDataV1-3"
+          },
+          "responseHeader": {
+            "$ref": "#/components/schemas/responseHeader-3"
+          },
+          "responseStatus": {
+            "$ref": "#/components/schemas/responseStatus-4"
+          },
+          "totalRecordsCount": {
+            "type": "string",
+            "description": "total number of records present"
+          },
+          "numRecordsReturned": {
+            "type": "string",
+            "description": "number of records returned"
+          },
+          "areNextOffsetRecordsAvailable": {
+            "type": "string",
+            "description": "more records available?"
+          }
+        }
+      },
+      "errorCodes-1": {
+        "title": "errorCodes",
+        "type": "object",
+        "properties": {
+          "CDI001": {
+            "type": "object",
+            "description": "Internal service failure"
+          },
+          "CDI002": {
+            "type": "object",
+            "description": "XML Parsing Failure"
+          },
+          "CDI012": {
+            "type": "object",
+            "description": "Request header length is invalid"
+          },
+          "CDI052": {
+            "type": "object",
+            "description": "Client Authentication failed"
+          },
+          "CDI071": {
+            "type": "object",
+            "description": "Exception in Group level entitlement process"
+          },
+          "CDI249": {
+            "type": "object",
+            "description": "Payment Account Type validation failure"
+          },
+          "CDI250": {
+            "type": "object",
+            "description": "Atleast one of the required/mandatory fields is missing in the request"
+          }
+        }
+      },
+      "responseData-2": {
+        "title": "responseData",
+        "type": "object"
+      },
+      "errorCodes-2": {
+        "type": "object",
+        "properties": {
+          "CDI001": {
+            "type": "object",
+            "description": "Internal service failure"
+          },
+          "CDI012": {
+            "type": "object",
+            "description": "Request header length is invalid"
+          },
+          "CDI052": {
+            "type": "object",
+            "description": "Client Authentication failed"
+          },
+          "CDI071": {
+            "type": "object",
+            "description": "Exception in Group level entitlement process"
+          },
+          "CDI248": {
+            "type": "object",
+            "description": "Payment Account validation failure"
+          },
+          "CDI249": {
+            "type": "object",
+            "description": "Payment Account Type validation failure"
+          },
+          "CDI250": {
+            "type": "object",
+            "description": "Atleast one of the required/mandatory fields is missing in the request"
+          }
+        }
+      },
+      "errorCodes-3": {
+        "title": "errorCodes",
+        "type": "object",
+        "properties": {
+          "CDI001": {
+            "type": "object",
+            "description": "Internal service failure"
+          },
+          "CDI002": {
+            "type": "object",
+            "description": "XML Parsing Failure"
+          },
+          "CDI012": {
+            "type": "object",
+            "description": "Request header length is invalid"
+          },
+          "CDI052": {
+            "type": "object",
+            "description": "Client Authentication failed"
+          },
+          "CDI071": {
+            "type": "object",
+            "description": "Exception in Group level entitlement process"
+          },
+          "CDI246": {
+            "type": "object",
+            "description": "Bin Range Search Index validation failure"
+          },
+          "CDI247": {
+            "type": "object",
+            "description": "Bin Range Count validation failure"
+          },
+          "CDI249": {
+            "type": "object",
+            "description": "Payment Account Type validation failure"
+          },
+          "CDI250": {
+            "type": "object",
+            "description": "Atleast one of the required/mandatory fields is missing in the request"
+          }
+        }
+      },
+      "paymentAccountLookupResponseV2-1": {
+        "type": "object",
+        "properties": {
+          "PanTokenLookupResponse": {
+            "type": "object",
+            "properties": {
+              "responseData": {
+                "$ref": "#/components/schemas/responseDataV2-1"
+              },
+              "responseStatus": {
+                "$ref": "#/components/schemas/responseStatus-2"
+              }
+            },
+            "description": "PanTokenLookup Response"
+          }
+        }
+      },
+      "requestData": {
+        "title": "requestData",
+        "required": [
+          "paymentAccountType"
+        ],
+        "type": "object",
+        "properties": {
+          "paymentAccountType": {
+            "maxLength": 1,
+            "minLength": 1,
+            "type": "string",
+            "description": "Identifier for whether account is a PAN ('P') or Token ('T')",
+            "example": "P"
+          }
+        }
+      },
+      "binFilesMetadataRequest": {
+        "title": "BinFilesMetadataRequest",
+        "type": "object",
+        "properties": {
+          "requestData": {
+            "$ref": "#/components/schemas/requestData"
+          },
+          "requestHeader": {
+            "$ref": "#/components/schemas/requestHeader"
+          }
+        }
+      },
+      "requestDataV2-1": {
+        "title": "requestDataV2",
+        "required": [
+          "binRangeCount",
+          "binRangeSearchIndex"
+        ],
+        "type": "object",
+        "properties": {
+          "binRangeCount": {
+            "type": "string",
+            "description": "Number of records being requested(maximum number of records to be displayed)"
+          },
+          "paymentAccountType": {
+            "type": "string",
+            "description": "Identifier for whether account is a PAN ('P') or Token ('T')"
+          },
+          "binRangeSearchIndex": {
+            "type": "string",
+            "description": "Starting index - to be used for paginating through the records. Starting possible values are 0, 100, 200, …,500(multiples of hundred)"
+          }
+        }
+      },
+      "BinRangeDetailsResponseV2": {
+        "title": "BinRangeDetailsResponse",
+        "required": [
+          "areNextOffsetRecordsAvailable",
+          "numRecordsReturned",
+          "totalRecordsCount"
+        ],
+        "type": "object",
+        "properties": {
+          "responseData": {
+            "$ref": "#/components/schemas/responseDataV2-2"
+          },
+          "responseHeader": {
+            "$ref": "#/components/schemas/responseHeader-2"
+          },
+          "responseStatus": {
+            "$ref": "#/components/schemas/responseStatus-3"
+          },
+          "totalRecordsCount": {
+            "minLength": 1,
+            "type": "string",
+            "description": "total number of records present"
+          },
+          "numRecordsReturned": {
+            "minLength": 1,
+            "type": "string",
+            "description": "number of records returned"
+          },
+          "areNextOffsetRecordsAvailable": {
+            "maxLength": 1,
+            "minLength": 1,
+            "type": "string",
+            "description": "more records available?"
+          }
+        }
+      },
+      "responseHeader-3": {
+        "title": "responseHeader",
+        "type": "object",
+        "properties": {
+          "responseMessageId": {
+            "type": "string",
+            "description": "A combination of Service Id, Application Id, an Integer and current Timestamp that uniquely identifies the current request-response processing"
+          }
+        }
+      },
+      "BinRangeDetailsResponseV1": {
+        "title": "BinRangeDetailsResponse",
+        "required": [
+          "areNextOffsetRecordsAvailable",
+          "numRecordsReturned",
+          "totalRecordsCount"
+        ],
+        "type": "object",
+        "properties": {
+          "responseData": {
+            "$ref": "#/components/schemas/responseDataV1-2"
+          },
+          "responseHeader": {
+            "$ref": "#/components/schemas/responseHeader-2"
+          },
+          "responseStatus": {
+            "$ref": "#/components/schemas/responseStatus-3"
+          },
+          "totalRecordsCount": {
+            "minLength": 1,
+            "type": "string",
+            "description": "total number of records present"
+          },
+          "numRecordsReturned": {
+            "minLength": 1,
+            "type": "string",
+            "description": "number of records returned"
+          },
+          "areNextOffsetRecordsAvailable": {
+            "maxLength": 1,
+            "minLength": 1,
+            "type": "string",
+            "description": "more records available?"
+          }
+        }
+      },
+      "requestHeader-5": {
+        "title": "requestHeader",
+        "required": [
+          "requestMessageId",
+          "requestTS"
+        ],
+        "type": "object",
+        "properties": {
+          "requestTS": {
+            "maxLength": 23,
+            "minLength": 23,
+            "type": "string",
+            "description": "Date and time at which Request is sent (up to milliseconds in GMT). Ex: 2008-09-19T00:00:00.000",
+            "format": "YYYY-MM-DDThh:mm:ss.sss"
+          },
+          "requestMessageId": {
+            "maxLength": 30,
+            "minLength": 1,
+            "type": "string",
+            "description": "A string which uniquely identifies the service request. Requesting application need to create this unique message Id"
+          }
+        }
+      },
+      "BinRangeDetailsRequestV2": {
+        "title": "BinRangeDetailsRequest",
+        "type": "object",
+        "properties": {
+          "requestData": {
+            "$ref": "#/components/schemas/requestDataV2"
+          },
+          "requestHeader": {
+            "$ref": "#/components/schemas/requestHeader-3"
+          }
+        }
+      },
+      "requestHeader-4": {
+        "title": "requestHeader",
+        "required": [
+          "requestMessageID",
+          "requestTS"
+        ],
+        "type": "object",
+        "properties": {
+          "requestTS": {
+            "maxLength": 23,
+            "type": "string",
+            "description": "Date and time at which Request is sent (up to milliseconds in GMT). Ex: 2008-09-19T00:00:00.000",
+            "format": "YYYY-MM-DDThh:mm:ss.sss"
+          },
+          "requestMessageID": {
+            "maxLength": 50,
+            "type": "string",
+            "description": "A string which uniquely identifies the service request. Requesting application need to create this unique message Id"
+          }
+        }
+      },
+      "BinRangeDetailsRequestV1": {
+        "title": "BinRangeDetailsRequest",
+        "type": "object",
+        "properties": {
+          "requestData": {
+            "$ref": "#/components/schemas/requestDataV1"
+          },
+          "requestHeader": {
+            "$ref": "#/components/schemas/requestHeader-3"
+          }
+        }
+      },
+      "requestHeader-3": {
+        "title": "requestHeader",
+        "required": [
+          "requestMessageID",
+          "requestTS"
+        ],
+        "type": "object",
+        "properties": {
+          "requestTS": {
+            "maxLength": 23,
+            "minLength": 0,
+            "type": "string",
+            "description": "Date and time at which Request is sent (up to milliseconds in GMT). Ex: 2024-02-19T00:00:00.000",
+            "format": "YYYY-MM-DDThh:mm:ss.sss"
+          },
+          "requestMessageID": {
+            "maxLength": 50,
+            "minLength": 0,
+            "type": "string",
+            "description": "A string which uniquely identifies the service request. Requesting application need to create this unique message Id"
+          }
+        }
+      },
+      "responseHeader-1": {
+        "title": "responseHeader",
+        "type": "object",
+        "properties": {
+          "responseTS": {
+            "maxLength": 23,
+            "minLength": 23,
+            "type": "string",
+            "description": "Date and time at which Response is sent (up to milliseconds in UTC)",
+            "format": "YYYY-MM-DDThh:mm:ss.sss",
+            "example": "2024-01-17T06:31:31.194"
+          },
+          "requestMessageId": {
+            "maxLength": 30,
+            "minLength": 1,
+            "type": "string",
+            "description": "A string which uniquely identifies the service request. Requesting application need to create this unique message Id",
+            "example": "reqMsgId135"
+          },
+          "responseMessageId": {
+            "maxLength": 33,
+            "minLength": 33,
+            "type": "string",
+            "description": "A combination of Service Id, Application Id, an Integer and current Timestamp that uniquely identifies the current request-response processing",
+            "example": "106VDP87035320230217063131177"
+          }
+        }
+      },
+      "requestHeader-2": {
+        "title": "requestHeader",
+        "required": [
+          "requestMessageId",
+          "requestTS"
+        ],
+        "type": "object",
+        "properties": {
+          "requestTS": {
+            "maxLength": 23,
+            "minLength": 23,
+            "type": "string",
+            "description": "Date and time at which Request is sent (up to milliseconds in GMT). Ex: 2024-01-19T00:00:00.000",
+            "format": "YYYY-MM-DDThh:mm:ss.sss"
+          },
+          "requestMessageId": {
+            "maxLength": 30,
+            "minLength": 1,
+            "type": "string",
+            "description": "A string which uniquely identifies the service request. Requesting application need to create this unique message Id"
+          }
+        }
+      },
+      "requestHeader-1": {
+        "title": "requestHeader",
+        "required": [
+          "requestMessageId",
+          "requestTS"
+        ],
+        "type": "object",
+        "properties": {
+          "requestTS": {
+            "maxLength": 23,
+            "minLength": 23,
+            "type": "string",
+            "description": "Date and time at which request is sent (up to milliseconds in UTC). Ex: 2024-01-19T00:00:00.000",
+            "format": "YYYY-MM-DDThh:mm:ss.sss",
+            "example": "2024-01-29T22:05:00.000"
+          },
+          "requestMessageId": {
+            "maxLength": 30,
+            "minLength": 1,
+            "type": "string",
+            "description": "A string which uniquely identifies the service request. Requesting application need to create this unique message Id",
+            "example": "reqMsgId135"
+          }
+        }
+      },
+      "responseHeader-2": {
+        "title": "responseHeader",
+        "type": "object",
+        "properties": {
+          "responseMessageId": {
+            "maxLength": 33,
+            "minLength": 33,
+            "type": "string",
+            "description": "A combination of Service Id, Application Id, an Integer and current Timestamp that uniquely identifies the current request-response processing"
+          }
+        }
+      },
+      "requestHeader": {
+        "title": "requestHeader",
+        "required": [
+          "requestMessageId",
+          "requestTS"
+        ],
+        "type": "object",
+        "properties": {
+          "requestTS": {
+            "maxLength": 23,
+            "minLength": 23,
+            "type": "string",
+            "description": "Date and time at which request is sent (up to milliseconds in UTC). Ex: 2020-09-19T00:00:00.000",
+            "format": "YYYY-MM-DDThh:mm:ss.sss",
+            "example": "2021-04-29T22:05:00.000"
+          },
+          "requestMessageId": {
+            "maxLength": 30,
+            "minLength": 1,
+            "type": "string",
+            "description": "A string which uniquely identifies the service request. Requesting application need to create this unique message Id",
+            "example": "reqMsgId456"
+          }
+        }
+      }
+    },
+    "responses": {},
+    "parameters": {},
+    "examples": {},
+    "requestBodies": {},
+    "headers": {},
+    "callbacks": {}
+  },
+  "webhooks": {},
+  "x-tagGroups": [
+    {
+      "name": "API Reference",
+      "tags": [
+        "BIN File Transfer",
+        "BIN Files Metadata",
+        "Full BIN List",
+        "Issuer API",
+        "Single BIN Lookup"
+      ]
+    }
+  ]
+}

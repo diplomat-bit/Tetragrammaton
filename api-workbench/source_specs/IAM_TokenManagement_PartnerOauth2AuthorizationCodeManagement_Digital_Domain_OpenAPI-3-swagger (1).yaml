@@ -1,0 +1,589 @@
+openapi: 3.0.1
+info:
+  title: IAM_TokenManagement_PartnerOauth2AuthorizationCodeManagement_Digital_Domain_OpenAPI
+  description: "Authorize is our implementation of the OAuth 2.0 framework. It enables\
+    \ secure authorization using standard methods that can easily be integrated in\
+    \ your app. If you're familiar with OAuth 2.0, everything should look familiar.\
+    \ If not, you may want to check out the OAuth 2.0 resources <a target=\"_blank\"\
+    \ href=\"https://oauth.net/2/\">here. This is used for partners</a>.<table><th>Change\
+    \ History</th><tr><td>Date(MM/DD/YYYY)</td><td>Version</td><td>SRT Number</td><td>OPPM\
+    \ ID</td><td>User Story</td><td>Description</td></tr><tr><td>06-13-2024</td><td>1.0.0</td><td>SRT\
+    \ 2886</td><td>WR202401389<td>PBWD-12470<td>New MS added</td></tr><\br><tr><td>07-30-2024</td><td>1.1.0</td><td>SRT\
+    \ 3375 </td><td>WR202401389<td>PBWD-12470<td>client_id header added in 3 APIs\
+    \ and updated error description of 401 and 400 as per standards</td></tr><\br><tr><td>08-06-2024</td><td>1.2.0</td><td>SRT\
+    \ 3425 </td><td>WR202401389<td>PBWD-12470<td>Updated errors in /authorize endpoint</td></tr><\b\
+    r><tr><td>08-16-2024</td><td>1.3.0</td><td>SRT  </td><td>WR202401389<td>PBWD-12470<td>Removed\
+    \ client_id header from 3 token APIs</td></tr>"
+  version: 1.3.0
+  x-deployment-reference: IAM-D-TknMgmt-POauthAut-DG-US
+  x-ibm-name: IAM_TokenManagement_PartnerOauth2AuthorizationCodeManagement_Digital_Domain_OpenAPI
+servers:
+- url: https://127.0.0.1/openapi/iam/tokenManagement/partner/authCode/oauth2/cgw/v1
+paths:
+  /authorize:
+    get:
+      tags:
+      - IAM_Authentication and Authorization_Token Management
+      summary: "Authorization code grant: Retrieve authorization code"
+      description: |-
+        To retrieve an authorization code, call the authorize endpoint by passing the required query parameters.You should end up with a relative URL similar to the below (illustrative).
+        <p>/authCode/oauth2/authorize?response_type=code&client_id=<span style='color:#FF6600;'>[Your client_id issued to you during app registration]</span>&scope=<span style='color:#FF6600;'>[Space delimited scopes selected from the table below. Only request the scopes required for your app to work.]</span>&countryCode=US&businessCode=GCB&locale=en_US&state=<span style='color:#FF6600;'>[The state value you create and will verify]</span>&redirect_uri=<span style='color:#FF6600;'>[The redirect_uri you registered during app registration]</span>.</p>
+        <p>Your final URL should look similar to this, go ahead a try it in any browser if you are unsure if you formed it properly:</p>
+        <p>https://sandbox.apihub.citi.com/gcb/api/authCode/oauth2/authorize?response_type=code&client_id=97086fae-c252-4d81-b4d9-d73cde5ea800&scope=accounts_details_transaction&countryCode=US&businessCode=GCB&locale=en_US&state=12093&redirect_uri=https://www.test.com</p>  <table class="table">
+        <tr><th>Scope</th><th>Description</th></tr>
+        <tr><td>customers_profiles</td><td> Provides customer name, email, phone number, and address </td></tr>
+        <tr><td>accounts_routing_number</td><td>Adding clear account/routing number added to accounts API </td></tr>
+        <tr><td>accounts_statements</td><td>Retrieve  user account statements for customer</td></tr>
+        <tr><td>accounts_tax_statements  </td><td>Retrieve    tax documentation for customer</td></tr>
+        </table>
+        <p>Once credentials are verified, a consent page will be presented to the Citi customer to approve the scope requested by your app. After getting customer consent, the flow redirects to the provided redirect_uri and an authorization code will be sent back as a query component.</p>
+        <p>https://www.test.com/?code=<span style='color:#FF6600;word-break:break-word'>AAJP_jIlIuuIqS-qj0ohfXLaOyhQK9y4bbyhEJWt39l5gWT-1XZmCHtESO2gcbLsPmLlERAAPj80IfLueI4WM8s_Ay1Gy8VtcwFUv8lQE4Svi9hOayu5kBP2OKLhvBwMwrZ_wz5SDHaKN96BdgScYmNEGww0IcV5gH4VBjeOPijN7CxdMRwc2H_w5RnpckbCtS4605BCp5FD0Qho4tYsfcmJ</span>&state=12093</p>
+        <p>This authorization code is valid for a very short period of time and should be immediately exchanged for access token.</p>
+      operationId: RetrieveAuthorizationCode
+      parameters:
+      - name: response_type
+        in: query
+        description: Value MUST be set to "code"
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: client_id
+        in: query
+        description: Client ID generated during application registration.
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: scope
+        in: query
+        description: The set of scopes required to make the API calls. Scope is case
+          insensitive and multiple values can be passed using space delimiter.
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: countryCode
+        in: query
+        description: Country code in 2 character ISO 3166 format (upper case)
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: businessCode
+        in: query
+        description: The 3 character business code. Use GCB for consumer banking (upper
+          case)
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: locale
+        in: query
+        description: "Locale identify a specific language and geographic region, it\
+          \ shoule follow [language[_territory]. eg - en_US, en_SG"
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: state
+        in: query
+        description: Opaque value to maintain the state between request and call back.
+          This will be used to prevent cross-site request forgery.
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: redirect_uri
+        in: query
+        description: Absolute uri for user-agent redirection.You should provide the
+          uri used during client registration process.
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Client Authentication
+          headers:
+            orgname:
+              description: ""
+              style: simple
+              explode: false
+              schema:
+                type: string
+            appname:
+              description: ""
+              style: simple
+              explode: false
+              schema:
+                type: string
+            orgid:
+              description: ""
+              style: simple
+              explode: false
+              schema:
+                type: string
+          content: {}
+        "302":
+          description: "The authorization response contains the authorization code\
+            \ needed to obtain an access token. Here are the parameters included in\
+            \ the response.<table class=\"table\"><caption>success response</caption><tbody><tr><td>fieldname</td><td>field\
+            \ type</td><td>mandatory</td><td>description</td></tr><tr><td>redirect_uri</td><td>location</td><td>yes</td><td>This\
+            \ is the absolute uri provided in the request</td></tr><tr><td>code</td><td>query</td><td>yes</td><td>The\
+            \ authorization code</td></tr><tr><td>state</td><td>query</td><td>yes</td><td>The\
+            \ same value as sent by the client in the state parameter, if any</td></tr></tbody></table><br>If\
+            \ an error occurs during authorization, two situations can occur. The\
+            \ first is, that the client is not authenticated or recognized. For instance,\
+            \ a wrong redirect URI was sent in the request. In that case the authorization\
+            \ server must not redirect the resource owner to the redirect URI. Instead\
+            \ it should inform the resource owner of the error. The second situation\
+            \ is that client is authenticated correctly, but that something else failed.\
+            \ In that case the following error response is sent to the client, included\
+            \ in the redirect_uri <table class=\"table\"><caption>failure response</caption><tbody><tr><td>field\
+            \ name</td><td>field type</td><td>mandatory</td><td>description</td></tr><tr><td>redirect_uri</td><td>location</td><td>yes</td><td>This\
+            \ is the absolute uri provided in the request</td></tr><tr><td>state</td><td>query</td><td>yes</td><td>The\
+            \ same value as sent by the client in the state parameter, if any</td></tr><tr><td>error</td><td>query</td><td>yes</td><td></td></tr><tr><td>error_description</td><td>query</td><td>no</td><td></td></tr><tr><td>error_uri</td><td>query</td><td>no</td><td></td></tr></tbody></table><br>Here\
+            \ is the list of errors: <table class=\"table\"><tr><td>error</td></tr><tr><td>invalid_request</td></tr><tr><td>unauthorized_client</td></tr><tr><td>unsupported_response_type</td></tr><tr><td>invalid_scope</td></tr><tr><td>access_denied</td></tr></table>"
+          content: {}
+        "400":
+          description: <table><tr><td>Type</td><td>Code</td><td>Details</td></tr><tr><tr><td>invalid</td><td>invalidRequest</td><td>Missing
+            or invalid Parameters</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "401":
+          description: <table><tr><td>Type</td><td>Code</td><td>Details</td></tr><tr><td>error</td><td>unAuthorized</td><td>Authorization
+            credentials are missing or invalid</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "403":
+          description: <table><tr><td>Type</td><td>Code</td><td>Details</td></tr><tr><td>error</td><td>accessNotConfigured</td><td>The
+            request operation is not configured to access this resource</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "404":
+          description: <table><tr><td>Type</td><td>Code</td><td>Details</td></tr><tr><td>error</td><td>resourceNotFound</td><td>Empty
+            resource/resource not found</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "500":
+          description: <table><tr><td>Type</td><td>Code</td><td>Details</td></tr><tr><td>fatal</td><td>serverUnavailable</td><td>The
+            request failed due to an internal error</td></tr></table>
+  /token/{countryCode}/{businessCode}:
+    post:
+      tags:
+      - IAM_Authentication and Authorization_Token Management
+      summary: "Authorization code grant: Retrieve access token"
+      description: "Get an access token issued by calling our token endpoint and passing\
+        \ the authorization code from the previous call.  The issued access token\
+        \ will have an expiry, and it will be valid only for the scope for which the\
+        \ consent has been provided by the customer. You can call the APIs by passing\
+        \ this token in Authorization header.<br>You also get a refresh token that\
+        \ can be used to get a new access token in case the original one expires."
+      operationId: RetrieveAccessToken
+      parameters:
+      - name: Authorization
+        in: header
+        description: "HTTP Basic authentication by passing base64 encoded value of\
+          \ the client id and client secret separated by colon (:).Example: Base64(client_id:client_secret)\
+          \ will be passed as Basic KGNsaWVudF9pZDpjbGllbnRfc2VjcmV0KQ=="
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: Content-Type
+        in: header
+        description: Value should always be application/x-www-form-urlencoded
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: countryCode
+        in: path
+        description: countryCode
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: businessCode
+        in: path
+        description: businessCode
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              required:
+              - code
+              - grant_type
+              - redirect_uri
+              type: object
+              properties:
+                grant_type:
+                  type: string
+                  description: Authentication grant type. Valid value is authorization_code
+                code:
+                  type: string
+                  description: The code from the response of GET /authCode/oauth2/authorize
+                redirect_uri:
+                  type: string
+                  description: Absolute uri for user-agent redirection. You should
+                    provide the uri passed in GET /authCode/oauth2/authorize request
+        required: true
+      responses:
+        "200":
+          description: The request has succeeded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RetrieveAccessTokenResponse'
+        "400":
+          description: <table><tr><td>Type</td><td>Code</td><td>Details</td></tr><tr><tr><td>invalid</td><td>invalidRequest</td><td>Missing
+            or invalid Parameters</td></tr><tr><tr><td>error</td><td>invalidGrant</td><td>Grant
+            is invalid</td></tr><tr><td>error</td><td>unauthorizedClient</td><td>Client
+            is unauthorized</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "401":
+          description: <table><tr><td>Type</td><td>Code</td><td>Details</td></tr><tr><td>error</td><td>unAuthorized</td><td>Authorization
+            credentials are missing or invalid</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "403":
+          description: <table><tr><td>Type</td><td>Code</td><td>Details</td></tr><tr><td>error</td><td>accessNotConfigured</td><td>The
+            request operation is not configured to access this resource</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "404":
+          description: <table><tr><td>Type</td><td>Code</td><td>Details</td></tr><tr><td>error</td><td>resourceNotFound</td><td>Empty
+            resource/resource not found</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "422":
+          description: <table><tr><td>Type</td><td>Code</td><td>Details</td></tr><tr><td>error</td><td>businessValidationsFailed</td><td>Business
+            validations failed</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "500":
+          description: <table><tr><td>Type</td><td>Code</td><td>Details</td></tr><tr><td>fatal</td><td>serverUnavailable</td><td>The
+            request failed due to an internal error</td></tr></table>
+          content: {}
+  /refresh:
+    post:
+      tags:
+      - IAM_Authentication and Authorization_Token Management
+      summary: "Authorization code grant: Refresh access token"
+      description: "If your access token has expired and you still have a valid refresh\
+        \ token, you can exchange it for a new set of valid access and refresh tokens."
+      operationId: RefreshToken
+      parameters:
+      - name: Authorization
+        in: header
+        description: "HTTP Basic authentication by passing base64 encoded value of\
+          \ the client id and client secret separated by colon (:).Example: Base64(client_id:client_secret)\
+          \ will be passed as Basic KGNsaWVudF9pZDpjbGllbnRfc2VjcmV0KQ=="
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: Content-Type
+        in: header
+        description: Content type. Value is application/x-www-form-urlencoded
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              required:
+              - grant_type
+              - refresh_token
+              type: object
+              properties:
+                grant_type:
+                  type: string
+                  description: The grant type. Valid value is refresh_token.
+                refresh_token:
+                  type: string
+                  description: The refresh token issued to the client
+        required: true
+      responses:
+        "200":
+          description: The request has succeeded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RefreshTokenResponse'
+        "400":
+          description: <table><tr><td>Type</td><td>Code</td><td>Details</td></tr><tr><tr><td>invalid</td><td>invalidRequest</td><td>Missing
+            or invalid Parameters</td></tr><tr><tr><td>error</td><td>invalidGrant</td><td>Grant
+            is invalid</td></tr><tr><tr><td>error</td><td>unauthorizedClient</td><td>Client
+            is unauthorized</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "401":
+          description: <table><tr><td>Type</td><td>Code</td><td>Details</td></tr><tr><td>error</td><td>unAuthorized</td><td>Authorization
+            credentials are missing or invalid</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "403":
+          description: <table><tr><td>Type</td><td>Code</td><td>Details</td></tr><tr><td>error</td><td>accessNotConfigured</td><td>The
+            request operation is not configured to access this resource</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "404":
+          description: <table><tr><td>Type</td><td>Code</td><td>Details</td></tr><tr><td>error</td><td>resourceNotFound</td><td>Empty
+            resource/resource not found</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "422":
+          description: <table><tr><td>Type</td><td>Code</td><td>Details</td></tr><tr><td>error</td><td>businessValidationsFailed</td><td>Business
+            validations failed</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "500":
+          description: <table><tr><td>Type</td><td>Code</td><td>Details</td></tr><tr><td>fatal</td><td>serverUnavailable</td><td>The
+            request failed due to an internal error</td></tr></table>
+          content: {}
+  /revoke:
+    post:
+      tags:
+      - IAM_Authentication and Authorization_Token Management
+      summary: "Authorization code grant: Revoke access"
+      description: The revoke call will terminate the access granted by citi customer
+        to your application.
+      operationId: RevokeToken
+      parameters:
+      - name: Authorization
+        in: header
+        description: "HTTP Basic authentication by passing base64 encoded value of\
+          \ the client id and client secret separated by colon (:).Example: Base64(client_id:client_secret)\
+          \ will be passed as Basic KGNsaWVudF9pZDpjbGllbnRfc2VjcmV0KQ=="
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: Content-Type
+        in: header
+        description: Content type. Value is application/x-www-form-urlencoded
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              required:
+              - token
+              - token_type_hint
+              type: object
+              properties:
+                token:
+                  type: string
+                  description: The token to be revoked
+                token_type_hint:
+                  type: string
+                  description: "A hint about the type of the token submitted for revocation.\
+                    \ Clients MAY pass this parameter in order to help the authorization\
+                    \ server to optimize the token lookup. Valid values are access_token,\
+                    \ refresh_token"
+        required: true
+      responses:
+        "200":
+          description: The request has succeeded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RevokeTokenResponse'
+        "400":
+          description: <table><tr><td>Type</td><td>Code</td><td>Details</td></tr><tr><tr><td>invalid</td><td>invalidRequest</td><td>Missing
+            or invalid Parameters</td></tr><tr><tr><td>error</td><td>invalidGrant</td><td>Grant
+            is invalid</td></tr><tr><td>error</td><td>unauthorizedClient</td><td>Client
+            is unauthorized</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "401":
+          description: <table><tr><td>Type</td><td>Code</td><td>Details</td></tr><tr><td>error</td><td>unAuthorized</td><td>Authorization
+            credentials are missing or invalid</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "403":
+          description: <table><tr><td>Type</td><td>Code</td><td>Details</td></tr><tr><td>error</td><td>accessNotConfigured</td><td>The
+            request operation is not configured to access this resource</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "404":
+          description: <table><tr><td>Type</td><td>Code</td><td>Details</td></tr><tr><td>error</td><td>resourceNotFound</td><td>Empty
+            resource/resource not found</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "422":
+          description: <table><tr><td>Type</td><td>Code</td><td>Details</td></tr><tr><td>error</td><td>businessValidationsFailed</td><td>Business
+            validations failed</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "500":
+          description: <table><tr><td>Type</td><td>Code</td><td>Details</td></tr><tr><td>fatal</td><td>serverUnavailable</td><td>The
+            request failed due to an internal error</td></tr></table>
+          content: {}
+components:
+  schemas:
+    RevokeTokenResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          description: The status of the token revocation request.
+          example: success
+    RefreshTokenResponse:
+      required:
+      - access_token
+      - expires_in
+      - scope
+      - token_type
+      type: object
+      properties:
+        access_token:
+          type: string
+          description: This field should be passed as Authorization header in API
+            request calls
+          example: AAEkYzFjMDQ0Y2UtNTBmMy00NmY4LWI4YjEtYmQ5ODJkMWZiNGZh3xGP85xjqyxoHR7pXxzQJf223kWPL-HyWHD4zrRCvHZUkeBkTgxppbmpFtmWeVmjzDOxs1wFzI4s45YDS15eYmyuxzLbVog4d8H9pYSelrvL6naDYOLL9U16EaY0iyAMPBGX1H7RhCqtmd-7u_Eanw7QshbruLaZh2stOrdq2thC5CCSwW2r0e8PM1QbWubJOcMp8UGv-zNc0I3cTSihymSCF44HJ_yeuPAcXJ7kj-iPzQqxaO6FiWPmIsIh2YSxdGYo8alTyjJfG5AQDnM0HA
+        refresh_token:
+          type: string
+          description: The refresh token value
+          example: AAGsyASCzlBplxGvA-5CFCkLhNinu6-0HQt-y7PuzsRLVAHok6yYs6KS2Np4t7bL0R8FMeT62wYXFxxY6F7LU_cc00QTXPfoQFFtay2tu3eGpBAGDg07ll_vNk_AEJo9l1GaEKYev7Q7drDOeRCDRqcD12zJzk36PsQEM6j1txFV2jR3snW5PLs3HVjxNRjUHWLR5IoI2qfb8zCZNahrFCRQ7T7ZVB_-E6Qk22tN3hZkZH7_kB3bZjtVoNxyjJ6qBDcrYdgtAvPvBV-xXDBmfUXD44JBYiZffHjEr2dFb_e3yA
+        scope:
+          type: string
+          description: The list of scopes separated by space
+          example: /dda/customer /dda/accountlist /dda/account /dda/accountsdetails
+            /dda/account/transactions
+        token_type:
+          type: string
+          description: The token type
+          example: bearer
+        expires_in:
+          type: number
+          description: The access token expiry time (in seconds)
+          example: 1800.0
+    RetrieveAccessTokenResponse:
+      required:
+      - access_token
+      - expires_in
+      - refresh_token
+      - scope
+      - token_type
+      type: object
+      properties:
+        access_token:
+          type: string
+          description: The access token value received after exchanging the authorization
+            token. This field should be passed as Authorization header in API request
+            calls
+          example: AAEkYzFjMDQ0Y2UtNTBmMy00NmY4LWI4YjEtYmQ5ODJkMWZiNGZh3xGP85xjqyxoHR7pXxzQJf223kWPL-HyWHD4zrRCvHZUkeBkTgxppbmpFtmWeVmjzDOxs1wFzI4s45YDS15eYmyuxzLbVog4d8H9pYSelrvL6naDYOLL9U16EaY0iyAMPBGX1H7RhCqtmd-7u_Eanw7QshbruLaZh2stOrdq2thC5CCSwW2r0e8PM1QbWubJOcMp8UGv-zNc0I3cTSihymSCF44HJ_yeuPAcXJ7kj-iPzQqxaO6FiWPmIsIh2YSxdGYo8alTyjJfG5AQDnM0HA
+        refresh_token:
+          type: string
+          description: You can use this token to refresh an expired access_token.
+          example: AAGsyASCzlBplxGvA-5CFCkLhNinu6-0HQt-y7PuzsRLVAHok6yYs6KS2Np4t7bL0R8FMeT62wYXFxxY6F7LU_cc00QTXPfoQFFtay2tu3eGpBAGDg07ll_vNk_AEJo9l1GaEKYev7Q7drDOeRCDRqcD12zJzk36PsQEM6j1txFV2jR3snW5PLs3HVjxNRjUHWLR5IoI2qfb8zCZNahrFCRQ7T7ZVB_-E6Qk22tN3hZkZH7_kB3bZjtVoNxyjJ6qBDcrYdgtAvPvBV-xXDBmfUXD44JBYiZffHjEr2dFb_e3yA
+        scope:
+          type: string
+          description: Set of scopes allowed by customer and separated by space
+          example: /dda/customer /dda/accountlist /dda/account /dda/accountsdetails
+            /dda/account/transactions
+        token_type:
+          type: string
+          description: Type of the access token issued.  This is bearer token for
+            authorization_code grant type
+          example: bearer
+        expires_in:
+          type: number
+          description: Validity of access token in seconds
+          example: 1800.0
+    ErrorResponse:
+      required:
+      - code
+      - type
+      type: object
+      properties:
+        type:
+          type: string
+          description: Invalid - Request did not confirm to the specification and
+            was unprocessed and rejected. Please fix the value and try again
+          enum:
+          - error
+          - warn
+          - invalid
+          - fatal
+        code:
+          type: string
+          description: Error code which qualifies the error
+        details:
+          type: string
+          description: Human readable explanation specific to the occurrence of the
+            problem
+        location:
+          type: string
+          description: The name of the field that resulted in the error
+        moreInfo:
+          type: object
+          properties: {}
+          description: URI to human readable documentation of the error

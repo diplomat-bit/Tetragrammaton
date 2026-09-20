@@ -1,0 +1,6 @@
+{
+  "name": "Dubai Loans API Caller",
+  "description": "An application to accept loan offers via Citi partner API.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

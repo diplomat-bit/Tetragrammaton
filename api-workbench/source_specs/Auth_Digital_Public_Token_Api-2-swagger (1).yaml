@@ -1,0 +1,594 @@
+swagger: "2.0"
+info:
+  description: Exchanging the authorization code for an access/refresh token in order
+    to grant a data aggregator permission to access a user’s data and share it with
+    a fintech app. The revoke endpoint allows an aggregator to revoke access for a
+    fintech app.
+  version: 1.0.0
+  title: Token Authorization
+basePath: /api/identity/auth/v1
+tags: []
+schemes:
+- https
+consumes:
+- application/x-www-form-urlencoded
+produces:
+- application/json
+paths:
+  /oauth2/token/us/gcb:
+    post:
+      tags: []
+      summary: "Authorization code grant: Retrieve access token"
+      description: "Get an access token issued by calling our token endpoint and passing\
+        \ the authorization code from the previous call.  The issued access token\
+        \ will have an expiry, and it will be valid only for the scope for which the\
+        \ consent has been provided by the customer. You can call the APIs by passing\
+        \ this token in Authorization header. You also get a refresh token that can\
+        \ be used to get a new access token in case the original one expires.<br>\
+        \ AccessTokens are valid for 10 minutes"
+      parameters:
+      - name: Authorization
+        in: header
+        description: "HTTP Basic authentication by passing base64 encoded value of\
+          \ the client id and client secret separated by colon (:).Example: Base64(client_id:client_secret)\
+          \ will be passed as Basic KGNsaWVudF9pZDpjbGllbnRfc2VjcmV0KQ=="
+        required: true
+        type: string
+      - name: Content-Type
+        in: header
+        description: Value should always be application/x-www-form-urlencoded
+        required: true
+        type: string
+      - in: body
+        name: Body
+        required: true
+        schema:
+          originalRef: '#/definitions/AccessTokenRequest'
+          $ref: '#/definitions/AccessTokenRequest'
+      responses:
+        "200":
+          description: The request has succeeded
+          responseSchema:
+            originalRef: '#/definitions/AccessTokenResponse'
+            $ref: '#/definitions/AccessTokenResponse'
+          schema:
+            originalRef: '#/definitions/AccessTokenResponse'
+            $ref: '#/definitions/AccessTokenResponse'
+        "400":
+          description: "If the request fails due to a missing, invalid, mismatching\
+            \ or malformed mandatory headers like authorization,Content-Type and parameters\
+            \ like authorization code,grant_type ,redirect_uri."
+          responseSchema:
+            originalRef: '#/definitions/BadResponse'
+            $ref: '#/definitions/BadResponse'
+          schema:
+            originalRef: '#/definitions/BadResponse'
+            $ref: '#/definitions/BadResponse'
+        "401":
+          description: "If the request fails due to a invalid, or mismatching grant_type."
+          responseSchema:
+            originalRef: '#/definitions/UnAuthorizedResponse'
+            $ref: '#/definitions/UnAuthorizedResponse'
+          schema:
+            originalRef: '#/definitions/UnAuthorizedResponse'
+            $ref: '#/definitions/UnAuthorizedResponse'
+        "404":
+          description: If authorization code is already used.
+          responseSchema:
+            originalRef: '#/definitions/NotFoundResponse'
+            $ref: '#/definitions/NotFoundResponse'
+          schema:
+            originalRef: '#/definitions/NotFoundResponse'
+            $ref: '#/definitions/NotFoundResponse'
+        "500":
+          description: The authorization server encountered an unexpected condition
+            which prevented it from fulfilling the request.
+          responseSchema:
+            originalRef: '#/definitions/ServerUnavailableResponse'
+            $ref: '#/definitions/ServerUnavailableResponse'
+          schema:
+            originalRef: '#/definitions/ServerUnavailableResponse'
+            $ref: '#/definitions/ServerUnavailableResponse'
+      responsesObject:
+        "200":
+          description: The request has succeeded
+          responseSchema:
+            originalRef: '#/definitions/AccessTokenResponse'
+            $ref: '#/definitions/AccessTokenResponse'
+          schema:
+            originalRef: '#/definitions/AccessTokenResponse'
+            $ref: '#/definitions/AccessTokenResponse'
+        "400":
+          description: "If the request fails due to a missing, invalid, mismatching\
+            \ or malformed mandatory headers like authorization,Content-Type and parameters\
+            \ like authorization code,grant_type ,redirect_uri."
+          responseSchema:
+            originalRef: '#/definitions/BadResponse'
+            $ref: '#/definitions/BadResponse'
+          schema:
+            originalRef: '#/definitions/BadResponse'
+            $ref: '#/definitions/BadResponse'
+        "401":
+          description: "If the request fails due to a invalid, or mismatching grant_type."
+          responseSchema:
+            originalRef: '#/definitions/UnAuthorizedResponse'
+            $ref: '#/definitions/UnAuthorizedResponse'
+          schema:
+            originalRef: '#/definitions/UnAuthorizedResponse'
+            $ref: '#/definitions/UnAuthorizedResponse'
+        "404":
+          description: If authorization code is already used.
+          responseSchema:
+            originalRef: '#/definitions/NotFoundResponse'
+            $ref: '#/definitions/NotFoundResponse'
+          schema:
+            originalRef: '#/definitions/NotFoundResponse'
+            $ref: '#/definitions/NotFoundResponse'
+        "500":
+          description: The authorization server encountered an unexpected condition
+            which prevented it from fulfilling the request.
+          responseSchema:
+            originalRef: '#/definitions/ServerUnavailableResponse'
+            $ref: '#/definitions/ServerUnavailableResponse'
+          schema:
+            originalRef: '#/definitions/ServerUnavailableResponse'
+            $ref: '#/definitions/ServerUnavailableResponse'
+  /oauth2/refresh:
+    post:
+      tags: []
+      summary: "Authorization code grant: Refresh access token"
+      description: "If your access token has expired and you still have a valid refresh\
+        \ token, you can exchange it for a new set of valid access and refresh tokens.\
+        \ RefreshTokens are valid for 30 days"
+      parameters:
+      - name: Authorization
+        in: header
+        description: "HTTP Basic authentication by passing base64 encoded value of\
+          \ the client id and client secret separated by colon (:).Example: Base64(client_id:client_secret)\
+          \ will be passed as Basic KGNsaWVudF9pZDpjbGllbnRfc2VjcmV0KQ=="
+        required: true
+        type: string
+      - name: Content-Type
+        in: header
+        description: Content type. Value is application/x-www-form-urlencoded
+        required: true
+        type: string
+      - in: body
+        name: Body
+        required: true
+        schema:
+          originalRef: '#/definitions/RefreshTokenRequest'
+          $ref: '#/definitions/RefreshTokenRequest'
+      responses:
+        "200":
+          description: The request has succeeded
+          responseSchema:
+            originalRef: '#/definitions/RefreshTokenResponse'
+            $ref: '#/definitions/RefreshTokenResponse'
+          schema:
+            originalRef: '#/definitions/RefreshTokenResponse'
+            $ref: '#/definitions/RefreshTokenResponse'
+        "400":
+          description: "If the request fails due to a missing, invalid, mismatching\
+            \ or malformed mandatory headers like authorization,Content-Type and body\
+            \ parameters like grant_type and refresh token."
+          responseSchema:
+            originalRef: '#/definitions/BadResponse'
+            $ref: '#/definitions/BadResponse'
+          schema:
+            originalRef: '#/definitions/BadResponse'
+            $ref: '#/definitions/BadResponse'
+        "401":
+          description: "If the request fails due to a invalid, or mismatching grant_type."
+          responseSchema:
+            originalRef: '#/definitions/UnAuthorizedResponse'
+            $ref: '#/definitions/UnAuthorizedResponse'
+          schema:
+            originalRef: '#/definitions/UnAuthorizedResponse'
+            $ref: '#/definitions/UnAuthorizedResponse'
+        "404":
+          description: "<table class=\\\"table\\\"><tr><b>Special Case: Different\
+            \ schemas for same response code</b></tr><tr><td>Token is revoked or already\
+            \ used.</td><td>{ \"type\":\"error\", \"code\":\"invalidToken\", \"details\"\
+            :\"Resource Not Found\" }</td></tr><tr><td>Consent time reaches max consent\
+            \ life time which is configured for 1 year</td><td>{ \"type\": \"error\"\
+            , \"error\":\"invalid_grant\", \"code\": \"invalidToken\", \"details\"\
+            : \"Resource Not Found\", \"message\": \"max consent life time is reached\
+            \ for this user\" }</td><tr></table>"
+          responseSchema:
+            originalRef: '#/definitions/NotFoundResponse'
+            $ref: '#/definitions/NotFoundResponse'
+          schema:
+            originalRef: '#/definitions/NotFoundResponse'
+            $ref: '#/definitions/NotFoundResponse'
+        "500":
+          description: The authorization server encountered an unexpected condition
+            which prevented it from fulfilling the request.
+          responseSchema:
+            originalRef: '#/definitions/ServerUnavailableResponse'
+            $ref: '#/definitions/ServerUnavailableResponse'
+          schema:
+            originalRef: '#/definitions/ServerUnavailableResponse'
+            $ref: '#/definitions/ServerUnavailableResponse'
+      responsesObject:
+        "200":
+          description: The request has succeeded
+          responseSchema:
+            originalRef: '#/definitions/RefreshTokenResponse'
+            $ref: '#/definitions/RefreshTokenResponse'
+          schema:
+            originalRef: '#/definitions/RefreshTokenResponse'
+            $ref: '#/definitions/RefreshTokenResponse'
+        "400":
+          description: "If the request fails due to a missing, invalid, mismatching\
+            \ or malformed mandatory headers like authorization,Content-Type and body\
+            \ parameters like grant_type and refresh token."
+          responseSchema:
+            originalRef: '#/definitions/BadResponse'
+            $ref: '#/definitions/BadResponse'
+          schema:
+            originalRef: '#/definitions/BadResponse'
+            $ref: '#/definitions/BadResponse'
+        "401":
+          description: "If the request fails due to a invalid, or mismatching grant_type."
+          responseSchema:
+            originalRef: '#/definitions/UnAuthorizedResponse'
+            $ref: '#/definitions/UnAuthorizedResponse'
+          schema:
+            originalRef: '#/definitions/UnAuthorizedResponse'
+            $ref: '#/definitions/UnAuthorizedResponse'
+        "404":
+          description: "<table class=\\\"table\\\"><tr><b>Special Case: Different\
+            \ schemas for same response code</b></tr><tr><td>Token is revoked or already\
+            \ used.</td><td>{ \"type\":\"error\", \"code\":\"invalidToken\", \"details\"\
+            :\"Resource Not Found\" }</td></tr><tr><td>Consent time reaches max consent\
+            \ life time which is configured for 1 year</td><td>{ \"type\": \"error\"\
+            , \"error\":\"invalid_grant\", \"code\": \"invalidToken\", \"details\"\
+            : \"Resource Not Found\", \"message\": \"max consent life time is reached\
+            \ for this user\" }</td><tr></table>"
+          responseSchema:
+            originalRef: '#/definitions/NotFoundResponse'
+            $ref: '#/definitions/NotFoundResponse'
+          schema:
+            originalRef: '#/definitions/NotFoundResponse'
+            $ref: '#/definitions/NotFoundResponse'
+        "500":
+          description: The authorization server encountered an unexpected condition
+            which prevented it from fulfilling the request.
+          responseSchema:
+            originalRef: '#/definitions/ServerUnavailableResponse'
+            $ref: '#/definitions/ServerUnavailableResponse'
+          schema:
+            originalRef: '#/definitions/ServerUnavailableResponse'
+            $ref: '#/definitions/ServerUnavailableResponse'
+  /oauth2/revoke:
+    post:
+      tags: []
+      summary: "Authorization code grant: Revoke access"
+      description: The revoke call will terminate the access granted by citi customer
+        to your application.
+      parameters:
+      - name: Authorization
+        in: header
+        description: "HTTP Basic authentication by passing base64 encoded value of\
+          \ the client id and client secret separated by colon (:).Example: Base64(client_id:client_secret)\
+          \ will be passed as Basic KGNsaWVudF9pZDpjbGllbnRfc2VjcmV0KQ=="
+        required: true
+        type: string
+      - name: Content-Type
+        in: header
+        description: Content type. Value is application/x-www-form-urlencoded
+        required: true
+        type: string
+      - in: body
+        name: Body
+        required: true
+        schema:
+          originalRef: '#/definitions/RevokeTokenRequest'
+          $ref: '#/definitions/RevokeTokenRequest'
+      responses:
+        "200":
+          description: The request has succeeded
+          responseSchema:
+            originalRef: '#/definitions/RevokeTokenResponse'
+            $ref: '#/definitions/RevokeTokenResponse'
+          schema:
+            originalRef: '#/definitions/RevokeTokenResponse'
+            $ref: '#/definitions/RevokeTokenResponse'
+        "400":
+          description: "If the request fails due to a missing, invalid, mismatching\
+            \ or malformed mandatory headers like authorization header,Content-Type\
+            \ and parameters like token or token_type_hint."
+          responseSchema:
+            originalRef: '#/definitions/BadResponse'
+            $ref: '#/definitions/BadResponse'
+          schema:
+            originalRef: '#/definitions/BadResponse'
+            $ref: '#/definitions/BadResponse'
+        "401":
+          description: "If the request fails due to a invalid, or mismatching grant_type."
+          responseSchema:
+            originalRef: '#/definitions/UnAuthorizedResponse'
+            $ref: '#/definitions/UnAuthorizedResponse'
+          schema:
+            originalRef: '#/definitions/UnAuthorizedResponse'
+            $ref: '#/definitions/UnAuthorizedResponse'
+        "500":
+          description: The authorization server encountered an unexpected condition
+            which prevented it from fulfilling the request.
+          responseSchema:
+            originalRef: '#/definitions/ServerUnavailableResponse'
+            $ref: '#/definitions/ServerUnavailableResponse'
+          schema:
+            originalRef: '#/definitions/ServerUnavailableResponse'
+            $ref: '#/definitions/ServerUnavailableResponse'
+      responsesObject:
+        "200":
+          description: The request has succeeded
+          responseSchema:
+            originalRef: '#/definitions/RevokeTokenResponse'
+            $ref: '#/definitions/RevokeTokenResponse'
+          schema:
+            originalRef: '#/definitions/RevokeTokenResponse'
+            $ref: '#/definitions/RevokeTokenResponse'
+        "400":
+          description: "If the request fails due to a missing, invalid, mismatching\
+            \ or malformed mandatory headers like authorization header,Content-Type\
+            \ and parameters like token or token_type_hint."
+          responseSchema:
+            originalRef: '#/definitions/BadResponse'
+            $ref: '#/definitions/BadResponse'
+          schema:
+            originalRef: '#/definitions/BadResponse'
+            $ref: '#/definitions/BadResponse'
+        "401":
+          description: "If the request fails due to a invalid, or mismatching grant_type."
+          responseSchema:
+            originalRef: '#/definitions/UnAuthorizedResponse'
+            $ref: '#/definitions/UnAuthorizedResponse'
+          schema:
+            originalRef: '#/definitions/UnAuthorizedResponse'
+            $ref: '#/definitions/UnAuthorizedResponse'
+        "500":
+          description: The authorization server encountered an unexpected condition
+            which prevented it from fulfilling the request.
+          responseSchema:
+            originalRef: '#/definitions/ServerUnavailableResponse'
+            $ref: '#/definitions/ServerUnavailableResponse'
+          schema:
+            originalRef: '#/definitions/ServerUnavailableResponse'
+            $ref: '#/definitions/ServerUnavailableResponse'
+definitions:
+  AccessTokenRequest:
+    required:
+    - code
+    - grant_type
+    - redirect_uri
+    properties:
+      grant_type:
+        type: string
+        description: Authentication grant type. Valid value is authorization_code
+      code:
+        type: string
+        description: The code from the response of GET /authCode/oauth2/authorize
+      redirect_uri:
+        type: string
+        description: Absolute uri for user-agent redirection. You should provide\
+          \ the uri passed in GET /authCode/oauth2/authorize request
+  RefreshTokenRequest:
+    required:
+    - grant_type
+    - refresh_token
+    properties:
+      grant_type:
+        type: string
+        description: The grant type. Valid value is refresh_token.
+      refresh_token:
+        type: string
+        description: The refresh token issued to the client
+  RevokeTokenRequest:
+    required:
+    - token
+    - token_type_hint
+    properties:
+      token:
+        type: string
+        description: The token to be revoked
+      token_type_hint:
+        type: string
+        description: "A hint about the type of the token submitted for revocation.\\\
+          \ \\ clients may pass this parameter in order to help the authorization\
+          \ server\\ \\ to optimize the token lookup. Valid values are access_token,\
+          \ refresh_token"
+  AccessTokenResponse:
+    required:
+    - access_token
+    - expires_in
+    - refresh_token
+    - refresh_token_expires_in
+    - scope
+    - token_type
+    properties:
+      token_type:
+        type: string
+        example: Bearer
+        description: Type of the access token issued.  This is bearer token for authorization_code
+          grant type
+      access_token:
+        type: string
+        example: AAEkYzFjMDQ0Y2UtNTBmMy00NmY4LWI4YjEtYmQ5ODJkMWZiNGZh3xGP85xjqyxoHR7pXxzQJf223kWPL-HyWHD4zrRCvHZUkeBkTgxppbmpFtmWeVmjzDOxs1wFzI4s45YDS15eYmyuxzLbVog4d8H9pYSelrvL6naDYOLL9U16EaY0iyAMPBGX1H7RhCqtmd-7u_Eanw7QshbruLaZh2stOrdq2thC5CCSwW2r0e8PM1QbWubJOcMp8UGv-zNc0I3cTSihymSCF44HJ_yeuPAcXJ7kj-iPzQqxaO6FiWPmIsIh2YSxdGYo8alTyjJfG5AQDnM0HA
+        description: The access token value received after exchanging the authorization
+          token. This field should be passed as Authorization header in API request
+          calls
+      expires_in:
+        type: number
+        example: 600.0
+        description: Validity of access token in seconds
+      scope:
+        type: string
+        example: accounts_details_transactions accounts_routing_number customers_profiles  accounts_statements
+          accounts_tax_statements
+        description: Set of scopes allowed by customer and separated by space
+      refresh_token:
+        type: string
+        example: AAGsyASCzlBplxGvA-5CFCkLhNinu6-0HQt-y7PuzsRLVAHok6yYs6KS2Np4t7bL0R8FMeT62wYXFxxY6F7LU_cc00QTXPfoQFFtay2tu3eGpBAGDg07ll_vNk_AEJo9l1GaEKYev7Q7drDOeRCDRqcD12zJzk36PsQEM6j1txFV2jR3snW5PLs3HVjxNRjUHWLR5IoI2qfb8zCZNahrFCRQ7T7ZVB_-E6Qk22tN3hZkZH7_kB3bZjtVoNxyjJ6qBDcrYdgtAvPvBV-xXDBmfUXD44JBYiZffHjEr2dFb_e3yA
+        description: You can use this token to refresh an expired access_token.
+      refresh_token_expires_in:
+        type: number
+        example: 2592000.0
+        description: Validity of refresh token in seconds
+  RefreshTokenResponse:
+    required:
+    - access_token
+    - expires_in
+    - refresh_token
+    - refresh_token_expires_in
+    - scope
+    - token_type
+    properties:
+      token_type:
+        type: string
+        example: Bearer
+        description: Type of the access token issued.  This is bearer token for authorization_code
+          grant type
+      access_token:
+        type: string
+        example: AAEkYzFjMDQ0Y2UtNTBmMy00NmY4LWI4YjEtYmQ5ODJkMWZiNGZh3xGP85xjqyxoHR7pXxzQJf223kWPL-HyWHD4zrRCvHZUkeBkTgxppbmpFtmWeVmjzDOxs1wFzI4s45YDS15eYmyuxzLbVog4d8H9pYSelrvL6naDYOLL9U16EaY0iyAMPBGX1H7RhCqtmd-7u_Eanw7QshbruLaZh2stOrdq2thC5CCSwW2r0e8PM1QbWubJOcMp8UGv-zNc0I3cTSihymSCF44HJ_yeuPAcXJ7kj-iPzQqxaO6FiWPmIsIh2YSxdGYo8alTyjJfG5AQDnM0HA
+        description: The access token value received after exchanging the authorization
+          token. This field should be passed as Authorization header in API request
+          calls
+      expires_in:
+        type: number
+        example: 600.0
+        description: Validity of access token in seconds
+      scope:
+        type: string
+        example: accounts_details_transactions accounts_routing_number customers_profiles  accounts_statements
+          accounts_tax_statements
+        description: Set of scopes allowed by customer and separated by space
+      refresh_token:
+        type: string
+        example: AAGsyASCzlBplxGvA-5CFCkLhNinu6-0HQt-y7PuzsRLVAHok6yYs6KS2Np4t7bL0R8FMeT62wYXFxxY6F7LU_cc00QTXPfoQFFtay2tu3eGpBAGDg07ll_vNk_AEJo9l1GaEKYev7Q7drDOeRCDRqcD12zJzk36PsQEM6j1txFV2jR3snW5PLs3HVjxNRjUHWLR5IoI2qfb8zCZNahrFCRQ7T7ZVB_-E6Qk22tN3hZkZH7_kB3bZjtVoNxyjJ6qBDcrYdgtAvPvBV-xXDBmfUXD44JBYiZffHjEr2dFb_e3yA
+        description: You can use this token to refresh an expired access_token.
+      refresh_token_expires_in:
+        type: number
+        example: 2592000.0
+        description: Validity of refresh token in seconds
+  RevokeTokenResponse:
+    properties:
+      status:
+        type: string
+        example: success
+        description: The status of the token revocation request.
+  ErrorResponse:
+    properties:
+      error_description:
+        type: string
+        description: "Human-readable ASCII [USASCII] text providing additional information,\
+          \ used to assist the client developer in understanding the error that occurred"
+      error:
+        type: string
+        description: "If the request fails due to a missing, invalid, or mismatching\
+          \ redirection URI, or if the client identifier is missing or invalid, the\
+          \ authorization server SHOULD inform the resource owner of the error and\
+          \ MUST NOT automatically redirect the user-agent to the invalid redirection\
+          \ URI."
+        enum:
+        - invalid_request
+        - unauthorized_client
+        - access_denied
+        - unsupported_response_type
+        - invalid_scope
+        - server_error
+        - temporarily_unavailable
+        - unsupported_token_type
+      error_uri:
+        type: string
+        description: "A URI identifying a human-readable web page with information\
+          \ about the error, used to provide the client developer with additional\
+          \ information about the error."
+      type:
+        type: string
+      code:
+        type: string
+      details:
+        type: string
+      message:
+        type: string
+        description: Error message
+  BadResponse:
+    properties:
+      error:
+        type: string
+        example: invalid_request
+        description: "If the request fails due to a missing, invalid, or mismatching\
+          \ authorization header,content-type,auth code,grant type or redirection\
+          \ uri."
+    required:
+    - error
+    allOf:
+    - originalRef: '#/definitions/ErrorResponse'
+      $ref: '#/definitions/ErrorResponse'
+  UnAuthorizedResponse:
+    properties:
+      error:
+        type: string
+        example: invalid_grant
+        description: "If the request fails due to a invalid, or mismatching grant\
+          \ type."
+    required:
+    - error
+    allOf:
+    - originalRef: '#/definitions/ErrorResponse'
+      $ref: '#/definitions/ErrorResponse'
+  NotFoundResponse:
+    properties:
+      type:
+        type: string
+        example: error
+        description: Type of the error
+      code:
+        type: string
+        example: invalidToken
+        description: Error code
+      details:
+        type: string
+        example: Resource Not Found
+        description: Error details
+      error:
+        type: string
+        example: invalidToken
+        description: "If authorization-code is already used,Access Token is revoked\
+          \ or Refresh token is already used."
+      message:
+        type: string
+        example: ""
+        description: "In case of consent time reaches max consent life time which\
+          \ is configured for 1 year, this meassge is returned in this field."
+    required:
+    - code
+    allOf:
+    - originalRef: '#/definitions/ErrorResponse'
+      $ref: '#/definitions/ErrorResponse'
+  ServerUnavailableResponse:
+    properties:
+      type:
+        type: string
+        example: fatal
+        description: Type of the error
+      code:
+        type: string
+        example: serverUnavailable
+        description: Error code
+      details:
+        type: string
+        example: The request failed due to an internal error/server unavailability
+        description: Error details
+      error:
+        type: string
+        example: server_error
+        description: The authorization server encountered an unexpected condition
+          which prevented it from fulfilling the request.
+    allOf:
+    - originalRef: '#/definitions/ErrorResponse'
+      $ref: '#/definitions/ErrorResponse'

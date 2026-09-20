@@ -1,0 +1,408 @@
+openapi: 3.0.1
+info:
+  title: Customers Profiles
+  description: "The Customers API can be used to view and update basic customer profile\
+    \ information like name, mailing address, email address, and phone numbers."
+  version: 1.0.0
+servers:
+- url: /api/custmgmt/profiles/v1
+paths:
+  /accounts/{accountId}/details:
+    get:
+      tags:
+      - Customer Profile
+      summary: Retrieve restricted customer profile information for specific account
+      description: "Returns the Citi customer's name, email address, mailing address\
+        \ and phone numbers. This should be used by data aggregators."
+      parameters:
+      - name: Authorization
+        in: header
+        description: "The most recent authorization token. This will have the format\
+          \ Bearer + {space} + {accessToken}. Example: Bearer KGNsaWVudF9pZDpjbGllbnRfc2VjcmV0KQ==."
+        required: true
+        schema:
+          type: string
+      - name: uuid
+        in: header
+        description: 128 bit random UUID generated uniquely for every request
+        required: true
+        schema:
+          type: string
+      - name: Accept
+        in: header
+        description: Content-Types that are acceptable for the response
+        required: true
+        schema:
+          type: string
+      - name: client_id
+        in: header
+        description: Client ID generated during application registration.
+        required: true
+        schema:
+          type: string
+      - name: countryCode
+        in: header
+        description: Two character ISO format Country Code
+        required: true
+        schema:
+          type: string
+      - name: accountId
+        in: path
+        description: account ID
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerProfileResponse'
+            charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/CustomerProfileResponse'
+        "400":
+          description: If Authorization header is empty or If clientId is wrong
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadResponse'
+            charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/BadResponse'
+        "401":
+          description: If wrong access token is used or If AccessToken is expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnAuthorizedCredentialResponse'
+            charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/UnAuthorizedCredentialResponse'
+        "403":
+          description: If clientId is correct but token was generated for different
+            clientId
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenResponse'
+            charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/ForbiddenResponse'
+        "404":
+          description: If AccessToken is not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundResponse'
+            charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/NotFoundResponse'
+        "500":
+          description: If request failed due to an internal error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerErrorResponse'
+            charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/ServerErrorResponse'
+components:
+  schemas:
+    Email:
+      required:
+      - emailAddress
+      - preferenceType
+      type: object
+      properties:
+        emailAddress:
+          type: string
+          description: |-
+            Mandatory.
+
+             Email address of the customer
+          example: customer123@email.com
+        preferenceType:
+          type: string
+          description: |-
+            Mandatory.
+
+             email preference
+          example: PRIMARY
+          enum:
+          - PRIMARY
+          - SECONDARY
+    Address:
+      required:
+      - countryCode
+      - postalCode
+      type: object
+      properties:
+        addressId:
+          type: string
+          description: address ID.
+          example: "12345"
+        addressLine1:
+          type: string
+          description: Address line1
+          example: 100 Prospect St
+        addressLine2:
+          type: string
+          description: Address line2
+          example: Apt 203
+        addressLine3:
+          type: string
+          description: Address line3
+          example: Unit Number 20
+        addressType:
+          type: string
+          description: address type
+          example: MAILING
+        city:
+          type: string
+          description: Customer city
+          example: Irving
+        countryCode:
+          type: string
+          description: |-
+            Mandatory.
+
+             Customer country code
+          example: US
+        postalCode:
+          type: string
+          description: |-
+            Mandatory.
+
+             Customer postal code
+          example: "12356789"
+        state:
+          type: string
+          description: Customer state code
+          example: TX
+    Phone:
+      required:
+      - phoneType
+      - preferenceType
+      type: object
+      properties:
+        areaCode:
+          type: string
+          description: area code of the phone number
+          example: "954"
+        countryCallingCode:
+          type: string
+          description: country code of the phone number
+          example: "1"
+        exchangeNumber:
+          type: string
+          description: phone exchange number
+          example: "2312"
+        extension:
+          type: string
+          description: extension for the phone
+          example: "123"
+        fullPhoneNumber:
+          type: string
+          description: Complete phone number
+          example: "1234567890"
+        localNumber:
+          type: string
+          description: land line number
+          example: "002"
+        phoneType:
+          type: string
+          description: |-
+            Mandatory.
+
+             Type of the phone (Mobile, Office or Other).
+          example: CELL
+          enum:
+          - HOME
+          - BUSINESS
+          - CELL
+          - MOBILE
+        preferenceType:
+          type: string
+          description: |-
+            Mandatory.
+
+             Denotes primary or secondary
+          example: PRIMARY
+          enum:
+          - PRIMARY
+          - SECONDARY
+    CustomerProfileResponse:
+      required:
+      - firstName
+      - lastName
+      type: object
+      properties:
+        fullName:
+          type: string
+          description: Customer full name.
+          example: Marc Carlo
+        firstName:
+          type: string
+          description: |-
+            Mandatory.
+
+             Customer first name.
+          example: Marc
+        lastName:
+          type: string
+          description: |-
+            Mandatory.
+
+             Customer last name.
+          example: Carlo
+        middleName:
+          type: string
+          description: Customer middle name.
+          example: david
+        localName:
+          type: string
+          description: Customer's local name.
+          example: Rick
+        title:
+          type: string
+          description: The prefix of the customer's name.
+          example: Mr
+        suffix:
+          type: string
+          description: The suffix of the customer's name.
+          example: Jr
+        maidenName:
+          type: string
+          description: Customer's maternal surname.
+          example: PAUL
+        companyName:
+          type: string
+          description: customer's company name.
+          example: PAUL
+        emails:
+          type: array
+          items:
+            $ref: '#/components/schemas/Email'
+        addressList:
+          type: array
+          items:
+            $ref: '#/components/schemas/Address'
+        phones:
+          type: array
+          items:
+            $ref: '#/components/schemas/Phone'
+    ErrorResponse:
+      required:
+      - code
+      - type
+      type: object
+      properties:
+        error:
+          type: string
+          description: Text providing additional information used to assist the client
+            in understanding the error that occurred
+        error_description:
+          type: string
+          description: Text informing the client of the error
+        type:
+          type: string
+          description: |-
+            Mandatory.
+
+             error type
+        code:
+          type: string
+          description: |-
+            Mandatory.
+
+             Error code
+        details:
+          type: string
+          description: Verbose explanation of the error
+    BadResponse:
+      properties:
+        error:
+          type: object
+          example: invalid_request
+        error_description:
+          type: object
+          example: Missing or Invalid parameters or Invalid Client Identifier
+        type:
+          type: object
+          example: invalid or error
+        code:
+          type: object
+          example: invalidRequest or 400
+        details:
+          type: object
+          example: Missing or invalid parameters or Bad Request
+      allOf:
+      - $ref: '#/components/schemas/ErrorResponse'
+    UnAuthorizedCredentialResponse:
+      properties:
+        error:
+          type: object
+          example: invalid_token
+        error_description:
+          type: object
+          example: Invalid Token
+        type:
+          type: object
+          example: unAuthorized
+        code:
+          type: object
+          example: "401"
+        details:
+          type: object
+          example: Authorization credentials are missing or invalid or Access token
+            is expired
+      allOf:
+      - $ref: '#/components/schemas/ErrorResponse'
+    ForbiddenResponse:
+      properties:
+        error:
+          type: object
+          example: accessNotConfigured
+        error_description:
+          type: object
+          example: Insufficient permission to grant access
+        type:
+          type: object
+          example: error
+        code:
+          type: object
+          example: "403"
+        details:
+          type: object
+          example: accessNotConfigured
+      allOf:
+      - $ref: '#/components/schemas/ErrorResponse'
+    NotFoundResponse:
+      properties:
+        type:
+          type: object
+          example: error
+        code:
+          type: object
+          example: resourceNotFound
+        details:
+          type: object
+          example: Resource not found
+      allOf:
+      - $ref: '#/components/schemas/ErrorResponse'
+    ServerErrorResponse:
+      properties:
+        type:
+          type: object
+          example: fatal
+        code:
+          type: object
+          example: serverUnavailable
+        details:
+          type: object
+          example: The request failed due to an internal error
+      allOf:
+      - $ref: '#/components/schemas/ErrorResponse'
+x-original-swagger-version: "2.0"

@@ -1,0 +1,2941 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Card on File Data Inquiry",
+    "description": "",
+    "version": "1"
+  },
+  "servers": [
+    {
+      "url": "https://sandbox.api.visa.com",
+      "description": "Sandbox server"
+    }
+  ],
+  "security": [],
+  "tags": [
+    {
+      "name": "Card-On-File Data Service API",
+      "description": "Card-On-File Data API allows to enable digital control capabilities in Issuer’s online mobile application or web application to provide visibility to the consumers where their card (PAN)/token credentials are stored to initiate Card-On-File Data API/e-commerce transactions and where the credentials are updated in case of a card reissuance or token status updates"
+    }
+  ],
+  "paths": {
+    "/cofds-web/v1/datainfo": {
+      "post": {
+        "tags": [
+          "Card-On-File Data Service API"
+        ],
+        "summary": "Card-on-File Merchant Aggregation",
+        "description": "The API will return data layer aggregated at cleansed merchant name level.",
+        "operationId": "getMerchantData",
+        "requestBody": {
+          "description": "Card-On-File Data request query for merchants",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MerchantDataRequest"
+              },
+              "examples": {
+                "Matching Data Found": {
+                  "summary": "Matching Data Found",
+                  "value": {
+                    "requestHeader": {
+                      "requestMessageId": "7076bcbe-d388-4ffa-bd38-9453251ddf1a",
+                      "messageDateTime": "2025-05-27 06:18:40.425"
+                    },
+                    "requestData": {
+                      "pANs": [
+                        "4395842407250000"
+                      ],
+                      "group": "STANDARD"
+                    }
+                  }
+                },
+                "No Matching Data": {
+                  "summary": "No Matching Data",
+                  "value": {
+                    "requestHeader": {
+                      "requestMessageId": "54675656776565467565677656546756567765654675656776",
+                      "messageDateTime": "2023-09-07 03:42:56.835"
+                    },
+                    "requestData": {
+                      "pANs": [
+                        "4072208010000000"
+                      ],
+                      "group": "STANDARD"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MerchantDataResponse"
+                },
+                "examples": {
+                  "Matching Data Found": {
+                    "summary": "Matching Data Found",
+                    "value": {
+                      "responseHeader": {
+                        "numRecordsReturned": 1,
+                        "responseMessageId": "1748326721_739_1257052126_f4999676-959r_VDP_WS",
+                        "requestMessageId": "7076bcbe-d388-4ffa-bd38-9453251ddf1a",
+                        "messageDateTime": "2025-05-27 06:18:41.896"
+                      },
+                      "responseData": {
+                        "panList": [
+                          {
+                            "panData": {
+                              "panResponseMsg": "Success",
+                              "pAN": "4395842407250000",
+                              "merchants": [
+                                {
+                                  "mrchDbaName": "PRIME VIDEO",
+                                  "mrchName": "PRIME VIDEO",
+                                  "cardAcceptorId": "1.60E+14",
+                                  "totalTranCount": "2",
+                                  "lastTranAmtUSD": "3.99",
+                                  "vAUUpdateStatus": "",
+                                  "mCC": "4815",
+                                  "tokenPANReplacementStatus": "",
+                                  "lastTranAmt": "3.99",
+                                  "lastTranAmtBillCurrency": "3.99",
+                                  "tokenReqstrId": "0",
+                                  "vAULastUpdateDate": "",
+                                  "confidenceInd": "C",
+                                  "mrchRef": "MTIzNDU6UFJJTUUgVklERU8=",
+                                  "lastTranDateTime": "2021-01-18 03:49:16.000",
+                                  "mrchPhoneNum": "",
+                                  "lastTranBillCurrency": "USD",
+                                  "mrchDbaId": "12345",
+                                  "lastTranCurrency": "USD",
+                                  "lastMrchTranDt": "2021-01-18",
+                                  "acctNumOld4Digit": "",
+                                  "mrchLogoURL": "",
+                                  "mrchAddr": "",
+                                  "mrchURL": "",
+                                  "tranTypeDetails": [
+                                    {
+                                      "lastTranBillCurrency": "USD",
+                                      "lastTranCurrency": "USD",
+                                      "lastTranAmt": "3.99",
+                                      "lastTranAmtBillCurrency": "3.99",
+                                      "lastTranAmtUSD": "3.99",
+                                      "tranCount": 2,
+                                      "lastTranDateTime": "2021-01-18 03:49:16.000",
+                                      "tranType": "ECOM_OTHER"
+                                    }
+                                  ],
+                                  "tokenPANReplacementDate": ""
+                                },
+                                {
+                                  "mrchDbaName": "COMPUTERHELP",
+                                  "mrchName": "COMPUTERHELP",
+                                  "cardAcceptorId": "4.09E+14",
+                                  "totalTranCount": "1",
+                                  "lastTranAmtUSD": "100.00",
+                                  "vAUUpdateStatus": "",
+                                  "mCC": "4816",
+                                  "tokenPANReplacementStatus": "",
+                                  "lastTranAmt": "100.00",
+                                  "lastTranAmtBillCurrency": "100.00",
+                                  "tokenReqstrId": "0",
+                                  "vAULastUpdateDate": "",
+                                  "confidenceInd": "C",
+                                  "mrchRef": "MTIzNDU6Q09NUFVURVJIRUxQ",
+                                  "lastTranDateTime": "2024-02-01 21:11:59.000",
+                                  "mrchPhoneNum": "",
+                                  "lastTranBillCurrency": "GBP",
+                                  "mrchDbaId": "12345",
+                                  "lastTranCurrency": "GBP",
+                                  "lastMrchTranDt": "2024-02-01",
+                                  "acctNumOld4Digit": "",
+                                  "mrchLogoURL": "",
+                                  "mrchAddr": "",
+                                  "mrchURL": "",
+                                  "tranTypeDetails": [
+                                    {
+                                      "lastTranBillCurrency": "GBP",
+                                      "lastTranCurrency": "GBP",
+                                      "lastTranAmt": "100.00",
+                                      "lastTranAmtBillCurrency": "100.00",
+                                      "lastTranAmtUSD": "100.00",
+                                      "tranCount": 1,
+                                      "lastTranDateTime": "2024-02-01 21:11:59.000",
+                                      "tranType": "CUSTOMER_COF"
+                                    }
+                                  ],
+                                  "tokenPANReplacementDate": ""
+                                },
+                                {
+                                  "mrchDbaName": "FLICKR",
+                                  "mrchName": "FLICKR",
+                                  "cardAcceptorId": "4.46E+11",
+                                  "totalTranCount": "1",
+                                  "lastTranAmtUSD": "6.99",
+                                  "vAUUpdateStatus": "",
+                                  "mCC": "7299",
+                                  "tokenPANReplacementStatus": "",
+                                  "lastTranAmt": "6.99",
+                                  "lastTranAmtBillCurrency": "6.99",
+                                  "tokenReqstrId": "0",
+                                  "vAULastUpdateDate": "",
+                                  "confidenceInd": "C",
+                                  "mrchRef": "MTIzNDU6RkxJQ0tS",
+                                  "lastTranDateTime": "2023-10-02 21:11:59.000",
+                                  "mrchPhoneNum": "",
+                                  "lastTranBillCurrency": "USD",
+                                  "mrchDbaId": "12345",
+                                  "lastTranCurrency": "USD",
+                                  "lastMrchTranDt": "2023-10-02",
+                                  "acctNumOld4Digit": "",
+                                  "mrchLogoURL": "",
+                                  "mrchAddr": "700 Yahoo Way, Sunnyvale, 951321815,California,USA",
+                                  "mrchURL": "www.flickr.com",
+                                  "tranTypeDetails": [
+                                    {
+                                      "lastTranBillCurrency": "USD",
+                                      "lastTranCurrency": "USD",
+                                      "lastTranAmt": "6.99",
+                                      "lastTranAmtBillCurrency": "6.99",
+                                      "lastTranAmtUSD": "6.99",
+                                      "tranCount": 1,
+                                      "lastTranDateTime": "2023-10-02 21:11:59.000",
+                                      "tranType": "SCHEDULED_RECURRING"
+                                    }
+                                  ],
+                                  "tokenPANReplacementDate": ""
+                                },
+                                {
+                                  "mrchDbaName": "CHEGG ORDER",
+                                  "mrchName": "CHEGG ORDER",
+                                  "cardAcceptorId": "4.45E+11",
+                                  "totalTranCount": "1",
+                                  "lastTranAmtUSD": "50.49",
+                                  "vAUUpdateStatus": "",
+                                  "mCC": "5942",
+                                  "tokenPANReplacementStatus": "",
+                                  "lastTranAmt": "50.49",
+                                  "lastTranAmtBillCurrency": "50.49",
+                                  "tokenReqstrId": "0",
+                                  "vAULastUpdateDate": "",
+                                  "confidenceInd": "C",
+                                  "mrchRef": "MTIzNDU6Q0hFR0cgT1JERVI=",
+                                  "lastTranDateTime": "2023-12-10 21:11:59.000",
+                                  "mrchPhoneNum": "",
+                                  "lastTranBillCurrency": "GBP",
+                                  "mrchDbaId": "12345",
+                                  "lastTranCurrency": "GBP",
+                                  "lastMrchTranDt": "2023-12-10",
+                                  "acctNumOld4Digit": "",
+                                  "mrchLogoURL": "",
+                                  "mrchAddr": "",
+                                  "mrchURL": "",
+                                  "tranTypeDetails": [
+                                    {
+                                      "lastTranBillCurrency": "GBP",
+                                      "lastTranCurrency": "GBP",
+                                      "lastTranAmt": "50.49",
+                                      "lastTranAmtBillCurrency": "50.49",
+                                      "lastTranAmtUSD": "50.49",
+                                      "tranCount": 1,
+                                      "lastTranDateTime": "2023-12-10 21:11:59.000",
+                                      "tranType": "UNSCHEDULED_RECURRING"
+                                    }
+                                  ],
+                                  "tokenPANReplacementDate": ""
+                                },
+                                {
+                                  "mrchDbaName": "Tap",
+                                  "mrchName": "Tap",
+                                  "cardAcceptorId": "80001684",
+                                  "totalTranCount": "1",
+                                  "lastTranAmtUSD": "2.00",
+                                  "vAUUpdateStatus": "",
+                                  "mCC": "5399",
+                                  "tokenPANReplacementStatus": "",
+                                  "lastTranAmt": "2.00",
+                                  "lastTranAmtBillCurrency": "2.00",
+                                  "tokenReqstrId": "0",
+                                  "vAULastUpdateDate": "",
+                                  "confidenceInd": "C",
+                                  "mrchRef": "MTIzNDU6VGFw",
+                                  "lastTranDateTime": "2024-02-29 21:11:59.000",
+                                  "mrchPhoneNum": "",
+                                  "lastTranBillCurrency": "KWD",
+                                  "mrchDbaId": "12345",
+                                  "lastTranCurrency": "KWD",
+                                  "lastMrchTranDt": "2024-02-29",
+                                  "acctNumOld4Digit": "",
+                                  "mrchLogoURL": "",
+                                  "mrchAddr": "",
+                                  "mrchURL": "",
+                                  "tranTypeDetails": [
+                                    {
+                                      "lastTranBillCurrency": "KWD",
+                                      "lastTranCurrency": "KWD",
+                                      "lastTranAmt": "2.00",
+                                      "lastTranAmtBillCurrency": "2.00",
+                                      "lastTranAmtUSD": "2.00",
+                                      "tranCount": 1,
+                                      "lastTranDateTime": "2024-02-29 21:11:59.000",
+                                      "tranType": "CUSTOMER_COF"
+                                    }
+                                  ],
+                                  "tokenPANReplacementDate": ""
+                                },
+                                {
+                                  "mrchDbaName": "PAYPAL",
+                                  "mrchName": "PAYPAL",
+                                  "cardAcceptorId": "9.80E+11",
+                                  "totalTranCount": "9",
+                                  "sponsoredMerchantId": "WU3MQR8N6DPHE",
+                                  "lastTranAmtUSD": "234.10",
+                                  "vAUUpdateStatus": "",
+                                  "mCC": "5651",
+                                  "tokenPANReplacementStatus": "",
+                                  "lastTranAmt": "234.10",
+                                  "paymentFacilitatorId": "10036958",
+                                  "lastTranAmtBillCurrency": "234.10",
+                                  "tokenReqstrId": "0",
+                                  "vAULastUpdateDate": "",
+                                  "confidenceInd": "C",
+                                  "mrchRef": "MTIzNDU6UEFZUEFM",
+                                  "lastTranDateTime": "2024-03-13 02:37:51.000",
+                                  "mrchPhoneNum": "",
+                                  "lastTranBillCurrency": "EUR",
+                                  "mrchDbaId": "12345",
+                                  "lastTranCurrency": "EUR",
+                                  "lastMrchTranDt": "2024-03-13",
+                                  "acctNumOld4Digit": "",
+                                  "mrchLogoURL": "",
+                                  "mrchAddr": "2211 N First St, San Jose, 951311234, California, USA",
+                                  "mrchURL": "www.paypal.com",
+                                  "tranTypeDetails": [
+                                    {
+                                      "lastTranBillCurrency": "EUR",
+                                      "lastTranCurrency": "EUR",
+                                      "lastTranAmt": "234.10",
+                                      "lastTranAmtBillCurrency": "234.10",
+                                      "lastTranAmtUSD": "234.10",
+                                      "tranCount": 9,
+                                      "lastTranDateTime": "2024-03-13 02:37:51.000",
+                                      "tranType": "CUSTOMER_COF"
+                                    }
+                                  ],
+                                  "tokenPANReplacementDate": ""
+                                },
+                                {
+                                  "mrchDbaName": "Dropbox",
+                                  "mrchName": "Dropbox",
+                                  "cardAcceptorId": "3.96E+11",
+                                  "totalTranCount": "1",
+                                  "lastTranAmtUSD": "0.99",
+                                  "vAUUpdateStatus": "",
+                                  "mCC": "5399",
+                                  "tokenPANReplacementStatus": "",
+                                  "lastTranAmt": "0.99",
+                                  "lastTranAmtBillCurrency": "0.99",
+                                  "tokenReqstrId": "0",
+                                  "vAULastUpdateDate": "",
+                                  "confidenceInd": "C",
+                                  "mrchRef": "MTIzNDU6RHJvcGJveA==",
+                                  "lastTranDateTime": "2023-11-22 21:11:59.000",
+                                  "mrchPhoneNum": "",
+                                  "lastTranBillCurrency": "GBP",
+                                  "mrchDbaId": "12345",
+                                  "lastTranCurrency": "GBP",
+                                  "lastMrchTranDt": "2023-11-22",
+                                  "acctNumOld4Digit": "",
+                                  "mrchLogoURL": "",
+                                  "mrchAddr": "1800 Owens St, San Francisco, 941581234, California, USA",
+                                  "mrchURL": "www.dropbox.com",
+                                  "tranTypeDetails": [
+                                    {
+                                      "lastTranBillCurrency": "GBP",
+                                      "lastTranCurrency": "GBP",
+                                      "lastTranAmt": "0.99",
+                                      "lastTranAmtBillCurrency": "0.99",
+                                      "lastTranAmtUSD": "0.99",
+                                      "tranCount": 1,
+                                      "lastTranDateTime": "2023-11-22 21:11:59.000",
+                                      "tranType": "UNKNOWN_COF"
+                                    }
+                                  ],
+                                  "tokenPANReplacementDate": ""
+                                },
+                                {
+                                  "mrchDbaName": "BIGFISHGAMES",
+                                  "mrchName": "BIGFISHGAMES",
+                                  "cardAcceptorId": "1.54E+14",
+                                  "totalTranCount": "1",
+                                  "lastTranAmtUSD": "10.99",
+                                  "vAUUpdateStatus": "",
+                                  "mCC": "5399",
+                                  "tokenPANReplacementStatus": "",
+                                  "lastTranAmt": "10.99",
+                                  "lastTranAmtBillCurrency": "10.99",
+                                  "tokenReqstrId": "0",
+                                  "vAULastUpdateDate": "",
+                                  "confidenceInd": "C",
+                                  "mrchRef": "MTIzNDU6QklHRklTSEdBTUVT",
+                                  "lastTranDateTime": "2024-01-31 21:11:59.000",
+                                  "mrchPhoneNum": "",
+                                  "lastTranBillCurrency": "GBP",
+                                  "mrchDbaId": "12345",
+                                  "lastTranCurrency": "GBP",
+                                  "lastMrchTranDt": "2024-01-31",
+                                  "acctNumOld4Digit": "",
+                                  "mrchLogoURL": "",
+                                  "mrchAddr": "",
+                                  "mrchURL": "",
+                                  "tranTypeDetails": [
+                                    {
+                                      "lastTranBillCurrency": "GBP",
+                                      "lastTranCurrency": "GBP",
+                                      "lastTranAmt": "10.99",
+                                      "lastTranAmtBillCurrency": "10.99",
+                                      "lastTranAmtUSD": "10.99",
+                                      "tranCount": 1,
+                                      "lastTranDateTime": "2024-01-31 21:11:59.000",
+                                      "tranType": "UNKNOWN_COF"
+                                    }
+                                  ],
+                                  "tokenPANReplacementDate": ""
+                                },
+                                {
+                                  "mrchDbaName": "ADOBE CREATIVE CLOUD",
+                                  "mrchName": "ADOBE CREATIVE CLOUD",
+                                  "cardAcceptorId": "2.22E+14",
+                                  "totalTranCount": "1",
+                                  "lastTranAmtUSD": "35.00",
+                                  "vAUUpdateStatus": "",
+                                  "mCC": "5399",
+                                  "tokenPANReplacementStatus": "",
+                                  "lastTranAmt": "35.00",
+                                  "lastTranAmtBillCurrency": "35.00",
+                                  "tokenReqstrId": "0",
+                                  "vAULastUpdateDate": "",
+                                  "confidenceInd": "C",
+                                  "mrchRef": "MTIzNDU6QURPQkUgQ1JFQVRJVkUgQ0xPVUQ=",
+                                  "lastTranDateTime": "2023-11-29 21:11:59.000",
+                                  "mrchPhoneNum": "",
+                                  "lastTranBillCurrency": "GBP",
+                                  "mrchDbaId": "12345",
+                                  "lastTranCurrency": "GBP",
+                                  "lastMrchTranDt": "2023-11-29",
+                                  "acctNumOld4Digit": "",
+                                  "mrchLogoURL": "",
+                                  "mrchAddr": "345 Park Ave, San Jose, 951102704, California, USA",
+                                  "mrchURL": "www.adobe.com",
+                                  "tranTypeDetails": [
+                                    {
+                                      "lastTranBillCurrency": "GBP",
+                                      "lastTranCurrency": "GBP",
+                                      "lastTranAmt": "35.00",
+                                      "lastTranAmtBillCurrency": "35.00",
+                                      "lastTranAmtUSD": "35.00",
+                                      "tranCount": 1,
+                                      "lastTranDateTime": "2023-11-29 21:11:59.000",
+                                      "tranType": "SCHEDULED_RECURRING"
+                                    }
+                                  ],
+                                  "tokenPANReplacementDate": ""
+                                },
+                                {
+                                  "mrchDbaName": "LinkedIn",
+                                  "mrchName": "LinkedIn",
+                                  "cardAcceptorId": "4.99E+14",
+                                  "totalTranCount": "1",
+                                  "lastTranAmtUSD": "8.79",
+                                  "vAUUpdateStatus": "",
+                                  "mCC": "5399",
+                                  "tokenPANReplacementStatus": "",
+                                  "lastTranAmt": "8.79",
+                                  "lastTranAmtBillCurrency": "8.79",
+                                  "tokenReqstrId": "0",
+                                  "vAULastUpdateDate": "",
+                                  "confidenceInd": "C",
+                                  "mrchRef": "MTIzNDU6TGlua2VkSW4=",
+                                  "lastTranDateTime": "2024-02-17 21:11:59.000",
+                                  "mrchPhoneNum": "",
+                                  "lastTranBillCurrency": "USD",
+                                  "mrchDbaId": "12345",
+                                  "lastTranCurrency": "USD",
+                                  "lastMrchTranDt": "2024-02-17",
+                                  "acctNumOld4Digit": "",
+                                  "mrchLogoURL": "",
+                                  "mrchAddr": "1000 W Maude Ave, Sunnyvale, 940851234, California, USA",
+                                  "mrchURL": "www.linkedin.com",
+                                  "tranTypeDetails": [
+                                    {
+                                      "lastTranBillCurrency": "USD",
+                                      "lastTranCurrency": "USD",
+                                      "lastTranAmt": "8.79",
+                                      "lastTranAmtBillCurrency": "8.79",
+                                      "lastTranAmtUSD": "8.79",
+                                      "tranCount": 1,
+                                      "lastTranDateTime": "2024-02-17 21:11:59.000",
+                                      "tranType": "CUSTOMER_COF"
+                                    }
+                                  ],
+                                  "tokenPANReplacementDate": ""
+                                },
+                                {
+                                  "mrchDbaName": "ONLYFANS",
+                                  "mrchName": "ONLYFANS",
+                                  "cardAcceptorId": "4.19E+14",
+                                  "totalTranCount": "1",
+                                  "lastTranAmtUSD": "23.99",
+                                  "vAUUpdateStatus": "",
+                                  "mCC": "5967",
+                                  "tokenPANReplacementStatus": "",
+                                  "lastTranAmt": "23.99",
+                                  "lastTranAmtBillCurrency": "23.99",
+                                  "tokenReqstrId": "0",
+                                  "vAULastUpdateDate": "",
+                                  "confidenceInd": "C",
+                                  "mrchRef": "MTIzNDU6T05MWUZBTlM=",
+                                  "lastTranDateTime": "2024-01-24 21:11:59.000",
+                                  "mrchPhoneNum": "",
+                                  "lastTranBillCurrency": "USD",
+                                  "mrchDbaId": "12345",
+                                  "lastTranCurrency": "USD",
+                                  "lastMrchTranDt": "2024-01-24",
+                                  "acctNumOld4Digit": "",
+                                  "mrchLogoURL": "",
+                                  "mrchAddr": "",
+                                  "mrchURL": "",
+                                  "tranTypeDetails": [
+                                    {
+                                      "lastTranBillCurrency": "USD",
+                                      "lastTranCurrency": "USD",
+                                      "lastTranAmt": "23.99",
+                                      "lastTranAmtBillCurrency": "23.99",
+                                      "lastTranAmtUSD": "23.99",
+                                      "tranCount": 1,
+                                      "lastTranDateTime": "2024-01-24 21:11:59.000",
+                                      "tranType": "CUSTOMER_COF"
+                                    }
+                                  ],
+                                  "tokenPANReplacementDate": ""
+                                },
+                                {
+                                  "mrchDbaName": "TAILOR BRANDS",
+                                  "mrchName": "TAILOR BRANDS",
+                                  "cardAcceptorId": "4.46E+11",
+                                  "totalTranCount": "1",
+                                  "lastTranAmtUSD": "40.00",
+                                  "vAUUpdateStatus": "",
+                                  "mCC": "8999",
+                                  "tokenPANReplacementStatus": "",
+                                  "lastTranAmt": "40.00",
+                                  "lastTranAmtBillCurrency": "40.00",
+                                  "tokenReqstrId": "0",
+                                  "vAULastUpdateDate": "",
+                                  "confidenceInd": "C",
+                                  "mrchRef": "MTIzNDU6VEFJTE9SIEJSQU5EUw==",
+                                  "lastTranDateTime": "2024-01-22 21:11:59.000",
+                                  "mrchPhoneNum": "",
+                                  "lastTranBillCurrency": "KWD",
+                                  "mrchDbaId": "12345",
+                                  "lastTranCurrency": "KWD",
+                                  "lastMrchTranDt": "2024-01-22",
+                                  "acctNumOld4Digit": "",
+                                  "mrchLogoURL": "",
+                                  "mrchAddr": "",
+                                  "mrchURL": "",
+                                  "tranTypeDetails": [
+                                    {
+                                      "lastTranBillCurrency": "KWD",
+                                      "lastTranCurrency": "KWD",
+                                      "lastTranAmt": "40.00",
+                                      "lastTranAmtBillCurrency": "40.00",
+                                      "lastTranAmtUSD": "40.00",
+                                      "tranCount": 1,
+                                      "lastTranDateTime": "2024-01-22 21:11:59.000",
+                                      "tranType": "CUSTOMER_COF"
+                                    }
+                                  ],
+                                  "tokenPANReplacementDate": ""
+                                },
+                                {
+                                  "mrchDbaName": "DR-EXPRT.COM",
+                                  "mrchName": "DR-EXPRT.COM",
+                                  "cardAcceptorId": "4.02E+14",
+                                  "totalTranCount": "1",
+                                  "lastTranAmtUSD": "0.49",
+                                  "vAUUpdateStatus": "",
+                                  "mCC": "742",
+                                  "tokenPANReplacementStatus": "",
+                                  "lastTranAmt": "0.49",
+                                  "lastTranAmtBillCurrency": "0.49",
+                                  "tokenReqstrId": "0",
+                                  "vAULastUpdateDate": "",
+                                  "confidenceInd": "C",
+                                  "mrchRef": "MTIzNDU6RFItRVhQUlQuQ09N",
+                                  "lastTranDateTime": "2023-11-20 21:11:59.000",
+                                  "mrchPhoneNum": "",
+                                  "lastTranBillCurrency": "KWD",
+                                  "mrchDbaId": "12345",
+                                  "lastTranCurrency": "KWD",
+                                  "lastMrchTranDt": "2023-11-20",
+                                  "acctNumOld4Digit": "",
+                                  "mrchLogoURL": "",
+                                  "mrchAddr": "",
+                                  "mrchURL": "",
+                                  "tranTypeDetails": [
+                                    {
+                                      "lastTranBillCurrency": "KWD",
+                                      "lastTranCurrency": "KWD",
+                                      "lastTranAmt": "0.49",
+                                      "lastTranAmtBillCurrency": "0.49",
+                                      "lastTranAmtUSD": "0.49",
+                                      "tranCount": 1,
+                                      "lastTranDateTime": "2023-11-20 21:11:59.000",
+                                      "tranType": "CUSTOMER_COF"
+                                    }
+                                  ],
+                                  "tokenPANReplacementDate": ""
+                                },
+                                {
+                                  "mrchDbaName": "MDACNE.COM",
+                                  "mrchName": "MDACNE.COM",
+                                  "cardAcceptorId": "4.46E+11",
+                                  "totalTranCount": "1",
+                                  "lastTranAmtUSD": "17.75",
+                                  "vAUUpdateStatus": "",
+                                  "mCC": "8099",
+                                  "tokenPANReplacementStatus": "",
+                                  "lastTranAmt": "17.75",
+                                  "lastTranAmtBillCurrency": "17.75",
+                                  "tokenReqstrId": "0",
+                                  "vAULastUpdateDate": "",
+                                  "confidenceInd": "C",
+                                  "mrchRef": "MTIzNDU6TURBQ05FLkNPTQ==",
+                                  "lastTranDateTime": "2023-06-29 21:11:59.000",
+                                  "mrchPhoneNum": "",
+                                  "lastTranBillCurrency": "KWD",
+                                  "mrchDbaId": "12345",
+                                  "lastTranCurrency": "KWD",
+                                  "lastMrchTranDt": "2023-06-29",
+                                  "acctNumOld4Digit": "",
+                                  "mrchLogoURL": "",
+                                  "mrchAddr": "",
+                                  "mrchURL": "",
+                                  "tranTypeDetails": [
+                                    {
+                                      "lastTranBillCurrency": "KWD",
+                                      "lastTranCurrency": "KWD",
+                                      "lastTranAmt": "17.75",
+                                      "lastTranAmtBillCurrency": "17.75",
+                                      "lastTranAmtUSD": "17.75",
+                                      "tranCount": 1,
+                                      "lastTranDateTime": "2023-06-29 21:11:59.000",
+                                      "tranType": "MERCHANT_COF"
+                                    }
+                                  ],
+                                  "tokenPANReplacementDate": ""
+                                },
+                                {
+                                  "mrchDbaName": "RTRECK.COM",
+                                  "mrchName": "RTRECK.COM",
+                                  "cardAcceptorId": "9.70E+14",
+                                  "totalTranCount": "1",
+                                  "lastTranAmtUSD": "19.25",
+                                  "vAUUpdateStatus": "",
+                                  "mCC": "5967",
+                                  "tokenPANReplacementStatus": "",
+                                  "lastTranAmt": "19.25",
+                                  "lastTranAmtBillCurrency": "19.25",
+                                  "tokenReqstrId": "0",
+                                  "vAULastUpdateDate": "",
+                                  "confidenceInd": "C",
+                                  "mrchRef": "MTIzNDU6UlRSRUNLLkNPTQ==",
+                                  "lastTranDateTime": "2024-02-27 21:11:59.000",
+                                  "mrchPhoneNum": "",
+                                  "lastTranBillCurrency": "KWD",
+                                  "mrchDbaId": "12345",
+                                  "lastTranCurrency": "KWD",
+                                  "lastMrchTranDt": "2024-02-27",
+                                  "acctNumOld4Digit": "",
+                                  "mrchLogoURL": "",
+                                  "mrchAddr": "",
+                                  "mrchURL": "",
+                                  "tranTypeDetails": [
+                                    {
+                                      "lastTranBillCurrency": "KWD",
+                                      "lastTranCurrency": "KWD",
+                                      "lastTranAmt": "19.25",
+                                      "lastTranAmtBillCurrency": "19.25",
+                                      "lastTranAmtUSD": "19.25",
+                                      "tranCount": 1,
+                                      "lastTranDateTime": "2024-02-27 21:11:59.000",
+                                      "tranType": "MERCHANT_COF"
+                                    }
+                                  ],
+                                  "tokenPANReplacementDate": ""
+                                },
+                                {
+                                  "mrchDbaName": "WWE NETWORK",
+                                  "mrchName": "WWE NETWORK",
+                                  "cardAcceptorId": "F1EXZBJCG3WALCE",
+                                  "totalTranCount": "1",
+                                  "lastTranAmtUSD": "8.14",
+                                  "vAUUpdateStatus": "",
+                                  "mCC": "5815",
+                                  "tokenPANReplacementStatus": "",
+                                  "lastTranAmt": "8.14",
+                                  "lastTranAmtBillCurrency": "8.14",
+                                  "tokenReqstrId": "0",
+                                  "vAULastUpdateDate": "",
+                                  "confidenceInd": "C",
+                                  "mrchRef": "MTIzNDU6V1dFIE5FVFdPUks=",
+                                  "lastTranDateTime": "2024-02-18 21:11:59.000",
+                                  "mrchPhoneNum": "",
+                                  "lastTranBillCurrency": "KWD",
+                                  "mrchDbaId": "12345",
+                                  "lastTranCurrency": "KWD",
+                                  "lastMrchTranDt": "2024-02-18",
+                                  "acctNumOld4Digit": "",
+                                  "mrchLogoURL": "",
+                                  "mrchAddr": "",
+                                  "mrchURL": "",
+                                  "tranTypeDetails": [
+                                    {
+                                      "lastTranBillCurrency": "KWD",
+                                      "lastTranCurrency": "KWD",
+                                      "lastTranAmt": "8.14",
+                                      "lastTranAmtBillCurrency": "8.14",
+                                      "lastTranAmtUSD": "8.14",
+                                      "tranCount": 1,
+                                      "lastTranDateTime": "2024-02-18 21:11:59.000",
+                                      "tranType": "CUSTOMER_COF"
+                                    }
+                                  ],
+                                  "tokenPANReplacementDate": ""
+                                },
+                                {
+                                  "mrchDbaName": "HEROKU",
+                                  "mrchName": "HEROKU",
+                                  "cardAcceptorId": "JYTT05N3GZQUC8J",
+                                  "totalTranCount": "1",
+                                  "sponsoredMerchantId": "1KlgQ9Lzb5a9EJ",
+                                  "lastTranAmtUSD": "0.99",
+                                  "vAUUpdateStatus": "",
+                                  "mCC": "5734",
+                                  "tokenPANReplacementStatus": "",
+                                  "lastTranAmt": "0.99",
+                                  "paymentFacilitatorId": "10069917",
+                                  "lastTranAmtBillCurrency": "0.99",
+                                  "tokenReqstrId": "0",
+                                  "vAULastUpdateDate": "",
+                                  "confidenceInd": "C",
+                                  "mrchRef": "MTIzNDU6SEVST0tV",
+                                  "lastTranDateTime": "2023-07-26 21:11:59.000",
+                                  "mrchPhoneNum": "",
+                                  "lastTranBillCurrency": "USD",
+                                  "mrchDbaId": "12345",
+                                  "lastTranCurrency": "USD",
+                                  "lastMrchTranDt": "2023-07-26",
+                                  "acctNumOld4Digit": "",
+                                  "mrchLogoURL": "",
+                                  "mrchAddr": "",
+                                  "mrchURL": "",
+                                  "tranTypeDetails": [
+                                    {
+                                      "lastTranBillCurrency": "USD",
+                                      "lastTranCurrency": "USD",
+                                      "lastTranAmt": "0.99",
+                                      "lastTranAmtBillCurrency": "0.99",
+                                      "lastTranAmtUSD": "0.99",
+                                      "tranCount": 1,
+                                      "lastTranDateTime": "2023-07-26 21:11:59.000",
+                                      "tranType": "SCHEDULED_RECURRING"
+                                    }
+                                  ],
+                                  "tokenPANReplacementDate": ""
+                                },
+                                {
+                                  "mrchDbaName": "WAVE",
+                                  "mrchName": "WAVE",
+                                  "cardAcceptorId": "3.96E+11",
+                                  "totalTranCount": "1",
+                                  "sponsoredMerchantId": "10308167",
+                                  "lastTranAmtUSD": "40.00",
+                                  "vAUUpdateStatus": "",
+                                  "mCC": "7299",
+                                  "tokenPANReplacementStatus": "",
+                                  "lastTranAmt": "40.00",
+                                  "paymentFacilitatorId": "10075864",
+                                  "lastTranAmtBillCurrency": "40.00",
+                                  "tokenReqstrId": "0",
+                                  "vAULastUpdateDate": "",
+                                  "confidenceInd": "C",
+                                  "mrchRef": "MTIzNDU6V0FWRQ==",
+                                  "lastTranDateTime": "2024-01-06 21:11:59.000",
+                                  "mrchPhoneNum": "",
+                                  "lastTranBillCurrency": "GBP",
+                                  "mrchDbaId": "12345",
+                                  "lastTranCurrency": "GBP",
+                                  "lastMrchTranDt": "2024-01-06",
+                                  "acctNumOld4Digit": "",
+                                  "mrchLogoURL": "",
+                                  "mrchAddr": "",
+                                  "mrchURL": "",
+                                  "tranTypeDetails": [
+                                    {
+                                      "lastTranBillCurrency": "GBP",
+                                      "lastTranCurrency": "GBP",
+                                      "lastTranAmt": "40.00",
+                                      "lastTranAmtBillCurrency": "40.00",
+                                      "lastTranAmtUSD": "40.00",
+                                      "tranCount": 1,
+                                      "lastTranDateTime": "2024-01-06 21:11:59.000",
+                                      "tranType": "CUSTOMER_COF"
+                                    }
+                                  ],
+                                  "tokenPANReplacementDate": ""
+                                },
+                                {
+                                  "mrchDbaName": "MYFOREXFUNDS-INFO.GO-V",
+                                  "mrchName": "MYFOREXFUNDS-INFO.GO-V",
+                                  "cardAcceptorId": "ENSBEZDPXJPWTAB",
+                                  "totalTranCount": "1",
+                                  "sponsoredMerchantId": "1M9jTKFdKLEesz",
+                                  "lastTranAmtUSD": "5.99",
+                                  "vAUUpdateStatus": "",
+                                  "mCC": "5734",
+                                  "tokenPANReplacementStatus": "",
+                                  "lastTranAmt": "5.99",
+                                  "paymentFacilitatorId": "10077336",
+                                  "lastTranAmtBillCurrency": "5.99",
+                                  "tokenReqstrId": "0",
+                                  "vAULastUpdateDate": "",
+                                  "confidenceInd": "C",
+                                  "mrchRef": "MTIzNDU6TVlGT1JFWEZVTkRTLUlORk8uR08tVg==",
+                                  "lastTranDateTime": "2024-02-21 21:11:59.000",
+                                  "mrchPhoneNum": "",
+                                  "lastTranBillCurrency": "GBP",
+                                  "mrchDbaId": "12345",
+                                  "lastTranCurrency": "GBP",
+                                  "lastMrchTranDt": "2024-02-21",
+                                  "acctNumOld4Digit": "",
+                                  "mrchLogoURL": "",
+                                  "mrchAddr": "",
+                                  "mrchURL": "",
+                                  "tranTypeDetails": [
+                                    {
+                                      "lastTranBillCurrency": "GBP",
+                                      "lastTranCurrency": "GBP",
+                                      "lastTranAmt": "5.99",
+                                      "lastTranAmtBillCurrency": "5.99",
+                                      "lastTranAmtUSD": "5.99",
+                                      "tranCount": 1,
+                                      "lastTranDateTime": "2024-02-21 21:11:59.000",
+                                      "tranType": "CUSTOMER_COF"
+                                    }
+                                  ],
+                                  "tokenPANReplacementDate": ""
+                                },
+                                {
+                                  "mrchDbaName": "HUMANS OF UNIVERSITY",
+                                  "mrchName": "HUMANS OF UNIVERSITY",
+                                  "cardAcceptorId": "DJL5HD1EWMTAQCW",
+                                  "totalTranCount": "1",
+                                  "sponsoredMerchantId": "1DNLEAGgTw0n2E",
+                                  "lastTranAmtUSD": "0.79",
+                                  "vAUUpdateStatus": "",
+                                  "mCC": "8699",
+                                  "tokenPANReplacementStatus": "",
+                                  "lastTranAmt": "0.79",
+                                  "paymentFacilitatorId": "10077336",
+                                  "lastTranAmtBillCurrency": "0.79",
+                                  "tokenReqstrId": "0",
+                                  "vAULastUpdateDate": "",
+                                  "confidenceInd": "C",
+                                  "mrchRef": "MTIzNDU6SFVNQU5TIE9GIFVOSVZFUlNJVFk=",
+                                  "lastTranDateTime": "2024-01-05 21:11:59.000",
+                                  "mrchPhoneNum": "",
+                                  "lastTranBillCurrency": "USD",
+                                  "mrchDbaId": "12345",
+                                  "lastTranCurrency": "USD",
+                                  "lastMrchTranDt": "2024-01-05",
+                                  "acctNumOld4Digit": "",
+                                  "mrchLogoURL": "",
+                                  "mrchAddr": "",
+                                  "mrchURL": "",
+                                  "tranTypeDetails": [
+                                    {
+                                      "lastTranBillCurrency": "USD",
+                                      "lastTranCurrency": "USD",
+                                      "lastTranAmt": "0.79",
+                                      "lastTranAmtBillCurrency": "0.79",
+                                      "lastTranAmtUSD": "0.79",
+                                      "tranCount": 1,
+                                      "lastTranDateTime": "2024-01-05 21:11:59.000",
+                                      "tranType": "SCHEDULED_RECURRING"
+                                    }
+                                  ],
+                                  "tokenPANReplacementDate": ""
+                                },
+                                {
+                                  "mrchDbaName": "UFC",
+                                  "mrchName": "UFC",
+                                  "cardAcceptorId": "FJQRNJW3WUGUPJW",
+                                  "totalTranCount": "1",
+                                  "sponsoredMerchantId": "1FLsSTFZxFnUAO",
+                                  "lastTranAmtUSD": "2.79",
+                                  "vAUUpdateStatus": "",
+                                  "mCC": "5734",
+                                  "tokenPANReplacementStatus": "",
+                                  "lastTranAmt": "2.79",
+                                  "paymentFacilitatorId": "10069917",
+                                  "lastTranAmtBillCurrency": "2.79",
+                                  "tokenReqstrId": "0",
+                                  "vAULastUpdateDate": "",
+                                  "confidenceInd": "C",
+                                  "mrchRef": "MTIzNDU6VUZD",
+                                  "lastTranDateTime": "2023-07-11 21:11:59.000",
+                                  "mrchPhoneNum": "",
+                                  "lastTranBillCurrency": "USD",
+                                  "mrchDbaId": "12345",
+                                  "lastTranCurrency": "USD",
+                                  "lastMrchTranDt": "2023-07-11",
+                                  "acctNumOld4Digit": "",
+                                  "mrchLogoURL": "",
+                                  "mrchAddr": "",
+                                  "mrchURL": "",
+                                  "tranTypeDetails": [
+                                    {
+                                      "lastTranBillCurrency": "USD",
+                                      "lastTranCurrency": "USD",
+                                      "lastTranAmt": "2.79",
+                                      "lastTranAmtBillCurrency": "2.79",
+                                      "lastTranAmtUSD": "2.79",
+                                      "tranCount": 1,
+                                      "lastTranDateTime": "2023-07-11 21:11:59.000",
+                                      "tranType": "ECOM_OTHER"
+                                    }
+                                  ],
+                                  "tokenPANReplacementDate": ""
+                                },
+                                {
+                                  "mrchDbaName": "USAPOWERLIFTING",
+                                  "mrchName": "USAPOWERLIFTING",
+                                  "cardAcceptorId": "LP6GH8Y3QWWTIW0",
+                                  "totalTranCount": "1",
+                                  "sponsoredMerchantId": "1DE7ISJRMReQBH",
+                                  "lastTranAmtUSD": "164.00",
+                                  "vAUUpdateStatus": "",
+                                  "mCC": "8398",
+                                  "tokenPANReplacementStatus": "",
+                                  "lastTranAmt": "164.00",
+                                  "paymentFacilitatorId": "10069917",
+                                  "lastTranAmtBillCurrency": "164.00",
+                                  "tokenReqstrId": "0",
+                                  "vAULastUpdateDate": "",
+                                  "confidenceInd": "C",
+                                  "mrchRef": "MTIzNDU6VVNBUE9XRVJMSUZUSU5H",
+                                  "lastTranDateTime": "2023-06-30 21:11:59.000",
+                                  "mrchPhoneNum": "",
+                                  "lastTranBillCurrency": "KWD",
+                                  "mrchDbaId": "12345",
+                                  "lastTranCurrency": "KWD",
+                                  "lastMrchTranDt": "2023-06-30",
+                                  "acctNumOld4Digit": "",
+                                  "mrchLogoURL": "",
+                                  "mrchAddr": "",
+                                  "mrchURL": "www.usapowerlifting.com",
+                                  "tranTypeDetails": [
+                                    {
+                                      "lastTranBillCurrency": "KWD",
+                                      "lastTranCurrency": "KWD",
+                                      "lastTranAmt": "164.00",
+                                      "lastTranAmtBillCurrency": "164.00",
+                                      "lastTranAmtUSD": "164.00",
+                                      "tranCount": 1,
+                                      "lastTranDateTime": "2023-06-30 21:11:59.000",
+                                      "tranType": "ECOM_OTHER"
+                                    }
+                                  ],
+                                  "tokenPANReplacementDate": ""
+                                },
+                                {
+                                  "mrchDbaName": "PIXIESET.COM",
+                                  "mrchName": "PIXIESET.COM",
+                                  "cardAcceptorId": "NQZEX3WGMBRDHD1",
+                                  "totalTranCount": "1",
+                                  "sponsoredMerchantId": "1691kbGF7YaVdF",
+                                  "lastTranAmtUSD": "23.50",
+                                  "vAUUpdateStatus": "",
+                                  "mCC": "5734",
+                                  "tokenPANReplacementStatus": "",
+                                  "lastTranAmt": "23.50",
+                                  "paymentFacilitatorId": "10069917",
+                                  "lastTranAmtBillCurrency": "23.50",
+                                  "tokenReqstrId": "0",
+                                  "vAULastUpdateDate": "",
+                                  "confidenceInd": "C",
+                                  "mrchRef": "MTIzNDU6UElYSUVTRVQuQ09N",
+                                  "lastTranDateTime": "2024-02-24 21:11:59.000",
+                                  "mrchPhoneNum": "",
+                                  "lastTranBillCurrency": "KWD",
+                                  "mrchDbaId": "12345",
+                                  "lastTranCurrency": "KWD",
+                                  "lastMrchTranDt": "2024-02-24",
+                                  "acctNumOld4Digit": "",
+                                  "mrchLogoURL": "",
+                                  "mrchAddr": "",
+                                  "mrchURL": "",
+                                  "tranTypeDetails": [
+                                    {
+                                      "lastTranBillCurrency": "KWD",
+                                      "lastTranCurrency": "KWD",
+                                      "lastTranAmt": "23.50",
+                                      "lastTranAmtBillCurrency": "23.50",
+                                      "lastTranAmtUSD": "23.50",
+                                      "tranCount": 1,
+                                      "lastTranDateTime": "2024-02-24 21:11:59.000",
+                                      "tranType": "ECOM_OTHER"
+                                    }
+                                  ],
+                                  "tokenPANReplacementDate": ""
+                                },
+                                {
+                                  "mrchDbaName": "DOORDASH DASHPASS",
+                                  "mrchName": "DOORDASH DASHPASS",
+                                  "cardAcceptorId": "1VKWOGBF44BU45L",
+                                  "totalTranCount": "1",
+                                  "sponsoredMerchantId": "1xmerw8hWoEwIJ",
+                                  "lastTranAmtUSD": "12.99",
+                                  "vAUUpdateStatus": "",
+                                  "mCC": "5812",
+                                  "tokenPANReplacementStatus": "",
+                                  "lastTranAmt": "12.99",
+                                  "paymentFacilitatorId": "10069917",
+                                  "lastTranAmtBillCurrency": "12.99",
+                                  "tokenReqstrId": "0",
+                                  "vAULastUpdateDate": "",
+                                  "confidenceInd": "C",
+                                  "mrchRef": "MTIzNDU6RE9PUkRBU0ggREFTSFBBU1M=",
+                                  "lastTranDateTime": "2024-02-03 21:11:59.000",
+                                  "mrchPhoneNum": "",
+                                  "lastTranBillCurrency": "KWD",
+                                  "mrchDbaId": "12345",
+                                  "lastTranCurrency": "KWD",
+                                  "lastMrchTranDt": "2024-02-03",
+                                  "acctNumOld4Digit": "",
+                                  "mrchLogoURL": "",
+                                  "mrchAddr": "1531 Main St, Redwood City, 940631234, California, USA",
+                                  "mrchURL": "www.doordash.com",
+                                  "tranTypeDetails": [
+                                    {
+                                      "lastTranBillCurrency": "KWD",
+                                      "lastTranCurrency": "KWD",
+                                      "lastTranAmt": "12.99",
+                                      "lastTranAmtBillCurrency": "12.99",
+                                      "lastTranAmtUSD": "12.99",
+                                      "tranCount": 1,
+                                      "lastTranDateTime": "2024-02-03 21:11:59.000",
+                                      "tranType": "CUSTOMER_COF"
+                                    }
+                                  ],
+                                  "tokenPANReplacementDate": ""
+                                },
+                                {
+                                  "mrchDbaName": "UBER TECHNOLOGIES",
+                                  "mrchName": "UBER TECHNOLOGIES",
+                                  "cardAcceptorId": "LTPQCYBMC8MSMHF",
+                                  "totalTranCount": "1",
+                                  "sponsoredMerchantId": "Sce6qUwWRlB60x",
+                                  "lastTranAmtUSD": "36.00",
+                                  "vAUUpdateStatus": "",
+                                  "mCC": "5812",
+                                  "tokenPANReplacementStatus": "",
+                                  "lastTranAmt": "36.00",
+                                  "paymentFacilitatorId": "10069917",
+                                  "lastTranAmtBillCurrency": "36.00",
+                                  "tokenReqstrId": "0",
+                                  "vAULastUpdateDate": "",
+                                  "confidenceInd": "C",
+                                  "mrchRef": "MTIzNDU6VUJFUiBURUNITk9MT0dJRVM=",
+                                  "lastTranDateTime": "2023-08-10 21:11:59.000",
+                                  "mrchPhoneNum": "",
+                                  "lastTranBillCurrency": "KWD",
+                                  "mrchDbaId": "12345",
+                                  "lastTranCurrency": "KWD",
+                                  "lastMrchTranDt": "2023-08-10",
+                                  "acctNumOld4Digit": "",
+                                  "mrchLogoURL": "",
+                                  "mrchAddr": "Onbekend Nederlands Adre,,0000AA,,NETHERLANDS",
+                                  "mrchURL": "www.uber.com",
+                                  "tranTypeDetails": [
+                                    {
+                                      "lastTranBillCurrency": "KWD",
+                                      "lastTranCurrency": "KWD",
+                                      "lastTranAmt": "36.00",
+                                      "lastTranAmtBillCurrency": "36.00",
+                                      "lastTranAmtUSD": "36.00",
+                                      "tranCount": 1,
+                                      "lastTranDateTime": "2023-08-10 21:11:59.000",
+                                      "tranType": "CUSTOMER_COF"
+                                    }
+                                  ],
+                                  "tokenPANReplacementDate": ""
+                                },
+                                {
+                                  "mrchDbaName": "SQUARE UP",
+                                  "mrchName": "SQUARE UP",
+                                  "cardAcceptorId": "4.45E+11",
+                                  "totalTranCount": "2",
+                                  "sponsoredMerchantId": "GVHLF6X2WYJXETO",
+                                  "lastTranAmtUSD": "10.99",
+                                  "vAUUpdateStatus": "",
+                                  "mCC": "7997",
+                                  "tokenPANReplacementStatus": "",
+                                  "lastTranAmt": "10.99",
+                                  "paymentFacilitatorId": "10067617",
+                                  "lastTranAmtBillCurrency": "10.99",
+                                  "tokenReqstrId": "0",
+                                  "vAULastUpdateDate": "",
+                                  "confidenceInd": "C",
+                                  "mrchRef": "MTIzNDU6U1FVQVJFIFVQ",
+                                  "lastTranDateTime": "2024-02-28 21:11:59.000",
+                                  "mrchPhoneNum": "",
+                                  "lastTranBillCurrency": "GBP",
+                                  "mrchDbaId": "12345",
+                                  "lastTranCurrency": "GBP",
+                                  "lastMrchTranDt": "2024-02-28",
+                                  "acctNumOld4Digit": "",
+                                  "mrchLogoURL": "",
+                                  "mrchAddr": "1455 Market St, San Francisco, 941031234, California, USA",
+                                  "mrchURL": "www.squareup.com",
+                                  "tranTypeDetails": [
+                                    {
+                                      "lastTranBillCurrency": "GBP",
+                                      "lastTranCurrency": "GBP",
+                                      "lastTranAmt": "10.99",
+                                      "lastTranAmtBillCurrency": "10.99",
+                                      "lastTranAmtUSD": "10.99",
+                                      "tranCount": 2,
+                                      "lastTranDateTime": "2024-02-28 21:11:59.000",
+                                      "tranType": "ECOM_OTHER"
+                                    }
+                                  ],
+                                  "tokenPANReplacementDate": ""
+                                },
+                                {
+                                  "mrchDbaName": "EZI",
+                                  "mrchName": "EZI",
+                                  "cardAcceptorId": "GPAU14711962",
+                                  "totalTranCount": "2",
+                                  "sponsoredMerchantId": "100000015",
+                                  "lastTranAmtUSD": "16.99",
+                                  "vAUUpdateStatus": "",
+                                  "mCC": "7392",
+                                  "tokenPANReplacementStatus": "",
+                                  "lastTranAmt": "16.99",
+                                  "paymentFacilitatorId": "10069510",
+                                  "lastTranAmtBillCurrency": "16.99",
+                                  "tokenReqstrId": "0",
+                                  "vAULastUpdateDate": "",
+                                  "confidenceInd": "C",
+                                  "mrchRef": "MTIzNDU6RVpJ",
+                                  "lastTranDateTime": "2024-01-01 21:11:59.000",
+                                  "mrchPhoneNum": "",
+                                  "lastTranBillCurrency": "GBP",
+                                  "mrchDbaId": "12345",
+                                  "lastTranCurrency": "GBP",
+                                  "lastMrchTranDt": "2024-01-01",
+                                  "acctNumOld4Digit": "",
+                                  "mrchLogoURL": "",
+                                  "mrchAddr": "",
+                                  "mrchURL": "",
+                                  "tranTypeDetails": [
+                                    {
+                                      "lastTranBillCurrency": "GBP",
+                                      "lastTranCurrency": "GBP",
+                                      "lastTranAmt": "16.99",
+                                      "lastTranAmtBillCurrency": "16.99",
+                                      "lastTranAmtUSD": "16.99",
+                                      "tranCount": 2,
+                                      "lastTranDateTime": "2024-01-01 21:11:59.000",
+                                      "tranType": "ECOM_OTHER"
+                                    }
+                                  ],
+                                  "tokenPANReplacementDate": ""
+                                },
+                                {
+                                  "mrchDbaName": "EIR",
+                                  "mrchName": "EIR",
+                                  "cardAcceptorId": "77501765",
+                                  "totalTranCount": "1",
+                                  "lastTranAmtUSD": "34.95",
+                                  "vAUUpdateStatus": "",
+                                  "mCC": "4814",
+                                  "tokenPANReplacementStatus": "",
+                                  "lastTranAmt": "34.95",
+                                  "lastTranAmtBillCurrency": "34.95",
+                                  "tokenReqstrId": "0",
+                                  "vAULastUpdateDate": "",
+                                  "confidenceInd": "C",
+                                  "mrchRef": "MTIzNDU6RUlS",
+                                  "lastTranDateTime": "2024-02-23 21:11:59.000",
+                                  "mrchPhoneNum": "",
+                                  "lastTranBillCurrency": "USD",
+                                  "mrchDbaId": "12345",
+                                  "lastTranCurrency": "USD",
+                                  "lastMrchTranDt": "2024-02-23",
+                                  "acctNumOld4Digit": "",
+                                  "mrchLogoURL": "",
+                                  "mrchAddr": "",
+                                  "mrchURL": "",
+                                  "tranTypeDetails": [
+                                    {
+                                      "lastTranBillCurrency": "USD",
+                                      "lastTranCurrency": "USD",
+                                      "lastTranAmt": "34.95",
+                                      "lastTranAmtBillCurrency": "34.95",
+                                      "lastTranAmtUSD": "34.95",
+                                      "tranCount": 1,
+                                      "lastTranDateTime": "2024-02-23 21:11:59.000",
+                                      "tranType": "CUSTOMER_COF"
+                                    }
+                                  ],
+                                  "tokenPANReplacementDate": ""
+                                },
+                                {
+                                  "mrchDbaName": "UNAT DIRECT",
+                                  "mrchName": "UNAT DIRECT",
+                                  "cardAcceptorId": "6790497",
+                                  "totalTranCount": "1",
+                                  "lastTranAmtUSD": "13.95",
+                                  "vAUUpdateStatus": "",
+                                  "mCC": "5968",
+                                  "tokenPANReplacementStatus": "",
+                                  "lastTranAmt": "13.95",
+                                  "lastTranAmtBillCurrency": "13.95",
+                                  "tokenReqstrId": "0",
+                                  "vAULastUpdateDate": "",
+                                  "confidenceInd": "C",
+                                  "mrchRef": "MTIzNDU6VU5BVCBESVJFQ1Q=",
+                                  "lastTranDateTime": "2023-11-22 21:11:59.000",
+                                  "mrchPhoneNum": "",
+                                  "lastTranBillCurrency": "GBP",
+                                  "mrchDbaId": "12345",
+                                  "lastTranCurrency": "GBP",
+                                  "lastMrchTranDt": "2023-11-22",
+                                  "acctNumOld4Digit": "",
+                                  "mrchLogoURL": "",
+                                  "mrchAddr": "",
+                                  "mrchURL": "",
+                                  "tranTypeDetails": [
+                                    {
+                                      "lastTranBillCurrency": "GBP",
+                                      "lastTranCurrency": "GBP",
+                                      "lastTranAmt": "13.95",
+                                      "lastTranAmtBillCurrency": "13.95",
+                                      "lastTranAmtUSD": "13.95",
+                                      "tranCount": 1,
+                                      "lastTranDateTime": "2023-11-22 21:11:59.000",
+                                      "tranType": "ECOM_OTHER"
+                                    }
+                                  ],
+                                  "tokenPANReplacementDate": ""
+                                },
+                                {
+                                  "mrchDbaName": "EIG",
+                                  "mrchName": "EIG",
+                                  "cardAcceptorId": "3.96E+11",
+                                  "totalTranCount": "1",
+                                  "lastTranAmtUSD": "2.00",
+                                  "vAUUpdateStatus": "",
+                                  "mCC": "1233",
+                                  "tokenPANReplacementStatus": "",
+                                  "lastTranAmt": "2.00",
+                                  "lastTranAmtBillCurrency": "2.00",
+                                  "tokenReqstrId": "0",
+                                  "vAULastUpdateDate": "",
+                                  "confidenceInd": "C",
+                                  "mrchRef": "MTIzNDU6RUlH",
+                                  "lastTranDateTime": "2024-01-06 21:11:59.000",
+                                  "mrchPhoneNum": "",
+                                  "lastTranBillCurrency": "USD",
+                                  "mrchDbaId": "12345",
+                                  "lastTranCurrency": "USD",
+                                  "lastMrchTranDt": "2024-01-06",
+                                  "acctNumOld4Digit": "",
+                                  "mrchLogoURL": "",
+                                  "mrchAddr": "",
+                                  "mrchURL": "",
+                                  "tranTypeDetails": [
+                                    {
+                                      "lastTranBillCurrency": "USD",
+                                      "lastTranCurrency": "USD",
+                                      "lastTranAmt": "2.00",
+                                      "lastTranAmtBillCurrency": "2.00",
+                                      "lastTranAmtUSD": "2.00",
+                                      "tranCount": 1,
+                                      "lastTranDateTime": "2024-01-06 21:11:59.000",
+                                      "tranType": "ECOM_OTHER"
+                                    }
+                                  ],
+                                  "tokenPANReplacementDate": ""
+                                },
+                                {
+                                  "mrchDbaName": "JUSTANSWER",
+                                  "mrchName": "JUSTANSWER",
+                                  "cardAcceptorId": "1.98E+13",
+                                  "totalTranCount": "1",
+                                  "lastTranAmtUSD": "34.81",
+                                  "vAUUpdateStatus": "",
+                                  "mCC": "4816",
+                                  "tokenPANReplacementStatus": "",
+                                  "lastTranAmt": "34.81",
+                                  "lastTranAmtBillCurrency": "34.81",
+                                  "tokenReqstrId": "0",
+                                  "vAULastUpdateDate": "",
+                                  "confidenceInd": "C",
+                                  "mrchRef": "MTIzNDU6SlVTVEFOU1dFUg==",
+                                  "lastTranDateTime": "2023-06-11 21:11:59.000",
+                                  "mrchPhoneNum": "",
+                                  "lastTranBillCurrency": "USD",
+                                  "mrchDbaId": "12345",
+                                  "lastTranCurrency": "USD",
+                                  "lastMrchTranDt": "2023-06-11",
+                                  "acctNumOld4Digit": "",
+                                  "mrchLogoURL": "",
+                                  "mrchAddr": "",
+                                  "mrchURL": "",
+                                  "tranTypeDetails": [
+                                    {
+                                      "lastTranBillCurrency": "USD",
+                                      "lastTranCurrency": "USD",
+                                      "lastTranAmt": "34.81",
+                                      "lastTranAmtBillCurrency": "34.81",
+                                      "lastTranAmtUSD": "34.81",
+                                      "tranCount": 1,
+                                      "lastTranDateTime": "2023-06-11 21:11:59.000",
+                                      "tranType": "ECOM_OTHER"
+                                    }
+                                  ],
+                                  "tokenPANReplacementDate": ""
+                                },
+                                {
+                                  "mrchDbaName": "NETFLIX",
+                                  "mrchName": "NETFLIX",
+                                  "cardAcceptorId": "2.04E+14",
+                                  "totalTranCount": "1",
+                                  "lastTranAmtUSD": "35.88",
+                                  "vAUUpdateStatus": "",
+                                  "mCC": "4899",
+                                  "tokenPANReplacementStatus": "",
+                                  "lastTranAmt": "35.88",
+                                  "lastTranAmtBillCurrency": "35.88",
+                                  "tokenReqstrId": "0",
+                                  "vAULastUpdateDate": "",
+                                  "confidenceInd": "C",
+                                  "mrchRef": "MTIzNDU6TkVURkxJWA==",
+                                  "lastTranDateTime": "2023-10-29 21:11:59.000",
+                                  "mrchPhoneNum": "",
+                                  "lastTranBillCurrency": "BRL",
+                                  "mrchDbaId": "12345",
+                                  "lastTranCurrency": "BRL",
+                                  "lastMrchTranDt": "2023-10-29",
+                                  "acctNumOld4Digit": "",
+                                  "mrchLogoURL": "",
+                                  "mrchAddr": "100 Winchester Cir,Los Gatos,950321815,California,USA",
+                                  "mrchURL": "www.netflix.com",
+                                  "tranTypeDetails": [
+                                    {
+                                      "lastTranBillCurrency": "BRL",
+                                      "lastTranCurrency": "BRL",
+                                      "lastTranAmt": "35.88",
+                                      "lastTranAmtBillCurrency": "35.88",
+                                      "lastTranAmtUSD": "35.88",
+                                      "tranCount": 1,
+                                      "lastTranDateTime": "2023-10-29 21:11:59.000",
+                                      "tranType": "SCHEDULED_RECURRING"
+                                    }
+                                  ],
+                                  "tokenPANReplacementDate": ""
+                                },
+                                {
+                                  "mrchDbaName": "ZUMBA FITNESS",
+                                  "mrchName": "ZUMBA FITNESS",
+                                  "cardAcceptorId": "8.61E+12",
+                                  "totalTranCount": "1",
+                                  "lastTranAmtUSD": "4.99",
+                                  "vAUUpdateStatus": "",
+                                  "mCC": "7997",
+                                  "tokenPANReplacementStatus": "",
+                                  "lastTranAmt": "4.99",
+                                  "lastTranAmtBillCurrency": "4.99",
+                                  "tokenReqstrId": "0",
+                                  "vAULastUpdateDate": "",
+                                  "confidenceInd": "C",
+                                  "mrchRef": "MTIzNDU6WlVNQkEgRklUTkVTUw==",
+                                  "lastTranDateTime": "2023-10-09 21:11:59.000",
+                                  "mrchPhoneNum": "",
+                                  "lastTranBillCurrency": "USD",
+                                  "mrchDbaId": "12345",
+                                  "lastTranCurrency": "USD",
+                                  "lastMrchTranDt": "2023-10-09",
+                                  "acctNumOld4Digit": "",
+                                  "mrchLogoURL": "",
+                                  "mrchAddr": "Schiphol Blvd 231,,0000AA,,NETHERLANDS",
+                                  "mrchURL": "www.zumba.com",
+                                  "tranTypeDetails": [
+                                    {
+                                      "lastTranBillCurrency": "USD",
+                                      "lastTranCurrency": "USD",
+                                      "lastTranAmt": "4.99",
+                                      "lastTranAmtBillCurrency": "4.99",
+                                      "lastTranAmtUSD": "4.99",
+                                      "tranCount": 1,
+                                      "lastTranDateTime": "2023-10-09 21:11:59.000",
+                                      "tranType": "ECOM_OTHER"
+                                    }
+                                  ],
+                                  "tokenPANReplacementDate": ""
+                                },
+                                {
+                                  "mrchDbaName": "identityangel.co.uk",
+                                  "mrchName": "identityangel.co.uk",
+                                  "cardAcceptorId": "63168678",
+                                  "totalTranCount": "1",
+                                  "lastTranAmtUSD": "21.30",
+                                  "vAUUpdateStatus": "",
+                                  "mCC": "5817",
+                                  "tokenPANReplacementStatus": "",
+                                  "lastTranAmt": "21.30",
+                                  "lastTranAmtBillCurrency": "21.30",
+                                  "tokenReqstrId": "0",
+                                  "vAULastUpdateDate": "",
+                                  "confidenceInd": "C",
+                                  "mrchRef": "MTIzNDU6aWRlbnRpdHlhbmdlbC5jby51aw==",
+                                  "lastTranDateTime": "2024-02-05 21:11:59.000",
+                                  "mrchPhoneNum": "",
+                                  "lastTranBillCurrency": "JOD",
+                                  "mrchDbaId": "12345",
+                                  "lastTranCurrency": "JOD",
+                                  "lastMrchTranDt": "2024-02-05",
+                                  "acctNumOld4Digit": "",
+                                  "mrchLogoURL": "",
+                                  "mrchAddr": "",
+                                  "mrchURL": "",
+                                  "tranTypeDetails": [
+                                    {
+                                      "lastTranBillCurrency": "JOD",
+                                      "lastTranCurrency": "JOD",
+                                      "lastTranAmt": "21.30",
+                                      "lastTranAmtBillCurrency": "21.30",
+                                      "lastTranAmtUSD": "21.30",
+                                      "tranCount": 1,
+                                      "lastTranDateTime": "2024-02-05 21:11:59.000",
+                                      "tranType": "ECOM_OTHER"
+                                    }
+                                  ],
+                                  "tokenPANReplacementDate": ""
+                                },
+                                {
+                                  "mrchDbaName": "FREDDIES FLOWERS",
+                                  "mrchName": "FREDDIES FLOWERS",
+                                  "cardAcceptorId": "GUZMBJG74HPDWMA",
+                                  "totalTranCount": "1",
+                                  "lastTranAmtUSD": "41.00",
+                                  "vAUUpdateStatus": "",
+                                  "mCC": "5992",
+                                  "tokenPANReplacementStatus": "",
+                                  "lastTranAmt": "41.00",
+                                  "lastTranAmtBillCurrency": "41.00",
+                                  "tokenReqstrId": "0",
+                                  "vAULastUpdateDate": "",
+                                  "confidenceInd": "C",
+                                  "mrchRef": "MTIzNDU6RlJFRERJRVMgRkxPV0VSUw==",
+                                  "lastTranDateTime": "2023-08-27 21:11:59.000",
+                                  "mrchPhoneNum": "",
+                                  "lastTranBillCurrency": "GBP",
+                                  "mrchDbaId": "12345",
+                                  "lastTranCurrency": "GBP",
+                                  "lastMrchTranDt": "2023-08-27",
+                                  "acctNumOld4Digit": "",
+                                  "mrchLogoURL": "",
+                                  "mrchAddr": "1-4 Cumberland Pl, Southhampton, Hampshire, England",
+                                  "mrchURL": "www.freddiesflowers.com",
+                                  "tranTypeDetails": [
+                                    {
+                                      "lastTranBillCurrency": "GBP",
+                                      "lastTranCurrency": "GBP",
+                                      "lastTranAmt": "41.00",
+                                      "lastTranAmtBillCurrency": "41.00",
+                                      "lastTranAmtUSD": "41.00",
+                                      "tranCount": 1,
+                                      "lastTranDateTime": "2023-08-27 21:11:59.000",
+                                      "tranType": "ECOM_OTHER"
+                                    }
+                                  ],
+                                  "tokenPANReplacementDate": ""
+                                },
+                                {
+                                  "mrchDbaName": "PlaystationNetwork",
+                                  "mrchName": "PlaystationNetwork",
+                                  "cardAcceptorId": "4.99E+14",
+                                  "totalTranCount": "1",
+                                  "lastTranAmtUSD": "39.99",
+                                  "vAUUpdateStatus": "",
+                                  "mCC": "5816",
+                                  "tokenPANReplacementStatus": "",
+                                  "lastTranAmt": "39.99",
+                                  "lastTranAmtBillCurrency": "39.99",
+                                  "tokenReqstrId": "0",
+                                  "vAULastUpdateDate": "",
+                                  "confidenceInd": "C",
+                                  "mrchRef": "MTIzNDU6UGxheXN0YXRpb25OZXR3b3Jr",
+                                  "lastTranDateTime": "2023-12-28 21:11:59.000",
+                                  "mrchPhoneNum": "",
+                                  "lastTranBillCurrency": "GBP",
+                                  "mrchDbaId": "12345",
+                                  "lastTranCurrency": "GBP",
+                                  "lastMrchTranDt": "2023-12-28",
+                                  "acctNumOld4Digit": "",
+                                  "mrchLogoURL": "",
+                                  "mrchAddr": "2207 Bridgepoint Pkwy, San Mateo, 944041234, California, USA",
+                                  "mrchURL": "www.sony.com",
+                                  "tranTypeDetails": [
+                                    {
+                                      "lastTranBillCurrency": "GBP",
+                                      "lastTranCurrency": "GBP",
+                                      "lastTranAmt": "39.99",
+                                      "lastTranAmtBillCurrency": "39.99",
+                                      "lastTranAmtUSD": "39.99",
+                                      "tranCount": 1,
+                                      "lastTranDateTime": "2023-12-28 21:11:59.000",
+                                      "tranType": "ECOM_OTHER"
+                                    }
+                                  ],
+                                  "tokenPANReplacementDate": ""
+                                },
+                                {
+                                  "mrchDbaName": "ReportScore.co.uk",
+                                  "mrchName": "ReportScore.co.uk",
+                                  "cardAcceptorId": "1.05E+11",
+                                  "totalTranCount": "1",
+                                  "lastTranAmtUSD": "10.75",
+                                  "vAUUpdateStatus": "",
+                                  "mCC": "8999",
+                                  "tokenPANReplacementStatus": "",
+                                  "lastTranAmt": "10.75",
+                                  "lastTranAmtBillCurrency": "10.75",
+                                  "tokenReqstrId": "0",
+                                  "vAULastUpdateDate": "",
+                                  "confidenceInd": "C",
+                                  "mrchRef": "MTIzNDU6UmVwb3J0U2NvcmUuY28udWs=",
+                                  "lastTranDateTime": "2023-09-03 21:11:59.000",
+                                  "mrchPhoneNum": "",
+                                  "lastTranBillCurrency": "USD",
+                                  "mrchDbaId": "12345",
+                                  "lastTranCurrency": "USD",
+                                  "lastMrchTranDt": "2023-09-03",
+                                  "acctNumOld4Digit": "",
+                                  "mrchLogoURL": "",
+                                  "mrchAddr": "",
+                                  "mrchURL": "",
+                                  "tranTypeDetails": [
+                                    {
+                                      "lastTranBillCurrency": "USD",
+                                      "lastTranCurrency": "USD",
+                                      "lastTranAmt": "10.75",
+                                      "lastTranAmtBillCurrency": "10.75",
+                                      "lastTranAmtUSD": "10.75",
+                                      "tranCount": 1,
+                                      "lastTranDateTime": "2023-09-03 21:11:59.000",
+                                      "tranType": "INSTALLMENT"
+                                    }
+                                  ],
+                                  "tokenPANReplacementDate": ""
+                                },
+                                {
+                                  "mrchDbaName": "Social-Score.co.uk",
+                                  "mrchName": "Social-Score.co.uk",
+                                  "cardAcceptorId": "1.05E+11",
+                                  "totalTranCount": "1",
+                                  "lastTranAmtUSD": "12.25",
+                                  "vAUUpdateStatus": "",
+                                  "mCC": "5968",
+                                  "tokenPANReplacementStatus": "",
+                                  "lastTranAmt": "12.25",
+                                  "lastTranAmtBillCurrency": "12.25",
+                                  "tokenReqstrId": "0",
+                                  "vAULastUpdateDate": "",
+                                  "confidenceInd": "C",
+                                  "mrchRef": "MTIzNDU6U29jaWFsLVNjb3JlLmNvLnVr",
+                                  "lastTranDateTime": "2024-01-18 21:11:59.000",
+                                  "mrchPhoneNum": "",
+                                  "lastTranBillCurrency": "EUR",
+                                  "mrchDbaId": "12345",
+                                  "lastTranCurrency": "EUR",
+                                  "lastMrchTranDt": "2024-01-18",
+                                  "acctNumOld4Digit": "",
+                                  "mrchLogoURL": "",
+                                  "mrchAddr": "",
+                                  "mrchURL": "",
+                                  "tranTypeDetails": [
+                                    {
+                                      "lastTranBillCurrency": "EUR",
+                                      "lastTranCurrency": "EUR",
+                                      "lastTranAmt": "12.25",
+                                      "lastTranAmtBillCurrency": "12.25",
+                                      "lastTranAmtUSD": "12.25",
+                                      "tranCount": 1,
+                                      "lastTranDateTime": "2024-01-18 21:11:59.000",
+                                      "tranType": "SCHEDULED_RECURRING"
+                                    }
+                                  ],
+                                  "tokenPANReplacementDate": ""
+                                },
+                                {
+                                  "mrchDbaName": "Loans2Go",
+                                  "mrchName": "Loans2Go",
+                                  "cardAcceptorId": "1.05E+11",
+                                  "totalTranCount": "1",
+                                  "lastTranAmtUSD": "8.10",
+                                  "vAUUpdateStatus": "",
+                                  "mCC": "6012",
+                                  "tokenPANReplacementStatus": "",
+                                  "lastTranAmt": "8.10",
+                                  "lastTranAmtBillCurrency": "8.10",
+                                  "tokenReqstrId": "0",
+                                  "vAULastUpdateDate": "",
+                                  "confidenceInd": "C",
+                                  "mrchRef": "MTIzNDU6TG9hbnMyR28=",
+                                  "lastTranDateTime": "2023-11-03 21:11:59.000",
+                                  "mrchPhoneNum": "",
+                                  "lastTranBillCurrency": "CAD",
+                                  "mrchDbaId": "12345",
+                                  "lastTranCurrency": "CAD",
+                                  "lastMrchTranDt": "2023-11-03",
+                                  "acctNumOld4Digit": "",
+                                  "mrchLogoURL": "",
+                                  "mrchAddr": "",
+                                  "mrchURL": "",
+                                  "tranTypeDetails": [
+                                    {
+                                      "lastTranBillCurrency": "CAD",
+                                      "lastTranCurrency": "CAD",
+                                      "lastTranAmt": "8.10",
+                                      "lastTranAmtBillCurrency": "8.10",
+                                      "lastTranAmtUSD": "8.10",
+                                      "tranCount": 1,
+                                      "lastTranDateTime": "2023-11-03 21:11:59.000",
+                                      "tranType": "SCHEDULED_RECURRING"
+                                    }
+                                  ],
+                                  "tokenPANReplacementDate": ""
+                                },
+                                {
+                                  "mrchDbaName": "customerlivehelp.com",
+                                  "mrchName": "customerlivehelp.com",
+                                  "cardAcceptorId": "9.60E+14",
+                                  "totalTranCount": "1",
+                                  "lastTranAmtUSD": "0.39",
+                                  "vAUUpdateStatus": "",
+                                  "mCC": "5967",
+                                  "tokenPANReplacementStatus": "",
+                                  "lastTranAmt": "0.39",
+                                  "lastTranAmtBillCurrency": "0.39",
+                                  "tokenReqstrId": "0",
+                                  "vAULastUpdateDate": "",
+                                  "confidenceInd": "C",
+                                  "mrchRef": "MTIzNDU6Y3VzdG9tZXJsaXZlaGVscC5jb20=",
+                                  "lastTranDateTime": "2024-01-05 21:11:59.000",
+                                  "mrchPhoneNum": "",
+                                  "lastTranBillCurrency": "USD",
+                                  "mrchDbaId": "12345",
+                                  "lastTranCurrency": "USD",
+                                  "lastMrchTranDt": "2024-01-05",
+                                  "acctNumOld4Digit": "",
+                                  "mrchLogoURL": "",
+                                  "mrchAddr": "",
+                                  "mrchURL": "",
+                                  "tranTypeDetails": [
+                                    {
+                                      "lastTranBillCurrency": "USD",
+                                      "lastTranCurrency": "USD",
+                                      "lastTranAmt": "0.39",
+                                      "lastTranAmtBillCurrency": "0.39",
+                                      "lastTranAmtUSD": "0.39",
+                                      "tranCount": 1,
+                                      "lastTranDateTime": "2024-01-05 21:11:59.000",
+                                      "tranType": "ECOM_OTHER"
+                                    }
+                                  ],
+                                  "tokenPANReplacementDate": ""
+                                },
+                                {
+                                  "mrchDbaName": "Amazon Prime",
+                                  "mrchName": "Amazon Prime",
+                                  "cardAcceptorId": "8.90E+13",
+                                  "totalTranCount": "1",
+                                  "lastTranAmtUSD": "11.99",
+                                  "vAUUpdateStatus": "",
+                                  "mCC": "5968",
+                                  "tokenPANReplacementStatus": "",
+                                  "lastTranAmt": "11.99",
+                                  "lastTranAmtBillCurrency": "11.99",
+                                  "tokenReqstrId": "0",
+                                  "vAULastUpdateDate": "",
+                                  "confidenceInd": "C",
+                                  "mrchRef": "MTIzNDU6QW1hem9uIFByaW1l",
+                                  "lastTranDateTime": "2023-09-03 21:11:59.000",
+                                  "mrchPhoneNum": "",
+                                  "lastTranBillCurrency": "GBP",
+                                  "mrchDbaId": "12345",
+                                  "lastTranCurrency": "GBP",
+                                  "lastMrchTranDt": "2023-09-03",
+                                  "acctNumOld4Digit": "",
+                                  "mrchLogoURL": "",
+                                  "mrchAddr": "410 Terry Ave N,Seattle,981095210,Washington,USA",
+                                  "mrchURL": "www.amazon.com",
+                                  "tranTypeDetails": [
+                                    {
+                                      "lastTranBillCurrency": "GBP",
+                                      "lastTranCurrency": "GBP",
+                                      "lastTranAmt": "11.99",
+                                      "lastTranAmtBillCurrency": "11.99",
+                                      "lastTranAmtUSD": "11.99",
+                                      "tranCount": 1,
+                                      "lastTranDateTime": "2023-09-03 21:11:59.000",
+                                      "tranType": "ECOM_OTHER"
+                                    }
+                                  ],
+                                  "tokenPANReplacementDate": ""
+                                },
+                                {
+                                  "mrchDbaName": "Spotify",
+                                  "mrchName": "Spotify",
+                                  "cardAcceptorId": "4.99E+14",
+                                  "totalTranCount": "1",
+                                  "lastTranAmtUSD": "36.50",
+                                  "vAUUpdateStatus": "",
+                                  "mCC": "5815",
+                                  "tokenPANReplacementStatus": "",
+                                  "lastTranAmt": "36.50",
+                                  "lastTranAmtBillCurrency": "36.50",
+                                  "tokenReqstrId": "0",
+                                  "vAULastUpdateDate": "",
+                                  "confidenceInd": "C",
+                                  "mrchRef": "MTIzNDU6U3BvdGlmeQ==",
+                                  "lastTranDateTime": "2023-07-23 21:11:59.000",
+                                  "mrchPhoneNum": "",
+                                  "lastTranBillCurrency": "GBP",
+                                  "mrchDbaId": "12345",
+                                  "lastTranCurrency": "GBP",
+                                  "lastMrchTranDt": "2023-07-23",
+                                  "acctNumOld4Digit": "",
+                                  "mrchLogoURL": "",
+                                  "mrchAddr": "988 Market St, San Francisco, 941021234, California, USA",
+                                  "mrchURL": "www.spotify.com",
+                                  "tranTypeDetails": [
+                                    {
+                                      "lastTranBillCurrency": "GBP",
+                                      "lastTranCurrency": "GBP",
+                                      "lastTranAmt": "36.50",
+                                      "lastTranAmtBillCurrency": "36.50",
+                                      "lastTranAmtUSD": "36.50",
+                                      "tranCount": 1,
+                                      "lastTranDateTime": "2023-07-23 21:11:59.000",
+                                      "tranType": "ECOM_OTHER"
+                                    }
+                                  ],
+                                  "tokenPANReplacementDate": ""
+                                },
+                                {
+                                  "mrchDbaName": "STEAMGAMES.COM",
+                                  "mrchName": "STEAMGAMES.COM",
+                                  "cardAcceptorId": "9772089",
+                                  "totalTranCount": "1",
+                                  "lastTranAmtUSD": "2.79",
+                                  "vAUUpdateStatus": "",
+                                  "mCC": "7994",
+                                  "tokenPANReplacementStatus": "",
+                                  "lastTranAmt": "2.79",
+                                  "lastTranAmtBillCurrency": "2.79",
+                                  "tokenReqstrId": "0",
+                                  "vAULastUpdateDate": "",
+                                  "confidenceInd": "C",
+                                  "mrchRef": "MTIzNDU6U1RFQU1HQU1FUy5DT00=",
+                                  "lastTranDateTime": "2023-11-22 21:11:59.000",
+                                  "mrchPhoneNum": "",
+                                  "lastTranBillCurrency": "USD",
+                                  "mrchDbaId": "12345",
+                                  "lastTranCurrency": "USD",
+                                  "lastMrchTranDt": "2023-11-22",
+                                  "acctNumOld4Digit": "",
+                                  "mrchLogoURL": "",
+                                  "mrchAddr": "",
+                                  "mrchURL": "",
+                                  "tranTypeDetails": [
+                                    {
+                                      "lastTranBillCurrency": "USD",
+                                      "lastTranCurrency": "USD",
+                                      "lastTranAmt": "2.79",
+                                      "lastTranAmtBillCurrency": "2.79",
+                                      "lastTranAmtUSD": "2.79",
+                                      "tranCount": 1,
+                                      "lastTranDateTime": "2023-11-22 21:11:59.000",
+                                      "tranType": "ECOM_OTHER"
+                                    }
+                                  ],
+                                  "tokenPANReplacementDate": ""
+                                }
+                              ]
+                            }
+                          }
+                        ],
+                        "group": "STANDARD"
+                      },
+                      "status": {
+                        "statusDescription": "COF Service - Success",
+                        "statusCode": "CDI000"
+                      }
+                    }
+                  },
+                  "No Matching Data": {
+                    "summary": "No Matching Data",
+                    "value": {
+                      "responseHeader": {
+                        "numRecordsReturned": 0,
+                        "responseMessageId": "1_1694058177_057_52_-79559b6c64d4f_COFDS",
+                        "requestMessageId": "54675656776565467565677656546756567765654675656776",
+                        "messageDateTime": "2023-09-07 03:42:57.835"
+                      },
+                      "responseData": {
+                        "panList": [
+                          {
+                            "panData": {
+                              "panResponseMsg": "No matching data found",
+                              "pAN": "4072208011000000"
+                            }
+                          }
+                        ],
+                        "group": "STANDARD"
+                      },
+                      "status": {
+                        "statusDescription": "COF Service - Success",
+                        "statusCode": "CDI000"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MerchantDataResponse"
+                },
+                "example": {
+                  "status": {
+                    "statusCode": "CDI071",
+                    "statusDescription": "Invalid data"
+                  },
+                  "responseData": {
+                    "group": "STANDARD",
+                    "panList": [
+                      {
+                        "panData": {
+                          "pAN": "5072208010000000",
+                          "panResponseMsg": "Invalid PAN"
+                        }
+                      }
+                    ]
+                  },
+                  "responseHeader": {
+                    "messageDateTime": "2020-04-17 14:08:45.546",
+                    "requestMessageId": "6da6b8b024532a2e0eacb1af58581",
+                    "responseMessageId": "1_1587132524_666_45_l73d001m_COFDS",
+                    "numRecordsReturned": 0
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MerchantDataResponse"
+                },
+                "example": {
+                  "status": {
+                    "statusCode": "CDI131",
+                    "statusDescription": "Not entitled to perform the operation"
+                  },
+                  "responseData": {
+                    "group": "STANDARD",
+                    "panList": [
+                      {
+                        "panData": {
+                          "pAN": "4000123456789010",
+                          "panResponseMsg": "PAN is not entitled"
+                        }
+                      }
+                    ]
+                  },
+                  "responseHeader": {
+                    "messageDateTime": "2020-04-17 14:08:45.546",
+                    "requestMessageId": "6da6b8b024532a2e0eacb1af58581",
+                    "responseMessageId": "1_1587132524_666_45_l73d001m_COFDS",
+                    "numRecordsReturned": 0
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal service failure",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MerchantDataResponse"
+                },
+                "example": {
+                  "status": {
+                    "statusCode": "CDI001",
+                    "statusDescription": "Internal service failure"
+                  },
+                  "responseHeader": {
+                    "messageDateTime": "2020-04-17 14:08:45.546",
+                    "requestMessageId": "6da6b8b024532a2e0eacb1af58581",
+                    "responseMessageId": "1_1587132524_666_45_l73d001m_COFDS",
+                    "numRecordsReturned": 0
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-operationVersions": [
+          {
+            "label": "v1 - Latest",
+            "operationPointer": "#/paths/~1cofds-web~1v1~1datainfo/post",
+            "default": false
+          }
+        ],
+        "x-hideTryIt": true
+      }
+    },
+    "/cofds-web/v1/datainfo/merchants": {
+      "post": {
+        "tags": [
+          "Card-On-File Data Service API"
+        ],
+        "summary": "Card-on-File Raw Merchant Details",
+        "description": "The API will return data layer aggregated at raw merchant name level.",
+        "operationId": "getRawMerchantData",
+        "parameters": [
+          {
+            "name": "mrchRef",
+            "in": "query",
+            "description": "Correlation ID to uniquely identify the merchant. The reference ID is not static and may change.",
+            "required": true,
+            "explode": true,
+            "schema": {
+              "pattern": "^[A-Za-z0-9-_=]{1,512}$",
+              "type": "string"
+            },
+            "example": "MTIzOmV4YW1wbGU"
+          }
+        ],
+        "requestBody": {
+          "description": "Card-On-File Data request query for raw merchants",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RawMerchantDataRequest"
+              },
+              "examples": {
+                "Matching Data Found": {
+                  "summary": "Matching Data Found",
+                  "value": {
+                    "requestHeader": {
+                      "requestMessageId": "2ad88d08-bae8-42b4-b25e-7e33d1ca67ee",
+                      "messageDateTime": "2025-05-27 06:18:42.237"
+                    },
+                    "requestData": {
+                      "pAN": "4395842407250000"
+                    }
+                  }
+                },
+                "No Matching Data": {
+                  "summary": "No Matching Data",
+                  "value": {
+                    "requestHeader": {
+                      "requestMessageId": "6da6b8b024532a2e0eacb1af58581",
+                      "messageDateTime": "2023-08-07 09:29:06.140"
+                    },
+                    "requestData": {
+                      "pAN": "4072202010000000"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RawMerchantDataResponse"
+                },
+                "examples": {
+                  "Matching Data Found": {
+                    "summary": "Matching Data Found",
+                    "value": {
+                      "responseHeader": {
+                        "numRecordsReturned": 1,
+                        "responseMessageId": "1748326723_245_1256376539_f4999676f2_VDP_WS",
+                        "requestMessageId": "2ad88d08-bae8-42b4-b25e-7e33d1ca67ee",
+                        "messageDateTime": "2025-05-27 06:18:43.287"
+                      },
+                      "responseData": {
+                        "rawMerchants": [
+                          {
+                            "mrchLogoURL": "",
+                            "paymentFacilitatorId": "",
+                            "sponsoredMerchantId": "",
+                            "rawMrchName": "COMPUTERHELP*TECH HELP",
+                            "tranTypeDetails": [
+                              {
+                                "lastTranBillCurrency": "GBP",
+                                "lastTranCurrency": "GBP",
+                                "lastTranAmt": "100.00",
+                                "lastTranAmtBillCurrency": "100.00",
+                                "lastCardAcceptorId": "409335000167901",
+                                "tranCount": 1,
+                                "lastTranDateTime": "2024-02-01 21:11:59.000",
+                                "tranType": "CUSTOMER_COF"
+                              }
+                            ]
+                          }
+                        ],
+                        "mrchRef": "MTIzNDU6Q09NUFVURVJIRUxQ",
+                        "responseMsg": "Success"
+                      },
+                      "status": {
+                        "statusDescription": "COF Service - Success",
+                        "statusCode": "CDI000"
+                      }
+                    }
+                  },
+                  "No Matching Data": {
+                    "summary": "No Matching Data",
+                    "value": {
+                      "responseHeader": {
+                        "numRecordsReturned": 0,
+                        "responseMessageId": "1_1694058678_113_61_f566f584k2m_COFDS",
+                        "requestMessageId": "6da6b8b024532a2e0eacb1af58581",
+                        "messageDateTime": "2023-08-07 09:29:07.140"
+                      },
+                      "responseData": {
+                        "mrchRef": "MTIzNDU2Nzg5MDEyMzQ1Njc4OTpBTUFaT04=",
+                        "responseMsg": "No matching data found"
+                      },
+                      "status": {
+                        "statusDescription": "COF Service - Success",
+                        "statusCode": "CDI000"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RawMerchantDataResponse"
+                },
+                "example": {
+                  "status": {
+                    "statusCode": "CDI071",
+                    "statusDescription": "Invalid data"
+                  },
+                  "responseData": {
+                    "mrchRef": "MTIzOmV4YW1wbGU",
+                    "responseMsg": "Invalid PAN"
+                  },
+                  "responseHeader": {
+                    "messageDateTime": "2023-07-27 11:12:13.529",
+                    "requestMessageId": "6da6b8b024532a2e0eacb1af58581",
+                    "responseMessageId": "1_1689731688_690_56_d5b9b6v_COFDS",
+                    "numRecordsReturned": 0
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RawMerchantDataResponse"
+                },
+                "example": {
+                  "status": {
+                    "statusCode": "CDI131",
+                    "statusDescription": "Not entitled to perform the operation"
+                  },
+                  "responseData": {
+                    "mrchRef": "MTIzOmV4YW1wbGU",
+                    "responseMsg": "PAN is not entitled"
+                  },
+                  "responseHeader": {
+                    "messageDateTime": "2023-07-27 11:12:13.529",
+                    "requestMessageId": "6da6b8b024532a2e0eacb1af58581",
+                    "responseMessageId": "1_1689731688_690_56_d5b9b6v_COFDS",
+                    "numRecordsReturned": 0
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal service failure",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RawMerchantDataResponse"
+                },
+                "example": {
+                  "status": {
+                    "statusCode": "CDI001",
+                    "statusDescription": "Internal service failure"
+                  },
+                  "responseHeader": {
+                    "messageDateTime": "2023-07-27 11:12:13.529",
+                    "requestMessageId": "6da6b8b024532a2e0eacb1af58581",
+                    "responseMessageId": "1_1689731688_690_56_d5b9b6v_COFDS",
+                    "numRecordsReturned": 0
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-operationVersions": [
+          {
+            "label": "v1 - Latest",
+            "operationPointer": "#/paths/~1cofds-web~1v1~1datainfo~1merchants/post",
+            "default": false
+          }
+        ],
+        "x-hideTryIt": true
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Status": {
+        "required": [
+          "statusCode",
+          "statusDescription"
+        ],
+        "type": "object",
+        "properties": {
+          "statusCode": {
+            "maxLength": 6,
+            "minLength": 6,
+            "type": "string",
+            "description": "Status Code of the Service Request.",
+            "example": "CDI000"
+          },
+          "statusDescription": {
+            "type": "string",
+            "description": "A string description of the statusCode element. A brief description indicating the result of the service request.",
+            "example": "COF Service - Success"
+          }
+        },
+        "description": "Status details, which include the application status code and corresponding message."
+      },
+      "TranType": {
+        "required": [
+          "lastTranAmt",
+          "tranCount",
+          "tranType"
+        ],
+        "type": "object",
+        "properties": {
+          "tranType": {
+            "type": "string",
+            "description": "The transaction type code.",
+            "example": "MERCHANT_COF",
+            "enum": [
+              "SCHEDULED_RECURRING, UNSCHEDULED_RECURRING, INSTALLMENT, MERCHANT_COF, CUSTOMER_COF, UNKNOWN_COF, MAIL_TELEPHONE, BILL_PAY, ECOM_OTHER, AUTH_VERIFICATION"
+            ]
+          },
+          "tranCount": {
+            "minimum": 0,
+            "type": "integer",
+            "description": "Transaction count for the type.",
+            "format": "int64",
+            "example": 10
+          },
+          "lastTranAmt": {
+            "maxLength": 24,
+            "minLength": 0,
+            "type": "string",
+            "description": "Last transaction amount in currency used in transaction for the type.",
+            "example": "22.72"
+          },
+          "lastTranAmtUSD": {
+            "maxLength": 24,
+            "minLength": 0,
+            "type": "string",
+            "description": "Last transaction amount in USD.",
+            "example": "15.22"
+          },
+          "lastTranCurrency": {
+            "maxLength": 3,
+            "minLength": 0,
+            "type": "string",
+            "description": "Currency used in last transaction for the type.\n\nFormat: ISO 4217 standard",
+            "example": "AUD"
+          },
+          "lastTranDateTime": {
+            "pattern": "^([0-9]{4})-([0-1][0-9])-([0-3][0-9])\\s([0-1][0-9]|[2][0-3]):([0-5][0-9]):([0-5][0-9]).([0-9][0-9][0-9])$",
+            "type": "string",
+            "description": "Date and time of last transaction timestamp for the type in UTC time zone.\n\nFormat: yyyy-MM-dd HH:mm:ss.SSS (ISO 8601 standard)",
+            "example": "2021-07-11 07:05:04.000"
+          },
+          "lastTranBillCurrency": {
+            "maxLength": 3,
+            "minLength": 0,
+            "type": "string",
+            "description": "Billing currency of last transaction.\n\nFormat: ISO 4217 standard",
+            "example": "AUD"
+          },
+          "lastTranAmtBillCurrency": {
+            "maxLength": 24,
+            "minLength": 0,
+            "type": "string",
+            "description": "Last transaction amount in billing currency.",
+            "example": "22.72"
+          }
+        },
+        "description": "List of transaction details by transaction type. Each transaction type can appear once and only if there’s an associated transaction."
+      },
+      "PANDataWrapper": {
+        "type": "object",
+        "properties": {
+          "panData": {
+            "$ref": "#/components/schemas/PANData"
+          }
+        },
+        "description": "An array of response objects for each PAN."
+      },
+      "BaseResponseHeader": {
+        "required": [
+          "messageDateTime",
+          "requestMessageId",
+          "responseMessageId"
+        ],
+        "type": "object",
+        "properties": {
+          "messageDateTime": {
+            "pattern": "^((19|2[0-9])[0-9]{2})-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])\\s([0-1][0-9]|[2][0-3]):([0-5][0-9]):([0-5][0-9]).([0-9][0-9][0-9])$",
+            "type": "string",
+            "description": "Date and time at which response is sent (up to milliseconds in UTC).\n\nFormat: yyyy-MM-dd HH:mm:ss.SSS (ISO 8601 standard)\n",
+            "example": "2018-09-19 06:01:00.601"
+          },
+          "requestMessageId": {
+            "maxLength": 50,
+            "minLength": 0,
+            "pattern": "^$|^[\\w-._]+$",
+            "type": "string",
+            "description": "A string that uniquely identifies the service request. Response will contain the same message ID as received from requesting application.",
+            "example": "6da60e1b8b024532a2e0eacb1af5858132a2e0eacb1af58581"
+          },
+          "responseMessageId": {
+            "maxLength": 50,
+            "minLength": 0,
+            "type": "string",
+            "description": "Correlation id which uniquely identifies the current request-response processing",
+            "example": "1561737829_569_743208831_l55c014_VDP_WS"
+          }
+        }
+      },
+      "ResponseHeader": {
+        "$ref": "#/components/schemas/RMResponseHeader"
+      },
+      "RMResponseData": {
+        "required": [
+          "mrchRef",
+          "responseMsg"
+        ],
+        "type": "object",
+        "properties": {
+          "mrchRef": {
+            "pattern": "^[A-Za-z0-9-_=]{1,512}$",
+            "type": "string",
+            "description": "Correlation ID to uniquely identify the merchant. The reference ID is not static and may change.",
+            "example": "MTIzNDU2Nzg5MDEyMzQ1Njc4OTpBTUFaT04="
+          },
+          "responseMsg": {
+            "maxLength": 128,
+            "minLength": 0,
+            "type": "string",
+            "description": "Indicates whether data retrieval for a given PAN and mrchRef was successful; field contains either \"Success\" or the reason for the error if data retrieval was not successful.",
+            "example": "Success"
+          },
+          "rawMerchants": {
+            "type": "array",
+            "description": "List of raw merchants who have Card-On-File Data for the requested PAN and mrchRef.",
+            "items": {
+              "$ref": "#/components/schemas/RawMerchant"
+            }
+          }
+        },
+        "description": "Response data, which includes raw merchant information for the requested PAN and mrchRef."
+      },
+      "RMRequestData": {
+        "required": [
+          "pAN"
+        ],
+        "type": "object",
+        "properties": {
+          "pAN": {
+            "type": "string",
+            "description": "PAN for requesting raw merchant data. The PAN has a format of 12–19 decimal digits starting with a \"4\" (indicating Visa accounts).",
+            "example": "4000123456789010"
+          }
+        },
+        "description": "Request body for querying Card-on-file raw merchant."
+      },
+      "RMResponseHeader": {
+        "description": "Fields contained in the header of each response.",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseResponseHeader"
+          },
+          {
+            "required": [
+              "numRecordsReturned"
+            ],
+            "type": "object",
+            "properties": {
+              "numRecordsReturned": {
+                "maximum": 2147483647,
+                "minimum": 0,
+                "type": "integer",
+                "description": "Number of raw merchant data returned for the requested PAN and mrchRef.",
+                "format": "int32",
+                "example": 3
+              }
+            }
+          }
+        ]
+      },
+      "RawMerchantTranType": {
+        "required": [
+          "lastTranAmt",
+          "tranCount",
+          "tranType"
+        ],
+        "type": "object",
+        "properties": {
+          "tranType": {
+            "type": "string",
+            "description": "The transaction type code.",
+            "example": "MERCHANT_COF",
+            "enum": [
+              "SCHEDULED_RECURRING, UNSCHEDULED_RECURRING, INSTALLMENT, MERCHANT_COF, CUSTOMER_COF, UNKNOWN_COF, MAIL_TELEPHONE, BILL_PAY, ECOM_OTHER, AUTH_VERIFICATION"
+            ]
+          },
+          "tranCount": {
+            "minimum": 0,
+            "type": "integer",
+            "description": "Transaction count for the type.",
+            "format": "int64",
+            "example": 10
+          },
+          "lastTranAmt": {
+            "maxLength": 24,
+            "minLength": 0,
+            "type": "string",
+            "description": "Last transaction amount in currency used in transaction for the type.",
+            "example": "22.72"
+          },
+          "lastTranAmtUSD": {
+            "maxLength": 24,
+            "minLength": 0,
+            "type": "string",
+            "description": "Last transaction amount in USD.",
+            "example": "15.22"
+          },
+          "lastTranCurrency": {
+            "maxLength": 3,
+            "minLength": 0,
+            "type": "string",
+            "description": "Currency used in last transaction for the type.\n\nFormat: ISO 4217 standard",
+            "example": "AUD"
+          },
+          "lastTranDateTime": {
+            "pattern": "^([0-9]{4})-([0-1][0-9])-([0-3][0-9])\\s([0-1][0-9]|[2][0-3]):([0-5][0-9]):([0-5][0-9]).([0-9][0-9][0-9])$",
+            "type": "string",
+            "description": "Date and time of last transaction timestamp for the type in UTC time zone.\n\nFormat: yyyy-MM-dd HH:mm:ss.SSS (ISO 8601 standard)",
+            "example": "2021-07-11 07:05:04.000"
+          },
+          "lastCardAcceptorId": {
+            "type": "string",
+            "description": "Card Acceptor ID of last transaction.",
+            "example": "44186224"
+          },
+          "lastTranBillCurrency": {
+            "maxLength": 3,
+            "minLength": 0,
+            "type": "string",
+            "description": "Billing currency of last transaction.\n\nFormat: ISO 4217 standard",
+            "example": "AUD"
+          },
+          "lastTranAmtBillCurrency": {
+            "maxLength": 24,
+            "minLength": 0,
+            "type": "string",
+            "description": "Last transaction amount in billing currency.",
+            "example": "22.72"
+          }
+        },
+        "description": "List of transaction details by transaction type. Each transaction type can appear once and only if there’s an associated transaction."
+      },
+      "MResponseData": {
+        "required": [
+          "group",
+          "panList"
+        ],
+        "type": "object",
+        "properties": {
+          "group": {
+            "maxLength": 100,
+            "minLength": 0,
+            "pattern": "STANDARD",
+            "type": "string",
+            "description": "Identifies the set of response fields the customer is eligible to receive.",
+            "example": "STANDARD",
+            "enum": [
+              "STANDARD"
+            ]
+          },
+          "panList": {
+            "maxItems": 1,
+            "minItems": 1,
+            "type": "array",
+            "description": "An array of response objects for each PAN.",
+            "items": {
+              "$ref": "#/components/schemas/PANDataWrapper"
+            }
+          }
+        },
+        "description": "Response data, which includes merchant information for the requested PANs."
+      },
+      "PANData": {
+        "required": [
+          "pAN",
+          "panResponseMsg"
+        ],
+        "type": "object",
+        "properties": {
+          "pAN": {
+            "type": "string",
+            "description": "The request account number (PAN value).",
+            "example": "4000123456789010"
+          },
+          "merchants": {
+            "type": "array",
+            "description": "List of merchants who have Card-On-File Data for the requested PAN.",
+            "items": {
+              "$ref": "#/components/schemas/Merchant"
+            }
+          },
+          "panResponseMsg": {
+            "maxLength": 128,
+            "minLength": 0,
+            "type": "string",
+            "description": "Indicates whether data retrieval for a given PAN was successful; field contains either \"Success\" or the reason for the error if data retrieval was not successful.",
+            "example": "Success"
+          }
+        },
+        "description": "Response Object for a single PAN"
+      },
+      "MerchantDataResponse": {
+        "required": [
+          "responseHeader",
+          "status"
+        ],
+        "type": "object",
+        "properties": {
+          "status": {
+            "$ref": "#/components/schemas/Status"
+          },
+          "responseData": {
+            "$ref": "#/components/schemas/MResponseData"
+          },
+          "responseHeader": {
+            "$ref": "#/components/schemas/MResponseHeader"
+          }
+        }
+      },
+      "RawMerchant": {
+        "required": [
+          "rawMrchName"
+        ],
+        "type": "object",
+        "properties": {
+          "mrchLogoURL": {
+            "maxLength": 255,
+            "minLength": 0,
+            "type": "string",
+            "description": "Merchant Logo URL.\n\nNote: This field may return an empty string.",
+            "example": "www.anymerchant.com/logo"
+          },
+          "rawMrchName": {
+            "type": "string",
+            "description": "Raw Merchant Name.",
+            "example": "AnyRawMerchant"
+          },
+          "tokenReqstrId": {
+            "maxLength": 11,
+            "minLength": 1,
+            "type": "string",
+            "description": "The token requestor ID of the merchant or payment facilitator, if any, assigned by Visa Token Service.\n\nNote: This field may return 00000000 when tokenReqstrId is unknown.",
+            "example": "1234567890"
+          },
+          "tranTypeDetails": {
+            "type": "array",
+            "description": "List of transaction details by transaction type. Each transaction type can appear once and only if there’s an associated transaction.",
+            "items": {
+              "$ref": "#/components/schemas/RawMerchantTranType"
+            }
+          },
+          "predictedPayments": {
+            "type": "object",
+            "properties": {
+              "nextPaymentAmt": {
+                "maxLength": 24,
+                "minLength": 0,
+                "type": "string",
+                "description": "Next payment amount in currency used in transaction.",
+                "example": "22.72"
+              },
+              "nextPaymentDate": {
+                "type": "string",
+                "description": "Date of next payment in UTC time zone.\n\nFormat: yyyy-MM-dd",
+                "example": "2025-05-11"
+              },
+              "paymentFrequency": {
+                "type": "string",
+                "description": "Frequency of the payment.",
+                "example": "MONTHLY",
+                "enum": [
+                  "WEEKLY, BIWEEKLY, SEMIMONTHLY, MONTHLY, BIMONTHLY, QUARTERLY, SEMIANNUALLY, ANNUALLY, IRREGULAR"
+                ]
+              }
+            },
+            "description": "Predicted upcoming payment based on the transaction history."
+          },
+          "sponsoredMerchantId": {
+            "maxLength": 20,
+            "minLength": 0,
+            "type": "string",
+            "description": "Sponsored Merchant ID.",
+            "example": "1234567890"
+          },
+          "paymentFacilitatorId": {
+            "maxLength": 20,
+            "minLength": 0,
+            "type": "string",
+            "description": "Payment Facilitator ID.",
+            "example": "1234567890"
+          }
+        },
+        "description": "List of raw merchants who have Card-On-File Data for the requested PAN and mrchRef."
+      },
+      "MRequestData": {
+        "required": [
+          "group",
+          "pANs"
+        ],
+        "type": "object",
+        "properties": {
+          "pANs": {
+            "maxItems": 1,
+            "minItems": 1,
+            "type": "array",
+            "description": "List of PANs for requesting merchant data. The PAN has a format of 12–19 decimal digits starting with a \"4\" (indicating Visa accounts).",
+            "example": [
+              "4000123456789010"
+            ],
+            "items": {
+              "type": "string",
+              "description": "List of PANs for requesting merchant data. The PAN has a format of 12–19 decimal digits starting with a \"4\" (indicating Visa accounts).",
+              "example": "[\"4000123456789010\"]"
+            }
+          },
+          "group": {
+            "pattern": "STANDARD",
+            "type": "string",
+            "description": "Identifies the set of response fields the customer is eligible to receive. If the group name is \"STANDARD\", all available response fields are included.",
+            "example": "STANDARD",
+            "enum": [
+              "STANDARD"
+            ]
+          }
+        },
+        "description": "Request body for querying Card-on-file merchant."
+      },
+      "Merchant": {
+        "required": [
+          "acctNumOld4Digit",
+          "cardAcceptorId",
+          "confidenceInd",
+          "lastMrchTranDt",
+          "lastTranAmt",
+          "mCC",
+          "mrchAddr",
+          "mrchDbaId",
+          "mrchDbaName",
+          "mrchName",
+          "mrchPhoneNum",
+          "mrchRef",
+          "mrchURL",
+          "tokenPANReplacementDate",
+          "tokenPANReplacementStatus",
+          "tokenReqstrId",
+          "totalTranCount",
+          "vAULastUpdateDate",
+          "vAUUpdateStatus"
+        ],
+        "type": "object",
+        "properties": {
+          "mCC": {
+            "pattern": "^$|^\\d{4}$",
+            "type": "string",
+            "description": "Merchant Category Code.\n\nNote: This field may return an empty string.",
+            "example": "5942"
+          },
+          "mrchRef": {
+            "pattern": "^[A-Za-z0-9-_=]{1,512}$",
+            "type": "string",
+            "description": "Correlation ID to uniquely identify the merchant. The reference ID is not static and may change.",
+            "example": "MTIzNDU2Nzg5MDEyMzQ1Njc4OTpBTUFaT04="
+          },
+          "mrchURL": {
+            "maxLength": 255,
+            "minLength": 0,
+            "type": "string",
+            "description": "Merchant URL.\n\nNote: This field may return an empty string.",
+            "example": "www.anymerchant.com"
+          },
+          "mrchAddr": {
+            "maxLength": 255,
+            "minLength": 0,
+            "type": "string",
+            "description": "Merchant address.\n\nNote: This field may return an empty string.",
+            "example": "111 Any St AnyCity 90000 AnyState USA"
+          },
+          "mrchName": {
+            "maxLength": 255,
+            "minLength": 0,
+            "type": "string",
+            "description": "Cleansed Merchant Name.",
+            "example": "ABC"
+          },
+          "mrchDbaId": {
+            "maxLength": 6,
+            "minLength": 0,
+            "type": "string",
+            "description": "\"Doing Business As\" (DBA) ID of the merchant. Use mrchName instead; this field may become deprecated.\n\nNote: This field may return an empty string.",
+            "example": "148"
+          },
+          "lastTranAmt": {
+            "maxLength": 24,
+            "minLength": 0,
+            "type": "string",
+            "description": "Last transaction amount in currency used in transaction; not applicable for “AUTH_VERIFICATION” transaction type.",
+            "example": "22.34"
+          },
+          "mrchDbaName": {
+            "maxLength": 40,
+            "minLength": 0,
+            "type": "string",
+            "description": "Merchant \"Doing Business As\" name. Use mrchName instead; this field may become deprecated.",
+            "example": "ANYMERCHANT"
+          },
+          "mrchLogoURL": {
+            "maxLength": 255,
+            "minLength": 0,
+            "type": "string",
+            "description": "Merchant Logo URL.\n\nNote: This field may return an empty string.",
+            "example": "www.anymerchant.com/logo"
+          },
+          "mrchPhoneNum": {
+            "maxLength": 40,
+            "minLength": 0,
+            "type": "string",
+            "description": "Merchant phone number.\n\nNote: This field may return an empty string.",
+            "example": "5551212"
+          },
+          "confidenceInd": {
+            "pattern": "^$|^[CEM]$",
+            "type": "string",
+            "description": "Confidence indicator.\n\nC - Highly likely a COF merchant\n\nM - May be a COF merchant\n\nE - Not a COF merchant",
+            "example": "C"
+          },
+          "tokenReqstrId": {
+            "maxLength": 11,
+            "minLength": 0,
+            "type": "string",
+            "description": "The token requestor ID of the merchant or payment facilitator, if any, assigned by Visa Token Service.\n\nNote: This field may return an empty string.",
+            "example": "00000000"
+          },
+          "cardAcceptorId": {
+            "maxLength": 15,
+            "minLength": 0,
+            "type": "string",
+            "description": "Card Acceptor ID (CAID) of the merchant. The value reflects the most recent CAID included in the last transaction.\n\nNote: This field may return an empty string.",
+            "example": "235251000762203"
+          },
+          "lastMrchTranDt": {
+            "pattern": "^$|^((19|2[0-9])[0-9]{2})-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$",
+            "type": "string",
+            "description": "Date when the last transaction was made with the merchant in UTC time zone; not applicable for “AUTH_VERIFICATION” transaction type.\n\nNote: This field may return an empty string.\n\nFormat: yyyy-MM-dd",
+            "example": "2018-07-18"
+          },
+          "lastTranAmtUSD": {
+            "maxLength": 24,
+            "minLength": 0,
+            "type": "string",
+            "description": "Last transaction amount in USD; not applicable for “AUTH_VERIFICATION” transaction type.",
+            "example": "25.68"
+          },
+          "totalTranCount": {
+            "maxLength": 19,
+            "minLength": 0,
+            "type": "string",
+            "description": "Total transaction count for all transaction type.",
+            "example": "3"
+          },
+          "tranTypeDetails": {
+            "type": "array",
+            "description": "List of transaction details by transaction type. Each transaction type can appear once and only if there’s an associated transaction.",
+            "items": {
+              "$ref": "#/components/schemas/TranType"
+            }
+          },
+          "vAUUpdateStatus": {
+            "pattern": "^(Y|N|NA)?$",
+            "type": "string",
+            "description": "Visa Account Updater (VAU) polling status.\n\nY - PAN update was polled by the merchant.\n\nN - No PAN update was polled by the merchant.\n\nNA - Issuer has not reissued a PAN nor updated expiry date.\n\nNote: <li>Issuers must be subscribed to VAU to provide updates. Merchants must be subscribed to VAU in order to receive updates.<li>This field may return an empty string.",
+            "example": "Y"
+          },
+          "acctNumOld4Digit": {
+            "pattern": "^$|^[0-9]{4}$",
+            "type": "string",
+            "description": "Last 4 digits of the old account number in Visa Account Updater (VAU).\n\nNote: This field may return an empty string.",
+            "example": "1234"
+          },
+          "lastTranCurrency": {
+            "maxLength": 3,
+            "minLength": 0,
+            "type": "string",
+            "description": "Currency used in last transaction; not applicable for “AUTH_VERIFICATION” transaction type.\n\nFormat: ISO 4217 standard",
+            "example": "AUD"
+          },
+          "lastTranDateTime": {
+            "pattern": "^([0-9]{4})-([0-1][0-9])-([0-3][0-9])\\s([0-1][0-9]|[2][0-3]):([0-5][0-9]):([0-5][0-9]).([0-9][0-9][0-9])$",
+            "type": "string",
+            "description": "Date and time of last transaction timestamp in UTC time zone; not applicable for “AUTH_VERIFICATION” transaction type.\n\nFormat: yyyy-MM-dd HH:mm:ss.SSS (ISO 8601 standard)",
+            "example": "2018-10-05 09:45:17.000"
+          },
+          "vAULastUpdateDate": {
+            "pattern": "^$|^((19|2[0-9])[0-9]{2})-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$",
+            "type": "string",
+            "description": "Date when merchant last polled Visa Account Updater (VAU) for new PAN data in UTC time zone.\n\nNote: <li>Issuers must be subscribed to VAU to provide updates. Merchants must be subscribed to VAU in order to receive updates.<li>This field may return an empty string.\n\nFormat: yyyy-MM-dd",
+            "example": "2018-07-18"
+          },
+          "sponsoredMerchantId": {
+            "maxLength": 20,
+            "minLength": 0,
+            "type": "string",
+            "description": "Sponsored Merchant ID.",
+            "example": "7494990"
+          },
+          "lastTranBillCurrency": {
+            "maxLength": 3,
+            "minLength": 0,
+            "type": "string",
+            "description": "Billing currency of last transaction; not applicable for “AUTH_VERIFICATION” transaction type.\n\nFormat: ISO 4217 standard",
+            "example": "AUD"
+          },
+          "paymentFacilitatorId": {
+            "maxLength": 15,
+            "minLength": 0,
+            "type": "string",
+            "description": "Payment Facilitator ID.",
+            "example": "10071854"
+          },
+          "lastTranAmtBillCurrency": {
+            "maxLength": 24,
+            "minLength": 0,
+            "type": "string",
+            "description": "Last transaction amount in billing currency; not applicable for “AUTH_VERIFICATION” transaction type.",
+            "example": "22.34"
+          },
+          "tokenPANReplacementDate": {
+            "pattern": "^$|^((19|2[0-9])[0-9]{2})-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$",
+            "type": "string",
+            "description": "tokenPANReplacementStatus update date in UTC time zone.\n\nNote: This field may return an empty string.\n\nFormat: yyyy-MM-dd",
+            "example": "2018-07-18"
+          },
+          "tokenPANReplacementStatus": {
+            "pattern": "^$|^Y{1}$|^N{1}$",
+            "type": "string",
+            "description": "Status of whether the token’s underlying PAN has been updated, based on issuer updates sent to Visa.\n\nY - PAN was updated.\n\nN - PAN was not updated.\n\nNote: This field may return an empty string.",
+            "example": "N"
+          }
+        },
+        "description": "List of merchants who have Card-On-File Data for the requested PAN."
+      },
+      "MResponseHeader": {
+        "description": "Fields contained in the header of each response.",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseResponseHeader"
+          },
+          {
+            "required": [
+              "numRecordsReturned"
+            ],
+            "type": "object",
+            "properties": {
+              "numRecordsReturned": {
+                "maximum": 2147483647,
+                "minimum": 0,
+                "type": "integer",
+                "description": "Number of successful PAN records returned.",
+                "format": "int32",
+                "example": 3
+              }
+            }
+          }
+        ]
+      },
+      "RequestHeader": {
+        "required": [
+          "messageDateTime",
+          "requestMessageId"
+        ],
+        "type": "object",
+        "properties": {
+          "messageDateTime": {
+            "pattern": "^([0-9]{4})-([0-1][0-9])-([0-3][0-9])\\s([0-1][0-9]|[2][0-3]):([0-5][0-9]):([0-5][0-9]).([0-9][0-9][0-9])$",
+            "type": "string",
+            "description": "Date and time at which request is sent (up to milliseconds in UTC).\n\nFormat: yyyy-MM-dd HH:mm:ss.SSS (ISO 8601 standard)",
+            "example": "2018-09-19 06:01:00.601"
+          },
+          "requestMessageId": {
+            "maxLength": 50,
+            "minLength": 0,
+            "pattern": "^[\\w-._]+$",
+            "type": "string",
+            "description": "A string that uniquely identifying the service request. The requesting application creates this unique message ID.",
+            "example": "6da60e1b8b024532a2e0eacb1af5858132a2e0eacb1af58581"
+          }
+        },
+        "description": "Fields contained in the header of each request."
+      },
+      "RawMerchantDataRequest": {
+        "required": [
+          "requestData",
+          "requestHeader"
+        ],
+        "type": "object",
+        "properties": {
+          "requestData": {
+            "$ref": "#/components/schemas/RMRequestData"
+          },
+          "requestHeader": {
+            "$ref": "#/components/schemas/RequestHeader"
+          }
+        }
+      },
+      "RawMerchantDataResponse": {
+        "required": [
+          "responseHeader",
+          "status"
+        ],
+        "type": "object",
+        "properties": {
+          "status": {
+            "$ref": "#/components/schemas/Status"
+          },
+          "responseData": {
+            "$ref": "#/components/schemas/RMResponseData"
+          },
+          "responseHeader": {
+            "$ref": "#/components/schemas/RMResponseHeader"
+          }
+        }
+      },
+      "MerchantDataRequest": {
+        "required": [
+          "requestData",
+          "requestHeader"
+        ],
+        "type": "object",
+        "properties": {
+          "requestData": {
+            "$ref": "#/components/schemas/MRequestData"
+          },
+          "requestHeader": {
+            "$ref": "#/components/schemas/RequestHeader"
+          }
+        }
+      }
+    },
+    "responses": {},
+    "parameters": {},
+    "examples": {},
+    "requestBodies": {},
+    "headers": {},
+    "callbacks": {}
+  },
+  "webhooks": {},
+  "x-tagGroups": [
+    {
+      "name": "API Reference",
+      "tags": [
+        "Card-On-File Data Service API"
+      ]
+    }
+  ]
+}

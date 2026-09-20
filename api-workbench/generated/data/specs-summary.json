@@ -1,0 +1,658 @@
+{
+  "generatedAt": "2026-09-11T21:39:02.520Z",
+  "totalSpecs": 41,
+  "totalEndpoints": 620,
+  "totalXsdTypes": 861,
+  "totalServers": 47,
+  "specs": [
+    {
+      "id": "Accounts_AccountTransactions_FinancialDetails_Digital_Domain_OpenAPI-2-swagger__1__yaml",
+      "fileName": "Accounts_AccountTransactions_FinancialDetails_Digital_Domain_OpenAPI-2-swagger (1).yaml",
+      "format": "openapi_3",
+      "title": "Accounts_AccountTransactions_FinancialDetails_Digital_Domain_OpenAPI",
+      "version": "1.3.0",
+      "endpointCount": 2,
+      "serverCount": 1,
+      "schemasCount": 9,
+      "tags": [
+        "Accounts_Account Financials_Account Transactions"
+      ]
+    },
+    {
+      "id": "Auth_Digital_Public_Token_Api-2-swagger__1__yaml",
+      "fileName": "Auth_Digital_Public_Token_Api-2-swagger (1).yaml",
+      "format": "swagger_2",
+      "title": "Token Authorization",
+      "version": "1.0.0",
+      "endpointCount": 3,
+      "serverCount": 1,
+      "schemasCount": 11,
+      "tags": [
+        "General"
+      ]
+    },
+    {
+      "id": "Broker_API_postman_collection_json_txt",
+      "fileName": "Broker API.postman_collection.json.txt",
+      "format": "postman",
+      "title": "Broker API",
+      "version": "2.1.0",
+      "endpointCount": 159,
+      "serverCount": 1,
+      "schemasCount": 0,
+      "tags": [
+        "Accounts",
+        "Documents",
+        "Trading",
+        "Portfolio History",
+        "Assets",
+        "Calendar",
+        "Events",
+        "Funding",
+        "Funding Wallets",
+        "Instant Funding",
+        "OAuth",
+        "Journals",
+        "Corporate Actions",
+        "Watchlist",
+        "KYC",
+        "Rebalancing",
+        "Logos",
+        "Reporting",
+        "Country Info",
+        "Crypto Funding",
+        "IRA",
+        "Cash Interest",
+        "FPSL Program",
+        "Tokenization",
+        "IPO"
+      ]
+    },
+    {
+      "id": "CardAccountBalanceTransferEligibility_OpenAPI-4-swagger_yaml",
+      "fileName": "CardAccountBalanceTransferEligibility_OpenAPI-4-swagger.yaml",
+      "format": "openapi_3",
+      "title": "CardAccountBalanceTransferEligibility_OpenAPI",
+      "version": "1.2.0",
+      "endpointCount": 1,
+      "serverCount": 1,
+      "schemasCount": 5,
+      "tags": [
+        "Accounts_Account Eligibility and Enrollment_Account Feature Eligibility"
+      ]
+    },
+    {
+      "id": "Common_ComplexTypes_xsd_xml",
+      "fileName": "Common_ComplexTypes.xsd.xml",
+      "format": "xsd",
+      "title": "XML Schema: Common_ComplexTypes.xsd.xml",
+      "version": "5.0.1",
+      "endpointCount": 0,
+      "serverCount": 0,
+      "schemasCount": 522,
+      "tags": [
+        "XSD Schema",
+        "XML Data Model"
+      ]
+    },
+    {
+      "id": "Common_Groups_xsd_xml",
+      "fileName": "Common_Groups.xsd.xml",
+      "format": "xsd",
+      "title": "XML Schema: Common_Groups.xsd.xml",
+      "version": "5.0.1",
+      "endpointCount": 0,
+      "serverCount": 0,
+      "schemasCount": 339,
+      "tags": [
+        "XSD Schema",
+        "XML Data Model"
+      ]
+    },
+    {
+      "id": "IAM_TokenManagement_PartnerOauth2AuthorizationCodeManagement_Digital_Domain_OpenAPI-3-swagger__1__yaml",
+      "fileName": "IAM_TokenManagement_PartnerOauth2AuthorizationCodeManagement_Digital_Domain_OpenAPI-3-swagger (1).yaml",
+      "format": "openapi_3",
+      "title": "IAM_TokenManagement_PartnerOauth2AuthorizationCodeManagement_Digital_Domain_OpenAPI",
+      "version": "1.3.0",
+      "endpointCount": 4,
+      "serverCount": 1,
+      "schemasCount": 4,
+      "tags": [
+        "IAM_Authentication and Authorization_Token Management"
+      ]
+    },
+    {
+      "id": "IAM_TokenManagement_PartnerOauth2AuthorizationCodeManagement_Digital_Domain_OpenAPI-3-swagger_yaml",
+      "fileName": "IAM_TokenManagement_PartnerOauth2AuthorizationCodeManagement_Digital_Domain_OpenAPI-3-swagger.yaml",
+      "format": "openapi_3",
+      "title": "IAM_TokenManagement_PartnerOauth2AuthorizationCodeManagement_Digital_Domain_OpenAPI",
+      "version": "1.3.0",
+      "endpointCount": 4,
+      "serverCount": 1,
+      "schemasCount": 4,
+      "tags": [
+        "IAM_Authentication and Authorization_Token Management"
+      ]
+    },
+    {
+      "id": "Oauth20_Authorize_Api-5-swagger_yaml__1_",
+      "fileName": "Oauth20_Authorize_Api-5-swagger.yaml (1)",
+      "format": "openapi_3",
+      "title": "Token Authorization",
+      "version": "1.0.0",
+      "endpointCount": 3,
+      "serverCount": 1,
+      "schemasCount": 11,
+      "tags": [
+        "General"
+      ]
+    },
+    {
+      "id": "Oauth2_Security_Idp_Api-4-swagger_yaml",
+      "fileName": "Oauth2_Security_Idp_Api-4-swagger.yaml",
+      "format": "openapi_3",
+      "title": "Consent Authorization",
+      "version": "1.0.0",
+      "endpointCount": 1,
+      "serverCount": 1,
+      "schemasCount": 1,
+      "tags": [
+        "General"
+      ]
+    },
+    {
+      "id": "Openbanking_Customerprofile_Orchestrator_Api-5-swagger_yaml",
+      "fileName": "Openbanking_Customerprofile_Orchestrator_Api-5-swagger.yaml",
+      "format": "openapi_3",
+      "title": "Customers Profiles",
+      "version": "1.0.0",
+      "endpointCount": 1,
+      "serverCount": 1,
+      "schemasCount": 10,
+      "tags": [
+        "Customer Profile"
+      ]
+    },
+    {
+      "id": "PayPal_APIs_postman_collection_json_txt",
+      "fileName": "PayPal APIs.postman_collection.json.txt",
+      "format": "postman",
+      "title": "PayPal APIs",
+      "version": "2.1.0",
+      "endpointCount": 116,
+      "serverCount": 1,
+      "schemasCount": 0,
+      "tags": [
+        "Authorization",
+        "Orders",
+        "Payments",
+        "Invoices",
+        "Templates",
+        "Catalog Products",
+        "Plans",
+        "Subscriptions",
+        "Payouts",
+        "Webhooks",
+        "Shipment Tracking",
+        "Transaction Search",
+        "Currency Exchange",
+        "Disputes",
+        "Manage Accounts",
+        "Vault Payment Source - Setup Tokens",
+        "Vault Payment Source - Payment token",
+        "Payment Links and Buttons"
+      ]
+    },
+    {
+      "id": "RewardLinkageShopWithPoints_OpenAPI-4-swagger_yaml__1_",
+      "fileName": "RewardLinkageShopWithPoints_OpenAPI-4-swagger.yaml (1)",
+      "format": "openapi_3",
+      "title": "RewardLinkageShopWithPoints_OpenAPI",
+      "version": "1.10.0",
+      "endpointCount": 1,
+      "serverCount": 1,
+      "schemasCount": 3,
+      "tags": [
+        "Rewards_Reward Management_Reward Enrollment"
+      ]
+    },
+    {
+      "id": "RewardRedemptionSelectAndCredit_OpenAPI-5-swagger_yaml__1_",
+      "fileName": "RewardRedemptionSelectAndCredit_OpenAPI-5-swagger.yaml (1)",
+      "format": "openapi_3",
+      "title": "RewardRedemptionSelectAndCredit_OpenAPI",
+      "version": "1.12.2",
+      "endpointCount": 1,
+      "serverCount": 1,
+      "schemasCount": 5,
+      "tags": [
+        "Rewards_Reward Management_Reward Redemption and Fulfillment"
+      ]
+    },
+    {
+      "id": "SecurityE2EKeyExchangePreLogin_Partner_OpenAPI-5-swagger_yaml",
+      "fileName": "SecurityE2EKeyExchangePreLogin_Partner_OpenAPI-5-swagger.yaml",
+      "format": "openapi_3",
+      "title": "SecurityE2EKeyExchangePreLogin_Partner_OpenAPI",
+      "version": "1.0.0",
+      "endpointCount": 1,
+      "serverCount": 1,
+      "schemasCount": 2,
+      "tags": [
+        "Foundations_Utilities_Encrytion and Decryption"
+      ]
+    },
+    {
+      "id": "Statement_Digital_Orchestration_Api-5-swagger_yaml__1_",
+      "fileName": "Statement_Digital_Orchestration_Api-5-swagger.yaml (1)",
+      "format": "openapi_3",
+      "title": "Account Statements",
+      "version": "1.0.0",
+      "endpointCount": 2,
+      "serverCount": 1,
+      "schemasCount": 9,
+      "tags": [
+        "Statements"
+      ]
+    },
+    {
+      "id": "TaxStatement_Digital_Orchestration_Api-1-swagger_yaml__1_",
+      "fileName": "TaxStatement_Digital_Orchestration_Api-1-swagger.yaml (1)",
+      "format": "openapi_3",
+      "title": "TaxStatement_Digital_Orchestation",
+      "version": "1.0.0",
+      "endpointCount": 2,
+      "serverCount": 1,
+      "schemasCount": 4,
+      "tags": [
+        "Tax Statements"
+      ]
+    },
+    {
+      "id": "api_reference__1__json",
+      "fileName": "api_reference (1).json",
+      "format": "openapi_3",
+      "title": "VisaNet Connect - Issuing",
+      "version": "1",
+      "endpointCount": 4,
+      "serverCount": 1,
+      "schemasCount": 1925,
+      "tags": [
+        "Cardholder Database Update",
+        "Card Services API"
+      ]
+    },
+    {
+      "id": "api_reference__10__json",
+      "fileName": "api_reference (10).json",
+      "format": "openapi_3",
+      "title": "B2B Virtual Account Payment Method",
+      "version": "1",
+      "endpointCount": 44,
+      "serverCount": 1,
+      "schemasCount": 245,
+      "tags": [
+        "Buyer Management Service",
+        "Account Management service",
+        "Supplier Service",
+        "Workflows",
+        "VCS Eligibility service",
+        "Single Use Account Pool Maintenance Service",
+        "Payment Service"
+      ]
+    },
+    {
+      "id": "api_reference__11__json",
+      "fileName": "api_reference (11).json",
+      "format": "openapi_3",
+      "title": "Visa DCVV2 Generate",
+      "version": "1",
+      "endpointCount": 4,
+      "serverCount": 1,
+      "schemasCount": 0,
+      "tags": [
+        "dCVV2 Management",
+        "dCVV2 Generate"
+      ]
+    },
+    {
+      "id": "api_reference__12__json",
+      "fileName": "api_reference (12).json",
+      "format": "openapi_3",
+      "title": "Visa Pay",
+      "version": "1",
+      "endpointCount": 11,
+      "serverCount": 1,
+      "schemasCount": 65,
+      "tags": [
+        " Visa Pay"
+      ]
+    },
+    {
+      "id": "api_reference__13__json",
+      "fileName": "api_reference (13).json",
+      "format": "openapi_3",
+      "title": "Click to Pay",
+      "version": "1",
+      "endpointCount": 8,
+      "serverCount": 1,
+      "schemasCount": 71,
+      "tags": [
+        "Secure Remote Commerce"
+      ]
+    },
+    {
+      "id": "api_reference__14__json",
+      "fileName": "api_reference (14).json",
+      "format": "openapi_3",
+      "title": "Visa Card Program Management",
+      "version": "1",
+      "endpointCount": 2,
+      "serverCount": 1,
+      "schemasCount": 47,
+      "tags": [
+        "Visa Credential Data Inquiry",
+        "Visa Card Program Enrollment "
+      ]
+    },
+    {
+      "id": "api_reference__15__json",
+      "fileName": "api_reference (15).json",
+      "format": "openapi_3",
+      "title": "Visa BIN Attribute Sharing Service",
+      "version": "1",
+      "endpointCount": 8,
+      "serverCount": 1,
+      "schemasCount": 65,
+      "tags": [
+        "BIN Files Metadata",
+        "Issuer API",
+        "Single BIN Lookup",
+        "Full BIN List",
+        "BIN File Transfer"
+      ]
+    },
+    {
+      "id": "api_reference__16__json",
+      "fileName": "api_reference (16).json",
+      "format": "openapi_3",
+      "title": "Foreign Exchange Rates",
+      "version": "1",
+      "endpointCount": 2,
+      "serverCount": 1,
+      "schemasCount": 24,
+      "tags": [
+        "Foreign Exchange Rates API"
+      ]
+    },
+    {
+      "id": "api_reference__17__json",
+      "fileName": "api_reference (17).json",
+      "format": "openapi_3",
+      "title": "Card on File Data Inquiry",
+      "version": "1",
+      "endpointCount": 2,
+      "serverCount": 1,
+      "schemasCount": 20,
+      "tags": [
+        "Card-On-File Data Service API"
+      ]
+    },
+    {
+      "id": "api_reference__18__json",
+      "fileName": "api_reference (18).json",
+      "format": "openapi_3",
+      "title": "Visa Payment Passkey ",
+      "version": "1",
+      "endpointCount": 5,
+      "serverCount": 1,
+      "schemasCount": 143,
+      "tags": [
+        "Visa Payment Passkey"
+      ]
+    },
+    {
+      "id": "api_reference__19__json",
+      "fileName": "api_reference (19).json",
+      "format": "openapi_3",
+      "title": "Visa Consumer Authentication Service",
+      "version": "1",
+      "endpointCount": 5,
+      "serverCount": 1,
+      "schemasCount": 27,
+      "tags": [
+        "VCAS-Marking-API",
+        "VCAS-CardStatus-API"
+      ]
+    },
+    {
+      "id": "api_reference__3__json",
+      "fileName": "api_reference (3).json",
+      "format": "openapi_3",
+      "title": "DPS Card and Account Services",
+      "version": "1",
+      "endpointCount": 24,
+      "serverCount": 1,
+      "schemasCount": 134,
+      "tags": [
+        "Card PIN Management",
+        "Card Services",
+        "Card Transactions",
+        "Program Services",
+        "Card Activation",
+        "Card Inquiry ",
+        "Cardholder Verification",
+        "Card CVV2 "
+      ]
+    },
+    {
+      "id": "api_reference__4__json",
+      "fileName": "api_reference (4).json",
+      "format": "openapi_3",
+      "title": "Visa Travel Notification Service",
+      "version": "1",
+      "endpointCount": 4,
+      "serverCount": 1,
+      "schemasCount": 23,
+      "tags": [
+        "Visa Travel Notification API"
+      ]
+    },
+    {
+      "id": "api_reference__5__json",
+      "fileName": "api_reference (5).json",
+      "format": "openapi_3",
+      "title": "Visa Credit Card Application",
+      "version": "1",
+      "endpointCount": 1,
+      "serverCount": 1,
+      "schemasCount": 2,
+      "tags": [
+        "CCA API"
+      ]
+    },
+    {
+      "id": "api_reference__6__json",
+      "fileName": "api_reference (6).json",
+      "format": "openapi_3",
+      "title": "Visa Direct Connect",
+      "version": "1",
+      "endpointCount": 25,
+      "serverCount": 1,
+      "schemasCount": 2480,
+      "tags": [
+        "Validate",
+        "Transaction Management",
+        "Payout",
+        "Exception Management",
+        "Transactional API - Initial Version - Deprecated",
+        "Get Requirements",
+        "Verify",
+        "Payin",
+        "Eligibility"
+      ]
+    },
+    {
+      "id": "api_reference__8__json",
+      "fileName": "api_reference (8).json",
+      "format": "openapi_3",
+      "title": "Kernel in the Cloud",
+      "version": "1",
+      "endpointCount": 3,
+      "serverCount": 1,
+      "schemasCount": 11,
+      "tags": [
+        "KiC List"
+      ]
+    },
+    {
+      "id": "api_reference__9__json",
+      "fileName": "api_reference (9).json",
+      "format": "openapi_3",
+      "title": "Visa Accounts Receivable Manager",
+      "version": "1",
+      "endpointCount": 10,
+      "serverCount": 1,
+      "schemasCount": 89,
+      "tags": [
+        "Visa AR Manager Onboarding Suite API",
+        "Visa AR Manager Payment Suite API"
+      ]
+    },
+    {
+      "id": "api_reference_json",
+      "fileName": "api_reference.json",
+      "format": "openapi_3",
+      "title": "Visa Direct",
+      "version": "1",
+      "endpointCount": 27,
+      "serverCount": 1,
+      "schemasCount": 220,
+      "tags": [
+        "Visa Alias Directory API - Deprecated",
+        "Mobile Push Payment Refund API",
+        "Reports API",
+        "mVisa API",
+        "Adjustment API",
+        "Query API",
+        "Cancel OCT API",
+        "Funds Transfer API"
+      ]
+    },
+    {
+      "id": "finicity-apimatic-20220106_yaml",
+      "fileName": "finicity-apimatic-20220106.yaml",
+      "format": "openapi_3",
+      "title": "Finicity API",
+      "version": "1.0.0",
+      "endpointCount": 84,
+      "serverCount": 1,
+      "schemasCount": 259,
+      "tags": [
+        "Connect",
+        "Institutions",
+        "Consumer",
+        "Verify Income",
+        "Verify Assets",
+        "Verify Income and Employment",
+        "Accounts",
+        "Account Owner",
+        "Customer",
+        "Bank Statements",
+        "Transactions",
+        "Pay Statements",
+        "Liabilities",
+        "Authentication",
+        "Get Portfolios",
+        "TxPush",
+        "Deprecated",
+        "Payments",
+        "Get Reports by Customer",
+        "App Registration and OAuth Migration",
+        "Get Reports by Consumer",
+        "Asset",
+        "Cash Flow",
+        "Verify Employment"
+      ]
+    },
+    {
+      "id": "openapi__3__json",
+      "fileName": "openapi (3).json",
+      "format": "openapi_3",
+      "title": "Custody",
+      "version": "1.0.0",
+      "endpointCount": 6,
+      "serverCount": 3,
+      "schemasCount": 24,
+      "tags": [
+        "Account(s)",
+        "Holdings",
+        "Transactions",
+        "Tax Lots",
+        "Assets",
+        "Failed Trades"
+      ]
+    },
+    {
+      "id": "openapi__4__json",
+      "fileName": "openapi (4).json",
+      "format": "openapi_3",
+      "title": "Access Online Transactions and Orders",
+      "version": "1.1.1",
+      "endpointCount": 4,
+      "serverCount": 2,
+      "schemasCount": 25,
+      "tags": [
+        "Transactions",
+        "Orders"
+      ]
+    },
+    {
+      "id": "openapi__5__json",
+      "fileName": "openapi (5).json",
+      "format": "openapi_3",
+      "title": "Virtual Card Payments",
+      "version": "2.7.0",
+      "endpointCount": 19,
+      "serverCount": 2,
+      "schemasCount": 104,
+      "tags": [
+        "Virtual Cards",
+        "Real-time Credit Details",
+        "Authorizations and Transactions",
+        "Payments",
+        "Payment Invoices"
+      ]
+    },
+    {
+      "id": "openapi__6__json",
+      "fileName": "openapi (6).json",
+      "format": "openapi_3",
+      "title": "Corporate Account Information",
+      "version": "2.5.0",
+      "endpointCount": 16,
+      "serverCount": 4,
+      "schemasCount": 66,
+      "tags": [
+        "Account(s)",
+        "Transaction(s)",
+        "Statement(s)",
+        "ACH-Returns-and-NOC"
+      ]
+    },
+    {
+      "id": "openapi_json",
+      "fileName": "openapi.json",
+      "format": "openapi_3",
+      "title": "Incoming webhooks",
+      "version": "1.0.0",
+      "endpointCount": 1,
+      "serverCount": 2,
+      "schemasCount": 5,
+      "tags": [
+        "Publish Event Notifications"
+      ]
+    }
+  ]
+}

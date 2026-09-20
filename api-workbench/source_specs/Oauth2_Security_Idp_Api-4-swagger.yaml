@@ -1,0 +1,131 @@
+openapi: 3.0.1
+info:
+  title: Consent Authorization
+  description: Generate an authorization code from a user’s consent by calling the
+    authorize endpoint with the required parameters
+  version: 1.0.0
+servers:
+- url: /api/identity/v1
+tags: []
+paths:
+  /authcode/oauth2/authorize:
+    get:
+      tags: []
+      summary: "Authorization code grant: Retrieve authorization code"
+      description: Authorization code is valid for 5 minutes.
+      parameters:
+      - name: scope
+        in: query
+        description: The set of scopes required to make the API calls. Scope is case
+          insensitive and multiple values can be passed using space delimiter
+        schema:
+          type: string
+      - name: response_type
+        in: query
+        description: Value MUST be set to "code"
+        schema:
+          type: string
+      - name: redirect_uri
+        in: query
+        description: Absolute uri for user-agent redirection.You should provide the
+          uri used during client registration process.
+        schema:
+          type: string
+      - name: businessCode
+        in: query
+        description: The 3 character business code. Use GCB for consumer banking (upper
+          case)
+        schema:
+          type: string
+      - name: locale
+        in: query
+        description: "Locale identify a specific language and geographic region, it\
+          \ shoule follow [language[_territory]. eg - en_US, en_SG"
+        schema:
+          type: string
+      - name: state
+        in: query
+        description: Opaque value to maintain the state between request and call back.
+          This will be used to prevent cross-site request forgery.
+        schema:
+          type: string
+      - name: countryCode
+        in: query
+        description: Country code in 2 character ISO 3166 format (upper case)
+        schema:
+          type: string
+      - name: client_id
+        in: query
+        description: Absolute uri for user-agent redirection.You should provide the
+          uri used during client registration process.
+        schema:
+          type: string
+      responses:
+        "200":
+          description: success
+          content: {}
+        "500":
+          description: server_error
+          content: {}
+        "503":
+          description: temporarily_unavailable
+          content: {}
+        "302":
+          description: "The authorization response contains the authorization code\
+            \ needed to obtain an access token. Here are the parameters included in\
+            \ the response.<table class=\"table\"><caption>success response</caption><tbody><tr><td>field\
+            \ name</td><td>field type</td><td>mandatory</td><td>description</td></tr><tr><td>redirect_uri</td><td>location</td><td>yes</td><td>This\
+            \ is the absolute uri provided in the request</td></tr><tr><td>code</td><td>query</td><td>yes</td><td>The\
+            \ authorization code</td></tr><tr><td>state</td><td>query</td><td>yes</td><td>The\
+            \ same value as sent by the client in the state parameter, if any</td></tr></tbody></table><br>If\
+            \ an error occurs during authorization, two situations can occur. The\
+            \ first is, that the client is not authenticated or recognized. For instance,\
+            \ a wrong redirect URI was sent in the request. In that case the authorization\
+            \ server must not redirect the resource owner to the redirect URI. Instead\
+            \ it should inform the resource owner of the error. The second situation\
+            \ is that client is authenticated correctly, but that something else failed.\
+            \ In that case the following error response is sent to the client, included\
+            \ in the redirect_uri <table class=\"table\"><caption>failure response</caption><tbody><tr><td>field\
+            \ name</td><td>field type</td><td>mandatory</td><td>description</td></tr><tr><td>redirect_uri</td><td>location</td><td>yes</td><td>This\
+            \ is the absolute uri provided in the request</td></tr><tr><td>state</td><td>query</td><td>yes</td><td>The\
+            \ same value as sent by the client in the state parameter, if any</td></tr><tr><td>error</td><td>query</td><td>yes</td><td></td></tr><tr><td>error_description</td><td>query</td><td>no</td><td></td></tr><tr><td>error_uri</td><td>query</td><td>no</td><td></td></tr></tbody></table><br>\
+            \ Here is the list of errors: <table class=\"table\"><tr><td>error</td></tr><tr><td>invalid_request</td></tr>\
+            \ <tr><td>unauthorized_client</td></tr><tr><td>unsupported_response_type</td></tr><tr><td>invalid_scope</td></tr><tr><td>access_denied</td></tr></table>"
+          content: {}
+components:
+  schemas:
+    ErrorResponse:
+      required:
+      - error
+      type: object
+      properties:
+        error_description:
+          type: string
+          description: "Human-readable ASCII [USASCII] text providing additional information,\
+            \ used to assist the client developer in understanding the error that\
+            \ occurred"
+        state:
+          type: string
+          description: REQUIRED if a "state" parameter was present in the client authorization
+            request.  The exact value received from the client.
+        error:
+          type: string
+          description: "If the request fails due to a missing, invalid, or mismatching\
+            \ redirection URI, or if the client identifier is missing or invalid,\
+            \ the authorization server SHOULD inform the resource owner of the error\
+            \ and MUST NOT automatically redirect the user-agent to the invalid redirection\
+            \ URI."
+          enum:
+          - invalid_request
+          - unauthorized_client
+          - access_denied
+          - unsupported_response_type
+          - invalid_scope
+          - server_error
+          - temporarily_unavailable
+        error_uri:
+          type: string
+          description: "A URI identifying a human-readable web page with information\
+            \ about the error, used to provide the client developer with additional\
+            \ information about the error."
+x-original-swagger-version: "2.0"

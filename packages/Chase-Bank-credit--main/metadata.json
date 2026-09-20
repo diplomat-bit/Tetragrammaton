@@ -1,0 +1,6 @@
+{
+  "name": "Chase Loyalty API Explorer",
+  "description": "API execution client and inspector for Chase Pay With Points rewards enrollment and loyalty APIs.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

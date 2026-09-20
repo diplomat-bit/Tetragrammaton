@@ -1,0 +1,3916 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Click to Pay",
+    "description": "",
+    "version": "1"
+  },
+  "servers": [
+    {
+      "url": "https://sandbox.api.visa.com",
+      "description": "Sandbox server"
+    }
+  ],
+  "security": [],
+  "tags": [
+    {
+      "name": "Secure Remote Commerce",
+      "description": "Enable partners  to securely add, manage, and use Visa tokenized credentials for digital purchases built on EMV standards."
+    }
+  ],
+  "paths": {
+    "/src/v1/identities/lookup": {
+      "post": {
+        "tags": [
+          "Secure Remote Commerce"
+        ],
+        "summary": "Identity Lookup",
+        "description": "The Identity Lookup operation uses a provided consumer identity (email address or mobile\nphone number) to determine whether it is associated with an SRC profile.\n\n**Authentication Requirements:**\n- HTTP Header: x-pay-token - JWT token for authentication\n- Query Parameter: apikey - API key issued during onboarding",
+        "operationId": "identityLookup",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "consumerIdentity",
+                  "srcClientId"
+                ],
+                "type": "object",
+                "properties": {
+                  "srcClientId": {
+                    "maxLength": 100,
+                    "type": "string",
+                    "description": "This is the ID shared by the SRC system with the client that identifies the connecting\nclient, such as SRCi, DCF, or SRC Issuer (SRCPI). If an API key was provided, use the API key as the srcClientId.\n"
+                  },
+                  "consumerIdentity": {
+                    "$ref": "#/components/schemas/ConsumerIdentity"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "The operation is processed successfully, and the lookup result is included in the response body.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "required": [
+                    "consumerPresent1"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "consumerStatus": {
+                      "type": "string",
+                      "description": "Status of the consumer. Must be provided if the specified consumer identity was recognized by the SRC system.",
+                      "enum": [
+                        "ACTIVE",
+                        "SUSPENDED",
+                        "LOCKED"
+                      ]
+                    },
+                    "consumerPresent1": {
+                      "type": "boolean",
+                      "description": "Indicates whether the Identity Lookup operation was successful."
+                    },
+                    "idLookupSessionId": {
+                      "type": "string",
+                      "description": "Session identifier of format UUID, returned by SRC System following an Identity Lookup operation. Can be used in subsequent Initiate Identity Validation operation.\nNot supported in Visa SRC system.\n"
+                    },
+                    "lastUsedCardTimestamp": {
+                      "type": "string",
+                      "description": "Timestamp of the last used card. UTC time in Unix epoch format.",
+                      "format": "number"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/Internal"
+          }
+        },
+        "x-operationVersions": [
+          {
+            "label": "v1 - Latest",
+            "operationPointer": "#/paths/~1src~1v1~1identities~1lookup/post",
+            "default": false
+          }
+        ],
+        "x-hideTryIt": true
+      }
+    },
+    "/src/v1/profiles/prepare": {
+      "post": {
+        "tags": [
+          "Secure Remote Commerce"
+        ],
+        "summary": "Prepare SRC Profile",
+        "description": "The Prepare SRC Profile operation requests that an SRC System prepare one or more SRC Profile(s) to be returned.\n\n**Authentication Requirements:**\n- HTTP Header: x-pay-token - JWT token for authentication\n- Query Parameter: apiKey - API key issued during onboarding",
+        "operationId": "prepareSrcProfile",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "srcClientId"
+                ],
+                "type": "object",
+                "properties": {
+                  "dpaData": {
+                    "$ref": "#/components/schemas/DpaData"
+                  },
+                  "idTokens": {
+                    "type": "array",
+                    "description": "(Conditional) List of JWTs. Either idTokens or consumerIdentities must be provided.\nIf both are provided, the idTokens will be used.\n",
+                    "items": {
+                      "$ref": "#/components/schemas/idToken"
+                    }
+                  },
+                  "srcDpaId": {
+                    "maxLength": 100,
+                    "type": "string",
+                    "description": "DPA identifier, which is generated by the SRCI during DPA registration."
+                  },
+                  "srcClientId": {
+                    "maxLength": 100,
+                    "minLength": 1,
+                    "type": "string",
+                    "description": "This is the ID shared by the SRC system to the Client that identifies the connecting\nclient, e.g. SRCi, DCF, or SRC Issuer (SRCPI). If an API key was provided then use the API Key as the srcClientId.\n"
+                  },
+                  "srcCorrelationId": {
+                    "maxLength": 100,
+                    "type": "string",
+                    "description": "(Conditional) Unique identifier generated by an SRC System. Must be provided if available within the present checkout session\n(such as received in an earlier response during the present session), otherwise a new checkout session will be initiated.\n"
+                  },
+                  "srciTransactionId": {
+                    "maxLength": 100,
+                    "type": "string",
+                    "description": "A unique transaction ID created by the SRCi, which may be created on the merchant page. It must be passed through to all networks (SRC systems) and DCFs.\n"
+                  },
+                  "consumerIdentities": {
+                    "type": "array",
+                    "description": "(Conditional) List of Consumer Identities. Either idTokens or consumerIdentities must be provided.\nIf both are provided, the idTokens will be used.\n",
+                    "items": {
+                      "$ref": "#/components/schemas/ConsumerIdentity"
+                    }
+                  },
+                  "dpaTransactionOptions": {
+                    "$ref": "#/components/schemas/DpaTransactionOptions"
+                  }
+                },
+                "description": "### Request Body Validation Rules\n#### idTokens/consumerIdentities Validation\n- Either idTokens or consumerIdentities must be provided if:\n- The idTokens list carries one or more Federated ID Tokens (used to identify associated SRC Profile(s), and attest that the requester is authorised to access this data). When the SRC Initiator performs Consumer Identity validation, it shall always use the Federated ID Token it generates here\n- The consumerIdentities list carries one or more Consumer Identities and is used to identify associated SRC Profile(s) (may be used only when the client is trusted and authorised to access the SRC System)\n"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "The operation is processed successfully and the SRC Profile details are included in the response body",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "required": [
+                    "profiles"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "profiles": {
+                      "type": "array",
+                      "description": "Contains entries if one or more SRC Profiles are found, otherwise an empty list is returned.",
+                      "items": {
+                        "$ref": "#/components/schemas/SRCProfile"
+                      }
+                    },
+                    "srcDpaId": {
+                      "maxLength": 100,
+                      "type": "string",
+                      "description": "Reference identifier of the DPA"
+                    },
+                    "srcCorrelationId": {
+                      "maxLength": 100,
+                      "type": "string",
+                      "description": "Unique identifier generated by an SRC System. Must be provided if available within the present checkout session\n(such as received in an earlier response during the present session), otherwise a new checkout session will be initiated.\n"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/Internal"
+          }
+        },
+        "x-operationVersions": [
+          {
+            "label": "v1 - Latest",
+            "operationPointer": "#/paths/~1src~1v1~1profiles~1prepare/post",
+            "default": false
+          }
+        ],
+        "x-hideTryIt": true
+      }
+    },
+    "/src/v1/confirmations": {
+      "post": {
+        "tags": [
+          "Secure Remote Commerce"
+        ],
+        "summary": "Confirmation",
+        "description": "The Confirmation operation enables SRC Participants to provide a notification of the result of a \ncheckout service (checkout or payment authorisation\n\n**Authentication Requirements:**\n- HTTP Header: x-pay-token - JWT token for authentication\n- Query Parameter: apiKey - API key issued during onboarding",
+        "operationId": "confirmation",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "confirmationData2",
+                  "srcCorrelationId"
+                ],
+                "type": "object",
+                "properties": {
+                  "srcDpaId": {
+                    "maxLength": 100,
+                    "type": "string",
+                    "description": "(Conditional) Reference identifier of the DPA. Must be provided if the calling client is an SRCI\n"
+                  },
+                  "serviceId": {
+                    "description": "(Conditional) Required for confirmation of checkout using Card on File or Partner Token.",
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/ServiceId"
+                      }
+                    ]
+                  },
+                  "customData": {
+                    "$ref": "#/components/schemas/JSONObject"
+                  },
+                  "srcClientId": {
+                    "maxLength": 100,
+                    "type": "string",
+                    "description": "(Conditional) This is the ID shared by the SRC system to the Client that identifies the connecting\nclient, e.g. SRCi, DCF, or SRC Issuer (SRCPI). If an API key was provided then use the API Key as the srcClientId.\nRefer integration guide for more details.\n"
+                  },
+                  "srcCorrelationId": {
+                    "maxLength": 100,
+                    "type": "string",
+                    "description": "Unique identifier generated by an SRC System. Must be provided if available within the present checkout session\n(such as received in an earlier response during the present session), otherwise a new checkout session will be initiated.\n"
+                  },
+                  "confirmationData2": {
+                    "$ref": "#/components/schemas/ConfirmationData"
+                  },
+                  "srciTransactionId": {
+                    "maxLength": 100,
+                    "type": "string",
+                    "description": "A unique transaction ID created by the SRCi, which may be created on the merchant page. It must be passed through to all networks (SRC systems) and DCFs.\n"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "The operation is processed successfully and there is no content to be returned."
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/Internal"
+          }
+        },
+        "x-operationVersions": [
+          {
+            "label": "v1 - Latest",
+            "operationPointer": "#/paths/~1src~1v1~1confirmations/post",
+            "default": false
+          }
+        ],
+        "x-hideTryIt": true
+      }
+    },
+    "/src/v1/cards": {
+      "post": {
+        "tags": [
+          "Secure Remote Commerce"
+        ],
+        "summary": "Enroll Card",
+        "description": "The Card Enrolment operation enrols a Consumer and Digital Card (associated with an\nunderlying PAN) to a new SRC Profile, or adds a Digital Card to an existing SRC Profile.",
+        "operationId": "enrollCard",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "srcClientId"
+                ],
+                "type": "object",
+                "properties": {
+                  "srcDpaId": {
+                    "maxLength": 100,
+                    "type": "string",
+                    "description": "DPA identifier, which is generated by the SRCi during DPA registration."
+                  },
+                  "serviceId": {
+                    "description": "(Conditional) Required for Card on File or Partner Token enrollments.",
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/ServiceId"
+                      }
+                    ]
+                  },
+                  "srcClientId": {
+                    "maxLength": 100,
+                    "minLength": 1,
+                    "type": "string",
+                    "description": "This is the ID shared by the SRC System with the client that identifies the connecting\nclient, such as SRCi, DCF, or SRC Issuer (SRCPI). If an API key was provided, then use the API key as the srcClientId.  \n"
+                  },
+                  "encryptedCard": {
+                    "pattern": "^([a-zA-Z0-9_=]+)\\.([a-zA-Z0-9_=]+)\\.([a-zA-Z0-9_=]+)\\.([a-zA-Z0-9_=]+)\\.([a-zA-Z0-9_\\-\\+\\/=]+)$",
+                    "type": "string",
+                    "description": "(Conditional) URL-safe base64 encoded JWE<Card> information related to the Card being enrolled, with no padding.\nEncrypted according to the JSON Web Encryption (JWE) specification RFC 7516, and the algorithm used for encryption is according to RFC 7518, Section 4.1.\nExactly one of encryptedCard or enrollmentReferenceData must be provided.\nSee: #/components/schemas/Card\n",
+                    "format": "application/jwt",
+                    "x-jwe-encryption": {
+                      "algorithm": "RSA-OAEP",
+                      "encryption": "A256GCM"
+                    }
+                  },
+                  "srcCorrelationId": {
+                    "maxLength": 100,
+                    "type": "string",
+                    "description": "Unique identifier generated by an SRC System. Must be provided if available within the present checkout session\n(such as received in an earlier response during the present session), otherwise a new checkout session will be initiated.\n"
+                  },
+                  "encryptedConsumer": {
+                    "pattern": "^([a-zA-Z0-9_=]+)\\.([a-zA-Z0-9_=]+)\\.([a-zA-Z0-9_=]+)\\.([a-zA-Z0-9_=]+)\\.([a-zA-Z0-9_\\-\\+\\/=]+)$",
+                    "type": "string",
+                    "description": "(Conditional) URL-safe base64 encoded JWE<Consumer> information related to the Consumer being enrolled, with no padding.\nEncrypted according to the JSON Web Encryption (JWE) specification RFC 7516, and the algorithm used for encryption is according to RFC 7518, Section 4.1.\nEither none or encryptedConsumer must be provided.\nSee: #/components/schemas/Consumer\n",
+                    "format": "application/jwt",
+                    "x-jwe-encryption": {
+                      "algorithm": "RSA-OAEP",
+                      "encryption": "A256GCM"
+                    }
+                  },
+                  "srciTransactionId": {
+                    "maxLength": 100,
+                    "type": "string",
+                    "description": "A unique transaction ID created by the SRCi, which may be created on the merchant page. It must be passed through to all networks (SRC Systems) and DCFs.\n"
+                  },
+                  "complianceSettings": {
+                    "description": "(Conditional) Required for enrolment into click to pay.",
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/ComplianceSettings"
+                      }
+                    ]
+                  },
+                  "enrollmentReferenceData": {
+                    "description": "(Conditional) Enrollment reference data. Exactly one of card, encryptedCard or enrollmentReferenceData must be provided.\nExactly one of encryptedCard or enrollmentReferenceData must be provided.\n",
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/EnrollmentReferenceData"
+                      }
+                    ]
+                  }
+                },
+                "description": "### Request Body Validation Rules\n#### EncryptedConsumer Validation\n- Either none or encryptedConsumer must be provided.\n#### EncryptedCard/EnrollmentReferenceData Validation\n- Exactly one of encryptedCard or enrollmentReferenceData must be provided.\n"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "The operation is processed successfully, and the card is enrolled.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "maskedCard": {
+                      "$ref": "#/components/schemas/MaskedCard"
+                    },
+                    "maskedConsumer": {
+                      "$ref": "#/components/schemas/MaskedConsumer"
+                    },
+                    "srcCorrelationId": {
+                      "maxLength": 100,
+                      "minLength": 0,
+                      "type": "string",
+                      "description": "Unique identifier generated by an SRC System. Must be provided if available within the present checkout session\n(such as received in an earlier response during the present session), otherwise a new checkout\nsession will be initiated.\n"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/Internal"
+          }
+        },
+        "x-operationVersions": [
+          {
+            "label": "v1 - Latest",
+            "operationPointer": "#/paths/~1src~1v1~1cards/post",
+            "default": false
+          }
+        ],
+        "x-hideTryIt": true
+      }
+    },
+    "/src/v1/identities/validation/initiate": {
+      "post": {
+        "tags": [
+          "Secure Remote Commerce"
+        ],
+        "summary": "Initiate Identity Validation",
+        "description": "The Initiate Identity Validation operation initiates a process to validate that a Consumer is in\nthe possession of, or has access to, the Consumer Identity claimed..\n\n**Authentication Requirements:**\n- HTTP Header: x-pay-token - JWT token for authentication\n- Query Parameter: apiKey - API key issued during onboarding",
+        "operationId": "initiateIdentityValidation",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "srcClientId"
+                ],
+                "type": "object",
+                "properties": {
+                  "srcClientId": {
+                    "maxLength": 100,
+                    "type": "string",
+                    "description": "This is the ID shared by the SRC system to the Client that identifies the connecting\nclient, e.g. SRCi, DCF, or SRC Issuer (SRCPI). If an API key was provided then use the API Key as the srcClientId.\n"
+                  },
+                  "consumerIdentity": {
+                    "description": "(Conditional) Consumer identity information. One of consumerIdentity or idLookupSessionId must be provided.\nIf both are provided, idLookupSessionId takes precedence.\n",
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/ConsumerIdentity"
+                      }
+                    ]
+                  },
+                  "idLookupSessionId": {
+                    "type": "string",
+                    "description": "(Conditional) Session identifier of format UUID, returned by SRC System following an Identity Lookup operation. Can be used in subsequent Initiate Identity Validation operation. \nOne of consumerIdentity or idLookupSessionId must be provided. If both are provided, idLookupSessionId takes precedence.\n"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "The operation is processed successfully and the verification request results are included in the response body.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "idValidationSessionId": {
+                      "type": "string",
+                      "description": "Session identifier of UUID format, returned by SRC System following an Initiate Identity Validation operation"
+                    },
+                    "maskedValidationChannel": {
+                      "$ref": "#/components/schemas/IdentityValidationChannel"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/Internal"
+          }
+        },
+        "x-operationVersions": [
+          {
+            "label": "v1 - Latest",
+            "operationPointer": "#/paths/~1src~1v1~1identities~1validation~1initiate/post",
+            "default": false
+          }
+        ],
+        "x-hideTryIt": true
+      }
+    },
+    "/src/v1/transaction/credentials": {
+      "get": {
+        "tags": [
+          "Secure Remote Commerce"
+        ],
+        "summary": "Get Payload",
+        "description": "This operation returns Payment Data and payment related data to be used in payment authorisation.",
+        "operationId": "getPayload",
+        "parameters": [
+          {
+            "name": "srcClientId",
+            "in": "query",
+            "description": "This is the ID shared by the SRC system with the client that identifies the connecting\nclient, such as SRCi, DCF, or SRC Issuer (SRCPI). If an API key was provided, use the API key as the srcClientId. \n",
+            "required": true,
+            "explode": true,
+            "schema": {
+              "maxLength": 100,
+              "type": "string"
+            }
+          },
+          {
+            "name": "payloadTypeIndicator",
+            "in": "query",
+            "description": "Identifies the type of encrypted payload to be returned. A value of *SUMMARY* is invalid for the GetPayload operation.\n",
+            "required": false,
+            "explode": true,
+            "schema": {
+              "$ref": "#/components/schemas/PayloadTypeIndicator"
+            }
+          },
+          {
+            "name": "srcDpaId",
+            "in": "query",
+            "description": "DPA identifier, which is generated by the SRCI during DPA registration.",
+            "required": false,
+            "explode": true,
+            "schema": {
+              "maxLength": 100,
+              "type": "string"
+            }
+          },
+          {
+            "name": "srcCorrelationId",
+            "in": "query",
+            "description": "This is the unique identifier generated by the SRC\nsystem to track and link SRC messages. It is used as the\ntransaction identifier assigned by the SRC system for this particular\ntransaction. Must be provided if available from the checkout session related to the transaction.\nConditionality: \n  - Must be provided if srcDigitalCardId is not provided \n",
+            "required": false,
+            "explode": true,
+            "schema": {
+              "maxLength": 100,
+              "type": "string"
+            }
+          },
+          {
+            "name": "serviceId",
+            "in": "query",
+            "description": "(Conditional) Required if using Card on File or Partner Token.",
+            "required": false,
+            "explode": true,
+            "schema": {
+              "$ref": "#/components/schemas/ServiceId"
+            }
+          },
+          {
+            "name": "srcDigitalCardId",
+            "in": "query",
+            "description": "Reference identifier for the digital card representing the PAN or payment tokens.\nConditionality: \n  - Must be provided for card-on-file if the srcCorrelationId is not provided\n   \n",
+            "required": false,
+            "explode": true,
+            "schema": {
+              "$ref": "#/components/schemas/SrcDigitalCardId"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/schemas/PayloadResponse"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/Internal"
+          }
+        },
+        "x-operationVersions": [
+          {
+            "label": "v1 - Latest",
+            "operationPointer": "#/paths/~1src~1v1~1transaction~1credentials/get",
+            "default": false
+          }
+        ],
+        "x-hideTryIt": true
+      },
+      "post": {
+        "tags": [
+          "Secure Remote Commerce"
+        ],
+        "summary": "Checkout",
+        "description": "The Checkout operation utilises the Consumer’s chosen Digital Card and details of the current transaction to retrieve Payment Data \nand payment related data.\n\n**Authentication Requirements:**\n- HTTP Header: x-pay-token - JWT token for authentication\n- Query Parameter: apiKey - API key issued during onboarding",
+        "operationId": "checkout",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "srcClientId",
+                  "srcCorrelationId",
+                  "srcDigitalCardId",
+                  "srcDpaId"
+                ],
+                "type": "object",
+                "properties": {
+                  "dpaData": {
+                    "$ref": "#/components/schemas/DpaData"
+                  },
+                  "srcDpaId": {
+                    "maxLength": 100,
+                    "minLength": 1,
+                    "type": "string",
+                    "description": "DPA identifier, which is generated by the SRCI during DPA registration.\n"
+                  },
+                  "serviceId": {
+                    "description": "(Conditional) Required for checkout using Card on File or Partner Token.",
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/ServiceId"
+                      }
+                    ]
+                  },
+                  "srcClientId": {
+                    "maxLength": 100,
+                    "minLength": 1,
+                    "type": "string",
+                    "description": "This is the ID shared by the SRC system to the Client that identifies the connecting\nclient, e.g. SRCi, DCF, or SRC Issuer (SRCPI). If an API key was provided then use the API Key as the srcClientId.\n"
+                  },
+                  "assuranceData": {
+                    "$ref": "#/components/schemas/AssuranceData"
+                  },
+                  "srcCorrelationId": {
+                    "maxLength": 100,
+                    "minLength": 1,
+                    "type": "string",
+                    "description": "Unique identifier generated by an SRC System. Must be provided if available within the present checkout session\n(such as received in an earlier response during the present session), otherwise a new checkout session will be initiated.\n"
+                  },
+                  "srcDigitalCardId": {
+                    "type": "string",
+                    "description": "Reference identifier to the Digital Card representing the PAN or Payment Tokens."
+                  },
+                  "srciTransactionId": {
+                    "maxLength": 100,
+                    "type": "string",
+                    "description": "A unique transaction ID created by the SRCi, which may be created on the merchant page. It must be passed through to all networks (SRC systems) and DCFs.\n"
+                  },
+                  "dpaTransactionOptions": {
+                    "$ref": "#/components/schemas/DpaTransactionOptions"
+                  },
+                  "encryptedBillingAddress": {
+                    "pattern": "^([a-zA-Z0-9_=]+)\\.([a-zA-Z0-9_=]+)\\.([a-zA-Z0-9_=]+)\\.([a-zA-Z0-9_=]+)\\.([a-zA-Z0-9_\\-\\+\\/=]+)$",
+                    "type": "string",
+                    "description": "URL-safe base64 encoded JWE<Address> information related to the Card, with no padding.\nEncrypted according to JSON Web Encryption (JWE) specification RFC 7516 and the algorithm used for encryption is according to RFC 7518 Section 4.1.\nSee: #/components/schemas/Address\n",
+                    "format": "application/jwt",
+                    "x-jwe-encryption": {
+                      "algorithm": "RSA-OAEP",
+                      "encryption": "A256GCM"
+                    }
+                  },
+                  "initializationSessionId": {
+                    "maxLength": 100,
+                    "type": "string",
+                    "description": "Session Id returned by SRC system intialization operation. \n(Conditional) Required when FIDO2 Authentication is required to be performed.\n"
+                  },
+                  "payloadTypeIndicatorPayload": {
+                    "$ref": "#/components/schemas/PayloadTypeIndicator"
+                  },
+                  "payloadTypeIndicatorCheckout": {
+                    "$ref": "#/components/schemas/PayloadTypeIndicatorCheckout"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/schemas/CheckoutResponse"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/Internal"
+          }
+        },
+        "x-operationVersions": [
+          {
+            "label": "v1 - Latest",
+            "operationPointer": "#/paths/~1src~1v1~1transaction~1credentials/post",
+            "default": false
+          }
+        ],
+        "x-hideTryIt": true
+      }
+    },
+    "/src/v1/identities/validation/complete": {
+      "post": {
+        "tags": [
+          "Secure Remote Commerce"
+        ],
+        "summary": "Complete Identity Validation",
+        "description": "The Complete Identity Validation operation determines whether data, provided by the Consumer as part of a second step of an \nidentity validation process, is valid. It can also be used to check whether an out-of-band service was successful.\n\n**Authentication Requirements:**\n- HTTP Header: x-pay-token - JWT token for authentication\n- Query Parameter: apiKey - API key issued during onboarding",
+        "operationId": "completeIdentityValidation",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "idValidationSessionId",
+                  "srcClientId",
+                  "validationData"
+                ],
+                "type": "object",
+                "properties": {
+                  "srcClientId": {
+                    "maxLength": 100,
+                    "type": "string",
+                    "description": "This is the ID shared by the SRC system to the Client that identifies the connecting\nclient, e.g. SRCi, DCF, or SRC Issuer (SRCPI). If an API key was provided then use the API Key as the srcClientId.\n"
+                  },
+                  "validationData": {
+                    "maxLength": 100,
+                    "type": "string",
+                    "description": "Validation data (e.g. OTP) as entered by the Consumer as part of the step-up authentication"
+                  },
+                  "idValidationSessionId": {
+                    "type": "string",
+                    "description": "Session identifier of UUID format, returned by SRC System following an Initiate Identity Validation operation"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "The operation is processed successfully, validation of identity has been successfully completed and the Federated ID Token included in the response body",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "required": [
+                    "idToken"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "idToken": {
+                      "type": "string",
+                      "description": "Federated ID Token issued by the SRC System based on successful validation"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/Internal"
+          }
+        },
+        "x-operationVersions": [
+          {
+            "label": "v1 - Latest",
+            "operationPointer": "#/paths/~1src~1v1~1identities~1validation~1complete/post",
+            "default": false
+          }
+        ],
+        "x-hideTryIt": true
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Origin": {
+        "type": "string",
+        "description": "Indicates the entity performing the enrollment.",
+        "enum": [
+          "CARDHOLDER",
+          "MERCHANT",
+          "ISSUER"
+        ]
+      },
+      "FederatedIdTokenClaims": {
+        "required": [
+          "aud",
+          "exp",
+          "iat",
+          "iss",
+          "sub"
+        ],
+        "type": "object",
+        "properties": {
+          "amr": {
+            "type": "array",
+            "description": "List of methods the end user was authenticated with.",
+            "items": {
+              "type": "string",
+              "enum": [
+                "sms_otp",
+                "email_otp",
+                "merchant_rememberme",
+                "fido_pop",
+                "ext_validation"
+              ]
+            }
+          },
+          "aud": {
+            "minItems": 1,
+            "type": "array",
+            "description": "Audience(s) this ID Token is intended for. It must contain the identifier of the requestor as the first element of the array and may also contain identifiers for participating SRC Systems.",
+            "items": {
+              "pattern": "^https://[^/]+$",
+              "type": "string",
+              "format": "uri"
+            }
+          },
+          "exp": {
+            "type": "integer",
+            "description": "Expiration time as NumericDate, in seconds since 1970-01-01T00:00:00Z UTC. Minimum expiration timestamp should be 15 minutes from the issued-at timestamp."
+          },
+          "iat": {
+            "type": "integer",
+            "description": "Issued-at time as NumericDate, in seconds since 1970-01-01T00:00:00Z UTC."
+          },
+          "iss": {
+            "pattern": "^https://[^/]+$",
+            "type": "string",
+            "description": "Issuer identifier for the issuer of the response. Must be a case-sensitive HTTPS URI containing scheme and fully qualified domain name of the host only.",
+            "format": "uri",
+            "example": "https://srcsystem1.com"
+          },
+          "jti": {
+            "type": "string",
+            "description": "JWT ID. Unique identifier for the JWT."
+          },
+          "sub": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "Subject identifier. A locally unique and never reassigned identifier within the issuer for the Consumer."
+          },
+          "email": {
+            "type": "string",
+            "description": "Obfuscated end user's preferred e-mail address. The underlying e-mail address must conform to RFC 5322 addr-spec syntax simplified to all lowercase characters."
+          },
+          "ext_amr": {
+            "type": "array",
+            "description": "amr value extracted from external validation JWT when amr includes ext_validation.",
+            "items": {
+              "type": "string"
+            }
+          },
+          "ext_aud": {
+            "description": "aud value extracted from external validation JWT when amr includes ext_validation.",
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            ]
+          },
+          "ext_exp": {
+            "type": "integer",
+            "description": "exp value extracted from external validation JWT when amr includes ext_validation."
+          },
+          "ext_iat": {
+            "type": "integer",
+            "description": "iat value extracted from external validation JWT when amr includes ext_validation."
+          },
+          "ext_iss": {
+            "pattern": "^https://[^/]+$",
+            "type": "string",
+            "description": "iss value extracted from external validation JWT when amr includes ext_validation.",
+            "format": "uri"
+          },
+          "ext_sub": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "sub value extracted from external validation JWT when amr includes ext_validation."
+          },
+          "auth_time": {
+            "type": "integer",
+            "description": "Time when end-user authentication occurred, as NumericDate."
+          },
+          "signed_data": {
+            "type": "array",
+            "description": "Array of SignedData when amr includes ext_validation.",
+            "items": {
+              "$ref": "#/components/schemas/SignedData"
+            }
+          },
+          "phone_number": {
+            "type": "string",
+            "description": "Obfuscated end user's preferred mobile phone number. The underlying phone number must conform to E.164 format except that the leading '+' is excluded."
+          },
+          "ext_auth_time": {
+            "type": "integer",
+            "description": "auth_time value extracted from external validation JWT when amr includes ext_validation."
+          },
+          "email_verified": {
+            "type": "boolean",
+            "description": "True if the end user's e-mail address has been verified."
+          },
+          "src_email_mask": {
+            "type": "string",
+            "description": "Masked Consumer e-mail address in RFC 5322 format with SRC-specific masking rules."
+          },
+          "phone_number_verified": {
+            "type": "boolean",
+            "description": "True if the end user's phone number has been verified.\n"
+          },
+          "src_phone_number_mask": {
+            "type": "string",
+            "description": "Masked Consumer mobile phone number using E.164 format with SRC-specific masking rules."
+          }
+        }
+      },
+      "DpaTransactionOptions": {
+        "type": "object",
+        "properties": {
+          "dpaLocale": {
+            "maxLength": 5,
+            "minLength": 0,
+            "type": "string",
+            "description": "(Optional) Merchant’s preferred locale.\nFor example:[“en_US”,“fr_CA”]\nISO language country pair. [ISO 639-1 Code] [ISO 3166-1 alpha-2 country code]\n"
+          },
+          "acquirerBin": {
+            "maxLength": 11,
+            "minLength": 0,
+            "type": "string",
+            "description": "(Conditional) Acquirer BIN. Required for the SRC system to facilitate authentication.\n"
+          },
+          "merchantName": {
+            "maxLength": 40,
+            "minLength": 0,
+            "type": "string",
+            "description": "(Conditional) Merchant name. Required for the SRC system to facilitate authentication."
+          },
+          "paymentOptions": {
+            "type": "array",
+            "description": "(Optional) Payment options(DynamicData preferences) requested by the DPA",
+            "items": {
+              "$ref": "#/components/schemas/PaymentOptions"
+            }
+          },
+          "customInputData": {
+            "$ref": "#/components/schemas/CustomInputData"
+          },
+          "merchantOrderId": {
+            "maxLength": 50,
+            "minLength": 0,
+            "type": "string",
+            "description": "(Optional) Digital Payment Application generated order/invoice number corresponding to a Consumer purchase"
+          },
+          "transactionAmount": {
+            "$ref": "#/components/schemas/TransactionAmount"
+          },
+          "acquirerMerchantId": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "description": "(Conditional) Acquirer-assigned Merchant identifier. Required for\nthe SRC system to facilitate authentication.\n"
+          },
+          "merchantCountryCode": {
+            "maxLength": 2,
+            "minLength": 2,
+            "type": "string",
+            "description": "(Optional) Country code of the merchant.\n",
+            "format": "ISO 3166-1-alpha2"
+          },
+          "merchantCategoryCode": {
+            "maxLength": 4,
+            "minLength": 0,
+            "type": "string",
+            "description": "(Optional) Describes the merchant’s type of business, product or service.\n"
+          },
+          "consumerNameRequested": {
+            "type": "boolean",
+            "description": "(Optional) Indicates whether the DPA expects the Consumer name to be returned in the SRC Payload"
+          },
+          "authenticationPreferences": {
+            "$ref": "#/components/schemas/AuthenticationPreferences"
+          },
+          "dpaAcceptedBillingCountries": {
+            "type": "array",
+            "description": "(Optional) Billing restrictions. \nArray of country codes in ISO 3166-1 alpha-2 format.\nPayments from all the listed billing countries are accepted \nFor example: [\"US\",\"CA\",\"AU\"] \nAn empty list or the absence of this data element means that all countries are accepted.\n",
+            "items": {
+              "maxLength": 2,
+              "minLength": 2,
+              "type": "string"
+            }
+          },
+          "consumerPhoneNumberRequested": {
+            "type": "boolean",
+            "description": "(Optional) Indicates whether the DPA expects the Consumer phone number to be returned in the SRC Payload."
+          },
+          "consumerEmailAddressRequested": {
+            "type": "boolean",
+            "description": "(Optional) Indicates whether the DPA expects the Consumer email address to be returned in the SRC Payload."
+          },
+          "consumerNationalIdentifierRequested": {
+            "type": "boolean",
+            "description": "(Optional) Indicates whether the DPA expects the Consumer National Identifier to be returned in the SRC Payload"
+          }
+        },
+        "description": "DPA configuration data, which overrides the configuration on the SRC system that was created during DPA registration.\n"
+      },
+      "AcceptanceChannelRelatedData": {
+        "required": [
+          "acceptanceChannelData",
+          "acceptanceChannelType"
+        ],
+        "type": "object",
+        "properties": {
+          "acceptanceChannelData": {
+            "$ref": "#/components/schemas/AcceptanceChannelData"
+          },
+          "acceptanceChannelType": {
+            "type": "string",
+            "description": "Acceptance channel type",
+            "enum": [
+              "EMV_MERCHANT_PRESENTED_MODE"
+            ]
+          },
+          "acceptanceChannelTechnology": {
+            "type": "string",
+            "description": "Technology used to transmit/receive the acceptance channel data\n",
+            "enum": [
+              "QR_CODE"
+            ]
+          }
+        },
+        "description": "Acceptance channel related data."
+      },
+      "Email": {
+        "maxLength": 255,
+        "minLength": 0,
+        "type": "string",
+        "description": "Email address.",
+        "format": "email"
+      },
+      "Address": {
+        "required": [
+          "countryCode"
+        ],
+        "type": "object",
+        "properties": {
+          "zip": {
+            "maxLength": 16,
+            "minLength": 1,
+            "type": "string",
+            "description": "(Conditional) Address zip or postal code.\nConditionality: \n  When used with the DPA registration operation in the Management Service APIs, at least one of the following is required:\n  • both city and state\n  • zip\nRequired if this is a shipping address in a valid format for the country and has a postal code or zip code.\n"
+          },
+          "city": {
+            "maxLength": 50,
+            "minLength": 0,
+            "type": "string",
+            "description": "(Conditional) Address city. \nConditionality: \n  When used with the DPA registration operation in the Management Service APIs, at least one of the following is required:\n  • both city and state\n  • zip\n  Required if this is a shipping address in a valid format for the country.\n"
+          },
+          "name": {
+            "maxLength": 100,
+            "minLength": 0,
+            "type": "string",
+            "description": "(Conditional) The name of the consumer or entity, if known.\nConditionality: Required when known to the SRC system for this address.\n"
+          },
+          "line1": {
+            "maxLength": 75,
+            "minLength": 1,
+            "type": "string",
+            "description": "(Conditional) Address line 1. \nConditionality: \n  Required when used with the DPA registration operation in the Management Service APIs.\n  Required when the address is used as a shipping or delivery address.\n"
+          },
+          "line2": {
+            "maxLength": 75,
+            "minLength": 0,
+            "type": "string",
+            "description": "(Optional) Address line 2."
+          },
+          "line3": {
+            "maxLength": 75,
+            "minLength": 0,
+            "type": "string",
+            "description": "(Optional) Address line 3."
+          },
+          "state": {
+            "maxLength": 30,
+            "minLength": 0,
+            "type": "string",
+            "description": "(Conditional) Address state.\nRecommendation: Support ISO 3166-2 format, which is made up of the ISO 3166-1 alpha-2 country code followed by an alphanumeric string of 3 characters representing the state or subdivision.\nConditionality: \n  When used with the DPA registration operation in the Management Service APIs, at least one of the following is required:\n  • both city and state\n  • zip\n  Required if this is a shipping address in a valid format for the country.\n"
+          },
+          "addressId": {
+            "maxLength": 36,
+            "minLength": 36,
+            "type": "string",
+            "description": "(Conditional) Reference identifier of the address.\nConditionality: Required when the address is already registered with Visa or the SRC system.\n",
+            "format": "uuid"
+          },
+          "countryCode": {
+            "maxLength": 2,
+            "minLength": 2,
+            "type": "string",
+            "description": "(Required) Address country code. \nISO 3166-1 alpha-2 country code.\n",
+            "format": "ISO 3166-1-alpha2"
+          }
+        },
+        "description": "Address data."
+      },
+      "DigitalCardFeature": {
+        "required": [
+          "content",
+          "contentType"
+        ],
+        "type": "object",
+        "properties": {
+          "style": {
+            "maxLength": 1024,
+            "minLength": 0,
+            "type": "string",
+            "description": "URI of a CSS style sheet that describes how to present a digital card feature."
+          },
+          "width": {
+            "maxLength": 10,
+            "minLength": 0,
+            "type": "string",
+            "description": "Width to be applied to the display of a digital card feature image.",
+            "format": "number"
+          },
+          "height": {
+            "maxLength": 10,
+            "minLength": 0,
+            "type": "string",
+            "description": "Height to be applied to the display of a digital card feature image.",
+            "format": "number"
+          },
+          "content": {
+            "maxLength": 1024,
+            "minLength": 1,
+            "type": "string",
+            "description": "Content of the digital card feature. The value is specific to the contentType."
+          },
+          "contentType": {
+            "type": "string",
+            "description": "Type of the content of the digital card feature.",
+            "enum": [
+              "TEXT_STRING",
+              "IMAGE_URL",
+              "CONTENT_URL",
+              "LINK_URL"
+            ]
+          }
+        },
+        "description": "Digital card feature."
+      },
+      "JwsPayloadResponse": {
+        "type": "string",
+        "description": "Signed JWS response. After verification and decoding, payload conforms to: #/components/schemas/CheckoutPayloadResponse.\n  \n",
+        "format": "jws"
+      },
+      "PayloadResponse": {},
+      "AuthenticationMethod": {
+        "type": "object",
+        "properties": {
+          "uriData": {
+            "$ref": "#/components/schemas/UriData"
+          },
+          "methodAttributes": {
+            "$ref": "#/components/schemas/MethodAttributes"
+          },
+          "authenticationSubject": {
+            "type": "string",
+            "description": "Authentication subject.",
+            "enum": [
+              "CARDHOLDER",
+              "CONSUMER",
+              "CARD"
+            ]
+          },
+          "authenticationMethodType": {
+            "type": "string",
+            "description": "Authentication method type.",
+            "enum": [
+              "SRCS_HOSTED_AUTHENTICATION",
+              "3DS"
+            ]
+          },
+          "authenticationCredentialReference": {
+            "maxLength": 255,
+            "minLength": 0,
+            "type": "string",
+            "description": "May be provided by the identity provider once authentication is initiated to qualify the nature of the authentication method. \nFor example, for SMS_OTP, this may include the masked mobile number \"***-***-1234,\" which can be displayed to the consumer to aid method selection.\n"
+          }
+        },
+        "description": "Authentication method."
+      },
+      "MethodResults": {
+        "type": "object",
+        "properties": {
+          "threeDsData": {
+            "$ref": "#/components/schemas/ThreeDsData"
+          }
+        },
+        "description": "Authentication or verification method attributes. \nClients should silently disregard any unrecognized fields in the JSON object.\n"
+      },
+      "VerificationData": {
+        "required": [
+          "verificationEntity",
+          "verificationMethod",
+          "verificationResults",
+          "verificationTimestamp",
+          "verificationType"
+        ],
+        "type": "object",
+        "properties": {
+          "methodResults": {
+            "$ref": "#/components/schemas/MethodResults"
+          },
+          "additionalData": {
+            "maxLength": 2048,
+            "minLength": 0,
+            "type": "string",
+            "description": "(Optional) Data collected during the verification process."
+          },
+          "verificationType": {
+            "type": "string",
+            "description": "(Required) Type of the verification data. \n",
+            "enum": [
+              "CARDHOLDER",
+              "CARD"
+            ]
+          },
+          "verificationEntity": {
+            "maxLength": 2,
+            "minLength": 2,
+            "type": "string",
+            "description": "(Required) Entity performing the verification.\n**01** - SRCI  \n**02** - SRC  \n**03** - SRCPI\n",
+            "enum": [
+              "01",
+              "02",
+              "03"
+            ]
+          },
+          "verificationEvents": {
+            "type": "array",
+            "description": "(Optional) Event where the verification occurred.\n  **01** - Payment transaction  \n",
+            "items": {
+              "maxLength": 2,
+              "minLength": 2,
+              "type": "string",
+              "format": "number",
+              "enum": [
+                "01"
+              ]
+            }
+          },
+          "verificationMethod": {
+            "maxLength": 2,
+            "minLength": 2,
+            "type": "string",
+            "description": "(Required) Method of the verification.\nFor veritificationType = CARDHOLDER:\n  **01** - Use of an EMV 3-D Secure ACS \n  **07** - FIDO2 \nFor verificationType = CARD:\n  **02** - Card Verification Number validation\n \n",
+            "format": "number",
+            "enum": [
+              "01",
+              "02",
+              "07"
+            ]
+          },
+          "verificationResults": {
+            "maxLength": 2,
+            "minLength": 2,
+            "type": "string",
+            "description": "(Required) Result of the verification.\n**01** - Verified  \n**02** - Not verified  \n**03** - Not performed  \n**04** - Not required  \n**21** - Not allowed\n",
+            "format": "number",
+            "enum": [
+              "01",
+              "02",
+              "03",
+              "04",
+              "21"
+            ]
+          },
+          "verificationTimestamp": {
+            "maxLength": 12,
+            "minLength": 1,
+            "type": "string",
+            "description": "(Required) Date and time the verification occurred. UTC time in Unix epoch format.",
+            "format": "number"
+          }
+        }
+      },
+      "DigitalCardData": {
+        "required": [
+          "artUri",
+          "descriptorName",
+          "status"
+        ],
+        "type": "object",
+        "properties": {
+          "artUri": {
+            "maxLength": 1024,
+            "minLength": 0,
+            "type": "string",
+            "description": "URI that hosts the card art image to be used for presentation purposes."
+          },
+          "status": {
+            "type": "string",
+            "description": "Token status.",
+            "enum": [
+              "ACTIVE",
+              "SUSPENDED",
+              "PENDING",
+              "EXPIRED",
+              "CANCELLED"
+            ]
+          },
+          "artWidth": {
+            "maxLength": 4,
+            "minLength": 0,
+            "type": "string",
+            "description": "Width of the card art in pixels.",
+            "format": "number"
+          },
+          "artHeight": {
+            "maxLength": 4,
+            "minLength": 0,
+            "type": "string",
+            "description": "Height of the card art in pixels.",
+            "format": "number"
+          },
+          "pendingEvents": {
+            "type": "array",
+            "description": "Set of events that are pending completion. \nConditionality: Required when the value of status is set to PENDING.\n",
+            "items": {
+              "$ref": "#/components/schemas/CardPendingEvent"
+            }
+          },
+          "descriptorName": {
+            "maxLength": 64,
+            "minLength": 0,
+            "type": "string",
+            "description": "Presentation text defined by the SRC program that describes the PAN presented as a digital card."
+          },
+          "presentationName": {
+            "maxLength": 64,
+            "minLength": 0,
+            "type": "string",
+            "description": "Presentation text created by the consumer to enable recognition of the PAN. This value is defined by the consumer, such as a nickname."
+          },
+          "authenticationMethods": {
+            "type": "array",
+            "description": "List of available authentication methods. May be provided when the SRC system identifies a need to perform verification.",
+            "items": {
+              "$ref": "#/components/schemas/AuthenticationMethod"
+            }
+          }
+        },
+        "description": "Contains digital card information that is used in the acceptance environment and user interface. Refers to the actual PAN or payment token without disclosing either."
+      },
+      "ErrorDetail": {
+        "type": "object",
+        "properties": {
+          "reason": {
+            "maxLength": 32,
+            "minLength": 0,
+            "type": "string",
+            "description": "Error reason associated with the error detail\n| Reason Code                 | Description                                                                          |\n|---------------------------- |--------------------------------------------------------------------------------------|\n| MISSING_REQUIRED_FIELD      | A required field is missing in the request.                                          |\n| INVALID_IDENTITY_TYPE       | The identity type provided is invalid.                                               |\n| INVALID_EMAIL_FORMAT        | The email address format is invalid.                                                 |\n| INVALID_PHONE_FORMAT        | The phone number format is invalid.                                                  |\n| INVALID_IDENTITY_PROVIDER   | The identity provider is invalid.                                                    |\n| EMPTY_IDENTITY_VALUE        | The identity value is empty.                                                         |\n| MISSING_CONDITIONAL_FIELD   | A field required under certain conditions is missing in the request.                 |\n| CONSUMER_IDENTITY_NOT_FOUND | The specified consumer identity was not found.                                       |\n| SESSION_ID_NOT_FOUND        | The specified session ID was not found.                                              |\n| INVALID_VALIDATION_DATA     | The validation data provided is invalid.                                             |\n| EMPTY_VALIDATION_DATA       | The validation data provided is empty.                                               |\n| INCORRECT_OTP               | The one-time password (OTP) provided is incorrect.                                   |\n| EXPIRED_OTP                 | The one-time password (OTP) provided has expired.                                    |\n| VALIDATION_SESSION_NOT_FOUND | The specified validation session ID was not found.                                  |\n| MAX_ATTEMPTS_EXCEEDED       | The maximum number of validation attempts has been exceeded.                         |\n| VALIDATION_ALREADY_COMPLETED | The identity validation has already been completed for the specified session ID.    |\n| VALIDATION_NOT_INITIATED    | The identity validation has not been initiated for the specified session ID.         |\n| INVALID_JWT_FORMAT          | The format of the provided JWT is invalid.                                           |\n| EMPTY_ARRAY                 | The provided array is empty.                                                         |\n| INVALID_TRANSACTION_AMOUNT  | The transaction amount provided is invalid.                                          |\n| INVALID_CURRENCY_CODE       | The currency code provided is invalid.                                               |\n| SRC_PROFILE_NOT_FOUND       | The specified SRC profile was not found.                                             |\n| INVALID_PAYLOAD_TYPE        | The payload type provided is invalid.                                                |\n| INVALID_COUNTRY_CODE        | The country code provided is invalid.                                                |\n| INVALID_BILLING_ADDRESS     | The billing address provided is invalid.                                             |\n| DIGITAL_CARD_NOT_FOUND      | The specified digital card was not found.                                            |\n| DPA_NOT_FOUND               | The specified DPA was not found.                                                     |\n| CORRELATION_ID_NOT_FOUND    | The specified correlation ID was not found.                                          |\n|--------------------------------------------------------------------------------------------------------------------|\n"
+          },
+          "source": {
+            "maxLength": 255,
+            "minLength": 0,
+            "type": "string",
+            "description": "Name of the source that generated this error."
+          },
+          "message": {
+            "maxLength": 32,
+            "minLength": 0,
+            "type": "string",
+            "description": "Error message."
+          },
+          "sourceType": {
+            "maxLength": 255,
+            "minLength": 0,
+            "type": "string",
+            "description": "Type of the source that generated this error."
+          }
+        }
+      },
+      "Consumer": {
+        "required": [
+          "consumerIdentity"
+        ],
+        "type": "object",
+        "properties": {
+          "fullName": {
+            "maxLength": 100,
+            "minLength": 0,
+            "type": "string",
+            "description": "(Optional) Consumer-provided full name."
+          },
+          "lastName": {
+            "maxLength": 50,
+            "minLength": 0,
+            "type": "string",
+            "description": "(Optional) Consumer-provided last name."
+          },
+          "firstName": {
+            "maxLength": 50,
+            "minLength": 0,
+            "type": "string",
+            "description": "(Optional) Consumer-provided first name."
+          },
+          "countryCode": {
+            "maxLength": 2,
+            "minLength": 2,
+            "type": "string",
+            "description": "(Required) Consumer-provided country code. ISO 3166-1 alpha-2 country code.",
+            "format": "ISO 3166-1-alpha2"
+          },
+          "emailAddress": {
+            "$ref": "#/components/schemas/Email"
+          },
+          "languageCode": {
+            "maxLength": 2,
+            "minLength": 2,
+            "type": "string",
+            "description": "(Required) Consumer-provided language choice. ISO 639-1 code."
+          },
+          "mobileNumber": {
+            "$ref": "#/components/schemas/PhoneNumber"
+          },
+          "consumerIdentity": {
+            "$ref": "#/components/schemas/ConsumerIdentity"
+          },
+          "nationalIdentifier": {
+            "maxLength": 20,
+            "minLength": 0,
+            "type": "string",
+            "description": "Conditional: Geographic-specific, nationally provided identifier for the consumer.\nConditionality: When required as per country-specific regulations.\n"
+          }
+        },
+        "description": "Consumer data."
+      },
+      "DeviceData": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "maxLength": 255,
+            "minLength": 0,
+            "type": "string",
+            "description": "Type of device being used.\nExample values:\n• Mobile phone\n• Tablet\n• Laptop\n• Personal assistant\n• Connected auto\n• Home appliance\n• Wearable\n• Stationary computer\n• E-reader\n• Handheld gaming devices\n• Other\n"
+          },
+          "brand": {
+            "maxLength": 255,
+            "minLength": 0,
+            "type": "string",
+            "description": "Brand name of the device."
+          },
+          "model": {
+            "maxLength": 255,
+            "minLength": 0,
+            "type": "string",
+            "description": "Specific model of the device."
+          },
+          "manufacturer": {
+            "maxLength": 255,
+            "minLength": 0,
+            "type": "string",
+            "description": "Manufacturer of the device."
+          }
+        },
+        "description": "Device data."
+      },
+      "DeliveryContactDetails": {
+        "type": "object",
+        "properties": {
+          "instructions": {
+            "maxLength": 1024,
+            "minLength": 0,
+            "type": "string",
+            "description": "Consumer-provided delivery instructions."
+          },
+          "contactFullName": {
+            "maxLength": 100,
+            "minLength": 0,
+            "type": "string",
+            "description": "Consumer-provided name of the contact person."
+          },
+          "contactPhoneNumber": {
+            "$ref": "#/components/schemas/PhoneNumber"
+          },
+          "contactEmailAddress": {
+            "$ref": "#/components/schemas/Email"
+          }
+        },
+        "description": "Delivery contact details associated with a shipping address."
+      },
+      "CheckoutPayloadResponse": {
+        "required": [
+          "srcCorrelationId"
+        ],
+        "type": "object",
+        "properties": {
+          "maskedCard": {
+            "$ref": "#/components/schemas/MaskedCard"
+          },
+          "assuranceData": {
+            "$ref": "#/components/schemas/AssuranceData"
+          },
+          "maskedConsumer": {
+            "$ref": "#/components/schemas/MaskedConsumer"
+          },
+          "customOutputData": {
+            "$ref": "#/components/schemas/JSONObject"
+          },
+          "encryptedPayload": {
+            "pattern": "^([a-zA-Z0-9_=]+)\\.([a-zA-Z0-9_=]+)\\.([a-zA-Z0-9_=]+)\\.([a-zA-Z0-9_=]+)\\.([a-zA-Z0-9_\\-\\+\\/=]+)$",
+            "type": "string",
+            "description": "JWE<Payload> - SRC payload (as defined in the payload schema) encrypted for the specific recipient (without signing).\n\nTo use this field:\n1. Decrypt the JWE using the recipient's private key according to RFC 7516.\n2. Parse the resulting JSON as a payload object (see payload schema).\n\nThe decrypted payload will contain card or token data, shipping address, billing address, and other consumer information\nbased on the payloadTypeIndicator value.\n\nConditionality: Either encryptedSignedPayload or encryptedPayload must be present in the response.\nSee: #/components/schemas/Payload\n",
+            "format": "application/jwt",
+            "x-jwe-encryption": {
+              "algorithm": "RSA-OAEP",
+              "encryption": "A256GCM"
+            }
+          },
+          "srcCorrelationId": {
+            "maxLength": 256,
+            "minLength": 0,
+            "type": "string",
+            "description": "Unique identifier generated by an SRC system.\nConditionality:\n• Required for the checkout.\n• Required if received in the request.\n"
+          },
+          "srciTransactionId": {
+            "maxLength": 255,
+            "minLength": 0,
+            "type": "string",
+            "description": "A unique transaction ID provided by the SRCi, which may be created on the merchant page. It must be passed through to all\nnetworks (SRC systems) and DCFs.\nConditionality: Required when received in the request\n"
+          }
+        },
+        "description": "Checkout payload response containing transaction details and payment information.\n"
+      },
+      "IdentityValidationChannel": {
+        "required": [
+          "identityType",
+          "validationChannelId"
+        ],
+        "type": "object",
+        "properties": {
+          "identityType": {
+            "type": "string",
+            "description": "Type of the identity validation channel (for example, email or SMS).",
+            "enum": [
+              "EMAIL_ADDRESS",
+              "MOBILE_PHONE_NUMBER"
+            ]
+          },
+          "identityProvider": {
+            "type": "string",
+            "description": "Entity or organization that can validate the identity.",
+            "enum": [
+              "SRC",
+              "SRCI"
+            ]
+          },
+          "validationChannelId": {
+            "type": "string",
+            "description": "Reference identifier of the validation channel."
+          },
+          "maskedValidationChannel": {
+            "maxLength": 255,
+            "minLength": 0,
+            "type": "string",
+            "description": "Masked identity validation channel (for example, masked email or masked mobile number)."
+          }
+        },
+        "description": "Identity validation channel."
+      },
+      "DynamicData": {
+        "type": "object",
+        "properties": {
+          "dynamicDataType": {
+            "$ref": "#/components/schemas/DynamicDataType"
+          },
+          "dynamicDataValue": {
+            "maxLength": 2048,
+            "minLength": 0,
+            "type": "string",
+            "description": "Value of the dynamic data.\nConditionality: Required when the value of dynamicDataType is not set to NONE.\n"
+          },
+          "dynamicDataExpiration": {
+            "maxLength": 12,
+            "minLength": 0,
+            "type": "string",
+            "description": "UTC time in Unix epoch format. Date and time when the dynamic data expires.",
+            "format": "number"
+          }
+        },
+        "description": "Dynamic data generated using the dynamicDataType preference indicated in paymentOptions."
+      },
+      "AppInstance": {
+        "type": "object",
+        "properties": {
+          "userAgent": {
+            "maxLength": 2048,
+            "minLength": 0,
+            "type": "string",
+            "description": "User agent string of the connecting client application.\nConditionality:\n• Required for browsers\n• Optional for non-browsers\n"
+          },
+          "deviceData": {
+            "$ref": "#/components/schemas/DeviceData"
+          },
+          "countryCode": {
+            "maxLength": 2,
+            "minLength": 2,
+            "type": "string",
+            "description": "ISO 3166-1 alpha-2 country code. The country where the consumer is accessing the service.",
+            "format": "ISO 3166-1-alpha2"
+          },
+          "applicationName": {
+            "maxLength": 255,
+            "minLength": 0,
+            "type": "string",
+            "description": "Name of the connecting client application."
+          }
+        },
+        "description": "Set of verification data structures relating to different types of assurance."
+      },
+      "MaskedAddress": {
+        "required": [
+          "addressId"
+        ],
+        "type": "object",
+        "properties": {
+          "zip": {
+            "maxLength": 16,
+            "minLength": 0,
+            "type": "string",
+            "description": "Address zip or postal code.\nConditionality: When used with the DPA registration operation in the Management Service APIs, at least one of the following is required:\n• both city and state\n• zip\n"
+          },
+          "city": {
+            "maxLength": 50,
+            "minLength": 0,
+            "type": "string",
+            "description": "Address city. \nConditionality: When used with the DPA registration operation in the Management Service APIs, \nat least one of the following is required:\n• both city and state\n• zip\n"
+          },
+          "name": {
+            "maxLength": 100,
+            "minLength": 0,
+            "type": "string",
+            "description": "The name of the consumer."
+          },
+          "line1": {
+            "maxLength": 75,
+            "minLength": 0,
+            "type": "string",
+            "description": "Address line 1.\n"
+          },
+          "line2": {
+            "maxLength": 75,
+            "minLength": 0,
+            "type": "string",
+            "description": "Address line 2."
+          },
+          "line3": {
+            "maxLength": 75,
+            "minLength": 0,
+            "type": "string",
+            "description": "Address line 3."
+          },
+          "state": {
+            "maxLength": 30,
+            "minLength": 0,
+            "type": "string",
+            "description": "Address state.\nRecommendation: Support ISO 3166-2 format, which is made up of the ISO 3166-1 alpha-2 country code followed by an alphanumeric string of 3 characters representing the state or subdivision.\nConditionality: When used with the DPA registration operation in the Management Service APIs, at least one of the following is required:\n• both city and state\n• zip\n"
+          },
+          "addressId": {
+            "maxLength": 36,
+            "minLength": 1,
+            "type": "string",
+            "description": "Reference identifier of the address.",
+            "format": "uuid"
+          },
+          "createTime": {
+            "maxLength": 12,
+            "minLength": 0,
+            "type": "string",
+            "description": "Date and time the address was created. UTC time in Unix epoch format.",
+            "format": "number"
+          },
+          "countryCode": {
+            "maxLength": 2,
+            "minLength": 2,
+            "type": "string",
+            "description": "Address country code. \nISO 3166-1 alpha-2 country code.\nConditionality: Required when used with the DPA registration operation in the Management Service APIs.\n",
+            "format": "ISO 3166-1-alpha2"
+          },
+          "lastUsedTime": {
+            "maxLength": 12,
+            "minLength": 0,
+            "type": "string",
+            "description": "Date and time the address was last used. UTC time in Unix epoch format.",
+            "format": "number"
+          }
+        },
+        "description": "Masked address."
+      },
+      "Dcf": {
+        "type": "object",
+        "properties": {
+          "uri": {
+            "maxLength": 1024,
+            "minLength": 0,
+            "type": "string",
+            "description": "DCF URI as provided by the DCF."
+          },
+          "name": {
+            "maxLength": 60,
+            "minLength": 0,
+            "type": "string",
+            "description": "Legal name of the DCF onboarded to the SRC system."
+          },
+          "logoUri": {
+            "maxLength": 1024,
+            "minLength": 0,
+            "type": "string",
+            "description": "Logo image URI provided by the DCF to support presentation."
+          },
+          "applicationType": {
+            "type": "string",
+            "enum": [
+              "IOT_DEVICE",
+              "MOBILE_APP",
+              "WEB_BROWSER",
+              "OTHER"
+            ]
+          }
+        },
+        "description": "Digital card features."
+      },
+      "RecurringIndicators": {
+        "type": "object",
+        "properties": {
+          "amountInd": {
+            "type": "string",
+            "description": "Constraints: \n  Amount Indicator \n    Values accepted:\n    • 01 = Fixed Purchase Amount\n    • 02 = Variable Purchase Amount \n",
+            "enum": [
+              "1",
+              "2"
+            ]
+          },
+          "frequencyInd": {
+            "type": "string",
+            "description": "Constraints: \n  Frequency Indicator \n    Field Name: frequencyInd\n    Values accepted:\n    • 01 = Fixed Frequency\n    • 02 = Variable or Unknown Frequency\n",
+            "enum": [
+              "1",
+              "2"
+            ]
+          }
+        }
+      },
+      "PaymentOptions": {
+        "type": "object",
+        "properties": {
+          "dynamicDataType": {
+            "$ref": "#/components/schemas/DynamicDataType"
+          }
+        },
+        "description": "Payment options."
+      },
+      "Card": {
+        "required": [
+          "primaryAccountNumber"
+        ],
+        "type": "object",
+        "properties": {
+          "billingAddress": {
+            "$ref": "#/components/schemas/Address"
+          },
+          "cardSecurityCode": {
+            "maxLength": 4,
+            "minLength": 3,
+            "type": "string",
+            "description": "(Conditional) The card security code (CVV2) value associated with the account number on the card, if available. \nConditionality: Required for those cards that have a card security code.\n"
+          },
+          "panExpirationYear": {
+            "maxLength": 4,
+            "minLength": 4,
+            "type": "string",
+            "description": "(Conditional) The account number expiration year.\nConditionality: Required when printed on the card.\n"
+          },
+          "cardholderFullName": {
+            "maxLength": 100,
+            "type": "string",
+            "description": "(Conditional) Cardholder full name.\nConditionality: Required if the billingAddress name field or the cardholderFirstName and cardholderLastName are not passed.\n"
+          },
+          "cardholderLastName": {
+            "maxLength": 50,
+            "type": "string",
+            "description": "(Optional) Cardholder last name."
+          },
+          "customerServiceUri": {
+            "maxLength": 1024,
+            "type": "string",
+            "description": "(Optional) Customer service URI."
+          },
+          "panExpirationMonth": {
+            "maxLength": 2,
+            "minLength": 2,
+            "type": "string",
+            "description": "(Conditional) The account number expiration month.\nConditionality: Required when printed on the card.\n"
+          },
+          "cardholderFirstName": {
+            "maxLength": 50,
+            "type": "string",
+            "description": "(Optional) Cardholder first name."
+          },
+          "primaryAccountNumber": {
+            "maxLength": 19,
+            "minLength": 9,
+            "type": "string",
+            "description": "(Required) Primary account number. \nAn ISO/IEC 7812-compliant account number, within account ranges associated with a BIN by a card issuer.\n",
+            "format": "integer"
+          },
+          "paymentAccountReference": {
+            "maxLength": 29,
+            "minLength": 0,
+            "type": "string",
+            "description": "(Optional) A non-financial reference assigned to each unique PAN and used to link a payment account represented by that PAN to affiliated payment tokens.\n"
+          },
+          "customerServicePhoneNumber": {
+            "$ref": "#/components/schemas/PhoneNumber"
+          },
+          "customerServiceEmailAddress": {
+            "maxLength": 255,
+            "type": "string",
+            "description": "(Optional) Customer service email address."
+          }
+        },
+        "description": "Payment account information."
+      },
+      "JSONObject": {
+        "type": "object",
+        "additionalProperties": true,
+        "description": "Represents a free-form JSON object data structure."
+      },
+      "SRCProfile": {
+        "required": [
+          "authorization"
+        ],
+        "type": "object",
+        "properties": {
+          "maskedCards": {
+            "type": "array",
+            "description": "Masked cards associated with the SRC Profile",
+            "items": {
+              "$ref": "#/components/schemas/MaskedCard"
+            }
+          },
+          "authorization": {
+            "maxLength": 4096,
+            "minLength": 0,
+            "type": "string",
+            "description": "Must be provided if no authorization was provided in the request."
+          },
+          "maskedConsumer": {
+            "$ref": "#/components/schemas/MaskedConsumer"
+          }
+        },
+        "description": "SRC Profile"
+      },
+      "MaskedConsumer": {
+        "required": [
+          "dateConsumerAdded",
+          "maskedConsumerIdentity",
+          "status"
+        ],
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "Status of the consumer within the SRC system.",
+            "enum": [
+              "ACTIVE",
+              "SUSPENDED",
+              "LOCKED"
+            ]
+          },
+          "countryCode": {
+            "maxLength": 2,
+            "minLength": 2,
+            "type": "string",
+            "description": "Consumer-provided country code. ISO 3166-1 alpha-2 country code.",
+            "format": "ISO 3166-1-alpha2"
+          },
+          "languageCode": {
+            "maxLength": 2,
+            "minLength": 0,
+            "type": "string",
+            "description": "Consumer-provided language choice. ISO 639-1 code."
+          },
+          "srcConsumerId": {
+            "maxLength": 36,
+            "minLength": 0,
+            "type": "string",
+            "description": "Reference identifier generated by the SRC system.",
+            "format": "uuid"
+          },
+          "maskedFullName": {
+            "maxLength": 100,
+            "minLength": 0,
+            "type": "string",
+            "description": "Masked consumer-provided full name."
+          },
+          "maskedLastName": {
+            "maxLength": 50,
+            "minLength": 0,
+            "type": "string",
+            "description": "Masked consumer-provided last name."
+          },
+          "maskedFirstName": {
+            "maxLength": 50,
+            "minLength": 0,
+            "type": "string",
+            "description": "Masked consumer-provided first name."
+          },
+          "dateConsumerAdded": {
+            "maxLength": 12,
+            "minLength": 0,
+            "type": "string",
+            "description": "Date the consumer was added to the SRC system.",
+            "format": "number"
+          },
+          "complianceSettings": {
+            "$ref": "#/components/schemas/ComplianceSettings"
+          },
+          "maskedEmailAddress": {
+            "$ref": "#/components/schemas/Email"
+          },
+          "maskedMobileNumber": {
+            "$ref": "#/components/schemas/PhoneNumber"
+          },
+          "dateConsumerLastUsed": {
+            "maxLength": 12,
+            "minLength": 0,
+            "type": "string",
+            "description": "Date the consumer last transacted, as determined by the SRC system.",
+            "format": "number"
+          },
+          "maskedConsumerIdentity": {
+            "$ref": "#/components/schemas/MaskedConsumerIdentity"
+          },
+          "maskedNationalIdentifier": {
+            "maxLength": 20,
+            "minLength": 0,
+            "type": "string",
+            "description": "Masked consumer national identifier."
+          }
+        },
+        "description": "Consumer data."
+      },
+      "RecurringData": {
+        "type": "object",
+        "properties": {
+          "recurringInd": {
+            "$ref": "#/components/schemas/RecurringIndicators"
+          },
+          "recurringDate": {
+            "maxLength": 8,
+            "minLength": 0,
+            "type": "string",
+            "description": "Effective date of the new authorised amount following the first / promotional payment in a recurring or instalment transaction, expressed in YYYYMMDD format\nConditionality: Required when recurringInd.frequencyInd = 01\n",
+            "format": "number"
+          },
+          "recurringAmount": {
+            "maxLength": 48,
+            "minLength": 0,
+            "type": "string",
+            "description": "Recurring amount in minor units of currency with all punctuation removed. For example, when the purchase amount is USD123.45, the following values are acceptable:\n• “12345”\n• “012345”\n• “0012345”\nConditionality: Required when recurringInd.AmountInd = 01\n",
+            "format": "double"
+          },
+          "recurringExpiry": {
+            "maxLength": 8,
+            "minLength": 0,
+            "type": "string",
+            "description": "Date after which no further authorisations are performed, expressed in YYYYMMDD format\nConditionality Required when there is an end date\n",
+            "format": "number"
+          },
+          "recurringCurrency": {
+            "maxLength": 3,
+            "minLength": 0,
+            "type": "string",
+            "description": "Currency in which recurringAmount is expressed.\nConditionality: Required when recurringAmount is present.\nISO 4217 three - digit currency code\n",
+            "format": "number"
+          },
+          "recurringExponent": {
+            "maxLength": 1,
+            "minLength": 0,
+            "type": "string",
+            "description": "Minor units of currency as specified in the ISO 4217 currency exponent \nFor example: USD = 2, JPY = 0\n",
+            "format": "number"
+          },
+          "recurringFrequency": {
+            "maxLength": 4,
+            "minLength": 0,
+            "type": "string",
+            "description": "Indicates the minimum number of days between authorisations for a recurring or instalment transaction from 1 to 9999 inclusive\nConditionality: Required when recurringInd.frequencyInd = 01\n",
+            "format": "number"
+          }
+        },
+        "description": "The data specific to a recurring transaction"
+      },
+      "Payload": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "$ref": "#/components/schemas/PaymentToken"
+          },
+          "dynamicData": {
+            "type": "array",
+            "description": "Dynamic data generated using the dynamicDataType preference indicated in paymentOptions.",
+            "items": {
+              "$ref": "#/components/schemas/DynamicData"
+            }
+          },
+          "billingAddress": {
+            "$ref": "#/components/schemas/Address"
+          },
+          "consumerFullName": {
+            "maxLength": 100,
+            "minLength": 0,
+            "type": "string",
+            "description": "Consumer-provided full name.\nConditionality: Required when:\n• The value of the relevant data element of type PayloadTypeIndicator is set to FULL or NON_PAYMENT, and\n• A consumer name is available in the SRC profile, and\n• A consumer name was requested (consumerNameRequested set to true).\n"
+          },
+          "consumerLastName": {
+            "maxLength": 50,
+            "minLength": 0,
+            "type": "string",
+            "description": "Consumer-provided last name.\nConditionality: Required when:\n• The value of the relevant data element of type PayloadTypeIndicator is set to FULL or NON_PAYMENT, and\n• A consumer last name is available in the SRC profile, and\n• A consumer name was requested (consumerNameRequested set to true).\n"
+          },
+          "consumerFirstName": {
+            "maxLength": 50,
+            "minLength": 0,
+            "type": "string",
+            "description": "Consumer-provided first name.\nConditionality: Required when:\n• The value of the relevant data element of type PayloadTypeIndicator is set to FULL or NON_PAYMENT, and\n• A consumer first name is available in the SRC profile, and\n• A consumer name was requested (consumerNameRequested set to true).\n"
+          },
+          "consumerEmailAddress": {
+            "$ref": "#/components/schemas/Email"
+          },
+          "consumerMobileNumber": {
+            "$ref": "#/components/schemas/PhoneNumber"
+          },
+          "consumerNationalIdentifier": {
+            "maxLength": 20,
+            "minLength": 0,
+            "type": "string",
+            "description": "Consumer national identifier as available in the SRC profile."
+          }
+        },
+        "description": "The payload contains either a card or a token field, but never both, as they are mutually exclusive.\n"
+      },
+      "MaskedCard": {
+        "required": [
+          "dateOfCardCreated",
+          "digitalCardData",
+          "panBin",
+          "panLastFour"
+        ],
+        "type": "object",
+        "properties": {
+          "panBin": {
+            "maxLength": 9,
+            "minLength": 0,
+            "type": "string",
+            "description": "First significant digits of the PAN in unmasked form. Maximum length = PAN length - 10.",
+            "format": "number"
+          },
+          "tokenId": {
+            "maxLength": 50,
+            "minLength": 0,
+            "type": "string",
+            "description": "Reference identifier for the payment token representing the PAN.\n"
+          },
+          "serviceId": {
+            "description": "Service identifier associated with the SRC digital card.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ServiceId"
+              }
+            ]
+          },
+          "cofEligible": {
+            "type": "boolean",
+            "description": "Indicates that the card is eligible for the merchant digital card-on-file use case."
+          },
+          "countryCode": {
+            "maxLength": 2,
+            "minLength": 2,
+            "type": "string",
+            "description": "ISO 3166-1 alpha-2 country code. Country code of issuance associated with the card issuer’s BIN license.",
+            "format": "ISO 3166-1-alpha2"
+          },
+          "panLastFour": {
+            "maxLength": 4,
+            "minLength": 4,
+            "type": "string",
+            "description": "Last four digits of the PAN in unmasked form.",
+            "format": "number"
+          },
+          "tokenBinRange": {
+            "maxLength": 9,
+            "minLength": 0,
+            "type": "string",
+            "description": "Specific BIN range or subset of the BIN range designated only for issuing payment tokens in unmasked form.\nConditionality: Required when a payment token is used.\nMaximum length = payment token length - 10.\n",
+            "format": "number"
+          },
+          "tokenLastFour": {
+            "maxLength": 4,
+            "minLength": 0,
+            "type": "string",
+            "description": "Last four digits of the payment token in unmasked form.\nConditionality: Required when a payment token is used.\n",
+            "format": "number"
+          },
+          "digitalCardData": {
+            "$ref": "#/components/schemas/DigitalCardData"
+          },
+          "paymentCardType": {
+            "maxLength": 32,
+            "minLength": 0,
+            "type": "string",
+            "description": "Conveys the card type."
+          },
+          "srcDigitalCardId": {
+            "$ref": "#/components/schemas/SrcDigitalCardId"
+          },
+          "srcPaymentCardId": {
+            "maxLength": 36,
+            "minLength": 0,
+            "type": "string",
+            "description": "(Conditional) Reference identifier for the PAN that enables the SRC system to communicate with the SRCPI without transmitting the actual PAN. \nIt is associated with the SRC profile to which the payment card belongs and is unique within an SRC system.\nConditionality: Required when returned to the SRCPI.\n",
+            "format": "uuid"
+          },
+          "dateOfCardCreated": {
+            "maxLength": 12,
+            "minLength": 0,
+            "type": "string",
+            "description": "UTC time in Unix epoch format. Date when the card was enrolled into the SRC system.",
+            "format": "number"
+          },
+          "panExpirationYear": {
+            "maxLength": 4,
+            "minLength": 4,
+            "type": "string",
+            "description": "Expiration year expressed as a four-digit calendar year (YYYY) for presentation purposes.\nConditionality: Required when specified for the card (PAN).\n"
+          },
+          "complianceSettings": {
+            "$ref": "#/components/schemas/ComplianceSettings"
+          },
+          "dateOfCardLastUsed": {
+            "maxLength": 12,
+            "minLength": 0,
+            "type": "string",
+            "description": "UTC time in Unix epoch format. Date when the card was last used for an SRC transaction.",
+            "format": "number"
+          },
+          "panExpirationMonth": {
+            "maxLength": 2,
+            "minLength": 2,
+            "type": "string",
+            "description": "Expiration month expressed as a two-digit month (MM) for presentation purposes.\nConditionality: Required when specified for the card (PAN).\n"
+          },
+          "digitalCardFeatures": {
+            "type": "array",
+            "description": "Attributes related to the digital card features that should be displayed to the consumer.",
+            "items": {
+              "$ref": "#/components/schemas/DigitalCardFeature"
+            }
+          },
+          "maskedBillingAddress": {
+            "$ref": "#/components/schemas/MaskedAddress"
+          },
+          "paymentCardDescriptor": {
+            "maxLength": 32,
+            "minLength": 0,
+            "type": "string",
+            "description": "A free-form string used for card brand or program recognition (also known as card short description). Example 'Visa Travel Rewards'"
+          },
+          "enrollmentReferenceData": {
+            "$ref": "#/components/schemas/EnrollmentReferenceData"
+          },
+          "paymentAccountReference": {
+            "maxLength": 29,
+            "minLength": 0,
+            "type": "string",
+            "description": "PAR - A non-financial reference assigned to each unique PAN.\nUsed to link a payment account represented by that PAN to affiliated payment tokens.\n"
+          },
+          "maskedCardholderFullName": {
+            "maxLength": 100,
+            "minLength": 0,
+            "type": "string",
+            "description": "Masked cardholder name."
+          },
+          "maskedCardholderLastName": {
+            "maxLength": 50,
+            "minLength": 0,
+            "type": "string",
+            "description": "Masked cardholder last name."
+          },
+          "maskedCardholderFirstName": {
+            "maxLength": 50,
+            "minLength": 0,
+            "type": "string",
+            "description": "Masked cardholder first name."
+          }
+        },
+        "description": "Masked card."
+      },
+      "PaymentToken": {
+        "required": [
+          "paymentToken"
+        ],
+        "type": "object",
+        "properties": {
+          "paymentToken": {
+            "maxLength": 19,
+            "minLength": 12,
+            "type": "string",
+            "description": "ISO/IEC 7812 format payment token."
+          },
+          "tokenExpirationYear": {
+            "maxLength": 4,
+            "minLength": 4,
+            "type": "string",
+            "description": "Expiration year expressed as a four-digit calendar year (YYYY).\nConditionality: Required when specified for the payment token.\n",
+            "format": "number"
+          },
+          "tokenExpirationMonth": {
+            "maxLength": 2,
+            "minLength": 2,
+            "type": "string",
+            "description": "Expiration month expressed as a two-digit month (MM).\nConditionality: Required when specified for the payment token.\n",
+            "format": "number"
+          },
+          "paymentAccountReference": {
+            "maxLength": 29,
+            "minLength": 0,
+            "type": "string",
+            "description": "A non-financial reference assigned to each unique PAN, used to link a payment account represented by that PAN to affiliated payment tokens."
+          }
+        }
+      },
+      "MethodAttributes": {
+        "type": "object",
+        "properties": {
+          "windowType": {
+            "type": "string",
+            "description": "(Optional) Preferred window type for the authentication method.",
+            "enum": [
+              "POP_UP"
+            ]
+          },
+          "challengeIndicator": {
+            "type": "string",
+            "description": "(Optional) Challenge indicator value related to 3DS authentication. It is one of the following values:\n * 01 - No preference\n * 02 - No challenge requested\n * 03 - Challenge requested (3DS Requestor Preference)\n * 04 - Challenge requested (Mandate)\n * 05 - No challenge requested (transactional risk analysis is already performed)\n * 06 - No challenge requested (Data share only)\n * 07 - No challenge requested (strong consumer authentication is already performed)\n * 08 - No challenge requested (utilize trust list exemption if no challenge required)\n * 09 - Challenge requested (trust list prompt requested if challenge required)\n"
+          }
+        },
+        "description": "Authentication or verification method attributes."
+      },
+      "CustomInputData": {
+        "type": "object",
+        "properties": {
+          "paymentCardTypeSelected": {
+            "maxLength": 50,
+            "minLength": 0,
+            "type": "string",
+            "description": "Identifies the cardholder selection to process the transaction as either debit or credit at checkout. \nApplicable only when the card product supports both credit and debit (Combo) options.\nFormat: It is one of the following values: CREDIT, DEBIT\n"
+          }
+        },
+        "description": "Network Specific Custom Input Data.\nClients should silently disregard any unrecognized fields in the JSON object.\n"
+      },
+      "PayloadTypeIndicatorCheckout": {
+        "type": "string",
+        "description": "Identifies the type of encrypted payload to be returned.\nFormat: It is one of the following values: \n * FULL — Includes everything; all PCI & PII data (card/token, billing, shipping, consumer)\n * PAYMENT — Includes everything; all PCI & PII data (card/token, billing, shipping, consumer)\n * NON_PAYMENT - Includes only PII data (shipping, billing, consumer); excludes card/token data\n * SUMMARY — (Default) Includes no PCI & PII data; only SRC Profile and transaction metadata\n",
+        "enum": [
+          "FULL",
+          "PAYMENT",
+          "SUMMARY",
+          "NON_PAYMENT"
+        ]
+      },
+      "CheckoutPayloadResponse-1": {
+        "required": [
+          "srcCorrelationId"
+        ],
+        "type": "object",
+        "properties": {
+          "maskedCard": {
+            "$ref": "#/components/schemas/MaskedCard"
+          },
+          "assuranceData": {
+            "$ref": "#/components/schemas/AssuranceData"
+          },
+          "maskedConsumer": {
+            "$ref": "#/components/schemas/MaskedConsumer"
+          },
+          "customOutputData": {
+            "$ref": "#/components/schemas/JSONObject"
+          },
+          "encryptedPayload": {
+            "pattern": "^([a-zA-Z0-9_=]+)\\.([a-zA-Z0-9_=]+)\\.([a-zA-Z0-9_=]+)\\.([a-zA-Z0-9_=]+)\\.([a-zA-Z0-9_\\-\\+\\/=]+)$",
+            "type": "string",
+            "description": "JWE<Payload> - SRC payload (as defined in the payload schema) encrypted for the specific recipient (without signing).\n\nTo use this field:\n1. Decrypt the JWE using the recipient's private key according to RFC 7516.\n2. Parse the resulting JSON as a payload object (see payload schema).\n\nThe decrypted payload will contain card or token data, shipping address, billing address, and other consumer information\nbased on the payloadTypeIndicator value.\n\nConditionality: Either encryptedSignedPayload or encryptedPayload must be present in the response.\nSee: #/components/schemas/Payload\n",
+            "format": "jwe",
+            "x-jwe-encryption": {
+              "algorithm": "RSA-OAEP",
+              "encryption": "A256GCM"
+            }
+          },
+          "srcCorrelationId": {
+            "maxLength": 256,
+            "minLength": 0,
+            "type": "string",
+            "description": "Unique identifier generated by an SRC system.\nConditionality:\n• Required for the checkout.\n• Required if received in the request.\n"
+          },
+          "srciTransactionId": {
+            "maxLength": 255,
+            "minLength": 0,
+            "type": "string",
+            "description": "A unique transaction ID provided by the SRCi, which may be created on the merchant page. It must be passed through to all\nnetworks (SRC systems) and DCFs.\nConditionality: Required when received in the request\n"
+          }
+        },
+        "description": "Checkout payload response containing transaction details and payment information.\n"
+      },
+      "DpaData": {
+        "type": "object",
+        "properties": {
+          "dpaUri": {
+            "maxLength": 1024,
+            "minLength": 0,
+            "type": "string",
+            "description": "(Conditional) Specifies the browser origin of the merchant’s parent window. This value is used by the step‑up Application \nto ensure the authentication result is only delivered to the correct and trusted origin.\n\n      \n"
+          },
+          "dpaPresentationName": {
+            "maxLength": 60,
+            "minLength": 0,
+            "type": "string",
+            "description": "Display name of the DPA. Required to facilitate transaction authentication."
+          }
+        },
+        "description": "Digital Payment Application Data"
+      },
+      "CardPendingEvent": {
+        "type": "string",
+        "description": "Card pending event.",
+        "enum": [
+          "PENDING_AVS",
+          "PENDING_CSC",
+          "PENDING_CONSUMER_IDV",
+          "PENDING_CARDHOLDER_AUTHENTICATION"
+        ]
+      },
+      "ConsumerIdentity": {
+        "required": [
+          "identityType",
+          "identityValue"
+        ],
+        "type": "object",
+        "properties": {
+          "identityType": {
+            "type": "string",
+            "description": "(Required) Type of consumer identity transmitted or collected.",
+            "enum": [
+              "EMAIL_ADDRESS",
+              "MOBILE_PHONE_NUMBER"
+            ]
+          },
+          "identityValue": {
+            "maxLength": 255,
+            "minLength": 1,
+            "type": "string",
+            "description": "(Required) Consumer identity value that corresponds to the consumer identity type.\nFormat: String for a valid email address. For a mobile number, use the E.164 format with a maximum length of 15, including the country code. Remove special characters: All spaces, dashes, and parentheses should be removed, and all characters should be numeric. The mobile number must not include \"+\".\nExample: user@example.com, 61423123456\n"
+          },
+          "identityProvider": {
+            "type": "string",
+            "description": "(Optional) Identity provider of the Consumer Identity. The default value is SRC",
+            "enum": [
+              "SRC",
+              "SRCI"
+            ]
+          }
+        },
+        "description": "Consumer identity."
+      },
+      "CheckoutResponse": {},
+      "idToken-1": {
+        "pattern": "^([a-zA-Z0-9_=]+)\\.([a-zA-Z0-9_=]+)\\.([a-zA-Z0-9_\\-\\+\\/=]+)$",
+        "type": "string",
+        "description": "Federated idToken in JWT Format. The token is a JSON Web Token (JWT) compliant with RFC 7519 and signed\nusing JSON Web Signature (JWS). The API returns the compact serialized JWT string in this field. The decoded JWT structure is \ndocumented by FederatedIdTokenDecoded, FederatedIdTokenHeader and FederatedIdTokenClaims.\nSee: #/components/schemas/FederatedIdTokenDecoded\n",
+        "format": "jwt"
+      },
+      "ServiceId": {
+        "type": "string",
+        "description": "To indicate to the SRC System that the Digital Card is the merchant Digital Card-on-file or partner token.\n",
+        "enum": [
+          "CARD_ON_FILE",
+          "PARTNER_TOKEN"
+        ]
+      },
+      "FederatedIdTokenHeader": {
+        "required": [
+          "alg",
+          "kid",
+          "typ"
+        ],
+        "type": "object",
+        "properties": {
+          "alg": {
+            "type": "string",
+            "description": "Algorithm used to digitally sign the payload according to RFC 7518.\n'none' is not supported. 'PS256' is preferred to 'RS256'.\n",
+            "enum": [
+              "PS256",
+              "RS256"
+            ]
+          },
+          "kid": {
+            "type": "string",
+            "description": "Key ID for the SRC System public key to be used to verify the signature.\n"
+          },
+          "typ": {
+            "type": "string",
+            "description": "Media type of the token. For JWT tokens the value should be JWT+ext.id_token.\n",
+            "enum": [
+              "JWT+ext.id_token"
+            ]
+          }
+        }
+      },
+      "ComplianceResource": {
+        "required": [
+          "complianceType",
+          "uri"
+        ],
+        "type": "object",
+        "properties": {
+          "uri": {
+            "maxLength": 1024,
+            "minLength": 3,
+            "type": "string",
+            "description": "URI."
+          },
+          "version": {
+            "maxLength": 10,
+            "minLength": 0,
+            "type": "string",
+            "description": "Version."
+          },
+          "datePublished": {
+            "type": "string",
+            "description": "Date the resource was published. UTC time in Unix epoch format.",
+            "format": "date-time"
+          },
+          "complianceType": {
+            "maxLength": 255,
+            "minLength": 6,
+            "type": "string",
+            "description": "Compliance type.",
+            "enum": [
+              "PRIVACY_POLICY",
+              "TERMS_AND_CONDITIONS"
+            ]
+          }
+        },
+        "description": "Compliance resource."
+      },
+      "ConfirmationData": {
+        "required": [
+          "checkoutEventType",
+          "confirmationStatus",
+          "confirmationTimestamp"
+        ],
+        "type": "object",
+        "properties": {
+          "assuranceData": {
+            "$ref": "#/components/schemas/AssuranceData"
+          },
+          "checkoutEventType": {
+            "maxLength": 2,
+            "minLength": 2,
+            "type": "string",
+            "description": "Event type associated with the confirmation. Valid values are:\n• 00 Place Order\n• 01 Authorise\n• 02 Capture\n• 03 Refund\n• 04 Cancel (Auth Reversal)\n• 05 Fraud\n• 06 Chargeback\n• 07 Cancel before Auth\n• 08 Auth for account validation\n• 09 - 50 EMVCo future use\n• 51 - 99 SRC System specific\n",
+            "format": "number"
+          },
+          "transactionAmount": {
+            "$ref": "#/components/schemas/TransactionAmount"
+          },
+          "confirmationReason": {
+            "maxLength": 64,
+            "minLength": 0,
+            "type": "string",
+            "description": "Description of the reason for the event associated with the order"
+          },
+          "confirmationStatus": {
+            "maxLength": 2,
+            "minLength": 2,
+            "type": "string",
+            "description": "Status related to the checkoutEventType as provided by the SRC Initiator. Valid values are:\n• 01 Success\n• 02 Failure\n• 03 Other\n• 04 Timeout\n",
+            "format": "number"
+          },
+          "checkoutEventStatus": {
+            "maxLength": 2,
+            "minLength": 2,
+            "type": "string",
+            "description": "Event status associated with the order. Valid values are:\n• 01 Created\n• 02 Confirmed\n• 03 Cancelled\n• 04 Fraud Cancelled\n• 05 Others\n• 06 - 50 EMVCo future use\n• 51 - 99 SRC System specific\n",
+            "format": "number"
+          },
+          "confirmationTimestamp": {
+            "maxLength": 12,
+            "minLength": 1,
+            "type": "string",
+            "description": "UTC time in Unix epoch format. Date and time of the event set by the SRC Initiator",
+            "format": "number"
+          },
+          "paymentNetworkReference": {
+            "maxLength": 25,
+            "minLength": 0,
+            "type": "string",
+            "description": "Transaction identifier as provided by a Payment Network payment authorisation has been completed"
+          },
+          "networkAuthorizationCode": {
+            "maxLength": 25,
+            "minLength": 0,
+            "type": "string",
+            "description": "(Conditional) Authorisation code associated with an approved transaction\nConditionality: Required when the value of:\n• checkoutEventType is set to 01 (Authorize) or 03 (Refund); and\n• confirmationStatus is set to 01 (Success)\n"
+          },
+          "networkTransactionIdentifier": {
+            "maxLength": 25,
+            "minLength": 0,
+            "type": "string",
+            "description": "Unique authorisation related tracing identifier assigned by a Payment Network and provided in an payment authorisation response"
+          }
+        }
+      },
+      "MaskedConsumerIdentity": {
+        "required": [
+          "identityType",
+          "maskedIdentityValue"
+        ],
+        "type": "object",
+        "properties": {
+          "identityType": {
+            "type": "string",
+            "description": "Type of consumer identity transmitted or collected.",
+            "enum": [
+              "EMAIL_ADDRESS",
+              "MOBILE_PHONE_NUMBER"
+            ]
+          },
+          "identityProvider": {
+            "type": "string",
+            "description": "Identity provider of the consumer identity.",
+            "enum": [
+              "SRC",
+              "SRCI"
+            ]
+          },
+          "maskedIdentityValue": {
+            "maxLength": 255,
+            "minLength": 1,
+            "type": "string",
+            "description": "Masked consumer identity value (for example, masked email address or masked mobile phone number)."
+          }
+        }
+      },
+      "AssuranceData": {
+        "required": [
+          "verificationData"
+        ],
+        "type": "object",
+        "properties": {
+          "eci": {
+            "maxLength": 2,
+            "minLength": 0,
+            "type": "string",
+            "description": "(Optional) If present, a value indicating the result of the authentication performed or attempted during a transaction. \nUse this value in the e-commerce authorization message to VisaNet.\nFormat: String; maximum 2 digits. It is one of the following values:\n05 - Successful authentication\n06 - Authentication attempted\n07 - Authentication not performed\n",
+            "enum": [
+              "05",
+              "06",
+              "07"
+            ]
+          },
+          "verificationData": {
+            "type": "array",
+            "description": "(Required) Verification data. Set of verification data structures relating to different types of assurance.",
+            "items": {
+              "$ref": "#/components/schemas/VerificationData"
+            }
+          }
+        },
+        "description": "Set of verification data structures relating to different types of assurance. Includes information about any risk assessment operations performed by\nthe SRC system.\n"
+      },
+      "TokenReferenceData": {
+        "type": "object",
+        "properties": {
+          "clientAppId": {
+            "maxLength": 36,
+            "minLength": 0,
+            "type": "string",
+            "description": "(Conditional) Client Application Id, which identifies the wallet provider application.\nFormat: UUID, 36\nConditionality: Required for Token for Token use-case or deferred authentication flows.\n",
+            "format": "uuid"
+          }
+        }
+      },
+      "PayloadTypeIndicator": {
+        "type": "string",
+        "description": "Identifies the type of encrypted payload to be returned.\nFormat: One of the following values: \n * FULL — Includes all PCI and PII data (card or token, billing, shipping, consumer).\n",
+        "enum": [
+          "FULL",
+          "PAYMENT"
+        ]
+      },
+      "AcceptanceChannelData": {
+        "type": "object",
+        "properties": {
+          "sellerData": {
+            "$ref": "#/components/schemas/JSONObject"
+          },
+          "consumerData": {
+            "$ref": "#/components/schemas/JSONObject"
+          }
+        },
+        "description": "Acceptance channel data."
+      },
+      "EnrollmentReferenceData": {
+        "required": [
+          "enrollmentReferenceId",
+          "enrollmentReferenceType"
+        ],
+        "type": "object",
+        "properties": {
+          "enrollmentReferenceId": {
+            "maxLength": 256,
+            "minLength": 1,
+            "type": "string",
+            "description": "Identifier of the enrollment reference."
+          },
+          "enrollmentReferenceType": {
+            "type": "string",
+            "description": "Type of the enrollment reference.",
+            "enum": [
+              "SRC_DIGITAL_CARD_ID",
+              "SRC_PAYMENT_CARD_ID",
+              "COF_REFERENCE_ID"
+            ]
+          },
+          "enrollmentReferenceProvider": {
+            "maxLength": 256,
+            "minLength": 0,
+            "type": "string",
+            "description": "Provider of the enrollment reference."
+          }
+        },
+        "description": "Enrollment reference data."
+      },
+      "SignedData": {
+        "required": [
+          "signedDataType",
+          "signedDataValue"
+        ],
+        "type": "object",
+        "properties": {
+          "signedDataType": {
+            "$ref": "#/components/schemas/SignedDataType"
+          },
+          "signedDataValue": {
+            "type": "string",
+            "description": "Signed data value.",
+            "example": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9..."
+          }
+        }
+      },
+      "CommunicationsConsent": {
+        "type": "object",
+        "properties": {
+          "allowCall": {
+            "type": "boolean",
+            "description": "Consumer's preference for receiving communications via voice calls."
+          },
+          "allowPush": {
+            "type": "boolean",
+            "description": "Consumer's preference for receiving communications via a notification channel."
+          },
+          "allowText": {
+            "type": "boolean",
+            "description": "Consumer's preference for receiving communications via SMS."
+          },
+          "allowEmail": {
+            "type": "boolean",
+            "description": "Consumer's preference for receiving communications via email."
+          },
+          "communicationsOptIn": {
+            "type": "boolean",
+            "description": "Consumer's communications opt-in preference."
+          },
+          "affiliateCommunicationsOptIn": {
+            "type": "boolean",
+            "description": "Consumer's affiliate communications opt-in preference."
+          }
+        },
+        "description": "Communications consent."
+      },
+      "TokenRequestData": {
+        "$ref": "#/components/schemas/JSONObject"
+      },
+      "ComplianceSettings": {
+        "required": [
+          "complianceResources"
+        ],
+        "type": "object",
+        "properties": {
+          "communications": {
+            "$ref": "#/components/schemas/CommunicationsConsent"
+          },
+          "complianceResources": {
+            "type": "array",
+            "description": "(Conditional) Compliance resources. \nConditionality: Refer to country-specific regulations or requirements.\n",
+            "items": {
+              "$ref": "#/components/schemas/ComplianceResource"
+            }
+          }
+        },
+        "description": "Compliance settings."
+      },
+      "BusinessIdentification": {
+        "type": "object",
+        "properties": {
+          "acquirerMerchantId": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "description": "Acquirer-assigned merchant identifier."
+          },
+          "businessIdentificationType": {
+            "maxLength": 50,
+            "minLength": 0,
+            "type": "string",
+            "description": "Conditionality: Required when acquirerMerchantId is not present or when business Identification Value is present.\n"
+          },
+          "businessIdentificationValue": {
+            "maxLength": 30,
+            "minLength": 0,
+            "type": "string",
+            "description": "Conditionality: Required when acquirerMerchantId is not present or when businessIdentificationType is present.\n"
+          }
+        },
+        "description": "Business identification."
+      },
+      "Error": {
+        "required": [
+          "message",
+          "reason",
+          "status"
+        ],
+        "type": "object",
+        "properties": {
+          "reason": {
+            "maxLength": 32,
+            "minLength": 1,
+            "type": "string",
+            "description": "Error reason associated with the HTTP status code are\n| Reason Code                | Description                                                                          |\n|----------------------------|--------------------------------------------------------------------------------------|\n| INVALID_PARAMETER           | The value provided for one or more request parameters is considered invalid. This error is also generated in case of a missing, required, request parameter. |\n| INVALID_REQUEST            | The server is not able to adequately parse the request. Usually occurs when some request parameter is expected to be in a particular format but is not. |\n| NOT_FOUND                  | The requested resource/business entity does not exist. The resource might also be hidden for security reasons \n| AUTH_INVALID               | Invalid federated idToken                                                            |\n| ACCT_INACCESSIBLE          | The account exists but is not currently accessible (e.g. is locked)                  |\n| INTERNAL_ERROR             | Some error happened on the server which caused the error. Either show a generic message or retry the same request again (it might succeed). \n| SERVICE_UNAVAILABLE        | The service is currently unavailable. Retry after some time.                         |\n|-------------------------------------------------------------------------------------------------------------------|\n"
+          },
+          "status": {
+            "maxLength": 3,
+            "minLength": 3,
+            "type": "string",
+            "description": "HTTP status code to categorize the errors."
+          },
+          "message": {
+            "maxLength": 255,
+            "minLength": 1,
+            "type": "string",
+            "description": "Error message associated with the HTTP status code."
+          },
+          "errorDetail": {
+            "type": "array",
+            "description": "List of error details providing additional information about the error.",
+            "items": {
+              "$ref": "#/components/schemas/ErrorDetail"
+            }
+          }
+        }
+      },
+      "threeDsInputData": {
+        "type": "object",
+        "properties": {
+          "acquirerBin": {
+            "maxLength": 11,
+            "minLength": 0,
+            "type": "string",
+            "description": "Acquiring institution identification code as assigned by the DS receiving the AReq message.\n"
+          },
+          "merchantName": {
+            "maxLength": 40,
+            "minLength": 0,
+            "type": "string",
+            "description": "Merchant name assigned by the acquirer or payment system."
+          },
+          "acquirerMerchantId": {
+            "maxLength": 35,
+            "minLength": 0,
+            "type": "string",
+            "description": "Acquirer-assigned merchant identifier. This may be the same value used in authorization requests sent on behalf of the 3DS requestor and is represented in ISO 8583 formatting requirements.\n"
+          },
+          "merchantCountryCode": {
+            "maxLength": 2,
+            "minLength": 2,
+            "type": "string",
+            "description": "Country code of the merchant.\n",
+            "format": "ISO 3166-1-alpha2"
+          },
+          "merchantCategoryCode": {
+            "maxLength": 4,
+            "minLength": 0,
+            "type": "string",
+            "description": "Describes the merchant’s type of business, product, or service (MCC).\n"
+          }
+        },
+        "description": "Input data for 3DS processing."
+      },
+      "DynamicDataType": {
+        "type": "string",
+        "description": "Type of dynamic data required in the payload.",
+        "enum": [
+          "CARD_APPLICATION_CRYPTOGRAM_SHORT_FORM",
+          "CARD_APPLICATION_CRYPTOGRAM_LONG_FORM",
+          "DYNAMIC_CARD_SECURITY_CODE",
+          "CARDHOLDER_AUTHENTICATION_CRYPTOGRAM",
+          "NONE"
+        ]
+      },
+      "TransactionAmount": {
+        "required": [
+          "transactionAmount",
+          "transactionCurrencyCode"
+        ],
+        "type": "object",
+        "properties": {
+          "transactionAmount": {
+            "maxLength": 15,
+            "minLength": 1,
+            "type": "number",
+            "description": "Amount of the transaction represented as a floating-point number, with 9 digits for the integer part and 4 digits for the decimal part.\n",
+            "format": "decimal"
+          },
+          "transactionCurrencyCode": {
+            "maxLength": 3,
+            "minLength": 3,
+            "type": "string",
+            "description": "ISO 4217 currency code. Currency in which the transaction amount is expressed."
+          }
+        },
+        "description": "Transaction amount details."
+      },
+      "ThreeDsData": {
+        "type": "object",
+        "properties": {
+          "dsTransId": {
+            "maxLength": 50,
+            "minLength": 0,
+            "type": "string",
+            "description": "(Optional) ID assigned by the DS to identify the transaction (for 3DS authentication)."
+          },
+          "acsTransId": {
+            "maxLength": 50,
+            "minLength": 0,
+            "type": "string",
+            "description": "(Optional) ID assigned by the ACS to identify the transaction (for 3DS authentication)."
+          },
+          "transStatus": {
+            "maxLength": 1,
+            "minLength": 1,
+            "type": "string",
+            "description": "(Optional) Indicates whether a transaction qualifies as an authenticated transaction (for 3DS authentication).",
+            "enum": [
+              "Y",
+              "R",
+              "C",
+              "N",
+              "U",
+              "A",
+              "D",
+              "I"
+            ]
+          }
+        },
+        "description": "3DS data."
+      },
+      "UriData": {
+        "type": "object",
+        "properties": {
+          "uri": {
+            "maxLength": 2048,
+            "minLength": 0,
+            "type": "string",
+            "description": "URI."
+          },
+          "uriType": {
+            "type": "string",
+            "description": "Type of the URI. Valid values are APP_URI and WEB_URI.",
+            "enum": [
+              "APP_URI",
+              "WEB_URI"
+            ]
+          }
+        },
+        "description": "URI data."
+      },
+      "CardholderData": {
+        "type": "object",
+        "properties": {
+          "fullName": {
+            "maxLength": 100,
+            "minLength": 0,
+            "type": "string",
+            "description": "Required - Cardholder name."
+          },
+          "lastName": {
+            "maxLength": 50,
+            "minLength": 1,
+            "type": "string",
+            "description": "Required - Cardholder last name."
+          },
+          "firstName": {
+            "maxLength": 50,
+            "minLength": 1,
+            "type": "string",
+            "description": "Required - Cardholder first name."
+          },
+          "emailAddress": {
+            "$ref": "#/components/schemas/Email"
+          },
+          "mobileNumber": {
+            "$ref": "#/components/schemas/PhoneNumber"
+          },
+          "issuerIdentity": {
+            "maxLength": 64,
+            "minLength": 0,
+            "type": "string",
+            "description": "Cardholder identity as known by the card issuer. This generally enables access to an application, website, or other resource. \nExamples include username, email address, or mobile number.\n"
+          },
+          "billingPhoneNumber": {
+            "$ref": "#/components/schemas/PhoneNumber"
+          }
+        },
+        "description": "Cardholder information, which is required for token provisioning."
+      },
+      "FederatedIdTokenDecoded": {
+        "type": "object",
+        "properties": {
+          "claims": {
+            "$ref": "#/components/schemas/FederatedIdTokenClaims"
+          },
+          "header": {
+            "$ref": "#/components/schemas/FederatedIdTokenHeader"
+          },
+          "signature": {
+            "type": "string",
+            "description": "Base64URL-encoded JWS signature segment."
+          }
+        },
+        "description": "Documentation-only schema representing the decoded JWT structure of the\nFederated ID Token. The API does not return this object directly.\n"
+      },
+      "SrcDigitalCardId": {
+        "maxLength": 36,
+        "minLength": 36,
+        "type": "string",
+        "description": "Reference identifier for the digital card representing the PAN or payment token.\n",
+        "format": "uuid"
+      },
+      "SignedDataType": {
+        "type": "string",
+        "description": "Type of signed data.",
+        "enum": [
+          "EXT_OIDC_JWT"
+        ]
+      },
+      "ShippingAddress": {
+        "type": "object",
+        "description": "Delivery address and contact details.",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Address"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "deliveryContactDetails": {
+                "$ref": "#/components/schemas/DeliveryContactDetails"
+              }
+            }
+          }
+        ]
+      },
+      "AuthenticationPreferences": {
+        "type": "object",
+        "properties": {
+          "payloadRequested": {
+            "type": "string",
+            "description": "Indicates whether the SRCI or Merchant prefers an authenticated or non-authenticated payload",
+            "enum": [
+              "AUTHENTICATED",
+              "NON_AUTHENTICATED"
+            ]
+          },
+          "authenticationMethods": {
+            "type": "array",
+            "description": "The list of authentication methods and associated parameters is populated by the SRCI:\n• in its preferred order; or\n• as instructed by the SRC System\n",
+            "items": {
+              "$ref": "#/components/schemas/AuthenticationMethod"
+            }
+          }
+        },
+        "description": "Authentication preferences."
+      },
+      "idToken": {
+        "pattern": "^([a-zA-Z0-9_=]+)\\.([a-zA-Z0-9_=]+)\\.([a-zA-Z0-9_\\-\\+\\/=]+)$",
+        "type": "string",
+        "description": "Federated idToken in JWT Format",
+        "format": "application/jwt"
+      },
+      "PhoneNumber": {
+        "required": [
+          "countryCode",
+          "phoneNumber"
+        ],
+        "type": "object",
+        "properties": {
+          "countryCode": {
+            "maxLength": 4,
+            "minLength": 1,
+            "type": "string",
+            "description": "(Required) Country code associated with the consumer phone number.\nFormat: The E.164 format includes the country code, local area code, and local phone number. No spaces: When adding the number as a contact, there should be no spaces. Remove special characters: All spaces, dashes, and parentheses should be removed, and all characters should be numeric. The country code must not include \"+\".\n"
+          },
+          "phoneNumber": {
+            "maxLength": 14,
+            "minLength": 4,
+            "type": "string",
+            "description": "(Required) Phone number without the country code.\nFormat: The E.164 format. No spaces: When adding the number as a contact, there should be no spaces. Remove special characters: All spaces, dashes, and parentheses should be removed, and all characters should be numeric. For some countries, such as Australia, the leading “0” of the local number must be removed when converting to E.164. For example, “0423 123 456” becomes “61423123456.”\nMinimum length = 4\nMaximum length = 14, with the condition that the maximum length including the country code must not exceed 15 digits.\n"
+          }
+        },
+        "description": "Phone number."
+      }
+    },
+    "responses": {
+      "BadRequest": {
+        "description": "Bad request. See error object for details.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "examples": {
+              "InvalidRequest": {
+                "$ref": "#/components/examples/InvalidRequest"
+              },
+              "InvalidParameter": {
+                "$ref": "#/components/examples/InvalidParameter"
+              }
+            }
+          }
+        }
+      },
+      "Internal": {
+        "description": "An internal server error occurred, such as a null pointer exception.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "examples": {
+              "Internal": {
+                "$ref": "#/components/examples/Internal"
+              }
+            }
+          }
+        }
+      },
+      "Forbidden": {
+        "description": "Forbidden. See error object for details, such as an incorrect SRC DPA ID being used.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "examples": {
+              "PermissionDenied": {
+                "$ref": "#/components/examples/PermissionDenied"
+              }
+            }
+          }
+        }
+      },
+      "Unauthorized": {
+        "description": "Unauthorized. See error object for details, such as authorization token validation failure.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "examples": {
+              "Unauthenticated": {
+                "$ref": "#/components/examples/Unauthenticated"
+              }
+            }
+          }
+        }
+      },
+      "NotFound": {
+        "description": "Checkout transaction not found.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "examples": {
+              "TransactionNotFound": {
+                "$ref": "#/components/examples/TransactionNotFound"
+              }
+            }
+          }
+        }
+      },
+      "Unavailable": {
+        "description": "The requested service is currently unavailable.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "examples": {
+              "Unavailable": {
+                "$ref": "#/components/examples/Unavailable"
+              }
+            }
+          }
+        }
+      }
+    },
+    "parameters": {},
+    "examples": {
+      "CompleteIdentityValidationResponse": {
+        "summary": "CompleteIdentityValidationResponse",
+        "value": {
+          "idToken": "eyJraWQiOiJvdXRib3VuZF90ZXN0IiwidHlwIjoiSldUK2V4dC5pZF90b2tlbiIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiJ4akJjMm15VmEwZ2d1dFgvVjA0MW00WHNBdzJua0thM2JvZ1F4NmIxZ3ZzPSIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwiYW1yIjpbInNtc19vdHAiXSwiaXNzIjoiaHR0cHM6Ly93d3cudmlzYS5jb20iLCJzcmNfZW1haWxfbWFzayI6InNieCoqQG1haWxpbmF0b3IuY29tIiwicGhvbmVfbnVtYmVyX3ZlcmlmaWVkIjp0cnVlLCJzcmNfcGhvbmVfbnVtYmVyX21hc2siOiIqKioqKioqKjI5NTUiLCJhdWQiOlsibWFzdGVyY2FyZC5jb20iLCJodHRwczovL3F3d3cuYWV4cC1zdGF0aWMuY29tIiwiaHR0cHM6Ly93d3cudmlzYS5jb20iLCJodHRwczovL3d3dy5hbWVyaWNhbmV4cHJlc3MuY29tIiwiaHR0cHM6Ly90ZXN0LmNvbSIsImh0dHBzOi8vbWFzdGVyY2FyZC5jb20iLCJodHRwczovL3d3dy52aXZ5YW50ZXN0LmNvbSJdLCJhdXRoX3RpbWUiOjE3NzAxNDI0NjUsImlkX3R5cGUiOiJFTUFJTF9BRERSRVNTIiwicGhvbmVfbnVtYmVyIjoiZDZ2bHh4SXhqdEZUWi9VaWhvRk9BekljeEh3UDR4YUZhdGVFcmh6Qit1MD0iLCJleHAiOjE3NzAxNDI3MDUsImlhdCI6MTc3MDE0MjQ2NSwianRpIjoiY0duSGRuUWt0dFhfUWNzaVEyWjRMY0Y2czg0SmU4cnRZM216VG5jWnF6NCIsImVtYWlsIjoieGpCYzJteVZhMGdndXRYL1YwNDFtNFhzQXcybmtLYTNib2dReDZiMWd2cz0ifQ.FpT7mVm1E12x1FwZGDDCI1gWb3D-FVnsm50W_iRVe03fF_CvYapYOxgqRrItWtV2W5J67ooo4eKqiD7x76O62ZTWfzuHxRzAYNf3c3Q4CGNoESc4rYp7Js0hLuW9gq_I6mT0v4Sr_LmxhHX0hmuDHQ4_J2fW89v5zjOmaT1VVkBmWG-SJWE1P3vHKNV82mVVDyvUQgIX7M568G-em5GcCvx61seAnzssxXVzqkXyRTCH1eVoWgGfT16D4wWqUcSkoYTOsONlCKLpixxgyaHw2EcnoUn8kY5Z8NI2PK4kL32mnJdg00izjG2gnllz8UEAGmHiVvnQ7slSoP1G1YH77g"
+        }
+      },
+      "GetSrcProfileResponse-1": {
+        "summary": "GetSrcProfileResponse",
+        "value": {
+          "profiles": [
+            {
+              "maskedCards": [
+                {
+                  "panBin": "409758",
+                  "countryCode": "US",
+                  "panLastFour": "4340",
+                  "tokenBinRange": "486281160",
+                  "tokenLastFour": "7651",
+                  "digitalCardData": [
+                    {
+                      "artUri": "https://sandbox.assets.vims.visa.com/vims/cardart/8e95514fc6604626b0665c2059426d14_imageA@2x.png",
+                      "status": "ACTIVE",
+                      "artWidth": "334",
+                      "artHeight": "210",
+                      "descriptorName": "YourBank Travel Reward Card"
+                    }
+                  ],
+                  "paymentCardType": "CREDIT",
+                  "srcDigitalCardId": "c48ac10b-58cc-4372-a567-0e02b2c3d489",
+                  "dateOfCardCreated": "1743621699836",
+                  "panExpirationYear": "2028",
+                  "panExpirationMonth": "01",
+                  "maskedBillingAddress": {
+                    "zip": "9****",
+                    "city": "S****",
+                    "state": "CA",
+                    "countryCode": "US",
+                    "addressLine1": "1*** M*** S****",
+                    "addressLine2": "A****"
+                  },
+                  "paymentCardDescriptor": "VISA CREDIT 4340",
+                  "paymentAccountReference": "V0010013018036780769886562352",
+                  "maskedCardholderFullName": "J*** D**",
+                  "maskedCardholderLastName": "D**",
+                  "maskedCardholderFirstName": "J***"
+                }
+              ]
+            },
+            {
+              "maskedConsumer": [
+                {
+                  "countryCode": "US",
+                  "languageCode": "en",
+                  "srcConsumerId": "12345678-1234-1234-1234-123456789012",
+                  "maskedFullName": "J*** D**",
+                  "maskedLastName": "D**",
+                  "maskedFirstName": "J***",
+                  "dateConsumerAdded": "1743621699815",
+                  "maskedEmailAddress": "usr***@example.com",
+                  "maskedMobileNumber": {
+                    "countryCode": "1",
+                    "phoneNumber": "******1000"
+                  },
+                  "maskedConsumerIdentity": {
+                    "identityType": "EMAIL_ADDRESS",
+                    "maskedIdentityValue": "usr***@example.com"
+                  }
+                }
+              ]
+            },
+            {
+              "authorization": "eyJraWQiOiJvdXRib3VuZF90ZXN0IiwidHlwIjoiSldUK2V4dC5pZF90b2tlbiIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiJ4akJjMm15VmEwZ2d1dFgvVjA0MW00WHNBdzJua0thM2JvZ1F4NmIxZ3ZzPSIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwiYW1yIjpbInNtc19vdHAiXSwiaXNzIjoiaHR0cHM6Ly93d3cudmlzYS5jb20iLCJzcmNfZW1haWxfbWFzayI6InNieCoqQG1haWxpbmF0b3IuY29tIiwicGhvbmVfbnVtYmVyX3ZlcmlmaWVkIjp0cnVlLCJzcmNfcGhvbmVfbnVtYmVyX21hc2siOiIqKioqKioqKjI5NTUiLCJhdWQiOlsibWFzdGVyY2FyZC5jb20iLCJodHRwczovL3F3d3cuYWV4cC1zdGF0aWMuY29tIiwiaHR0cHM6Ly93d3cudmlzYS5jb20iLCJodHRwczovL3d3dy5hbWVyaWNhbmV4cHJlc3MuY29tIiwiaHR0cHM6Ly90ZXN0LmNvbSIsImh0dHBzOi8vbWFzdGVyY2FyZC5jb20iLCJodHRwczovL3d3dy52aXZ5YW50ZXN0LmNvbSJdLCJhdXRoX3RpbWUiOjE3NzAxNDI0NjUsImlkX3R5cGUiOiJFTUFJTF9BRERSRVNTIiwicGhvbmVfbnVtYmVyIjoiZDZ2bHh4SXhqdEZUWi9VaWhvRk9BekljeEh3UDR4YUZhdGVFcmh6Qit1MD0iLCJleHAiOjE3NzAxNDI3MDUsImlhdCI6MTc3MDE0MjQ2NSwianRpIjoiY0duSGRuUWt0dFhfUWNzaVEyWjRMY0Y2czg0SmU4cnRZM216VG5jWnF6NCIsImVtYWlsIjoieGpCYzJteVZhMGdndXRYL1YwNDFtNFhzQXcybmtLYTNib2dReDZiMWd2cz0ifQ.FpT7mVm1E12x1FwZGDDCI1gWb3D-FVnsm50W_iRVe03fF_CvYapYOxgqRrItWtV2W5J67ooo4eKqiD7x76O62ZTWfzuHxRzAYNf3c3Q4CGNoESc4rYp7Js0hLuW9gq_I6mT0v4Sr_LmxhHX0hmuDHQ4_J2fW89v5zjOmaT1VVkBmWG-SJWE1P3vHKNV82mVVDyvUQgIX7M568G-em5GcCvx61seAnzssxXVzqkXyRTCH1eVoWgGfT16D4wWqUcSkoYTOsONlCKLpixxgyaHw2EcnoUn8kY5Z8NI2PK4kL32mnJdg00izjG2gnllz8UEAGmHiVvnQ7slSoP1G1YH77g"
+            }
+          ],
+          "srcDpaId": "d68ac10b-58cc-4372-a567-0e02b2c3d489",
+          "srcCorrelationId": "e48ac10b-58cc-4372-a567-0e02b2c3d489"
+        }
+      },
+      "IdentityLookupResponse-1": {
+        "summary": "IdentityLookupResponse",
+        "value": {
+          "consumerStatus": "ACTIVE",
+          "consumerPresent1": true,
+          "idLookupSessionId": "d48ac10b-58cc-4372-a567-0e02b2c3d489",
+          "lastUsedCardTimestamp": "1743621699815"
+        }
+      },
+      "InitiateIdentityValidationRequest": {
+        "summary": "InitiateIdentityValidationRequest",
+        "value": {
+          "srcClientId": "f48ac10b-58cc-4372-a567-0e02b2c3d489",
+          "idLookupSessionId": "d48ac10b-58cc-4372-a567-0e02b2c3d489"
+        }
+      },
+      "Unauthenticated": {
+        "value": {
+          "reason": "AUTH_INVALID",
+          "status": "401",
+          "message": "Invalid input provided",
+          "errorDetail": [
+            {
+              "source": "json path of the field that caused the error. Or Generic Error"
+            }
+          ]
+        }
+      },
+      "IdentityLookupResponse": {
+        "summary": "IdentityLookupResponse",
+        "value": {
+          "consumerStatus": "ACTIVE",
+          "consumerPresent1": true,
+          "idLookupSessionId": "d48ac10b-58cc-4372-a567-0e02b2c3d489",
+          "lastUsedCardTimestamp": 1743621699815
+        }
+      },
+      "InitiateIdentityValidationResponse": {
+        "summary": "InitiateIdentityValidationResponse",
+        "value": {
+          "idValidationSessionId": "d48ac10b-58cc-4372-a567-0e02b2c3d489",
+          "maskedValidationChannel": [
+            {
+              "identityType": "EMAIL_ADDRESS",
+              "identityProvider": "SRC",
+              "validationChannelId": "41fcf8ff-7861-4979-b903-7aee24e08f93",
+              "maskedValidationChannel": "usr***@example.com"
+            }
+          ]
+        }
+      },
+      "TransactionNotFound": {
+        "value": {
+          "reason": "NOT_FOUND",
+          "status": "404",
+          "message": "Invalid input provided",
+          "errorDetail": [
+            {
+              "source": "json path of the field that caused the error. Or Generic Error"
+            }
+          ]
+        }
+      },
+      "GetSrcProfileResponse": {
+        "summary": "GetSrcProfileResponse",
+        "value": {
+          "profiles": [
+            {
+              "maskedCards": [
+                {
+                  "panBin": "409758",
+                  "countryCode": "US",
+                  "panLastFour": "4340",
+                  "tokenBinRange": "486281160",
+                  "tokenLastFour": "7651",
+                  "digitalCardData": [
+                    {
+                      "artUri": "https://sandbox.assets.vims.visa.com/vims/cardart/8e95514fc6604626b0665c2059426d14_imageA@2x.png",
+                      "status": "ACTIVE",
+                      "artWidth": "334",
+                      "artHeight": "210",
+                      "descriptorName": "YourBank Travel Reward Card"
+                    }
+                  ],
+                  "paymentCardType": "CREDIT",
+                  "srcDigitalCardId": "c48ac10b-58cc-4372-a567-0e02b2c3d489",
+                  "dateOfCardCreated": 1743621699836,
+                  "panExpirationYear": "2028",
+                  "panExpirationMonth": "01",
+                  "maskedBillingAddress": {
+                    "zip": "9****",
+                    "city": "S****",
+                    "state": "CA",
+                    "countryCode": "US",
+                    "addressLine1": "1*** M*** S****",
+                    "addressLine2": "A****"
+                  },
+                  "paymentCardDescriptor": "VISA CREDIT 4340",
+                  "paymentAccountReference": "V0010013018036780769886562352",
+                  "maskedCardholderFullName": "J*** D**",
+                  "maskedCardholderLastName": "D**",
+                  "maskedCardholderFirstName": "J***"
+                }
+              ]
+            },
+            {
+              "maskedConsumer": [
+                {
+                  "countryCode": "US",
+                  "languageCode": "en",
+                  "srcConsumerId": "12345678-1234-1234-1234-123456789012",
+                  "maskedFullName": "J*** D**",
+                  "maskedLastName": "D**",
+                  "maskedFirstName": "J***",
+                  "dateConsumerAdded": 1743621699815,
+                  "maskedEmailAddress": "usr***@example.com",
+                  "maskedMobileNumber": {
+                    "countryCode": "1",
+                    "phoneNumber": "******1000"
+                  },
+                  "maskedConsumerIdentity": {
+                    "identityType": "EMAIL_ADDRESS",
+                    "maskedIdentityValue": "usr***@example.com"
+                  }
+                }
+              ]
+            },
+            {
+              "authorization": "eyJraWQiOiJvdXRib3VuZF90ZXN0IiwidHlwIjoiSldUK2V4dC5pZF90b2tlbiIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiJ4akJjMm15VmEwZ2d1dFgvVjA0MW00WHNBdzJua0thM2JvZ1F4NmIxZ3ZzPSIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwiYW1yIjpbInNtc19vdHAiXSwiaXNzIjoiaHR0cHM6Ly93d3cudmlzYS5jb20iLCJzcmNfZW1haWxfbWFzayI6InNieCoqQG1haWxpbmF0b3IuY29tIiwicGhvbmVfbnVtYmVyX3ZlcmlmaWVkIjp0cnVlLCJzcmNfcGhvbmVfbnVtYmVyX21hc2siOiIqKioqKioqKjI5NTUiLCJhdWQiOlsibWFzdGVyY2FyZC5jb20iLCJodHRwczovL3F3d3cuYWV4cC1zdGF0aWMuY29tIiwiaHR0cHM6Ly93d3cudmlzYS5jb20iLCJodHRwczovL3d3dy5hbWVyaWNhbmV4cHJlc3MuY29tIiwiaHR0cHM6Ly90ZXN0LmNvbSIsImh0dHBzOi8vbWFzdGVyY2FyZC5jb20iLCJodHRwczovL3d3dy52aXZ5YW50ZXN0LmNvbSJdLCJhdXRoX3RpbWUiOjE3NzAxNDI0NjUsImlkX3R5cGUiOiJFTUFJTF9BRERSRVNTIiwicGhvbmVfbnVtYmVyIjoiZDZ2bHh4SXhqdEZUWi9VaWhvRk9BekljeEh3UDR4YUZhdGVFcmh6Qit1MD0iLCJleHAiOjE3NzAxNDI3MDUsImlhdCI6MTc3MDE0MjQ2NSwianRpIjoiY0duSGRuUWt0dFhfUWNzaVEyWjRMY0Y2czg0SmU4cnRZM216VG5jWnF6NCIsImVtYWlsIjoieGpCYzJteVZhMGdndXRYL1YwNDFtNFhzQXcybmtLYTNib2dReDZiMWd2cz0ifQ.FpT7mVm1E12x1FwZGDDCI1gWb3D-FVnsm50W_iRVe03fF_CvYapYOxgqRrItWtV2W5J67ooo4eKqiD7x76O62ZTWfzuHxRzAYNf3c3Q4CGNoESc4rYp7Js0hLuW9gq_I6mT0v4Sr_LmxhHX0hmuDHQ4_J2fW89v5zjOmaT1VVkBmWG-SJWE1P3vHKNV82mVVDyvUQgIX7M568G-em5GcCvx61seAnzssxXVzqkXyRTCH1eVoWgGfT16D4wWqUcSkoYTOsONlCKLpixxgyaHw2EcnoUn8kY5Z8NI2PK4kL32mnJdg00izjG2gnllz8UEAGmHiVvnQ7slSoP1G1YH77g"
+            }
+          ],
+          "srcDpaId": "d68ac10b-58cc-4372-a567-0e02b2c3d489",
+          "srcCorrelationId": "e48ac10b-58cc-4372-a567-0e02b2c3d489"
+        }
+      },
+      "Internal": {
+        "value": {
+          "reason": "UNKNOWN_ERROR",
+          "status": "500",
+          "message": "Unknown Error.",
+          "errorDetail": [
+            {
+              "source": "Generic Error"
+            }
+          ]
+        }
+      },
+      "InvalidRequest": {
+        "value": {
+          "reason": "INVALID_REQUEST",
+          "status": "400",
+          "message": "Invalid input provided",
+          "errorDetail": [
+            {
+              "reason": "optional - non deterministic",
+              "source": "json path or generic parsing error",
+              "message": "optional - non deterministic",
+              "sourceType": "optional - non deterministic value"
+            }
+          ]
+        }
+      },
+      "CheckoutPayloadResponseFull": {
+        "summary": "CheckoutPayloadResponseFull(Decoded)",
+        "value": {
+          "maskedCard": {
+            "panBin": "409758",
+            "countryCode": "US",
+            "panLastFour": "4340",
+            "tokenBinRange": "486281160",
+            "tokenLastFour": "7651",
+            "digitalCardData": {
+              "artUri": "https://sandbox.assets.vims.visa.com/vims/cardart/8e95514fc6604626b0665c2059426d14_imageA@2x.png",
+              "status": "ACTIVE",
+              "artWidth": "334",
+              "artHeight": "210",
+              "descriptorName": "YourBank Travel Reward Card"
+            },
+            "paymentCardType": "CREDIT",
+            "srcDigitalCardId": "c48ac10b-58cc-4372-a567-0e02b2c3d489",
+            "panExpirationYear": "2028",
+            "panExpirationMonth": "01",
+            "paymentCardDescriptor": "VISA CREDIT 4340"
+          },
+          "assuranceData": {
+            "eci": "05",
+            "verificationData": [
+              {
+                "verificationType": "CARDHOLDER,",
+                "verificationEntity": "02,",
+                "verificationEvents": [
+                  1
+                ],
+                "verificationMethod": "01,",
+                "verificationResults": "01,",
+                "verificationTimestamp": "1754500546"
+              }
+            ]
+          },
+          "maskedConsumer": {
+            "countryCode": "US",
+            "languageCode": "en",
+            "srcConsumerId": "12345678-1234-1234-1234-123456789012",
+            "maskedFullName": "J*** D**",
+            "maskedLastName": "D**",
+            "maskedFirstName": "J***",
+            "maskedEmailAddress": "usr***@example.com",
+            "maskedMobileNumber": {
+              "countryCode": "1",
+              "phoneNumber": "******1000"
+            },
+            "maskedConsumerIdentity": {
+              "identityType": "EMAIL_ADDRESS",
+              "maskedIdentityValue": "usr***@example.com"
+            }
+          },
+          "encryptedPayload": "eyJhbGciOiJSU0EtT0FFUCIsImVuYyI6IkEyNTZHQ00iLCJraWQiOiIxMjM0NTY3ODkwIiwidHlwIjoiSldFIn0.KDlTtXchhZTGufMYmOYGS4HffxPSUrfmqCHXaI9wOGY8cMHqzjAEJxGmtQvn1hM9ZzPJV_MMwTxPwilYNtAypV9eeiH_GE1oB9RTN7LTNw6bWgTt7kJuW-rJVpEF1-uVDKaKMJ3Fv_BMe2T4HgSLmP7SHG9csGCgjbKlNz4Bl1-Qf-RFAvAT.48V1_ALb6US04U3b.5eym8TW_c8SuK0ltJ3rpYIzOeDQz7TALvtu6UG9oMo4vpzs9tX_EFShS8iB7j6jiSdiwkIr3ajwQzaBtQD_A.XFBoMYUZodetZdvTiFvSkQ",
+          "srcCorrelationId": "e48ac10b-58cc-4372-a567-0e02b2c3d489",
+          "srciTransactionId": "d48ac10b-58cc-4372-a567-0e02b2c3d489"
+        }
+      },
+      "CheckoutResponseWithPendingAction": {
+        "summary": "CheckoutResponseWithPendingAction",
+        "value": {
+          "maskedCard": {
+            "panBin": "409758",
+            "countryCode": "US",
+            "panLastFour": "4340",
+            "tokenBinRange": "486281160",
+            "tokenLastFour": "7651",
+            "digitalCardData": {
+              "artUri": "https://sandbox.assets.vims.visa.com/vims/cardart/8e95514fc6604626b0665c2059426d14_imageA@2x.png",
+              "status": "PENDING",
+              "artWidth": "334",
+              "artHeight": "210",
+              "pendingEvents": [
+                "PENDING_CARDHOLDER_AUTHENTICATION"
+              ],
+              "descriptorName": "YourBank Travel Reward Card",
+              "authenticationMethods": [
+                {
+                  "uriData": {
+                    "uri": "https://secure.checkout.visa.com/",
+                    "uriType": "WEB_URI"
+                  },
+                  "methodAttributes": {
+                    "windowType": "popUp"
+                  },
+                  "authenticationSubject": "CARDHOLDER",
+                  "authenticationMethodType": "SRCS_HOSTED_AUTHENTICATION"
+                }
+              ]
+            },
+            "paymentCardType": "CREDIT",
+            "srcDigitalCardId": "c48ac10b-58cc-4372-a567-0e02b2c3d489",
+            "panExpirationYear": "2028",
+            "panExpirationMonth": "01",
+            "paymentCardDescriptor": "VISA CREDIT 4340"
+          },
+          "maskedConsumer": {
+            "countryCode": "US",
+            "languageCode": "en",
+            "srcConsumerId": "12345678-1234-1234-1234-123456789012",
+            "maskedFullName": "J*** D**",
+            "maskedLastName": "D**",
+            "maskedFirstName": "J***",
+            "maskedEmailAddress": "usr***@example.com",
+            "maskedMobileNumber": {
+              "countryCode": "1",
+              "phoneNumber": "******1000"
+            },
+            "maskedConsumerIdentity": {
+              "identityType": "EMAIL_ADDRESS",
+              "maskedIdentityValue": "usr***@example.com"
+            }
+          },
+          "srcCorrelationId": "e48ac10b-58cc-4372-a567-0e02b2c3d489",
+          "srciTransactionId": "d48ac10b-58cc-4372-a567-0e02b2c3d489"
+        }
+      },
+      "CheckoutResponseWithPendingAction-1": {
+        "summary": "CheckoutResponseWithPendingAction(Decoded)",
+        "value": {
+          "maskedCard": {
+            "panBin": "409758",
+            "countryCode": "US",
+            "panLastFour": "4340",
+            "tokenBinRange": "486281160",
+            "tokenLastFour": "7651",
+            "digitalCardData": {
+              "artUri": "https://sandbox.assets.vims.visa.com/vims/cardart/8e95514fc6604626b0665c2059426d14_imageA@2x.png",
+              "status": "PENDING",
+              "artWidth": "334",
+              "artHeight": "210",
+              "pendingEvents": [
+                "PENDING_CARDHOLDER_AUTHENTICATION"
+              ],
+              "descriptorName": "YourBank Travel Reward Card",
+              "authenticationMethods": [
+                {
+                  "uriData": {
+                    "uri": "https://secure.checkout.visa.com/",
+                    "uriType": "WEB_URI"
+                  },
+                  "methodAttributes": {
+                    "windowType": "popUp"
+                  },
+                  "authenticationSubject": "CARDHOLDER",
+                  "authenticationMethodType": "SRCS_HOSTED_AUTHENTICATION"
+                }
+              ]
+            },
+            "paymentCardType": "CREDIT",
+            "srcDigitalCardId": "c48ac10b-58cc-4372-a567-0e02b2c3d489",
+            "panExpirationYear": "2028",
+            "panExpirationMonth": "01",
+            "paymentCardDescriptor": "VISA CREDIT 4340"
+          },
+          "maskedConsumer": {
+            "countryCode": "US",
+            "languageCode": "en",
+            "srcConsumerId": "12345678-1234-1234-1234-123456789012",
+            "maskedFullName": "J*** D**",
+            "maskedLastName": "D**",
+            "maskedFirstName": "J***",
+            "maskedEmailAddress": "usr***@example.com",
+            "maskedMobileNumber": {
+              "countryCode": "1",
+              "phoneNumber": "******1000"
+            },
+            "maskedConsumerIdentity": {
+              "identityType": "EMAIL_ADDRESS",
+              "maskedIdentityValue": "usr***@example.com"
+            }
+          },
+          "srcCorrelationId": "e48ac10b-58cc-4372-a567-0e02b2c3d489",
+          "srciTransactionId": "d48ac10b-58cc-4372-a567-0e02b2c3d489"
+        }
+      },
+      "EnrollCardRequest": {
+        "summary": "Example request for enrolling a card with reference data. Note - All API calls require x-pay-token header and apiKey query parameter.",
+        "value": "{\n  \"srcClientId\": \"f48ac10b-58cc-4372-a567-0e02b2c3d489\",\n  \"srcDpaId\": \"d68ac10b-58cc-4372-a567-0e02b2c3d489\",\n  \"srciTransactionId\": \"d48ac10b-58cc-4372-a567-0e02b2c3d489\",\n  \"serviceId\": \"CARD_ON_FILE\",\n  \"srcCorrelationId\": \"e48ac10b-58cc-4372-a567-0e02b2c3d489\",\n  \"enrollmentReferenceData\": {\n    \"enrollmentReferenceId\": \"d48ac10b-58cc-4372-a567-0e02b2c3d489\",\n    \"enrollmentReferenceType\": \"SRC_DIGITAL_CARD_ID\",\n    \"enrollmentReferenceProvider\": \"SRC\"\n  }\n}\n"
+      },
+      "Unavailable": {
+        "value": {
+          "reason": "SERVICE_ERROR",
+          "status": "409",
+          "message": "Invalid input provided",
+          "errorDetail": [
+            {
+              "source": "json path of the field that caused the error. Or Generic Error"
+            }
+          ]
+        }
+      },
+      "GetSrcProfileRequestWithIdToken": {
+        "summary": "GetSrcProfileRequestWithIdToken",
+        "value": {
+          "idToken": "eyJraWQiOiJvdXRib3VuZF90ZXN0IiwidHlwIjoiSldUK2V4dC5pZF90b2tlbiIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiJ4akJjMm15VmEwZ2d1dFgvVjA0MW00WHNBdzJua0thM2JvZ1F4NmIxZ3ZzPSIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwiYW1yIjpbInNtc19vdHAiXSwiaXNzIjoiaHR0cHM6Ly93d3cudmlzYS5jb20iLCJzcmNfZW1haWxfbWFzayI6InNieCoqQG1haWxpbmF0b3IuY29tIiwicGhvbmVfbnVtYmVyX3ZlcmlmaWVkIjp0cnVlLCJzcmNfcGhvbmVfbnVtYmVyX21hc2siOiIqKioqKioqKjI5NTUiLCJhdWQiOlsibWFzdGVyY2FyZC5jb20iLCJodHRwczovL3F3d3cuYWV4cC1zdGF0aWMuY29tIiwiaHR0cHM6Ly93d3cudmlzYS5jb20iLCJodHRwczovL3d3dy5hbWVyaWNhbmV4cHJlc3MuY29tIiwiaHR0cHM6Ly90ZXN0LmNvbSIsImh0dHBzOi8vbWFzdGVyY2FyZC5jb20iLCJodHRwczovL3d3dy52aXZ5YW50ZXN0LmNvbSJdLCJhdXRoX3RpbWUiOjE3NzAxNDI0NjUsImlkX3R5cGUiOiJFTUFJTF9BRERSRVNTIiwicGhvbmVfbnVtYmVyIjoiZDZ2bHh4SXhqdEZUWi9VaWhvRk9BekljeEh3UDR4YUZhdGVFcmh6Qit1MD0iLCJleHAiOjE3NzAxNDI3MDUsImlhdCI6MTc3MDE0MjQ2NSwianRpIjoiY0duSGRuUWt0dFhfUWNzaVEyWjRMY0Y2czg0SmU4cnRZM216VG5jWnF6NCIsImVtYWlsIjoieGpCYzJteVZhMGdndXRYL1YwNDFtNFhzQXcybmtLYTNib2dReDZiMWd2cz0ifQ.FpT7mVm1E12x1FwZGDDCI1gWb3D-FVnsm50W_iRVe03fF_CvYapYOxgqRrItWtV2W5J67ooo4eKqiD7x76O62ZTWfzuHxRzAYNf3c3Q4CGNoESc4rYp7Js0hLuW9gq_I6mT0v4Sr_LmxhHX0hmuDHQ4_J2fW89v5zjOmaT1VVkBmWG-SJWE1P3vHKNV82mVVDyvUQgIX7M568G-em5GcCvx61seAnzssxXVzqkXyRTCH1eVoWgGfT16D4wWqUcSkoYTOsONlCKLpixxgyaHw2EcnoUn8kY5Z8NI2PK4kL32mnJdg00izjG2gnllz8UEAGmHiVvnQ7slSoP1G1YH77g",
+          "srcDpaId": "d68ac10b-58cc-4372-a567-0e02b2c3d489",
+          "srcClientId": "f48ac10b-58cc-4372-a567-0e02b2c3d489",
+          "srcCorrelationId": "e48ac10b-58cc-4372-a567-0e02b2c3d489",
+          "dpaTransactionOptions": {
+            "transactionAmount": {
+              "transactionAmount": "980.00",
+              "transactionCurrencyCode": "USD"
+            }
+          }
+        }
+      },
+      "InvalidParameter": {
+        "value": {
+          "reason": "INVALID_PARAMETER",
+          "status": "400",
+          "message": "Invalid input provided",
+          "errorDetail": [
+            {
+              "reason": "optional - non-deterministic",
+              "source": "json path of the field that caused the error. See some examples below",
+              "message": "optional - non-deterministic",
+              "sourceType": "optional - non-deterministic"
+            },
+            {
+              "reason": "optional - non-deterministic",
+              "source": "srcDpaId or dpaData",
+              "message": "optional - non-deterministic",
+              "sourceType": "optional - non-deterministic value"
+            },
+            {
+              "reason": "optional - non-deterministic",
+              "source": "card or encryptedCard",
+              "message": "optional - non-deterministic",
+              "sourceType": "optional - non-deterministic value"
+            },
+            {
+              "reason": "optional - non-deterministic",
+              "source": "consumer or encryptedConsumer",
+              "message": "optional - non-deterministic",
+              "sourceType": "optional - non-deterministic value"
+            },
+            {
+              "reason": "optional - non-deterministic",
+              "source": "dpaTransactionOptions.transactionAmount.transactionCurrencyCode",
+              "message": "optional - non-deterministic",
+              "sourceType": "optional - non-deterministic value"
+            },
+            {
+              "reason": "optional - non-deterministic",
+              "source": "assuranceData.verificationData[0].verificationMethod",
+              "message": "optional - non-deterministic",
+              "sourceType": "optional - non-deterministic value"
+            }
+          ]
+        }
+      },
+      "PermissionDenied": {
+        "value": {
+          "reason": "ACCT_INACCESSIBLE",
+          "status": "403",
+          "message": "Invalid input provided",
+          "errorDetail": [
+            {
+              "source": "json path of the field that caused the error. Or Generic Error"
+            }
+          ]
+        }
+      },
+      "IdentityLookupRequest": {
+        "summary": "IdentityLookupRequest",
+        "value": {
+          "srcClientId": "f48ac10b-58cc-4372-a567-0e02b2c3d489",
+          "consumerIdentity": {
+            "identityType": "EMAIL_ADDRESS",
+            "identityValue": "user@example.com"
+          }
+        }
+      },
+      "CheckoutResponseWithFullPayload": {
+        "summary": "CheckoutResponseWithFullPayload",
+        "value": {
+          "maskedCard": {
+            "panBin": "409758",
+            "countryCode": "US",
+            "panLastFour": "4340",
+            "tokenBinRange": "486281160",
+            "tokenLastFour": "7651",
+            "digitalCardData": {
+              "artUri": "https://sandbox.assets.vims.visa.com/vims/cardart/8e95514fc6604626b0665c2059426d14_imageA@2x.png",
+              "status": "ACTIVE",
+              "artWidth": "334",
+              "artHeight": "210",
+              "descriptorName": "YourBank Travel Reward Card"
+            },
+            "paymentCardType": "CREDIT",
+            "srcDigitalCardId": "c48ac10b-58cc-4372-a567-0e02b2c3d489",
+            "panExpirationYear": "2028",
+            "panExpirationMonth": "01",
+            "paymentCardDescriptor": "VISA CREDIT 4340"
+          },
+          "assuranceData": {
+            "eci": "05",
+            "verificationData": [
+              {
+                "verificationType": "CARDHOLDER,",
+                "verificationEntity": "02,",
+                "verificationEvents": [
+                  1
+                ],
+                "verificationMethod": "01,",
+                "verificationResults": "01,",
+                "verificationTimestamp": "1754500546"
+              }
+            ]
+          },
+          "maskedConsumer": {
+            "countryCode": "US",
+            "languageCode": "en",
+            "srcConsumerId": "12345678-1234-1234-1234-123456789012",
+            "maskedFullName": "J*** D**",
+            "maskedLastName": "D**",
+            "maskedFirstName": "J***",
+            "maskedEmailAddress": "usr***@example.com",
+            "maskedMobileNumber": {
+              "countryCode": "1",
+              "phoneNumber": "******1000"
+            },
+            "maskedConsumerIdentity": {
+              "identityType": "EMAIL_ADDRESS",
+              "maskedIdentityValue": "usr***@example.com"
+            }
+          },
+          "encryptedPayload": "eyJhbGciOiJSU0EtT0FFUCIsImVuYyI6IkEyNTZHQ00iLCJraWQiOiIxMjM0NTY3ODkwIiwidHlwIjoiSldFIn0.KDlTtXchhZTGufMYmOYGS4HffxPSUrfmqCHXaI9wOGY8cMHqzjAEJxGmtQvn1hM9ZzPJV_MMwTxPwilYNtAypV9eeiH_GE1oB9RTN7LTNw6bWgTt7kJuW-rJVpEF1-uVDKaKMJ3Fv_BMe2T4HgSLmP7SHG9csGCgjbKlNz4Bl1-Qf-RFAvAT.48V1_ALb6US04U3b.5eym8TW_c8SuK0ltJ3rpYIzOeDQz7TALvtu6UG9oMo4vpzs9tX_EFShS8iB7j6jiSdiwkIr3ajwQzaBtQD_A.XFBoMYUZodetZdvTiFvSkQ",
+          "srcCorrelationId": "e48ac10b-58cc-4372-a567-0e02b2c3d489",
+          "srciTransactionId": "d48ac10b-58cc-4372-a567-0e02b2c3d489"
+        }
+      },
+      "CompleteCheckoutRequest": {
+        "summary": "CompleteCheckoutRequest",
+        "value": {
+          "srcDpaId": "d68ac10b-58cc-4372-a567-0e02b2c3d489",
+          "srcClientId": "f48ac10b-58cc-4372-a567-0e02b2c3d489",
+          "assuranceData": {
+            "eci": "05",
+            "verificationData": [
+              {
+                "verificationType": "CARDHOLDER,",
+                "verificationEntity": "02,",
+                "verificationEvents": [
+                  1
+                ],
+                "verificationMethod": "01,",
+                "verificationResults": "01,",
+                "verificationTimestamp": "1754500546"
+              }
+            ]
+          },
+          "srcCorrelationId": "e48ac10b-58cc-4372-a567-0e02b2c3d489",
+          "srcDigitalCardId": "c48ac10b-58cc-4372-a567-0e02b2c3d489",
+          "srciTransactionId": "d48ac10b-58cc-4372-a567-0e02b2c3d489",
+          "dpaTransactionOptions": {
+            "dpaLocale": "en_US",
+            "acquirerBin": "12345678901",
+            "merchantName": "Best Merchant",
+            "merchantOrderId": "123456789",
+            "transactionAmount": {
+              "transactionAmount": "980.00",
+              "transactionCurrencyCode": "USD"
+            },
+            "acquirerMerchantId": "987654321",
+            "merchantCategoryCode": "5311",
+            "authenticationPreferences": {
+              "payloadRequested": "AUTHENTICATED"
+            },
+            "consumerNationalIdentifierRequested": true
+          },
+          "payloadTypeIndicatorCheckout": "FULL"
+        }
+      },
+      "InitiateCheckoutRequest": {
+        "summary": "InitiateCheckoutRequest",
+        "value": {
+          "srcDpaId": "d68ac10b-58cc-4372-a567-0e02b2c3d489",
+          "srcClientId": "f48ac10b-58cc-4372-a567-0e02b2c3d489",
+          "srcCorrelationId": "e48ac10b-58cc-4372-a567-0e02b2c3d489",
+          "srcDigitalCardId": "c48ac10b-58cc-4372-a567-0e02b2c3d489",
+          "srciTransactionId": "d48ac10b-58cc-4372-a567-0e02b2c3d489",
+          "dpaTransactionOptions": {
+            "dpaLocale": "en_US",
+            "acquirerBin": "12345678901",
+            "merchantName": "Best Merchant",
+            "merchantOrderId": "123456789",
+            "transactionAmount": {
+              "transactionAmount": "980.00",
+              "transactionCurrencyCode": "USD"
+            },
+            "acquirerMerchantId": "987654321",
+            "merchantCategoryCode": "5311",
+            "authenticationPreferences": {
+              "payloadRequested": "AUTHENTICATED",
+              "authenticationMethods": [
+                {
+                  "methodAttributes": {
+                    "challengeIndicator": "03"
+                  },
+                  "authenticationSubject": "CARDHOLDER",
+                  "authenticationMethodType": "3DS"
+                }
+              ]
+            },
+            "consumerNationalIdentifierRequested": true
+          },
+          "payloadTypeIndicatorCheckout": "FULL"
+        }
+      },
+      "CompleteIdentityValidationRequest": {
+        "summary": "CompleteIdentityValidationRequest",
+        "value": {
+          "srcClientId": "f48ac10b-58cc-4372-a567-0e02b2c3d489",
+          "validationData": "12345",
+          "idValidationSessionId": "d48ac10b-58cc-4372-a567-0e02b2c3d489"
+        }
+      }
+    },
+    "requestBodies": {},
+    "headers": {},
+    "callbacks": {}
+  },
+  "webhooks": {},
+  "x-tagGroups": [
+    {
+      "name": "API Reference",
+      "tags": [
+        "Secure Remote Commerce"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,182 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ===============================================================
+    // Assumed Data Model
+    // ===============================================================
+    //
+    // Collection: /users/{userId}
+    // Fields:
+    //   - id: string (required)
+    //   - name: string (required, 1-100 chars)
+    //   - title: string (optional)
+    //   - email: string (required, email format)
+    //   - phone: string (optional)
+    //   - loyaltyTier: string (optional)
+    //   - avatarUrl: string (optional, url format)
+    //   - usdBalance: number (optional)
+    //   - fiatBalance: number (optional)
+    //   - cryptoBalance: number (optional)
+    //   - app_metadata: map (optional)
+    //   - user_metadata: map (optional)
+    //
+    // Collection: /users/{userId}/transactions/{transactionId}
+    // Fields:
+    //   - id: string (required)
+    //   - date: string (required, ISO 8601)
+    //   - amount: number (required)
+    //   - currency: string (required)
+    //   - type: string (required)
+    //   - category: string (required)
+    //   - description: string (required)
+    //   - metadata: map (optional)
+    //
+    // Collection: /rewards/{rewardId}
+    // Fields:
+    //   - id: string (required)
+    //   - name: string (required)
+    //   - cost: number (required)
+    //   - type: string (required)
+    //   - description: string (required)
+    //   - iconName: string (optional)
+    //
+    // ===============================================================
+
+    // ===============================================================
+    // Helper Functions
+    // ===============================================================
+
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    function isAdmin() {
+      return isAuthenticated() &&
+        (get(/databases/$(database)/documents/users/$(request.auth.uid)).data.app_metadata.role == 'admin' ||
+         (request.auth.token.email == "sovereignties3@gmail.com" && request.auth.token.email_verified == true));
+    }
+
+    function isValidEmail(email) {
+      return email is string && email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$");
+    }
+
+    function isValidUrl(url) {
+      return url is string && (url.matches("^https://.*") || url.matches("^http://.*"));
+    }
+
+    function isValidDateString(dateStr) {
+      return dateStr is string && dateStr.matches("^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}.*Z?$");
+    }
+
+    // ===============================================================
+    // Domain Validators
+    // ===============================================================
+
+    function isValidUserProfile(data) {
+      return data.keys().hasAll(['id', 'name', 'email']) &&
+             data.id is string &&
+             data.name is string && data.name.size() > 0 && data.name.size() <= 100 &&
+             isValidEmail(data.email);
+    }
+
+    function isValidTransaction(data) {
+      return data.keys().hasAll(['id', 'date', 'amount', 'currency', 'type', 'category', 'description']) &&
+             data.id is string &&
+             isValidDateString(data.date) &&
+             data.amount is number &&
+             data.currency is string &&
+             data.type is string &&
+             data.category is string &&
+             data.description is string;
+    }
+
+    function isValidReward(data) {
+      return data.keys().hasAll(['id', 'name', 'cost', 'type', 'description']) &&
+             data.id is string &&
+             data.name is string &&
+             data.cost is number &&
+             data.type is string &&
+             data.description is string;
+    }
+
+    function isValidGoal(data) {
+      return data.keys().hasAll(['id', 'name', 'targetAmount', 'currentAmount', 'status']) &&
+             data.id is string &&
+             data.name is string && data.name.size() > 0 &&
+             data.targetAmount is number &&
+             data.currentAmount is number &&
+             data.status in ['on_track', 'needs_attention', 'achieved', 'behind'];
+    }
+
+    function isValidRecipient(data) {
+      return data.keys().hasAll(['id', 'name', 'email']) &&
+             data.id is string &&
+             data.name is string && data.name.size() > 0 &&
+             isValidEmail(data.email);
+    }
+
+    // ===============================================================
+    // Rules
+    // ===============================================================
+
+    match /users/{userId} {
+      allow read: if isOwner(userId) || isAdmin();
+      allow create: if isOwner(userId) && isValidUserProfile(request.resource.data);
+      allow update: if isOwner(userId) && isValidUserProfile(request.resource.data) && 
+                    request.resource.data.email == resource.data.email; // Email immutable for non-admins
+
+      match /transactions/{transactionId} {
+        allow read: if isOwner(userId) || isAdmin();
+        allow create: if isOwner(userId) && isValidTransaction(request.resource.data);
+        allow update: if isOwner(userId) && isValidTransaction(request.resource.data);
+        allow delete: if isOwner(userId);
+      }
+
+      match /accounts/{accountId} {
+        allow read, write: if isOwner(userId);
+      }
+
+      match /portfolio/{assetId} {
+        allow read, write: if isOwner(userId);
+      }
+
+      match /notifications/{notificationId} {
+        allow read, write: if isOwner(userId);
+      }
+
+      match /insights/{insightId} {
+        allow read, write: if isOwner(userId);
+      }
+
+      match /budgets/{budgetId} {
+        allow read, write: if isOwner(userId);
+      }
+
+      match /goals/{goalId} {
+        allow read: if isOwner(userId) || isAdmin();
+        allow create, update: if isOwner(userId) && isValidGoal(request.resource.data);
+        allow delete: if isOwner(userId);
+      }
+
+      match /recipients/{recipientId} {
+        allow read: if isOwner(userId) || isAdmin();
+        allow create, update: if isOwner(userId) && isValidRecipient(request.resource.data);
+        allow delete: if isOwner(userId);
+      }
+    }
+
+    match /test/{docId} {
+      allow read: if true;
+    }
+
+    match /rewards/{rewardId} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin();
+    }
+  }
+}

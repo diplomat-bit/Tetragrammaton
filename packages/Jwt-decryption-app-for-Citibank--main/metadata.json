@@ -1,0 +1,6 @@
+{
+  "name": "Citi JWE Decryptor",
+  "description": "A client-side utility for decrypting end-to-end encrypted PII data based on JWE RFC 7516 for Citi APIs.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

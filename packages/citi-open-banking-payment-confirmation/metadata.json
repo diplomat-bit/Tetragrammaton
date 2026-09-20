@@ -1,0 +1,6 @@
+{
+  "name": "Citi Open Banking Payment Confirmation",
+  "description": "Open Banking Funds Confirmation & Account Balance lookup tool for Citi Partner Open Banking API",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

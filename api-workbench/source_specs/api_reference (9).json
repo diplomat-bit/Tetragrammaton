@@ -1,0 +1,3926 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Visa Accounts Receivable Manager",
+    "description": "",
+    "version": "1"
+  },
+  "servers": [
+    {
+      "url": "https://sandbox.api.visa.com",
+      "description": "Sandbox server"
+    }
+  ],
+  "security": [],
+  "tags": [
+    {
+      "name": "Visa AR Manager Onboarding Suite API",
+      "description": "Visa AR Manager APIs for Onboarding Suite operations "
+    },
+    {
+      "name": "Visa AR Manager Payment Suite API",
+      "description": "Visa AR Manager APIs for Payment Suite operations"
+    }
+  ],
+  "paths": {
+    "/varm/v1/suppliermanagement": {
+      "post": {
+        "tags": [
+          "Visa AR Manager Onboarding Suite API"
+        ],
+        "summary": "Supplier Payment Configuration",
+        "description": "Configures acquiring details and establishes supplier preferences",
+        "requestBody": {
+          "description": "Supplier management configuration request",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SupplierManagementRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Request accepted and processed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SupplierManagementResponse"
+                },
+                "example": {
+                  "message": "Supplier management configuration request is enqueued",
+                  "request_id": 123456789,
+                  "status_code": "1000"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "message": "Validation failed. Invalid value for acquirer.acquirer_bin.",
+                  "status_code": "4001"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "message": "Internal server error. Please try again later or contact support.",
+                  "status_code": "5001"
+                }
+              }
+            }
+          }
+        },
+        "x-codegen-request-body-name": "supplierManagementRequest",
+        "x-operationVersions": [
+          {
+            "label": "v1 - Latest",
+            "operationPointer": "#/paths/~1varm~1v1~1suppliermanagement/post",
+            "default": false
+          }
+        ],
+        "x-hideTryIt": true
+      }
+    },
+    "/varm/v1/participationagreement": {
+      "post": {
+        "tags": [
+          "Visa AR Manager Onboarding Suite API"
+        ],
+        "summary": "Supplier Participation Agreement",
+        "description": "Submit the participation agreement with signer details after the supplier onboarding is complete.",
+        "operationId": "submitParticipationAgreement",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ParticipationAgreementRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Participation agreement submission response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ParticipationAgreementResponse"
+                }
+              }
+            }
+          }
+        },
+        "x-operationVersions": [
+          {
+            "label": "v1 - Latest",
+            "operationPointer": "#/paths/~1varm~1v1~1participationagreement/post",
+            "default": false
+          }
+        ],
+        "x-hideTryIt": true
+      }
+    },
+    "/varm/v1/onboarding/customer": {
+      "post": {
+        "tags": [
+          "Visa AR Manager Onboarding Suite API"
+        ],
+        "summary": "Supplier Customer Onboarding",
+        "description": "Onboard a new customer and link them to an existing supplier in the VARM system.",
+        "operationId": "customerOnboarding",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CustomerOnboardingRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Customer onboarding response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomerOnboardingResponse"
+                }
+              }
+            }
+          }
+        },
+        "x-operationVersions": [
+          {
+            "label": "v1 - Latest",
+            "operationPointer": "#/paths/~1varm~1v1~1onboarding~1customer/post",
+            "default": false
+          }
+        ],
+        "x-hideTryIt": true
+      }
+    },
+    "/varm/v1/merchant/invitation": {
+      "post": {
+        "tags": [
+          "Visa AR Manager Onboarding Suite API"
+        ],
+        "summary": "Supplier Invitation",
+        "description": "This endpoint creates a new self-serve supplier registration link and sends the registration email to the supplier.",
+        "operationId": "createMerchantInvitation",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MerchantInvitationRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created — merchant invitation created successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MerchantInvitationResponse"
+                },
+                "example": {
+                  "status": 1001,
+                  "message": "Merchant invitation created successfully",
+                  "inviteHash": "18357b90325157acd4edc77d99846c2a4fda92f1a4324c9c22472ac7090c76a6",
+                  "emailSentAt": "2026-06-03T18:09:02Z",
+                  "invitationId": 1511793847707431000,
+                  "expirationDate": "2026-06-04T18:09:01Z",
+                  "registrationLink": "https://registration.visa.com/varm/en/varm-onboarding/index.html?#/?hash=18357b90325157acd4edc77d99846c2a4fda92f1a4324c9c22472ac8976c76a6&lang=en-US&email=xyz%40visa.com"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request — validation failure.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse-1"
+                },
+                "example": {
+                  "reason": "BAD_REQUEST",
+                  "status": 4001,
+                  "details": [
+                    {
+                      "reason": "mailing_address.country_code: Invalid country code."
+                    }
+                  ],
+                  "message": "Invalid request submitted.",
+                  "submitTimeUtc": "2026-06-04T19:29:48Z"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict — an active invitation already exists for the originator combination.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse-1"
+                },
+                "example": {
+                  "reason": "CONFLICT",
+                  "status": 4001,
+                  "details": [
+                    {
+                      "reason": "An active invitation already exists for the originator combination (client_id: 14444444444, originator_supp_id: xyz@corpdev.com, customer_id: 118499901)."
+                    }
+                  ],
+                  "message": "A resource with the same identifier already exists",
+                  "submitTimeUtc": "2026-01-08T10:30:00Z"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse-1"
+                },
+                "example": {
+                  "reason": "INTERNAL_SERVER_ERROR",
+                  "status": 5000,
+                  "message": "Internal server error",
+                  "submitTimeUtc": "2026-01-08T10:30:00Z"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Service Unavailable — merchant invitation feature is currently disabled.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse-1"
+                },
+                "example": {
+                  "reason": "SERVICE_UNAVAILABLE",
+                  "status": 5000,
+                  "message": "Merchant invitation feature is currently disabled",
+                  "submitTimeUtc": "2026-01-08T10:30:00Z"
+                }
+              }
+            }
+          }
+        },
+        "x-codegen-request-body-name": "body",
+        "x-operationVersions": [
+          {
+            "label": "v1 - Latest",
+            "operationPointer": "#/paths/~1varm~1v1~1merchant~1invitation/post",
+            "default": false
+          }
+        ],
+        "x-hideTryIt": true
+      }
+    },
+    "/varm/v1/onboarding/supplier": {
+      "post": {
+        "tags": [
+          "Visa AR Manager Onboarding Suite API"
+        ],
+        "summary": "Supplier Profile",
+        "description": "Onboard a new supplier to the VARM system with company details, address, business contact, and recipient contact information.",
+        "operationId": "supplierOnboarding",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SupplierOnboardingRequest-1"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Supplier onboarding response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SupplierOnboardingResponse"
+                }
+              }
+            }
+          }
+        },
+        "x-operationVersions": [
+          {
+            "label": "v1 - Latest",
+            "operationPointer": "#/paths/~1varm~1v1~1onboarding~1supplier/post",
+            "default": false
+          }
+        ],
+        "x-hideTryIt": true
+      }
+    },
+    "/varm/v1/onboardingstatus": {
+      "get": {
+        "tags": [
+          "Visa AR Manager Onboarding Suite API"
+        ],
+        "summary": "Supplier Onboarding Status",
+        "description": "Retrieve the current status of a supplier onboarding request using the request ID.",
+        "operationId": "getProvisioningStatus",
+        "parameters": [
+          {
+            "name": "request_id",
+            "in": "query",
+            "description": "Request ID to track the supplier onboarding status",
+            "required": true,
+            "explode": true,
+            "schema": {
+              "format": "int64",
+              "exampleSetFlag": false,
+              "types": [
+                "integer"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Provisioning status retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OnboardingstatusResponse"
+                }
+              }
+            }
+          }
+        },
+        "x-operationVersions": [
+          {
+            "label": "v1 - Latest",
+            "operationPointer": "#/paths/~1varm~1v1~1onboardingstatus/get",
+            "default": false
+          }
+        ],
+        "x-hideTryIt": true
+      }
+    },
+    "/varm/v1/relationshipinfo": {
+      "get": {
+        "tags": [
+          "Visa AR Manager Onboarding Suite API"
+        ],
+        "summary": "Supplier Relationship Details",
+        "description": "Retrieve information about established buyer/supplier relationships. Supports filtering by type, supplier ID, or customer ID.",
+        "operationId": "getRelationshipInfo",
+        "parameters": [
+          {
+            "name": "type",
+            "in": "query",
+            "description": "Type of information to retrieve (ALL, SUPPLIER, CUSTOMER)",
+            "required": false,
+            "explode": true,
+            "schema": {
+              "default": "ALL",
+              "enum": [
+                "ALL",
+                "SUPPLIER",
+                "CUSTOMER"
+              ],
+              "exampleSetFlag": false,
+              "types": [
+                "string"
+              ]
+            }
+          },
+          {
+            "name": "supplierId",
+            "in": "query",
+            "description": "Primary email address of the supplier to filter by",
+            "required": false,
+            "explode": true,
+            "schema": {
+              "format": "email",
+              "exampleSetFlag": false,
+              "types": [
+                "string"
+              ]
+            }
+          },
+          {
+            "name": "customerId",
+            "in": "query",
+            "description": "Customer ID to filter by",
+            "required": false,
+            "explode": true,
+            "schema": {
+              "exampleSetFlag": false,
+              "types": [
+                "string"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Relationship information retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RelationshipInfoResponse"
+                }
+              }
+            }
+          }
+        },
+        "x-operationVersions": [
+          {
+            "label": "v1 - Latest",
+            "operationPointer": "#/paths/~1varm~1v1~1relationshipinfo/get",
+            "default": false
+          }
+        ],
+        "x-hideTryIt": true
+      }
+    },
+    "/varm/v1/deposit": {
+      "post": {
+        "tags": [
+          "Visa AR Manager Payment Suite API"
+        ],
+        "summary": "Supplier Deposit Confirmation",
+        "description": "Process a deposit transaction to confirm that the penny test deposit was successfully received by the supplier.",
+        "operationId": "depositConfirmation",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DepositConfirmationRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Deposit confirmation response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DepositConfirmationResponse"
+                }
+              }
+            }
+          }
+        },
+        "x-operationVersions": [
+          {
+            "label": "v1 - Latest",
+            "operationPointer": "#/paths/~1varm~1v1~1deposit/post",
+            "default": false
+          }
+        ],
+        "x-hideTryIt": true
+      }
+    },
+    "/varm/v1/payment": {
+      "post": {
+        "tags": [
+          "Visa AR Manager Payment Suite API"
+        ],
+        "summary": "Process Payment Suite Request",
+        "description": "Process payment request for client",
+        "operationId": "paymentRequest",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PaymentSuiteRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Response is Successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaymentSuiteResponse"
+                }
+              }
+            }
+          }
+        },
+        "x-operationVersions": [
+          {
+            "label": "v1 - Latest",
+            "operationPointer": "#/paths/~1varm~1v1~1payment/post",
+            "default": false
+          }
+        ],
+        "x-hideTryIt": true
+      }
+    },
+    " /varm/v1/paymentinfo": {
+      "get": {
+        "tags": [
+          "Visa AR Manager Payment Suite API"
+        ],
+        "summary": "Retrieve Payment Status",
+        "description": "Get payment status information by request ID and/or payment ID",
+        "operationId": "getPaymentInfo",
+        "parameters": [
+          {
+            "name": "request_id",
+            "in": "query",
+            "description": "Unique identifier for the payment request",
+            "required": true,
+            "explode": true,
+            "schema": {
+              "maxLength": 100,
+              "minLength": 1,
+              "exampleSetFlag": false,
+              "types": [
+                "string"
+              ]
+            }
+          },
+          {
+            "name": "payment_id",
+            "in": "query",
+            "description": "Specific payment transaction identifier to filter results",
+            "required": false,
+            "explode": true,
+            "schema": {
+              "maxLength": 20,
+              "exampleSetFlag": false,
+              "types": [
+                "string"
+              ]
+            }
+          },
+          {
+            "name": "pageno",
+            "in": "query",
+            "description": "Page number for pagination (default: 1).",
+            "required": false,
+            "explode": true,
+            "schema": {
+              "minimum": 1,
+              "format": "int32",
+              "default": 1,
+              "exampleSetFlag": false,
+              "types": [
+                "integer"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Payment information retrieved successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaymentStatusResponse-1"
+                }
+              }
+            }
+          }
+        },
+        "x-operationVersions": [
+          {
+            "label": "v1 - Latest",
+            "operationPointer": "#/paths/ ~1varm~1v1~1paymentinfo/get",
+            "default": false
+          }
+        ],
+        "x-hideTryIt": true
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "InvoiceTaxAmountReferenceDetails": {
+        "properties": {
+          "invoice_tax_amt_ref": {
+            "multipleOf": 0.01,
+            "minimum": 0,
+            "description": "Individual fee amount for tax reference. Positive number, Max 2 decimal places.",
+            "exampleSetFlag": false,
+            "types": [
+              "number"
+            ]
+          },
+          "invoice_tax_rate_ref": {
+            "maxLength": 255,
+            "description": "Fee description for tax reference. Max length: 255 characters.",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          }
+        },
+        "description": "Individual tax reference object containing fee amount and description.",
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "Invoice": {
+        "required": [
+          "credit_note_indicator",
+          "invoice_currency",
+          "invoice_id",
+          "total_invoice_amount"
+        ],
+        "properties": {
+          "invoice_id": {
+            "maxLength": 50,
+            "minLength": 1,
+            "description": "Unique invoice identifier. Non-empty string, Max length: 50 characters.",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "invoice_ref": {
+            "$ref": "#/components/schemas/InvoiceReferenceItems"
+          },
+          "invoice_date": {
+            "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
+            "description": "Invoice date in YYYY-MM-DD format. Valid date format, not future date.",
+            "format": "date",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "invoice_desc": {
+            "maxLength": 255,
+            "description": "Description of the invoice or services provided. Additional Sales Information. Max length: 255 characters.",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "invoice_currency": {
+            "maxLength": 3,
+            "minLength": 3,
+            "pattern": "^[A-Z]{3}$",
+            "description": "Invoice currency code. Valid ISO currency code (e.g., 'USD', 'EUR').",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "purchase_order_no": {
+            "maxLength": 50,
+            "description": "Customer purchase order number. Max length: 50 characters.",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "invoice_adjustment": {
+            "$ref": "#/components/schemas/InvoiceAdjustmentItems"
+          },
+          "total_invoice_amount": {
+            "multipleOf": 0.01,
+            "minimum": 0.01,
+            "description": "Invoice amount in decimal format. Positive number, Max 2 decimal places, Min Value: 0.01.",
+            "exampleSetFlag": false,
+            "types": [
+              "number"
+            ]
+          },
+          "credit_note_indicator": {
+            "description": "Credit note indicator. True value indicates that the invoice amount is positive while False value means the invoice amount is negative.",
+            "exampleSetFlag": false,
+            "types": [
+              "boolean"
+            ]
+          },
+          "invoice_tax_amount_ref": {
+            "$ref": "#/components/schemas/InvoiceTaxAmountReferenceItems"
+          },
+          "invoice_partial_pmt_ind": {
+            "description": "Split payment indicator. Must be 'Y' or 'N' (Default: 'N').",
+            "default": "N",
+            "enum": [
+              "Y",
+              "N"
+            ],
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          }
+        },
+        "description": "Invoice details including amounts, dates, and reference information.",
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "Address": {
+        "required": [
+          "address_line1",
+          "city",
+          "country_code",
+          "state",
+          "zipcode"
+        ],
+        "properties": {
+          "city": {
+            "description": "City name",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "state": {
+            "description": "State or province",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "zipcode": {
+            "description": "Postal/ZIP code",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "country_code": {
+            "maxLength": 2,
+            "minLength": 2,
+            "pattern": "^[A-Z]{2}$",
+            "description": "ISO country code",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "address_line1": {
+            "description": "Primary address line",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "address_line2": {
+            "description": "Secondary address line",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          }
+        },
+        "description": "Address information",
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "CustomerInformation": {
+        "required": [
+          "customer_identifier",
+          "customer_name",
+          "order_info",
+          "payment_instrument"
+        ],
+        "properties": {
+          "order_info": {
+            "$ref": "#/components/schemas/OrderInformation"
+          },
+          "customer_name": {
+            "maxLength": 60,
+            "minLength": 1,
+            "description": "Full name of the customer. Non-empty string, Max length: 60 characters.",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "payment_instrument": {
+            "$ref": "#/components/schemas/PaymentInstrument"
+          },
+          "customer_identifier": {
+            "$ref": "#/components/schemas/CustomerIdentificationInfo"
+          }
+        },
+        "description": "Customer information object containing customer details, order details, and invoice details.",
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "SupplierIdentificationInfo": {
+        "properties": {
+          "originator_supp_id": {
+            "maxLength": 100,
+            "description": "Alphanumeric identifier for the supplier originator. Max length: 100 characters. At least one of originator_supp_id or primary_email_address must be present.",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "primary_email_address": {
+            "maxLength": 253,
+            "description": "Primary email address of the supplier. Email format validation, Max length: 253 characters. At least one of originator_supp_id or primary_email_address must be present.",
+            "format": "email",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          }
+        },
+        "description": "Supplier identification object containing supplier identifiers. At least one of originator_supp_id or primary_email_address must be provided.",
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "AmountDetails": {
+        "required": [
+          "currency",
+          "total_amount"
+        ],
+        "properties": {
+          "currency": {
+            "maxLength": 3,
+            "minLength": 3,
+            "pattern": "^[A-Z]{3}$",
+            "description": "ISO currency code (e.g., 'USD'). Valid ISO currency code (3 Char).",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "total_amount": {
+            "multipleOf": 0.01,
+            "minimum": 0.01,
+            "description": "Total payment amount in decimal format. Positive number, Max 2 decimal places, Min value: 0.01.",
+            "exampleSetFlag": false,
+            "types": [
+              "number"
+            ]
+          }
+        },
+        "description": "Payment amount information including total amount and currency.",
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "MerchantContactPhone": {
+        "required": [
+          "country_code",
+          "phone_number"
+        ],
+        "type": "object",
+        "properties": {
+          "country_code": {
+            "maxLength": 20,
+            "type": "string",
+            "description": "International dialing code (e.g., 1 for US/Canada).",
+            "example": "1"
+          },
+          "phone_number": {
+            "maxLength": 20,
+            "type": "string",
+            "description": "Phone number without country code.",
+            "example": "9089089908"
+          }
+        }
+      },
+      "SupplierOnboardingResponse": {
+        "required": [
+          "message",
+          "status"
+        ],
+        "properties": {
+          "status": {
+            "description": "Status code: 1000 (Enqueued), 1001 (Success), 5000 (Error), 4001 (Validation Error)",
+            "enum": [
+              1000,
+              1001,
+              4001,
+              5000
+            ],
+            "exampleSetFlag": false,
+            "types": [
+              "integer"
+            ]
+          },
+          "details": {
+            "description": "Contains field and reason for validation errors",
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "exampleSetFlag": false,
+            "types": [
+              "array"
+            ]
+          },
+          "message": {
+            "description": "Response message",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "request_id": {
+            "description": "Request ID for tracking",
+            "format": "int64",
+            "exampleSetFlag": false,
+            "types": [
+              "integer"
+            ]
+          },
+          "varm_email_id": {
+            "description": "AR manager email ID",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "participation_agreement_link": {
+            "description": "Consent document link",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          }
+        },
+        "description": "Supplier onboarding response",
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "CustomerDetails": {
+        "properties": {
+          "address": {
+            "$ref": "#/components/schemas/CustomerAddress"
+          },
+          "customer_info": {
+            "$ref": "#/components/schemas/CustomerInfo"
+          }
+        },
+        "description": "Detailed customer information",
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "MerchantSupplierId": {
+        "type": "object",
+        "properties": {
+          "originator_supp_id": {
+            "maxLength": 100,
+            "type": "string",
+            "description": "Originator's own Supplier ID, used when referring to suppliers via Originator IDs vs. AR Manager email.",
+            "example": "org12345"
+          }
+        }
+      },
+      "SingleUseAccountNumber": {
+        "required": [
+          "expires_at",
+          "sua_link"
+        ],
+        "properties": {
+          "sua_link": {
+            "description": "URL link to the SUA payment interface.",
+            "format": "uri",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "expires_at": {
+            "description": "ISO 8601 timestamp when the SUA expires.",
+            "format": "date-time",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          }
+        },
+        "description": "Single Use Account information for secure one-time payments. Not supported currently.",
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "ErrorDetail": {
+        "type": "object",
+        "properties": {
+          "reason": {
+            "type": "string",
+            "description": "Specific reason describing why the field or rule failed.",
+            "example": "originator_details.client_id is required"
+          }
+        }
+      },
+      "TransactionInformation": {
+        "required": [
+          "customer_info",
+          "payment_id"
+        ],
+        "properties": {
+          "payment_id": {
+            "maxLength": 10,
+            "minLength": 1,
+            "description": "Unique identifier for the specific payment transaction. This should be unique within the payment request. Non-empty string, Max length: 10 characters.",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "customer_info": {
+            "$ref": "#/components/schemas/CustomerInformation"
+          },
+          "payment_category": {
+            "description": "Payment category identifier. Set to 'TRAVEL' for B2B travel payments. Case-insensitive. When set to 'TRAVEL', ota_info is required and payment_instrument.type must be 'CARD'. If not provided or null, standard payment validation applies.",
+            "enum": [
+              "TRAVEL"
+            ],
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          }
+        },
+        "description": "Transaction details containing payment ID, optional payment category, and customer information.",
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "Pagination": {
+        "required": [
+          "page",
+          "per_page",
+          "total_count",
+          "total_pages"
+        ],
+        "properties": {
+          "page": {
+            "minimum": 1,
+            "description": "Current page number. Min value: 1.",
+            "format": "int32",
+            "exampleSetFlag": false,
+            "types": [
+              "integer"
+            ]
+          },
+          "per_page": {
+            "maximum": 10,
+            "minimum": 1,
+            "description": "Number of items per page. Min value: 1, Max value: 10.",
+            "format": "int32",
+            "exampleSetFlag": false,
+            "types": [
+              "integer"
+            ]
+          },
+          "total_count": {
+            "minimum": 0,
+            "description": "Total number of payment records. Min value: 0.",
+            "format": "int32",
+            "exampleSetFlag": false,
+            "types": [
+              "integer"
+            ]
+          },
+          "total_pages": {
+            "minimum": 1,
+            "description": "Total number of pages available. Min value: 1.",
+            "format": "int32",
+            "exampleSetFlag": false,
+            "types": [
+              "integer"
+            ]
+          }
+        },
+        "description": "Pagination information for the response.",
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "TypeDetails": {
+        "properties": {
+          "sua_info": {
+            "$ref": "#/components/schemas/SingleUseAccountNumber"
+          },
+          "card_info": {
+            "$ref": "#/components/schemas/CardInformation"
+          }
+        },
+        "description": "Specific details based on payment type - Card info or SUA info. Currently only Card_info is supported.",
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "ParticipationAgreementResponse": {
+        "required": [
+          "message",
+          "status"
+        ],
+        "properties": {
+          "status": {
+            "description": "Status code: 1001 (Success), 4001 (Validation Error)",
+            "enum": [
+              1001,
+              4001
+            ],
+            "exampleSetFlag": false,
+            "types": [
+              "integer"
+            ]
+          },
+          "message": {
+            "description": "Response message",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "agreement_id": {
+            "description": "Unique identifier for the agreement",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "submission_date": {
+            "description": "Date and time of submission (ISO 8601 format)",
+            "format": "date-time",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          }
+        },
+        "description": "Participation agreement submission response",
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "RelationshipInfo": {
+        "properties": {
+          "customer": {
+            "$ref": "#/components/schemas/CustomerRelationshipContainer"
+          },
+          "supplier_id": {
+            "$ref": "#/components/schemas/SupplierIdentifier"
+          },
+          "supplier_details": {
+            "$ref": "#/components/schemas/SupplierDetails"
+          },
+          "supplier_details_link": {
+            "description": "Link to retrieve detailed supplier information",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          }
+        },
+        "description": "Supplier-customer relationship information",
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "PaymentSuiteRequest-1": {
+        "required": [
+          "payment_details",
+          "request_id",
+          "supplier_id"
+        ],
+        "properties": {
+          "request_id": {
+            "maxLength": 100,
+            "minLength": 1,
+            "description": "Unique identifier for the payment request. Same request id is not allowed even in case of any fixes from a prior failed request. Every request id has to be unique.Non-empty string, Max length: 100 characters.",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "supplier_id": {
+            "$ref": "#/components/schemas/SupplierIdentificationInfo"
+          },
+          "payment_details": {
+            "maxItems": 10,
+            "minItems": 1,
+            "description": "Array of transaction_info objects. Non-empty array (minimum 1 and maximum is 10).",
+            "items": {
+              "$ref": "#/components/schemas/PaymentDetails-1"
+            },
+            "exampleSetFlag": false,
+            "types": [
+              "array"
+            ]
+          }
+        },
+        "description": "Main payment request containing supplier identification and payment details.",
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "SupplierInfo-1": {
+        "required": [
+          "address",
+          "business_contact",
+          "company_name",
+          "exception_recipient_info",
+          "mcc",
+          "recon_recipient_info",
+          "supp_time_zone"
+        ],
+        "properties": {
+          "mcc": {
+            "description": "Merchant Category Code",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "address": {
+            "$ref": "#/components/schemas/Address"
+          },
+          "dba_name": {
+            "description": "Doing Business As name",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "company_name": {
+            "description": "Legal name of the company",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "supp_time_zone": {
+            "description": "Time Zone of supplier",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "business_contact": {
+            "$ref": "#/components/schemas/BusinessContact"
+          },
+          "recon_recipient_info": {
+            "$ref": "#/components/schemas/RecipientInfo"
+          },
+          "business_registration_id": {
+            "description": "Business Registration Id",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "exception_recipient_info": {
+            "$ref": "#/components/schemas/RecipientInfo"
+          },
+          "allow_payments_on_invoice_mismatch": {
+            "description": "Boolean flag for whether payments should process if invoice amounts do not add up to the total payment amount",
+            "exampleSetFlag": false,
+            "types": [
+              "boolean"
+            ]
+          }
+        },
+        "description": "Supplier information including company details and contacts",
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "MerchantBusinessContactInfo": {
+        "required": [
+          "email_address"
+        ],
+        "type": "object",
+        "properties": {
+          "phone": {
+            "$ref": "#/components/schemas/MerchantContactPhone"
+          },
+          "last_name": {
+            "maxLength": 50,
+            "type": "string",
+            "description": "Contact person last name.",
+            "example": "Doe"
+          },
+          "first_name": {
+            "maxLength": 50,
+            "type": "string",
+            "description": "Contact person first name.",
+            "example": "John"
+          },
+          "email_address": {
+            "maxLength": 100,
+            "type": "string",
+            "description": "Contact email address — invitation will be sent here.",
+            "format": "email",
+            "example": "merchant@example.com"
+          }
+        }
+      },
+      "BusinessContact": {
+        "required": [
+          "company_email_address",
+          "first_name",
+          "last_name",
+          "phone"
+        ],
+        "properties": {
+          "phone": {
+            "$ref": "#/components/schemas/PhoneNumber"
+          },
+          "last_name": {
+            "description": "Last name of the Business Contact",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "first_name": {
+            "description": "First name of the Business Contact user",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "company_email_address": {
+            "description": "Email address of the Business Contact",
+            "format": "email",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          }
+        },
+        "description": "Business contact information",
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "CustomerInformation-1": {
+        "required": [
+          "customer_identifier",
+          "customer_name",
+          "order_info",
+          "payment_instrument"
+        ],
+        "properties": {
+          "order_info": {
+            "$ref": "#/components/schemas/OrderInformation-1"
+          },
+          "customer_name": {
+            "maxLength": 60,
+            "minLength": 1,
+            "description": "Full name of the customer. Non-empty string, Max length: 60 characters.",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "payment_instrument": {
+            "$ref": "#/components/schemas/PaymentInstrument"
+          },
+          "customer_identifier": {
+            "$ref": "#/components/schemas/CustomerIdentificationInfo"
+          }
+        },
+        "description": "Customer information object containing customer details, order details, and invoice details.",
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "ValidationError": {
+        "properties": {
+          "field": {
+            "description": "Field name that failed validation",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "reason": {
+            "description": "Reason for validation failure",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          }
+        },
+        "description": "Validation error details",
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "InvoiceAdjustmentDetails": {
+        "properties": {
+          "invoice_adj_amt": {
+            "multipleOf": 0.01,
+            "minimum": 0,
+            "description": "Individual rebate amount for adjustment. Positive number, Max 2 decimal places.",
+            "exampleSetFlag": false,
+            "types": [
+              "number"
+            ]
+          },
+          "invoice_adj_reason": {
+            "maxLength": 255,
+            "description": "Individual reason for rebate amount. Max length: 255 characters.",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          }
+        },
+        "description": "Individual adjustment object containing amount and reason for rebates or discounts.",
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "ProcessingStatus": {
+        "required": [
+          "payment_statuses",
+          "reason_code",
+          "reason_desc",
+          "request_id",
+          "status"
+        ],
+        "properties": {
+          "status": {
+            "description": "Overall status of the payment request. Values: SUCCESS, ENQUEUED, PARTIAL_SUCCESS, FAILED, VALIDATION_FAILURE, SYSTEM_ERROR.",
+            "enum": [
+              "SUCCESS",
+              "ENQUEUED",
+              "PARTIAL_SUCCESS",
+              "FAILED",
+              "VALIDATION_FAILURE",
+              "SYSTEM_ERROR"
+            ],
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "request_id": {
+            "maxLength": 100,
+            "minLength": 1,
+            "description": "Unique identifier for the payment request. Non-empty string, Max length: 100 characters.",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "reason_code": {
+            "description": "Numeric or alphanumeric code indicating the result. Values: 1001 (SUCCESS), 1000 (ENQUEUED), 1003 (PARTIAL_SUCCESS), 1004 (FAILED), 4001 (VALIDATION_FAILURE), 5001 (SYSTEM_ERROR).",
+            "enum": [
+              "1001",
+              "1000",
+              "1003",
+              "1004",
+              "4001",
+              "5001"
+            ],
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "reason_desc": {
+            "description": "Descriptive message explaining the status or reason.",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "payment_statuses": {
+            "description": "Array of individual payment status objects.",
+            "items": {
+              "$ref": "#/components/schemas/PaymentStatus"
+            },
+            "exampleSetFlag": false,
+            "types": [
+              "array"
+            ]
+          }
+        },
+        "description": "Overall processing status information for the request.",
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "PaymentSuiteResponse": {
+        "required": [
+          "reason_code",
+          "reason_desc",
+          "request_id",
+          "status"
+        ],
+        "properties": {
+          "status": {
+            "description": "Overall status of the payment request. Values: SUCCESS, ENQUEUED, PARTIAL_SUCCESS, FAILED, VALIDATION_FAILURE, SYSTEM_ERROR.",
+            "enum": [
+              "SUCCESS",
+              "ENQUEUED",
+              "PARTIAL_SUCCESS",
+              "FAILED",
+              "VALIDATION_FAILURE",
+              "SYSTEM_ERROR"
+            ],
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "request_id": {
+            "maxLength": 100,
+            "minLength": 1,
+            "description": "Unique identifier for the payment request. Non-empty string, Max length: 100 characters.",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "reason_code": {
+            "description": "Numeric or alphanumeric code indicating the result. Values: 1001 (SUCCESS), 1000 (ENQUEUED), 1003 (PARTIAL_SUCCESS), 1004 (FAILED), 4001 (VALIDATION_FAILURE), 5001 (SYSTEM_ERROR).",
+            "enum": [
+              "1001",
+              "1000",
+              "1003",
+              "1004",
+              "4001",
+              "5001"
+            ],
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "reason_desc": {
+            "description": "Descriptive message explaining the status or reason.",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          }
+        },
+        "description": "Payment response containing status and result information.",
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "DepositConfirmationRequest": {
+        "required": [
+          "payment_details",
+          "request_id",
+          "supplier_id"
+        ],
+        "properties": {
+          "request_id": {
+            "maxLength": 100,
+            "minLength": 1,
+            "description": "Unique identifier for the payment request",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "supplier_id": {
+            "$ref": "#/components/schemas/SupplierIdentifier"
+          },
+          "payment_details": {
+            "maxItems": 10,
+            "minItems": 1,
+            "description": "Array of payment details",
+            "items": {
+              "$ref": "#/components/schemas/DepositPaymentDetails"
+            },
+            "exampleSetFlag": false,
+            "types": [
+              "array"
+            ]
+          }
+        },
+        "description": "Deposit confirmation request",
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "ErrorResponse-1": {
+        "required": [
+          "message",
+          "reason",
+          "status",
+          "submitTimeUtc"
+        ],
+        "type": "object",
+        "properties": {
+          "reason": {
+            "type": "string",
+            "description": "HTTP status name (e.g. BAD_REQUEST, CONFLICT, SERVICE_UNAVAILABLE, INTERNAL_SERVER_ERROR).",
+            "example": "BAD_REQUEST"
+          },
+          "status": {
+            "type": "integer",
+            "description": "Application status code. 4001 for client errors, 5000 for server errors.",
+            "example": 4001
+          },
+          "details": {
+            "type": "array",
+            "description": "Optional list of per-field or per-rule error items. Omitted when empty.",
+            "items": {
+              "$ref": "#/components/schemas/ErrorDetail"
+            }
+          },
+          "message": {
+            "type": "string",
+            "description": "High-level human-readable error message.",
+            "example": "Invalid request submitted."
+          },
+          "submitTimeUtc": {
+            "type": "string",
+            "description": "UTC timestamp when the error response was generated (ISO 8601).",
+            "format": "date-time",
+            "example": "2026-06-04T19:40:29Z"
+          }
+        }
+      },
+      "PaymentStatus": {
+        "required": [
+          "payment_id",
+          "payment_status",
+          "reason"
+        ],
+        "properties": {
+          "reason": {
+            "maxLength": 255,
+            "minLength": 1,
+            "description": "Descriptive reason for the current payment status. Non-empty string, Max length: 255 characters.",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "payment_id": {
+            "maxLength": 20,
+            "minLength": 1,
+            "description": "Unique identifier for the payment transaction. Non-empty string, Max length: 20 characters.",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "payment_status": {
+            "description": "Current status of the individual payment. Values: 'COMPLETED', 'PENDING', 'FAILED', 'VALIDATED', 'SCHEDULED'",
+            "enum": [
+              "COMPLETED",
+              "PENDING",
+              "FAILED",
+              "VALIDATED",
+              "SCHEDULED"
+            ],
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          }
+        },
+        "description": "Individual payment status object containing payment transaction details.",
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "DepositOrderInfo": {
+        "required": [
+          "amountDetails"
+        ],
+        "properties": {
+          "amountDetails": {
+            "$ref": "#/components/schemas/AmountDetails"
+          }
+        },
+        "description": "Order information for deposit",
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "OnboardingstatusResponse": {
+        "required": [
+          "message",
+          "request_id",
+          "status"
+        ],
+        "properties": {
+          "status": {
+            "description": "Status code: 1000 (Enqueued), 1001 (Success), 5000 (Error), 4001 (Validation Error)",
+            "enum": [
+              1000,
+              1001,
+              4001,
+              5000
+            ],
+            "exampleSetFlag": false,
+            "types": [
+              "integer"
+            ]
+          },
+          "message": {
+            "description": "Response message",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "request_id": {
+            "description": "Request ID",
+            "format": "int64",
+            "exampleSetFlag": false,
+            "types": [
+              "integer"
+            ]
+          },
+          "supplier_id": {
+            "$ref": "#/components/schemas/SupplierIdentifier"
+          },
+          "participation_agreement_link": {
+            "description": "Consent document link",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "supplier_provisioning_status": {
+            "$ref": "#/components/schemas/SupplierProvisioningStatus"
+          }
+        },
+        "description": "Provisioning status response",
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "PaymentStatusResponse": {
+        "required": [
+          "pagination",
+          "processing_status"
+        ],
+        "properties": {
+          "pagination": {
+            "$ref": "#/components/schemas/Pagination"
+          },
+          "processing_status": {
+            "$ref": "#/components/schemas/ProcessingStatus"
+          }
+        },
+        "description": "Response containing payment status information and pagination details.",
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "TransactionInformation-1": {
+        "required": [
+          "customer_info",
+          "payment_id"
+        ],
+        "properties": {
+          "payment_id": {
+            "maxLength": 10,
+            "minLength": 1,
+            "description": "Unique identifier for the specific payment transaction. This should be unique within the payment request. Non-empty string, Max length: 10 characters.",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "customer_info": {
+            "$ref": "#/components/schemas/CustomerInformation-1"
+          }
+        },
+        "description": "Transaction details containing payment ID and customer information.",
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "MerchantInvitationMetadata": {
+        "required": [
+          "source"
+        ],
+        "type": "object",
+        "properties": {
+          "source": {
+            "minLength": 1,
+            "type": "string",
+            "description": "Origin of invitation (e.g. API).",
+            "example": "API"
+          }
+        }
+      },
+      "CustomerIdentificationInfo": {
+        "properties": {
+          "customer_id": {
+            "maxLength": 100,
+            "description": "Identifier for the customer used during onboarding. Max length: 100 characters. At least one of originator_customer_id or customer_id must be present.",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "originator_customer_id": {
+            "maxLength": 100,
+            "description": "Alphanumeric identifier for the originator customer. Max length: 100 characters. At least one of originator_customer_id or customer_id must be present.",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          }
+        },
+        "description": "Customer identification object containing customer identifiers. At least one of originator_customer_id or customer_id must be provided.",
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "RelationshipInfoResponse-1": {
+        "required": [
+          "message",
+          "status"
+        ],
+        "properties": {
+          "status": {
+            "description": "Status code: 1001 (Success), 4001 (Validation Error), 5000 (System Error)",
+            "enum": [
+              1001,
+              4001,
+              5000
+            ],
+            "exampleSetFlag": false,
+            "types": [
+              "integer"
+            ]
+          },
+          "message": {
+            "description": "Response message",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "page_dtls": {
+            "$ref": "#/components/schemas/RelationshipPaginationDetails"
+          },
+          "relationship": {
+            "description": "Array of supplier-customer relationships",
+            "items": {
+              "$ref": "#/components/schemas/RelationshipInfo-1"
+            },
+            "exampleSetFlag": false,
+            "types": [
+              "array"
+            ]
+          }
+        },
+        "description": "Relationship information response",
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "CardInformation": {
+        "required": [
+          "cardNumber",
+          "cardType",
+          "expirationMonth",
+          "expirationYear"
+        ],
+        "properties": {
+          "cardType": {
+            "description": "Card type identifier. Currently supports '001' for Visa cards.",
+            "enum": [
+              "001"
+            ],
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "cardNumber": {
+            "maxLength": 16,
+            "minLength": 16,
+            "pattern": "^[0-9]{16}$",
+            "description": "Card number (PCI compliant handling required). 16 digit long with Luhn algorithm validation.",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "securityCode": {
+            "maxLength": 4,
+            "minLength": 3,
+            "pattern": "^[0-9]{3,4}$",
+            "description": "Card security code (CVV/CVC). Optional field. Numeric, 3-4 digits.",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "expirationYear": {
+            "maxLength": 4,
+            "minLength": 4,
+            "pattern": "^[0-9]{4}$",
+            "description": "Card expiration year in YYYY format, must be future date.",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "expirationMonth": {
+            "maxLength": 2,
+            "minLength": 2,
+            "pattern": "^(0[1-9]|1[0-2])$",
+            "description": "Card expiration month in MM format (01-12).",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          }
+        },
+        "description": "Credit/debit card information for payment",
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "MerchantCustomerAddress": {
+        "required": [
+          "country_code",
+          "state",
+          "zip"
+        ],
+        "type": "object",
+        "properties": {
+          "zip": {
+            "maxLength": 20,
+            "pattern": "^[A-Za-z0-9]+$",
+            "type": "string",
+            "description": "Customer postal/ZIP code.",
+            "example": "12345"
+          },
+          "state": {
+            "maxLength": 20,
+            "type": "string",
+            "description": "Customer state or province code.",
+            "example": "AL"
+          },
+          "country_code": {
+            "maxLength": 2,
+            "minLength": 2,
+            "type": "string",
+            "description": "ISO 3166-1 alpha-2 country code for customer location.",
+            "example": "US"
+          }
+        }
+      },
+      "SupplierId": {
+        "required": [
+          "primary_email_address"
+        ],
+        "type": "object",
+        "properties": {
+          "originator_supp_id": {
+            "maxLength": 100,
+            "type": "string",
+            "description": "Alphanumeric identifier for the supplier originator",
+            "example": "SUPP001"
+          },
+          "primary_email_address": {
+            "maxLength": 100,
+            "type": "string",
+            "description": "AR manager email of the supplier (1-100 chars, valid email format, active email)",
+            "format": "email",
+            "example": "supplier1@armanager.com"
+          }
+        },
+        "description": "Supplier identification details. At least one of originator_supp_id or primary_email_address must be present."
+      },
+      "CustomerRelationshipInfo": {
+        "properties": {
+          "customer_details": {
+            "$ref": "#/components/schemas/CustomerDetails"
+          },
+          "customer_details_link": {
+            "description": "Link to retrieve detailed customer information",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          }
+        },
+        "description": "Customer relationship information",
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "OtaInfo": {
+        "required": [
+          "booking_number",
+          "card_activation_date"
+        ],
+        "properties": {
+          "booking_ref_1": {
+            "maxLength": 250,
+            "description": "Additional booking reference field. Max length: 250 characters.",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "booking_ref_2": {
+            "maxLength": 250,
+            "description": "Additional booking reference field. Max length: 250 characters.",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "booking_ref_3": {
+            "maxLength": 250,
+            "description": "Additional booking reference field. Max length: 250 characters.",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "booking_ref_4": {
+            "maxLength": 250,
+            "description": "Additional booking reference field. Max length: 250 characters.",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "booking_ref_5": {
+            "maxLength": 250,
+            "description": "Additional booking reference field. Max length: 250 characters.",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "booking_number": {
+            "maxLength": 50,
+            "minLength": 1,
+            "description": "Unique booking identifier for the travel reservation. Non-empty string, Max length: 50 characters.",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "card_activation_date": {
+            "pattern": "^(0[1-9]|1[0-2])/(0[1-9]|[12][0-9]|3[01])/[0-9]{4}$",
+            "description": "Date when the card becomes active for the travel booking. Format: MM/dd/uuuu (only supported format). Valid date format.",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          }
+        },
+        "description": "B2B travel booking information. Required when payment_category is 'TRAVEL'.",
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "CustomerOnboardingRequest": {
+        "required": [
+          "customer_info",
+          "supplier_id"
+        ],
+        "properties": {
+          "address": {
+            "$ref": "#/components/schemas/CustomerAddress"
+          },
+          "supplier_id": {
+            "$ref": "#/components/schemas/SupplierIdentifier"
+          },
+          "customer_info": {
+            "$ref": "#/components/schemas/CustomerInfo"
+          }
+        },
+        "description": "Customer onboarding request",
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "SupplierProvisioningStatus": {
+        "properties": {
+          "deposit": {
+            "description": "Deposit acknowledgement is done",
+            "exampleSetFlag": false,
+            "types": [
+              "boolean"
+            ]
+          },
+          "penny_test": {
+            "description": "Penny test is completed",
+            "exampleSetFlag": false,
+            "types": [
+              "boolean"
+            ]
+          },
+          "customer_creation": {
+            "description": "At least one customer has been created for supplier",
+            "exampleSetFlag": false,
+            "types": [
+              "boolean"
+            ]
+          },
+          "supplier_onboarding": {
+            "description": "Initial supplier registration complete",
+            "exampleSetFlag": false,
+            "types": [
+              "boolean"
+            ]
+          },
+          "supplier_configuration": {
+            "description": "Supplier configuration is done",
+            "exampleSetFlag": false,
+            "types": [
+              "boolean"
+            ]
+          },
+          "participation_agreement": {
+            "description": "Participation agreement is submitted",
+            "exampleSetFlag": false,
+            "types": [
+              "boolean"
+            ]
+          }
+        },
+        "description": "Supplier provisioning status tracking",
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "SupplierOnboardingRequest-1": {
+        "required": [
+          "supplier_info"
+        ],
+        "properties": {
+          "supplier_info": {
+            "$ref": "#/components/schemas/SupplierInfo-1"
+          }
+        },
+        "description": "Supplier onboarding request containing supplier information",
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "CustomerOnboardingResponse": {
+        "required": [
+          "message",
+          "status"
+        ],
+        "properties": {
+          "status": {
+            "description": "Status code: 1001 (Success), 4001 (Validation Error)",
+            "enum": [
+              1001,
+              4001
+            ],
+            "exampleSetFlag": false,
+            "types": [
+              "integer"
+            ]
+          },
+          "details": {
+            "description": "Contains field and reason for validation errors",
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "exampleSetFlag": false,
+            "types": [
+              "array"
+            ]
+          },
+          "message": {
+            "description": "Response message",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "customer_id": {
+            "description": "Unique identifier for the created customer",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          }
+        },
+        "description": "Customer onboarding response",
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "SupplierManagementRequest": {
+        "required": [
+          "acquirer",
+          "acquirer_processor",
+          "currencies",
+          "mcc",
+          "payment_types_supported",
+          "supplier_id"
+        ],
+        "type": "object",
+        "properties": {
+          "mcc": {
+            "maxLength": 4,
+            "minLength": 4,
+            "pattern": "^[0-9]{4}$",
+            "type": "string",
+            "description": "Merchant Category Code - 4-digit classification code",
+            "example": "5411"
+          },
+          "acquirer": {
+            "$ref": "#/components/schemas/Acquirer"
+          },
+          "cpip_sid": {
+            "maxLength": 6,
+            "pattern": "^[0-9]{6}$",
+            "type": "string",
+            "description": "CPIP system identifier / Presenter ID (6 digits)",
+            "example": "123456"
+          },
+          "store_id": {
+            "maxLength": 10,
+            "type": "string",
+            "description": "Store identifier for the merchant location (up to 10 alphanumeric characters)",
+            "example": "1234"
+          },
+          "currencies": {
+            "type": "array",
+            "description": "Supported currency codes in ISO 4217 format (e.g., USD, EUR, GBP)",
+            "example": [
+              "USD"
+            ],
+            "items": {
+              "pattern": "^[A-Z]{3}$",
+              "type": "string"
+            }
+          },
+          "bank_number": {
+            "maxLength": 6,
+            "pattern": "^[0-9]{6}$",
+            "type": "string",
+            "description": "Bank identification number (6 digits)",
+            "example": "123456"
+          },
+          "merchant_id": {
+            "maxLength": 15,
+            "type": "string",
+            "description": "Unique merchant identifier (up to 15 alphanumeric characters)",
+            "example": "123456789123456"
+          },
+          "supplier_id": {
+            "$ref": "#/components/schemas/SupplierId"
+          },
+          "terminal_id": {
+            "maxLength": 8,
+            "type": "string",
+            "description": "Terminal identifier for the merchant (up to 8 alphanumeric characters)",
+            "example": "123456"
+          },
+          "chain_number": {
+            "maxLength": 6,
+            "pattern": "^[0-9]{6}$",
+            "type": "string",
+            "description": "Chain store identifier for multi-location merchants (6 digits)",
+            "example": "123456"
+          },
+          "vital_number": {
+            "maxLength": 8,
+            "pattern": "^7[0-9]{7}$",
+            "type": "string",
+            "description": "VITAL (Visa Integrated Transaction Accounting and Liability) processing number (8 digits with leading digit 7)",
+            "example": "71234567"
+          },
+          "cpip_division": {
+            "maxLength": 7,
+            "pattern": "^[0-9]{7}$",
+            "type": "string",
+            "description": "CPIP (Credit Payment Infrastructure Platform) division code (7 digits)",
+            "example": "1234567"
+          },
+          "industry_code": {
+            "type": "string",
+            "description": "Merchant industry classification code. Valid values: 0 (unknown), A (auto rental), B (bank/financial), D (direct marketing), F (food/restaurant), G (grocery), H (hotel), L (limited amount terminal), O (oil company), P (passenger transport), R (retail)",
+            "example": "R (Retail)",
+            "enum": [
+              "0",
+              "A",
+              "B",
+              "D",
+              "F",
+              "G",
+              "H",
+              "L",
+              "O",
+              "P",
+              "R"
+            ]
+          },
+          "acquirer_processor": {
+            "$ref": "#/components/schemas/AcquirerProcessor"
+          },
+          "merchant_bin_number": {
+            "maxLength": 6,
+            "pattern": "^[0-9]{6}$",
+            "type": "string",
+            "description": "Merchant Bank Identification Number (6 digits)",
+            "example": "123456"
+          },
+          "payment_types_supported": {
+            "type": "array",
+            "description": "List of accepted payment card types. Valid value: VISA",
+            "example": [
+              "VISA"
+            ],
+            "items": {
+              "type": "string",
+              "enum": [
+                "VISA"
+              ]
+            }
+          },
+          "merchant_location_number": {
+            "maxLength": 5,
+            "pattern": "^[0-9]{5}$",
+            "type": "string",
+            "description": "Specific location identifier for the merchant (5 digits, often with leading zeros)",
+            "example": "00001"
+          }
+        }
+      },
+      "PaymentSuiteRequest": {
+        "required": [
+          "payment_details",
+          "request_id",
+          "supplier_id"
+        ],
+        "properties": {
+          "request_id": {
+            "maxLength": 100,
+            "minLength": 1,
+            "description": "Unique identifier for the payment request. Same request id is not allowed even in case of any fixes from a prior failed request. Every request id has to be unique.Non-empty string, Max length: 100 characters.",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "supplier_id": {
+            "$ref": "#/components/schemas/SupplierIdentificationInfo"
+          },
+          "payment_details": {
+            "maxItems": 10,
+            "minItems": 1,
+            "description": "Array of transaction_info objects. Non-empty array (minimum 1 and maximum is 10).",
+            "items": {
+              "$ref": "#/components/schemas/PaymentDetails"
+            },
+            "exampleSetFlag": false,
+            "types": [
+              "array"
+            ]
+          }
+        },
+        "description": "Main payment request containing supplier identification and payment details.",
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "PaymentDetails": {
+        "required": [
+          "transaction_info"
+        ],
+        "properties": {
+          "transaction_info": {
+            "$ref": "#/components/schemas/TransactionInformation"
+          }
+        },
+        "description": "Payment details container for transaction information.",
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "MerchantCustomerInfo": {
+        "required": [
+          "customer_id",
+          "customer_name",
+          "customer_type",
+          "preferred_currency"
+        ],
+        "type": "object",
+        "properties": {
+          "address": {
+            "$ref": "#/components/schemas/MerchantCustomerAddress"
+          },
+          "customer_id": {
+            "maxLength": 100,
+            "type": "string",
+            "description": "Originator's unique identifier for the customer.",
+            "example": "varmtestcustomer1234"
+          },
+          "customer_url": {
+            "type": "string",
+            "description": "Email-customer URL clicked to access the SUA.",
+            "example": "customer@example.com"
+          },
+          "customer_name": {
+            "maxLength": 60,
+            "type": "string",
+            "description": "Customer display name.",
+            "example": "varmtestcustomer"
+          },
+          "customer_type": {
+            "type": "string",
+            "description": "Type of customer.",
+            "example": "Email",
+            "enum": [
+              "Email",
+              "Batch/API"
+            ]
+          },
+          "customer_category": {
+            "type": "string",
+            "description": "Customer Category — defaults to Invoice unless Travel is provided.",
+            "example": "Invoice",
+            "default": "Invoice",
+            "enum": [
+              "Invoice",
+              "Travel"
+            ]
+          },
+          "preferred_currency": {
+            "maxLength": 3,
+            "minLength": 3,
+            "type": "string",
+            "description": "ISO 4217 currency code (e.g., USD, EUR, GBP).",
+            "example": "USD"
+          },
+          "sender_email_address": {
+            "type": "string",
+            "description": "Sender of the Payment Advice Notification (email customers only).",
+            "format": "email",
+            "example": "sender@example.com"
+          }
+        }
+      },
+      "CustomerInfo": {
+        "required": [
+          "customer_id",
+          "customer_name",
+          "preferred_currency"
+        ],
+        "properties": {
+          "customer_id": {
+            "description": "Customer identifier",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "customer_name": {
+            "description": "Name of the customer",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "preferred_currency": {
+            "maxLength": 3,
+            "minLength": 3,
+            "pattern": "^[A-Z]{3}$",
+            "description": "Preferred currency for transactions",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          }
+        },
+        "description": "Customer information",
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "RecipientInfo": {
+        "required": [
+          "date_format",
+          "email",
+          "language",
+          "time_zone"
+        ],
+        "properties": {
+          "email": {
+            "maxLength": 253,
+            "description": "Email of the recipient",
+            "format": "email",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "language": {
+            "description": "Language of the recipient",
+            "enum": [
+              "en-us",
+              "en-uk",
+              "fr-fr",
+              "fr-ca",
+              "de-de",
+              "it-it",
+              "pt-br",
+              "es-us",
+              "es-es"
+            ],
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "time_zone": {
+            "description": "Time zone in specific format",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "date_format": {
+            "description": "Date format",
+            "enum": [
+              "MM/dd/yyyy",
+              "dd/MM/yyyy",
+              "yyyy/MM/dd",
+              "MMM-dd-yyyy",
+              "dd-MMM-yyyy"
+            ],
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          }
+        },
+        "description": "Recipient information for notifications",
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "InvoiceTaxAmountReferenceItems": {
+        "properties": {
+          "tax_ref1": {
+            "$ref": "#/components/schemas/InvoiceTaxAmountReferenceDetails"
+          },
+          "tax_ref2": {
+            "$ref": "#/components/schemas/InvoiceTaxAmountReferenceDetails"
+          },
+          "tax_ref3": {
+            "$ref": "#/components/schemas/InvoiceTaxAmountReferenceDetails"
+          },
+          "tax_ref4": {
+            "$ref": "#/components/schemas/InvoiceTaxAmountReferenceDetails"
+          }
+        },
+        "description": "Invoice tax amount reference object containing 4 tax reference objects for different tax types.",
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "ProcessingStatus-1": {
+        "required": [
+          "payment_statuses",
+          "reason_code",
+          "reason_desc",
+          "request_id",
+          "status"
+        ],
+        "properties": {
+          "status": {
+            "description": "Overall status of the payment request. Values: SUCCESS, ENQUEUED, PARTIAL_SUCCESS, FAILED, VALIDATION_FAILURE, SYSTEM_ERROR.",
+            "enum": [
+              "SUCCESS",
+              "ENQUEUED",
+              "PARTIAL_SUCCESS",
+              "FAILED",
+              "VALIDATION_FAILURE",
+              "SYSTEM_ERROR"
+            ],
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "request_id": {
+            "maxLength": 100,
+            "minLength": 1,
+            "description": "Unique identifier for the payment request. Non-empty string, Max length: 100 characters.",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "reason_code": {
+            "description": "Numeric or alphanumeric code indicating the result. Values: 1001 (SUCCESS), 1000 (ENQUEUED), 1003 (PARTIAL_SUCCESS), 1004 (FAILED), 4001 (VALIDATION_FAILURE), 5001 (SYSTEM_ERROR).",
+            "enum": [
+              "1001",
+              "1000",
+              "1003",
+              "1004",
+              "4001",
+              "5001"
+            ],
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "reason_desc": {
+            "description": "Descriptive message explaining the status or reason.",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "payment_statuses": {
+            "description": "Array of individual payment status objects.",
+            "items": {
+              "$ref": "#/components/schemas/PaymentStatus-1"
+            },
+            "exampleSetFlag": false,
+            "types": [
+              "array"
+            ]
+          }
+        },
+        "description": "Overall processing status information for the request.",
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "CustomerAddress": {
+        "properties": {
+          "state": {
+            "description": "State or province",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "zipcode": {
+            "description": "Postal/ZIP code",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "country_code": {
+            "maxLength": 2,
+            "minLength": 2,
+            "pattern": "^[A-Z]{2}$",
+            "description": "ISO country code",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          }
+        },
+        "description": "Customer address information (required for US Suppliers)",
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "SupplierOnboardingRequest": {
+        "required": [
+          "supplier_info"
+        ],
+        "properties": {
+          "supplier_info": {
+            "$ref": "#/components/schemas/SupplierInfo"
+          }
+        },
+        "description": "Supplier onboarding request containing supplier information",
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "MerchantOriginatorDetails": {
+        "required": [
+          "client_id"
+        ],
+        "type": "object",
+        "properties": {
+          "client_id": {
+            "minLength": 1,
+            "type": "string",
+            "description": "Unique identifier for the client application (Originator ID).",
+            "example": "12345678"
+          }
+        }
+      },
+      "AmountDetails-1": {
+        "required": [
+          "currency",
+          "total_amount"
+        ],
+        "properties": {
+          "currency": {
+            "maxLength": 3,
+            "minLength": 3,
+            "pattern": "^[A-Z]{3}$",
+            "description": "ISO currency code (e.g., 'USD'). Valid ISO currency code (3 Char).",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "total_amount": {
+            "minimum": 0.01,
+            "description": "Total payment amount in decimal format. Positive number, Max 2 decimal places, Min value: 0.01.",
+            "exampleSetFlag": false,
+            "types": [
+              "number"
+            ]
+          }
+        },
+        "description": "Payment amount information including total amount and currency.",
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "CustomerIdentifier": {
+        "properties": {
+          "customer_id": {
+            "maxLength": 100,
+            "description": "Identifier for the customer used during onboarding",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "originator_customer_id": {
+            "maxLength": 100,
+            "description": "Alphanumeric identifier for the originator customer",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          }
+        },
+        "description": "Customer identification information",
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "PaymentInstrument": {
+        "required": [
+          "type",
+          "type_details"
+        ],
+        "properties": {
+          "type": {
+            "description": "Payment type: 'CARD' for traditional cards or SUA Cards, 'SUA' for Single Use Account Link only. Currently 'SUA' as a type is not supported.",
+            "enum": [
+              "CARD",
+              "SUA"
+            ],
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "type_details": {
+            "$ref": "#/components/schemas/TypeDetails"
+          }
+        },
+        "description": "Payment method details specifying the type and specific payment information.",
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "SupplierDetails": {
+        "properties": {
+          "supplier_info": {
+            "$ref": "#/components/schemas/SupplierInfo"
+          }
+        },
+        "description": "Detailed supplier information",
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "InvoiceReferenceItems": {
+        "properties": {
+          "invoice_ref_1": {
+            "maxLength": 250,
+            "description": "First invoice reference field. Max length: 250 characters.",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "invoice_ref_2": {
+            "maxLength": 250,
+            "description": "Second invoice custom reference field. Max length: 250 characters.",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "invoice_ref_3": {
+            "maxLength": 250,
+            "description": "Third invoice custom reference field. Max length: 250 characters.",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "invoice_ref_4": {
+            "maxLength": 250,
+            "description": "Fourth invoice custom reference field. Max length: 250 characters.",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          }
+        },
+        "description": "Invoice reference object containing 4 reference fields for custom invoice references.",
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "AcquirerProcessor": {
+        "type": "object",
+        "properties": {
+          "processor_id": {
+            "maxLength": 10,
+            "type": "string",
+            "description": "Unique identifier for the Acquirer Processor",
+            "example": "8126"
+          },
+          "processor_name": {
+            "type": "string",
+            "description": "Name of the Acquirer Processor",
+            "example": "Woodforest National Bank",
+            "enum": [
+              "Vantiv CNP",
+              "TSYS",
+              "Chase Paymentech Salem",
+              "Chase Paymentech Tampa",
+              "FDI Global",
+              "SMARTFDC Nashville",
+              "Elavon",
+              "Woodforest National Bank",
+              "etc..."
+            ]
+          },
+          "transaction_date": {
+            "type": "string",
+            "description": "Transaction Date to identify the Processor for Transcard - Format MM/DD/YYYY HH:MM:SS",
+            "format": "date-time"
+          },
+          "retrieval_reference": {
+            "maxLength": 50,
+            "type": "string",
+            "description": "Retrieval Reference value to identify the Processor for Transcard",
+            "example": "600XXX0X1XXX"
+          }
+        },
+        "description": "Acquirer Processor information for the supplier"
+      },
+      "InvoiceAdjustmentItems": {
+        "properties": {
+          "adjustment_1": {
+            "$ref": "#/components/schemas/InvoiceAdjustmentDetails"
+          },
+          "adjustment_2": {
+            "$ref": "#/components/schemas/InvoiceAdjustmentDetails"
+          },
+          "adjustment_3": {
+            "$ref": "#/components/schemas/InvoiceAdjustmentDetails"
+          },
+          "adjustment_4": {
+            "$ref": "#/components/schemas/InvoiceAdjustmentDetails"
+          }
+        },
+        "description": "Invoice adjustment object containing 4 adjustment objects for various discounts and rebates.",
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "RelationshipInfoResponse": {
+        "required": [
+          "message",
+          "status"
+        ],
+        "properties": {
+          "status": {
+            "description": "Status code: 1001 (Success), 4001 (Validation Error), 5000 (System Error)",
+            "enum": [
+              1001,
+              4001,
+              5000
+            ],
+            "exampleSetFlag": false,
+            "types": [
+              "integer"
+            ]
+          },
+          "message": {
+            "description": "Response message",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "page_dtls": {
+            "$ref": "#/components/schemas/RelationshipPaginationDetails"
+          },
+          "relationship": {
+            "description": "Array of supplier-customer relationships",
+            "items": {
+              "$ref": "#/components/schemas/RelationshipInfo"
+            },
+            "exampleSetFlag": false,
+            "types": [
+              "array"
+            ]
+          }
+        },
+        "description": "Relationship information response",
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "MerchantMailingAddress": {
+        "required": [
+          "country_code"
+        ],
+        "type": "object",
+        "properties": {
+          "zip": {
+            "maxLength": 20,
+            "pattern": "^[A-Za-z0-9]+$",
+            "type": "string",
+            "description": "Postal/ZIP code.",
+            "example": "10001"
+          },
+          "city": {
+            "maxLength": 50,
+            "type": "string",
+            "description": "City name.",
+            "example": "New York"
+          },
+          "state": {
+            "maxLength": 20,
+            "type": "string",
+            "description": "State or province code.",
+            "example": "NY"
+          },
+          "address1": {
+            "maxLength": 60,
+            "type": "string",
+            "description": "Primary street address line.",
+            "example": "123 Main Street"
+          },
+          "address2": {
+            "maxLength": 60,
+            "type": "string",
+            "description": "Secondary address line (suite, building, floor).",
+            "example": "Suite 100"
+          },
+          "country_code": {
+            "maxLength": 2,
+            "minLength": 2,
+            "type": "string",
+            "description": "ISO 3166-1 alpha-2 country code (e.g., US, CA, GB).",
+            "example": "US"
+          }
+        }
+      },
+      "Acquirer": {
+        "type": "object",
+        "properties": {
+          "acquirer_bin": {
+            "maxLength": 6,
+            "minLength": 6,
+            "pattern": "^[0-9]{6}$",
+            "type": "string",
+            "description": "Acquirer BIN - Bank Identification Number for file routing (exactly 6 digits)",
+            "example": "123456"
+          },
+          "destination_id": {
+            "maxLength": 11,
+            "pattern": "^[0-9]{1,11}$",
+            "type": "string",
+            "description": "Destination ID - Unique institution identifier (numeric string, 1-11 digits)",
+            "example": "12345678912"
+          }
+        },
+        "description": "Acquirer institution details for payment processing"
+      },
+      "SignerDetails": {
+        "required": [
+          "email",
+          "name",
+          "title"
+        ],
+        "properties": {
+          "name": {
+            "description": "Name of the person signing the agreement",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "email": {
+            "description": "Email address of the signer",
+            "format": "email",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "title": {
+            "description": "Job title of the signer",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          }
+        },
+        "description": "Signer details for signing the agreement",
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "SupplierInfo": {
+        "required": [
+          "address",
+          "business_contact",
+          "company_name",
+          "exception_recipient_info",
+          "mcc",
+          "recon_recipient_info",
+          "supp_time_zone"
+        ],
+        "properties": {
+          "mcc": {
+            "description": "Merchant Category Code",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "address": {
+            "$ref": "#/components/schemas/Address"
+          },
+          "dba_name": {
+            "description": "Doing Business As name",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "company_name": {
+            "description": "Legal name of the company",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "supp_time_zone": {
+            "description": "Time Zone of supplier",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "business_contact": {
+            "$ref": "#/components/schemas/BusinessContact"
+          },
+          "recon_recipient_info": {
+            "$ref": "#/components/schemas/RecipientInfo"
+          },
+          "exception_recipient_info": {
+            "$ref": "#/components/schemas/RecipientInfo"
+          },
+          "allow_payments_on_invoice_mismatch": {
+            "description": "Boolean flag for whether payments should process if invoice amounts do not add up to the total payment amount",
+            "exampleSetFlag": false,
+            "types": [
+              "boolean"
+            ]
+          }
+        },
+        "description": "Supplier information including company details and contacts",
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "PaymentStatusResponse-1": {
+        "required": [
+          "pagination",
+          "processing_status"
+        ],
+        "properties": {
+          "pagination": {
+            "$ref": "#/components/schemas/Pagination"
+          },
+          "processing_status": {
+            "$ref": "#/components/schemas/ProcessingStatus-1"
+          }
+        },
+        "description": "Response containing payment status information and pagination details.",
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "SupplierIdentifier": {
+        "properties": {
+          "originator_supp_id": {
+            "maxLength": 100,
+            "description": "Supplier ID",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "primary_email_address": {
+            "maxLength": 253,
+            "description": "Supplier AR manager email ID",
+            "format": "email",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          }
+        },
+        "description": "Supplier identification information",
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "DepositTransactionInfo": {
+        "required": [
+          "customer_info",
+          "payment_id"
+        ],
+        "properties": {
+          "payment_id": {
+            "maxLength": 10,
+            "minLength": 1,
+            "description": "Unique identifier for the specific payment transaction",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "customer_info": {
+            "$ref": "#/components/schemas/DepositCustomerInfo"
+          }
+        },
+        "description": "Transaction information for deposit",
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "OrderInformation-1": {
+        "required": [
+          "amountDetails",
+          "invoices"
+        ],
+        "properties": {
+          "invoices": {
+            "maxItems": 10,
+            "minItems": 1,
+            "description": "Array of invoice objects. Non-empty array, Max 10 items. Invoices are not required only for penny test scenario. Do not send invoices in case of Penny Test.",
+            "items": {
+              "$ref": "#/components/schemas/Invoice"
+            },
+            "exampleSetFlag": false,
+            "types": [
+              "array"
+            ]
+          },
+          "amountDetails": {
+            "$ref": "#/components/schemas/AmountDetails-1"
+          },
+          "ship_to_details": {
+            "$ref": "#/components/schemas/ShipToDetails"
+          }
+        },
+        "description": "Order and billing details including shipping information, amounts, and invoices. Invoices are not required for penny test. Do not send invoices in case of Penny Test.",
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "MerchantInvitationResponse": {
+        "required": [
+          "emailSentAt",
+          "expirationDate",
+          "invitationId",
+          "inviteHash",
+          "message",
+          "registrationLink",
+          "status"
+        ],
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "integer",
+            "description": "Application status code (e.g. 1001 for MERCHANT_INVITATION_CREATED).",
+            "format": "int32",
+            "example": 1001
+          },
+          "message": {
+            "type": "string",
+            "description": "Human-readable response message.",
+            "example": "Merchant invitation created successfully"
+          },
+          "inviteHash": {
+            "type": "string",
+            "description": "SHA-256 hash of the invitation for security validation.",
+            "example": "18357b90325157acd4edc77d99846c2a4fda92f1a4324c9c22472ac7090c76a6"
+          },
+          "emailSentAt": {
+            "type": "string",
+            "description": "ISO 8601 timestamp when the invitation email was sent.",
+            "format": "date-time",
+            "example": "2026-06-03T18:09:02Z"
+          },
+          "invitationId": {
+            "type": "integer",
+            "description": "Unique identifier for the created invitation.",
+            "format": "int64",
+            "example": 1511793847707431000
+          },
+          "expirationDate": {
+            "type": "string",
+            "description": "ISO 8601 timestamp when the invitation expires.",
+            "format": "date-time",
+            "example": "2026-06-04T18:09:01Z"
+          },
+          "registrationLink": {
+            "type": "string",
+            "description": "Complete URL sent to merchant for onboarding access.",
+            "example": "https://sl73mapgkapq006.visa.com:8443/content2/bc/varm/en/varm-onboarding/index.html?#/?hash=18357b90325157acd4edc77d99846c2a4fda92f1a4324c9c22472ac7090c76a6&lang=en-US&email=xyz%40corpdev.com"
+          }
+        }
+      },
+      "DepositPaymentDetails": {
+        "required": [
+          "transaction_info"
+        ],
+        "properties": {
+          "transaction_info": {
+            "$ref": "#/components/schemas/DepositTransactionInfo"
+          }
+        },
+        "description": "Payment details for deposit confirmation",
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "RelationshipPaginationDetails": {
+        "properties": {
+          "page_size": {
+            "minimum": 1,
+            "description": "Number of records per page",
+            "exampleSetFlag": false,
+            "types": [
+              "integer"
+            ]
+          },
+          "total_pages": {
+            "minimum": 1,
+            "description": "Total number of pages",
+            "exampleSetFlag": false,
+            "types": [
+              "integer"
+            ]
+          },
+          "current_page": {
+            "minimum": 1,
+            "description": "Current page number",
+            "exampleSetFlag": false,
+            "types": [
+              "integer"
+            ]
+          },
+          "last_page_url": {
+            "description": "URL for last page",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "next_page_url": {
+            "description": "URL for next page (empty if no next page)",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "total_records": {
+            "minimum": 0,
+            "description": "Total number of records",
+            "exampleSetFlag": false,
+            "types": [
+              "integer"
+            ]
+          },
+          "first_page_url": {
+            "description": "URL for first page",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "current_page_url": {
+            "description": "URL for current page",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "previous_page_url": {
+            "description": "URL for previous page (empty if no previous page)",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "current_no_records": {
+            "minimum": 0,
+            "description": "Number of records in current page",
+            "exampleSetFlag": false,
+            "types": [
+              "integer"
+            ]
+          }
+        },
+        "description": "Pagination details for relationship data",
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "DepositConfirmationResponse": {
+        "required": [
+          "reason_code",
+          "reason_desc",
+          "request_id",
+          "status"
+        ],
+        "properties": {
+          "status": {
+            "description": "Overall status of the payment request",
+            "enum": [
+              "SUCCESS",
+              "ENQUEUED",
+              "PARTIAL_SUCCESS",
+              "FAILED",
+              "VALIDATION_FAILURE",
+              "SYSTEM_ERROR"
+            ],
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "request_id": {
+            "maxLength": 100,
+            "description": "Unique identifier for the payment request",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "reason_code": {
+            "description": "Numeric or alphanumeric code indicating the result",
+            "enum": [
+              "1001",
+              "1000",
+              "1003",
+              "1004",
+              "4001",
+              "5001"
+            ],
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "reason_desc": {
+            "description": "Descriptive message explaining the status or reason",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          }
+        },
+        "description": "Deposit confirmation response",
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "RelationshipInfo-1": {
+        "properties": {
+          "customer": {
+            "$ref": "#/components/schemas/CustomerRelationshipContainer"
+          },
+          "supplier_id": {
+            "$ref": "#/components/schemas/SupplierIdentifier"
+          },
+          "supplier_details": {
+            "$ref": "#/components/schemas/SupplierDetails-1"
+          },
+          "supplier_details_link": {
+            "description": "Link to retrieve detailed supplier information",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          }
+        },
+        "description": "Supplier-customer relationship information",
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "ErrorResponse": {
+        "required": [
+          "message",
+          "status_code"
+        ],
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Error message describing what went wrong"
+          },
+          "status_code": {
+            "type": "string",
+            "description": "Error code",
+            "enum": [
+              "4001",
+              "4002",
+              "4003",
+              "4004",
+              "5001"
+            ]
+          }
+        }
+      },
+      "PaymentDetails-1": {
+        "required": [
+          "transaction_info"
+        ],
+        "properties": {
+          "transaction_info": {
+            "$ref": "#/components/schemas/TransactionInformation-1"
+          }
+        },
+        "description": "Payment details container for transaction information.",
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "DepositCustomerInfo": {
+        "required": [
+          "order_info"
+        ],
+        "properties": {
+          "order_info": {
+            "$ref": "#/components/schemas/DepositOrderInfo"
+          },
+          "customer_name": {
+            "maxLength": 60,
+            "description": "Full name of the customer",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "customer_identifier": {
+            "$ref": "#/components/schemas/CustomerIdentifier"
+          }
+        },
+        "description": "Customer information for deposit",
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "SupplierDetails-1": {
+        "properties": {
+          "supplier_info": {
+            "$ref": "#/components/schemas/SupplierInfo-1"
+          }
+        },
+        "description": "Detailed supplier information",
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "ShipToDetails": {
+        "required": [
+          "iso_country",
+          "postal_code"
+        ],
+        "properties": {
+          "iso_country": {
+            "maxLength": 2,
+            "minLength": 2,
+            "pattern": "^[A-Z]{2}$",
+            "description": "ISO country code (e.g., 'US'). Valid ISO 3166-1 alpha-2 code.",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "postal_code": {
+            "maxLength": 10,
+            "description": "Postal/ZIP code for shipping. Max length: 10 characters.",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "administrative_area": {
+            "maxLength": 3,
+            "description": "State/Province/County code. Max length: 3 characters. Required depending upon Country.",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          }
+        },
+        "description": "Shipping address information. Required if the supplier is enabled for L3 processing.",
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "OrderInformation": {
+        "required": [
+          "amountDetails",
+          "invoices"
+        ],
+        "properties": {
+          "invoices": {
+            "maxItems": 10,
+            "minItems": 1,
+            "description": "Array of invoice objects. Non-empty array, Max 10 items. Invoices are not required only for penny test scenario. Do not send invoices in case of Penny Test.",
+            "items": {
+              "$ref": "#/components/schemas/Invoice"
+            },
+            "exampleSetFlag": false,
+            "types": [
+              "array"
+            ]
+          },
+          "ota_info": {
+            "$ref": "#/components/schemas/OtaInfo"
+          },
+          "amountDetails": {
+            "$ref": "#/components/schemas/AmountDetails-1"
+          },
+          "ship_to_details": {
+            "$ref": "#/components/schemas/ShipToDetails"
+          }
+        },
+        "description": "Order and billing details including shipping information, amounts, invoices, and optional B2B travel booking information. Invoices are not required for penny test. Do not send invoices in case of Penny Test.",
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "SupplierManagementResponse": {
+        "required": [
+          "message",
+          "status_code"
+        ],
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Human-readable message describing the status"
+          },
+          "request_id": {
+            "type": "integer",
+            "description": "Numeric identifier for the request (present for successful submissions)"
+          },
+          "status_code": {
+            "type": "string",
+            "description": "Status code indicating the processing state",
+            "enum": [
+              "1000",
+              "1002",
+              "1003",
+              "5000"
+            ]
+          }
+        }
+      },
+      "PaymentStatus-1": {
+        "required": [
+          "payment_id",
+          "payment_status",
+          "reason"
+        ],
+        "properties": {
+          "reason": {
+            "maxLength": 255,
+            "minLength": 1,
+            "description": "Descriptive reason for the current payment status. Non-empty string, Max length: 255 characters.",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "payment_id": {
+            "maxLength": 20,
+            "minLength": 1,
+            "description": "Unique identifier for the payment transaction. Non-empty string, Max length: 20 characters.",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "payment_status": {
+            "description": "Current status of the individual payment. Values: 'COMPLETED', 'PENDING', 'FAILED','VALIDATED', 'SCHEDULED'",
+            "enum": [
+              "COMPLETED",
+              "PENDING",
+              "FAILED",
+              "VALIDATED",
+              "SCHEDULED"
+            ],
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          }
+        },
+        "description": "Individual payment status object containing payment transaction details.",
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "PhoneNumber": {
+        "required": [
+          "phone_country_code",
+          "phone_number"
+        ],
+        "properties": {
+          "phone_number": {
+            "description": "Phone number without country code",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "phone_country_code": {
+            "description": "Phone country code (without + sign)",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          }
+        },
+        "description": "Phone number with country code",
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "MerchantInvitationRequest": {
+        "required": [
+          "business_contact_info",
+          "company_name",
+          "invitation_metadata",
+          "mailing_address",
+          "notification_language",
+          "originator_details"
+        ],
+        "type": "object",
+        "properties": {
+          "mcc": {
+            "pattern": "^\\d{4}$",
+            "type": "string",
+            "description": "Merchant Category Code — 4-digit classification code.",
+            "example": "5411"
+          },
+          "time_zone": {
+            "type": "string",
+            "description": "IANA time zone identifier (e.g., America/New_York).",
+            "example": "America/New_York"
+          },
+          "supplier_id": {
+            "$ref": "#/components/schemas/MerchantSupplierId"
+          },
+          "company_name": {
+            "maxLength": 60,
+            "minLength": 6,
+            "pattern": "^[A-Za-z0-9 ]+$",
+            "type": "string",
+            "description": "Legal name of the supplier/merchant company being invited. Special characters are not permitted.",
+            "example": "ABC Corporation"
+          },
+          "customer_info": {
+            "$ref": "#/components/schemas/MerchantCustomerInfo"
+          },
+          "mailing_address": {
+            "$ref": "#/components/schemas/MerchantMailingAddress"
+          },
+          "originator_details": {
+            "$ref": "#/components/schemas/MerchantOriginatorDetails"
+          },
+          "invitation_metadata": {
+            "$ref": "#/components/schemas/MerchantInvitationMetadata"
+          },
+          "business_contact_info": {
+            "$ref": "#/components/schemas/MerchantBusinessContactInfo"
+          },
+          "notification_language": {
+            "type": "string",
+            "description": "Language code for invitation email & registration form (e.g., en-US).",
+            "example": "en-US"
+          },
+          "suppress_notification": {
+            "type": "boolean",
+            "description": "true if originator prefers to embed the invitation link in their own email.",
+            "example": true,
+            "default": false
+          },
+          "business_registration_id": {
+            "maxLength": 40,
+            "type": "string",
+            "description": "Government-issued business registration number (e.g., EIN, VAT).",
+            "example": "BR-987654321"
+          }
+        }
+      },
+      "ParticipationAgreementRequest": {
+        "required": [
+          "participation_agreement_link",
+          "signer_details",
+          "supplier_id"
+        ],
+        "properties": {
+          "supplier_id": {
+            "$ref": "#/components/schemas/SupplierIdentifier"
+          },
+          "signer_details": {
+            "$ref": "#/components/schemas/SignerDetails"
+          },
+          "participation_agreement_link": {
+            "description": "URL of the consent document",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          }
+        },
+        "description": "Participation agreement submission request",
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "CustomerRelationshipContainer": {
+        "properties": {
+          "page_dtls": {
+            "$ref": "#/components/schemas/RelationshipPaginationDetails"
+          },
+          "customer_list": {
+            "description": "Array of customer objects with details and links",
+            "items": {
+              "$ref": "#/components/schemas/CustomerRelationshipInfo"
+            },
+            "exampleSetFlag": false,
+            "types": [
+              "array"
+            ]
+          }
+        },
+        "description": "Container for customer relationship information with pagination",
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      }
+    },
+    "responses": {},
+    "parameters": {},
+    "examples": {},
+    "requestBodies": {},
+    "headers": {},
+    "callbacks": {}
+  },
+  "webhooks": {},
+  "x-tagGroups": [
+    {
+      "name": "API Reference",
+      "tags": [
+        "Visa AR Manager Onboarding Suite API",
+        "Visa AR Manager Payment Suite API"
+      ]
+    }
+  ]
+}

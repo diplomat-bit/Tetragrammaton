@@ -1,0 +1,745 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Visa Credit Card Application",
+    "description": "",
+    "version": "1"
+  },
+  "servers": [
+    {
+      "url": "https://sandbox.api.visa.com",
+      "description": "Sandbox server"
+    }
+  ],
+  "security": [],
+  "tags": [
+    {
+      "name": "CCA API",
+      "description": "Credit Card Application Data API"
+    }
+  ],
+  "paths": {
+    "/cca/api/v1/ccarealtime": {
+      "post": {
+        "tags": [
+          "CCA API"
+        ],
+        "summary": "CCA Realtime API",
+        "description": "This endpoint processes CCA realtime API requests.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CcaRealtimeRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CcaRealtimeResponse"
+                }
+              }
+            }
+          }
+        },
+        "x-operationVersions": [
+          {
+            "label": "v1 - Latest",
+            "operationPointer": "#/paths/~1cca~1api~1v1~1ccarealtime/post",
+            "default": false
+          }
+        ],
+        "x-hideTryIt": true
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "CcaRealtimeRequest": {
+        "required": [
+          "requestType",
+          "serviceSubscriberType"
+        ],
+        "type": "object",
+        "properties": {
+          "comment": {
+            "maxLength": 34,
+            "minLength": 0,
+            "type": "string",
+            "description": "Issuer use comments.",
+            "nullable": true,
+            "example": "Add App with UU"
+          },
+          "Product-id": {
+            "type": "object",
+            "properties": {
+              "requestCategory": {
+                "maxLength": 4,
+                "minLength": 0,
+                "type": "string",
+                "description": "If subscriber request is related to issuing new card or adding services to an existing card, the card type associated with request - credit, debit etc. Value will be numeric.",
+                "nullable": true,
+                "example": "10"
+              }
+            },
+            "description": "Group of data elements tied to product id."
+          },
+          "Request-key": {
+            "required": [
+              "activityDate",
+              "issuingBIN",
+              "locatorNumber"
+            ],
+            "type": "object",
+            "properties": {
+              "issuingBID": {
+                "maxLength": 8,
+                "minLength": 0,
+                "type": "string",
+                "description": "Business ID or member ID assigned to subscriber by Visa.",
+                "nullable": true,
+                "example": "99901235"
+              },
+              "issuingBIN": {
+                "maxLength": 8,
+                "minLength": 6,
+                "type": "string",
+                "description": "Issuing BIN (Bank Identification Number) or Processing ID assigned by Visa. Values can be 6 or 8 numeric bytes.",
+                "nullable": false,
+                "example": "55501235"
+              },
+              "activityDate": {
+                "maxLength": 8,
+                "minLength": 8,
+                "type": "string",
+                "description": "Date of application activity/Inquiry/fraud in YYYYMMDD format.",
+                "nullable": false,
+                "example": "20210929"
+              },
+              "processorBIN": {
+                "maxLength": 6,
+                "minLength": 0,
+                "type": "string",
+                "description": "Processing ID (numeric) if using processor for reporting data.",
+                "nullable": true,
+                "example": "77701235"
+              },
+              "locatorNumber": {
+                "maxLength": 11,
+                "minLength": 1,
+                "type": "string",
+                "description": "Unique for record by Issuing BIN and date; Must fill all 11 numeric bytes using leading zeros where necessary; May not be spaces or all zeros.",
+                "nullable": false,
+                "example": "22531066015"
+              },
+              "internalTraceNumber": {
+                "maxLength": 6,
+                "minLength": 0,
+                "type": "string",
+                "description": "Trace number (numeric) within the subscriber's business solution, like application ID. This is not the ID for a JSON request.",
+                "nullable": true,
+                "example": "333333"
+              }
+            },
+            "description": "Group of data elements tied to request key."
+          },
+          "countryCode": {
+            "maxLength": 2,
+            "minLength": 2,
+            "type": "string",
+            "description": "Country code in ISO 3166-1 alpha-2 format (assumes “US” if not populated).",
+            "format": "iso3166-alpha2",
+            "nullable": true,
+            "example": "US"
+          },
+          "requestType": {
+            "maxLength": 2,
+            "minLength": 2,
+            "type": "string",
+            "description": "16 - Declined application. For Consumer or Small Business Application.\n17 - Application (Approved/approvable application, application in process). For Consumer or Small Business Application.\n18 - Unauthorized use (UU)/credit card fraud. For Consumer or Small Business Fraud.\n28 - Debit card Fraud.\n58 - Merchant Fraud.\n68 - Prepaid card Fraud.\n78 - Other card Fraud.\n19 - Inquiry.\n29 - Debit inquiry.\n49 - Non-bankcard inquiry.\n59 - Request to delete previously reported record.\n",
+            "nullable": false,
+            "example": "17"
+          },
+          "Fraud-report": {
+            "type": "object",
+            "properties": {
+              "fraudTypeCode": {
+                "maxLength": 2,
+                "minLength": 0,
+                "type": "string",
+                "description": "MUST be present for unauthorized use/fraud (type 18, 28, 58, 68 or 78) record. Account level frauds detected at both acquisition stage and post-booking must be reported by issuers.\n00 – Fraud loss due to card lost\n01 – Fraud loss due to card stolen\n02 – Fraud loss due to card not received\n03 – Fraud loss due to a fraudulent application\n04 – Fraud loss due to counterfeit card\n05 – Fraud loss due to Account takeover\n06 – Fraud loss due to card not present activity\n07 – Fraudulent application; consumer verified (pre-booking, no loss)\n08 – Suspicious application; unable to verify (pre-booking, no loss)\n09 – Bust out\n",
+                "nullable": true,
+                "example": "02"
+              },
+              "cardMailedZipCode": {
+                "maxLength": 9,
+                "minLength": 0,
+                "type": "string",
+                "description": "Relevant only for fraud/unauthorized use (type 18, 28, 58, 68 or 78) record with UU fraud type code ‘02’, where a consumer reported that card was not received.\nFive or nine digit ZIP code which card was mailed.\n",
+                "nullable": true,
+                "example": "605151111"
+              },
+              "internetFraud_arrestCode": {
+                "maxLength": 1,
+                "type": "integer",
+                "description": "Relevant only for fraud/unauthorized use reports (type 18, 28, 58, 68 or 78). Indicates whether the fraud report was tied to an internet originated card application.\n0 - No arrest; non-Internet application\n1 - Arrest; non-internet application\n2 - No arrest; Internet application\n3 - Arrest; Internet application\n",
+                "nullable": true
+              },
+              "lawEnforcementCaseNumber": {
+                "maxLength": 7,
+                "minLength": 0,
+                "type": "string",
+                "description": "Relevant only for unauthorized use (type 18, 28, 58, 68 or 78) record. If a report was filed with law enforcement, the case number associated with the report.",
+                "nullable": true,
+                "example": "2340987"
+              }
+            },
+            "description": "Group of data elements tied to fraud report."
+          },
+          "Consumer-identity": {
+            "type": "object",
+            "properties": {
+              "email": {
+                "maxLength": 42,
+                "minLength": 0,
+                "type": "string",
+                "description": "Applicant's email address. Email address may include only one “@” and must contain at least one “.” after the @.",
+                "nullable": true,
+                "example": "Test3@Test.com"
+              },
+              "dateOfBirth": {
+                "maxLength": 8,
+                "minLength": 0,
+                "type": "string",
+                "description": "Date of birth of consumer in YYYYMMDD format. If the request is for adding a card holder to an existing card, this DOB is for the additional card holder, NOT the existing card holder.",
+                "nullable": true,
+                "example": "19720203"
+              },
+              "Ssn-or-taxID": {
+                "type": "object",
+                "properties": {
+                  "ssnTaxid": {
+                    "maxLength": 9,
+                    "minLength": 0,
+                    "type": "string",
+                    "description": "SSN or Tax ID.",
+                    "nullable": true,
+                    "example": "887601476"
+                  },
+                  "isSSNTaxid": {
+                    "maxLength": 1,
+                    "minLength": 0,
+                    "type": "string",
+                    "description": "1 - Tax ID Number. Any other value - SSN.",
+                    "nullable": true,
+                    "example": "1"
+                  }
+                },
+                "description": "Group of data elements tied to SSN or Tax ID."
+              },
+              "Consumer-name": {
+                "type": "object",
+                "properties": {
+                  "lastName": {
+                    "maxLength": 19,
+                    "minLength": 0,
+                    "type": "string",
+                    "description": "Applicant's last name.",
+                    "nullable": true,
+                    "example": "WELLING"
+                  },
+                  "firstName": {
+                    "maxLength": 10,
+                    "minLength": 0,
+                    "type": "string",
+                    "description": "Applicant's first name.",
+                    "nullable": true,
+                    "example": "BEVERLY"
+                  },
+                  "middleNameOrInitial": {
+                    "maxLength": 1,
+                    "minLength": 0,
+                    "type": "string",
+                    "description": "Applicant's middle initial.",
+                    "nullable": true,
+                    "example": "J"
+                  }
+                },
+                "description": "Group of data elements tied to name components (US format)."
+              },
+              "accountNumber": {
+                "maxLength": 16,
+                "minLength": 0,
+                "type": "string",
+                "description": "Required for request record type 18, 28, 58, 68, or 78.\nValue will be 16 digit primary card number.\nIf request is with regard to an existing card account, the account number will be the one associated with the card.\nNot applicable for Unauthorized use (UU) type codes '07' and '08'.\n",
+                "nullable": true,
+                "example": "4500010098110001"
+              },
+              "Ip-address-data": {
+                "type": "object",
+                "properties": {
+                  "trueIP": {
+                    "maxLength": 64,
+                    "minLength": 0,
+                    "type": "string",
+                    "description": "The true client IP Address detected by Device ID vendor.",
+                    "nullable": true,
+                    "example": "100.101.103.103"
+                  },
+                  "proxyIP": {
+                    "maxLength": 64,
+                    "minLength": 0,
+                    "type": "string",
+                    "description": "IP address of the proxy.",
+                    "nullable": true,
+                    "example": "100.101.103.103"
+                  },
+                  "ipAddress": {
+                    "maxLength": 39,
+                    "minLength": 0,
+                    "type": "string",
+                    "description": "IP address of the browser as returned by the HTTP headers (e.g. 111.222.33.44).",
+                    "nullable": true,
+                    "example": "101.101.102.103"
+                  },
+                  "proxyType": {
+                    "maxLength": 32,
+                    "minLength": 0,
+                    "type": "string",
+                    "description": "Used to classify the type, and hence risk of the proxy in real time. Examples:\nTransparent - proxy is a transparent proxy\nAnonymous - anonymous proxy was detected\nHidden - proxy is trying to avoid detection. This is the highest risk proxy type.\n",
+                    "nullable": true,
+                    "example": "NUMICS1"
+                  },
+                  "trueIPISP": {
+                    "maxLength": 50,
+                    "minLength": 0,
+                    "type": "string",
+                    "description": "The Internet Service Provider (ISP) that serves the True IP address.",
+                    "nullable": true,
+                    "example": "100.101.103.103"
+                  },
+                  "proxyIPISP": {
+                    "maxLength": 50,
+                    "minLength": 0,
+                    "type": "string",
+                    "description": "Internet Service Provider (ISP) the Proxy IP address originates from.",
+                    "nullable": true,
+                    "example": "100.101.103.103"
+                  },
+                  "trueIPActivity": {
+                    "maxLength": 64,
+                    "minLength": 0,
+                    "type": "string",
+                    "description": "Activities associated with IP Address based on infection detection and automated classification. Associated with phishing, spam, malware, peer to peer sharing, etc.",
+                    "nullable": true,
+                    "example": "100.101.103.103"
+                  },
+                  "trueIPgeoLocation": {
+                    "maxLength": 2,
+                    "minLength": 0,
+                    "type": "string",
+                    "description": "The ISO 3166 country code of the True IP Address or one of the special codes.",
+                    "nullable": true,
+                    "example": "US"
+                  },
+                  "proxyIPgeoLocation": {
+                    "maxLength": 2,
+                    "minLength": 0,
+                    "type": "string",
+                    "description": "ISO 3166 country code of the proxy IP address or one of the special codes.",
+                    "nullable": true,
+                    "example": "US"
+                  }
+                },
+                "description": "Consumer IP address captured by subscriber's service/API."
+              },
+              "Consumer-device-data": {
+                "type": "object",
+                "properties": {
+                  "deviceID": {
+                    "maxLength": 40,
+                    "minLength": 0,
+                    "type": "string",
+                    "description": "The unique device ID generated by the device ID provider.",
+                    "nullable": true,
+                    "example": "100.101.100.100"
+                  },
+                  "deviceIdProvider": {
+                    "maxLength": 1,
+                    "minLength": 0,
+                    "type": "string",
+                    "description": "1 - Lovation\n2 - ThreatMetrix\n3 - 41st Parameter\n4 - Kount\n5 - Others\n",
+                    "nullable": true,
+                    "example": "4"
+                  }
+                },
+                "description": "Consumer device data captured by subscriber's service/API."
+              },
+              "Consumer-state-id-usa": {
+                "type": "object",
+                "properties": {
+                  "issuingState": {
+                    "maxLength": 2,
+                    "minLength": 0,
+                    "type": "string",
+                    "description": "2-letter state code that issued ID.",
+                    "format": "iso3166-2",
+                    "nullable": true,
+                    "example": "TX"
+                  },
+                  "stateIDNumber": {
+                    "maxLength": 30,
+                    "minLength": 0,
+                    "type": "string",
+                    "description": "Driver's License",
+                    "nullable": true,
+                    "example": "4325309845244334"
+                  }
+                },
+                "description": "Group of data elements tied to US-State-ID."
+              },
+              "Consumer-phone-numbers": {
+                "type": "object",
+                "properties": {
+                  "primaryPhone": {
+                    "maxLength": 10,
+                    "minLength": 0,
+                    "type": "string",
+                    "description": "Applicant's phone number.",
+                    "nullable": true,
+                    "example": "7012802796"
+                  },
+                  "secondaryPhone": {
+                    "maxLength": 10,
+                    "minLength": 0,
+                    "type": "string",
+                    "description": "Applicant's second phone number.",
+                    "nullable": true,
+                    "example": "3012211234"
+                  }
+                },
+                "description": "Group of data elements tied to phone numbers."
+              },
+              "Consumer-state-id-other": {
+                "type": "object",
+                "properties": {
+                  "idNumber": {
+                    "maxLength": 30,
+                    "minLength": 0,
+                    "type": "string",
+                    "description": "Can be passport number (both US and others), NEXUS, SENTRI or other forms of ID.",
+                    "nullable": true,
+                    "example": "230978657"
+                  },
+                  "issuingEntity": {
+                    "maxLength": 2,
+                    "minLength": 0,
+                    "type": "string",
+                    "description": "Country code or other issuing entity for ID Number.",
+                    "nullable": true,
+                    "example": "IL"
+                  }
+                },
+                "description": "Group of data elements tied to Other-ID."
+              },
+              "Consumer-primary-address": {
+                "type": "object",
+                "properties": {
+                  "address1City": {
+                    "maxLength": 28,
+                    "minLength": 0,
+                    "type": "string",
+                    "description": "City Name.",
+                    "nullable": true,
+                    "example": "WICHITA"
+                  },
+                  "address1Zip5": {
+                    "maxLength": 5,
+                    "minLength": 0,
+                    "type": "string",
+                    "description": "First 5 digits of zip code.",
+                    "nullable": true,
+                    "example": "67212"
+                  },
+                  "address1Line1": {
+                    "maxLength": 35,
+                    "minLength": 0,
+                    "type": "string",
+                    "description": "Street Number and Street Name. PO BOX can be listed in address1Line1 or address1Line2.",
+                    "nullable": true,
+                    "example": "7620 W DOUGLAS AVE"
+                  },
+                  "address1Line2": {
+                    "maxLength": 27,
+                    "minLength": 0,
+                    "type": "string",
+                    "description": "Secondary unit designator for multi-unit dwellings. PO BOX can be listed in address1Line1 or address1Line2.",
+                    "nullable": true
+                  },
+                  "address1State": {
+                    "maxLength": 2,
+                    "minLength": 0,
+                    "type": "string",
+                    "description": "2-letter state code.",
+                    "format": "iso3166-2",
+                    "nullable": true,
+                    "example": "KS"
+                  },
+                  "address1ZipSuffix4": {
+                    "maxLength": 4,
+                    "minLength": 0,
+                    "type": "string",
+                    "description": "Only last 4 suffix digits of zip code (items after hyphen).",
+                    "nullable": true,
+                    "example": "6132"
+                  }
+                },
+                "description": "Consumer's official address on file at time of application/inquiry."
+              },
+              "Consumer-alternate-address": {
+                "type": "object",
+                "properties": {
+                  "address2City": {
+                    "maxLength": 28,
+                    "minLength": 0,
+                    "type": "string",
+                    "description": "City Name.",
+                    "nullable": true,
+                    "example": "Hanover Park"
+                  },
+                  "address2Zip5": {
+                    "maxLength": 5,
+                    "minLength": 0,
+                    "type": "string",
+                    "description": "First 5 digits of zip code.",
+                    "nullable": true,
+                    "example": "60188"
+                  },
+                  "address2Line1": {
+                    "maxLength": 35,
+                    "minLength": 0,
+                    "type": "string",
+                    "description": "Street Number and Street Name. PO BOX can be listed in Address2Line1 or Address2Line2.",
+                    "nullable": true,
+                    "example": "1928 Pastoral Ln"
+                  },
+                  "address2Line2": {
+                    "maxLength": 35,
+                    "minLength": 0,
+                    "type": "string",
+                    "description": "Secondary unit designator. Required for multi-unit dwellings. PO BOX can be listed in Address2Line1 or Address2Line2.",
+                    "nullable": true
+                  },
+                  "address2State": {
+                    "maxLength": 2,
+                    "minLength": 0,
+                    "type": "string",
+                    "description": "2-letter state code.",
+                    "format": "iso3166-2",
+                    "nullable": true,
+                    "example": "IL"
+                  },
+                  "address2ZipSuffix4": {
+                    "maxLength": 4,
+                    "minLength": 0,
+                    "type": "string",
+                    "description": "Only last 4 suffix digits of zip code (items after hyphen).",
+                    "nullable": true,
+                    "example": "1111"
+                  }
+                },
+                "description": "Consumer's \"Mail to\" or \"other\" address on file at time of application/inquiry."
+              }
+            },
+            "description": "Group of data elements tied to Consumer Identity."
+          },
+          "Delete-or-update-key": {
+            "type": "object",
+            "properties": {
+              "originalIssuingBID": {
+                "maxLength": 8,
+                "minLength": 0,
+                "type": "string",
+                "description": "Required for request type 59 (delete). Business ID or member ID sent on the original request's request-key that is being deleted or updated. Numeric value.",
+                "nullable": true,
+                "example": "99901235"
+              },
+              "originalIssuingBIN": {
+                "maxLength": 8,
+                "minLength": 0,
+                "type": "string",
+                "description": "Required for request type 59 (delete). Issuing BIN or Processing ID sent on the original request’s request-key that is being deleted or updated. Will support both 6 and 8 numeric byte Issuing BIN's.",
+                "nullable": true,
+                "example": "55501235"
+              },
+              "originalActivityDate": {
+                "maxLength": 8,
+                "minLength": 0,
+                "type": "string",
+                "description": "Required for request type 59 (delete). Date of application activity/Inquiry/fraud in YYYYMMDD format sent on the original request’s request-key that is being deleted.",
+                "nullable": true,
+                "example": "20210929"
+              },
+              "originalLocatorNumber": {
+                "maxLength": 11,
+                "minLength": 0,
+                "type": "string",
+                "description": "Required for request type 59 (delete). Locator number (numeric) sent on the original request’s request-key that is being deleted.",
+                "nullable": true,
+                "example": "22531066015"
+              }
+            },
+            "description": "Key for deleting or updating previously reported request."
+          },
+          "serviceSubscriberType": {
+            "maxLength": 1,
+            "minLength": 1,
+            "type": "string",
+            "description": "Must be V (Visa).",
+            "nullable": false,
+            "example": "V"
+          }
+        }
+      },
+      "CcaRealtimeResponse": {
+        "required": [
+          "requestTime",
+          "responseTime",
+          "transactionLevelIndicator"
+        ],
+        "type": "object",
+        "properties": {
+          "requestTime": {
+            "maxLength": 6,
+            "minLength": 6,
+            "type": "string",
+            "description": "Time the request was received in HHMMSS format.",
+            "nullable": false,
+            "example": "162304"
+          },
+          "Request-Data": {
+            "type": "object",
+            "properties": {
+              "comment": {
+                "maxLength": 34,
+                "minLength": 0,
+                "type": "string",
+                "description": "Echoed from input request. Comment from request.",
+                "nullable": true,
+                "example": "Cert App Request"
+              },
+              "request-key": {
+                "type": "object",
+                "properties": {
+                  "issuingBIN": {
+                    "maxLength": 8,
+                    "minLength": 0,
+                    "type": "string",
+                    "description": "Echoed from input request. Issuing BIN from request.",
+                    "nullable": true,
+                    "example": "44444401"
+                  },
+                  "activityDate": {
+                    "maxLength": 8,
+                    "minLength": 0,
+                    "type": "string",
+                    "description": "Echoed from input request. Activity Date in YYYYMMDD format from request",
+                    "format": "ISO 8601",
+                    "example": "20240926"
+                  },
+                  "processorBIN": {
+                    "maxLength": 8,
+                    "minLength": 0,
+                    "type": "string",
+                    "description": "Echoed from input request. Processor BIN from request.",
+                    "nullable": true,
+                    "example": "55501235"
+                  },
+                  "locatorNumber": {
+                    "maxLength": 11,
+                    "minLength": 0,
+                    "type": "string",
+                    "description": "Echoed from input request. Locator number from request.",
+                    "nullable": true,
+                    "example": "11202205011"
+                  },
+                  "internalTraceNumber": {
+                    "maxLength": 6,
+                    "minLength": 0,
+                    "type": "string",
+                    "description": "Echoed from input request. Internal trace number from request.",
+                    "nullable": true,
+                    "example": "333301"
+                  },
+                  "accessReferenceNumber": {
+                    "maxLength": 25,
+                    "minLength": 0,
+                    "type": "string",
+                    "description": "Created by Visa and is concatenated numeric values issuingBIN, activityDate (YYDDD), locatorNumber.",
+                    "nullable": true,
+                    "example": "444444012427011202205011"
+                  }
+                },
+                "description": "Group of data elements tied to the request key."
+              },
+              "requestType": {
+                "maxLength": 2,
+                "minLength": 0,
+                "type": "string",
+                "description": "Echoed from input request. Request type from request.",
+                "nullable": true,
+                "example": "17"
+              }
+            },
+            "description": "Group of data elements tied to the request."
+          },
+          "responseTime": {
+            "maxLength": 6,
+            "minLength": 6,
+            "type": "string",
+            "description": "Time the response was sent in HHMMSS format.",
+            "nullable": false,
+            "example": "162304"
+          },
+          "transactionLevelIndicator": {
+            "maxLength": 2,
+            "minLength": 2,
+            "type": "string",
+            "description": "Indicates if the transaction passed basic validation.\n00 -- Indicates request was sent to Visa &/or partners for processing, but it does not guarantee request is error-free.\nAny other value than 00 indicates a severe invalid condition and request did not process. Correct error and resubmit the request.\n00 -- Indicates request was sent for processing.\n03 – Severe Invalid - Invalid Issuing BIN\n15 – Severe Invalid - Invalid record layout\n",
+            "nullable": false,
+            "example": "00"
+          },
+          "processingResultsIndicator": {
+            "maxLength": 1,
+            "minLength": 0,
+            "type": "string",
+            "description": "Indicates if processing was successful.\n1 – Request successfully processed.\nE – An error occurred during processing. PLease resubmit your request.\n",
+            "nullable": true,
+            "example": "1"
+          }
+        }
+      }
+    },
+    "responses": {},
+    "parameters": {},
+    "examples": {},
+    "requestBodies": {},
+    "headers": {},
+    "callbacks": {}
+  },
+  "webhooks": {},
+  "x-tagGroups": [
+    {
+      "name": "API Reference",
+      "tags": [
+        "CCA API"
+      ]
+    }
+  ]
+}

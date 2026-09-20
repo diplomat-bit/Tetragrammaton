@@ -1,0 +1,9 @@
+{
+  "name": "Kronos Apex Financial Operating System",
+  "description": "Kronos Foundation Model (AAAI 2026) for financial markets, enterprise multi-bank gateway, DonOne AI Banking Consortium & Aether Mesh (James Burvelo O'Callaghan III) with 75 OmniGrid AI applications, 150 ISO 20022 code standards, Jester Mode 2.0 Mirrored Runtime Chronicle with 100 verification vectors, automated API workbench, and developer hub.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

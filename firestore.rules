@@ -1,0 +1,34 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Users Collection
+    match /users/{userId} {
+      allow read, write: if true;
+    }
+    
+    // API Keys Collection
+    match /api_keys/{keyId} {
+      allow read, write: if true;
+    }
+
+    // API Logs Collection
+    match /api_logs/{logId} {
+      allow read, write: if true;
+    }
+
+    // Stored Banking & Ingestion Records
+    match /stored_records/{recordId} {
+      allow read, write: if true;
+    }
+
+    // Uploaded ZIP Apps Collection
+    match /uploaded_apps/{appId} {
+      allow read, write: if true;
+    }
+
+    // AI Test Sessions & Telemetry
+    match /ai_test_sessions/{sessionId} {
+      allow read, write: if true;
+    }
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "name": "Citi FDX BillPay Dashboard",
+  "description": "Dashboard for viewing Citi FDX payees, managing username, and tracking API telemetry graphs.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

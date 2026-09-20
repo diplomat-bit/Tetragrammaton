@@ -1,0 +1,80 @@
+import { CitiCardsResponse } from '../types';
+
+export const DEFAULT_CREDENTIALS = {
+  url: 'https://partner.citi.com/gcgapi/sandbox/prod/openapi/partner/v1/cards',
+  bearerToken:
+    'ZjQwOTAwMTg4ODZiYWVkODU2ODVkODdhMGE5MmEzYTY3ZWU3NmI0ZDkxYWFjNTllZWY2MzRmMmUwOWYwMDgyYmUwMWZiZjFlMTU4MjhlMDUyM2ViNTdjYzg3ZThlODNkMGQwNTU5MzQ1MDA0ZmQ0YjgzMmM4YTc2OWIzZTBiMWU4ZDVlNDQyZTc0ZjE4OTE0ZjNiNzlhZGFhYzlmZWRhNzVmMDBiZTFjY2Y4YmU1ZmJkZjczZjhmYTljZjk0ZmRjYzM4OWRmZjI2YTU5ZDc1MjU1NzBmZGZmMzBiZWIwZWNlN2Y0YjczY2IwMTgzMTUzNzhmMjllM2EyNDk2MmFlNQ==',
+  uuid: 'aad4a7cd-0828-405e-ae49-741b72238736',
+  clientId: '8bJV5Au7B80L0yUhmmNcCznaTJKVCYKI',
+  cardFunction: 'ALL',
+  linkedSupplementaryCardFlag: true,
+};
+
+export const SAMPLE_CITI_RESPONSE: CitiCardsResponse = {
+  partnerCardDetails: [
+    {
+      cardId:
+        '44125873852316f2b4d4d796c344e38756339654972776f663745446e6d4c32486f455a4165374a476858343d',
+      displayCardNumber: '8653',
+      localCardActivationIndicator: 'REPLACE',
+      overseasCardActivationIndicator: 'REPLACE',
+      perpetualActivationFlag: true,
+      overseasCardActivationStartDate: '2016-11-01',
+      overseasCardActivationEndDate: '2016-12-05',
+      currentCreditLimitAmount: 8900000,
+      maximumPermanentCreditLimitAmount: 5000.25,
+      maximumTemporaryCreditLimitAmount: 5000.25,
+      subCardType: 'DEBIT',
+      cardHolderType: 'PRIMARY',
+      cardIssueReason: 'NEWLY_ONBOARDED_CARD',
+      cardFunctionsAllowed: [
+        { cardFunction: 'CREDIT_LIMIT_INCREASE' },
+        { cardFunction: 'LOCAL_CARD_ACTIVATION' },
+        { cardFunction: 'OVERSEAS_CARD_ACTIVATION' },
+        { cardFunction: 'REPORT_LOST_STOLEN' },
+        { cardFunction: 'EPP_BOOKING' },
+        { cardFunction: 'UPDATE_POS_CREDIT_LIMIT' },
+        { cardFunction: 'UPDATE_NON_POS_CREDIT_LIMIT' },
+        { cardFunction: 'E_STATEMENT' },
+        { cardFunction: 'E_ADVICE' },
+        { cardFunction: 'RESET_ATM_PIN' },
+        { cardFunction: 'ADD_SUPPLEMENTARY_CARD' },
+        { cardFunction: 'OVERSEAS_TRAVEL_PLAN_MAINTENANCE' },
+      ],
+      embossName: 'Matthew Hyden',
+      organization: '888',
+      logo: '300',
+      productName: 'Citibank Platinum Visa',
+      primaryCardId:
+        '44125873852316f2b4d4d796c344e38756339654972776f663745446e6d4c32486f455a4165374a476858343d',
+      displayPrimaryCardNumber: 'XXXXXXXXXXXX8653',
+      cardPlasticType: 'PAYTAG',
+      currentContactlessWthoutPinPmtLimit: 200,
+      maxContactlessWithoutPinPmtLimit: 250,
+      domesticTransaction: {
+        atmTransactionLimitToggleIndicator: 'A',
+        atmTransactionLimitAmount: 100,
+        contactlessTxnLimitToggleIndicator: 'A',
+        contactlessTransactionLimitAmount: 100,
+        contactPosTxnLimitToggleIndicator: 'D',
+        contactPosTransactionLimitAmount: 100,
+        nonPosTxnLimitToggleIndicator: 'A',
+        nonPosTransactionLimitAmount: 100,
+      },
+      internationalTransaction: {
+        atmTransactionLimitToggleIndicator: 'A',
+        atmTransactionLimitAmount: 100,
+        contactlessTxnLimitToggleIndicator: 'A',
+        contactlessTransactionLimitAmount: 100,
+        contactPosTxnLimitToggleIndicator: 'A',
+        contactPosTransactionLimitAmount: 100,
+        nonPosTxnLimitToggleIndicator: 'D',
+        nonPosTransactionLimitAmount: 100,
+      },
+      posSpendingLimitAmount: 250,
+      dailyAtmWithdrawalLimitAmount: 250,
+      internetPurchaseLimitAmount: 250,
+      cashCreditLimitAmount: 28000.45,
+    },
+  ],
+};

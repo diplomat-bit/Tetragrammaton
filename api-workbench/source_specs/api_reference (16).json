@@ -1,0 +1,1251 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Foreign Exchange Rates",
+    "description": "",
+    "version": "1"
+  },
+  "servers": [
+    {
+      "url": "https://sandbox.api.visa.com",
+      "description": "Sandbox server"
+    }
+  ],
+  "security": [],
+  "tags": [
+    {
+      "name": "Foreign Exchange Rates API",
+      "description": "The Foreign Exchange Rates API provides an easy access to the Visa’s currency conversion rate for a given currency pair. "
+    }
+  ],
+  "paths": {
+    "/forexrates/v2/foreignexchangerates": {
+      "post": {
+        "tags": [
+          "Foreign Exchange Rates API"
+        ],
+        "summary": "Foreign Exchange Rates",
+        "description": "This API returns Visa's conversion rates for a given currency pair. <br> <ul><li>A request with rateProductCode = \"A\" returns indicative daily rates that apply to transactions with card as the payment instrument. This is an indicative rate and may be different from the actual rate for settlement of transaction. <br>You can use the transactionType field to specify whether you want to obtain foreign exchange rates for PULL or PUSH funds transactions:<br><ul><li>PULL – Use when the obtain FX rates for Visa Direct Pull Funds transaction.</li><li>PUSH – Use when the obtain FX rates for Visa Direct Push Funds transaction.</li></ul>If transactionType is not provided, the API will return FX rates for Visa Direct Push Funds transaction.<br></li> <li> A request with rateProductCode = \"B\" returns indicative daily rates that apply to transactions with bank-account as the payment instrument. This is an indicative rate and may be different from the actual rate for settlement of transaction. <br></li> <li> A request with rateProductCode = \"BANK\" returns real-time rates that apply to transactions with bank-account as the payment instrument. This option is only available to clients integrating with “Visa Direct Account and Wallet Send API” bundle.  <br></li> <li> A request with rateProductCode = \"WALLET\" returns real-time rates that apply to transactions with wallet as the payment instrument. This option is only available to clients integrating with “Visa Direct Account and Wallet Send API” bundle. <br> </li></ul>  The following 3 use cases are supported on the new BANK and WALLET flows:  <ol><li>Provide a currency pair and set quoteIdRequired=true in the FX Request; the response returns a quote ID that can be used on all payout transactions for the same currency pair, until the quote expires. <br></li> <li>Provide a currency pair and an amount value in source currency in the FX Request; the response returns a rate and destination amount. This rate and destination amount is only indicative, and not guaranteed to be the same at the time of the payout transaction. <br></li> <li>Provide a currency pair and an amount value in destination currency in the FX Request; the response returns a rate and source amount. This rate and source amount is only indicative, and not guaranteed to be the same at the time of the payout transaction. <br><br></li></ol>  <small><i>Please note that the API specifications have been upgraded from swagger 2.0 to OpenAPI 3.0, and clients who have already been accessing this page for Foreign Exchange Rates V2 API documentation may now see a difference in the documentation rendering. However, the API functionality for “A” & “B” rateProductCodes has not changed. </i></small>",
+        "operationId": "ForeignExchangeRates",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/FXRequest_using_rateProductCode_A_or_B"
+                  },
+                  {
+                    "$ref": "#/components/schemas/FXRequest_using_rateProductCode_BANK_or_WALLET"
+                  }
+                ]
+              },
+              "examples": {
+                "FXRequest_BANK_or_WALLET_withQuoteID": {
+                  "summary": "FXRequest_BANK_or_WALLET_withQuoteID",
+                  "value": {
+                    "initiatingPartyId": 1002,
+                    "rateProductCode": "BANK",
+                    "destinationCurrencyCode": "USD",
+                    "sourceCurrencyCode": "EUR",
+                    "quoteIdRequired": true
+                  }
+                },
+                "FX_BANK_or_WALLET_Destination_to_Source": {
+                  "summary": "FX_BANK_or_WALLET_Destination_to_Source",
+                  "value": {
+                    "initiatingPartyId": 1002,
+                    "rateProductCode": "BANK",
+                    "destinationCurrencyCode": "GBP",
+                    "sourceCurrencyCode": "USD",
+                    "destinationAmount": 10
+                  }
+                },
+                "FXRequest_A_or_B_Source_to_Destination": {
+                  "summary": "FXRequest_A_or_B_Source_to_Destination",
+                  "value": {
+                    "acquirerDetails": {
+                      "bin": 408999,
+                      "settlement": {
+                        "currencyCode": "840"
+                      }
+                    },
+                    "rateProductCode": "A",
+                    "markupRate": "0.07",
+                    "destinationCurrencyCode": "826",
+                    "sourceAmount": "100.55",
+                    "sourceCurrencyCode": "840"
+                  }
+                },
+                "FX_BANK_or_WALLET_Source_to_Destination": {
+                  "summary": "FX_BANK_or_WALLET_Source_to_Destination",
+                  "value": {
+                    "initiatingPartyId": 1002,
+                    "rateProductCode": "BANK",
+                    "destinationCurrencyCode": "GBP",
+                    "sourceAmount": 6.67,
+                    "sourceCurrencyCode": "USD"
+                  }
+                },
+                "FXRequest_A_or_B_Destination_to_Source": {
+                  "summary": "FXRequest_A_or_B_Destination_to_Source",
+                  "value": {
+                    "acquirerDetails": {
+                      "bin": 408999,
+                      "settlement": {
+                        "currencyCode": "840"
+                      }
+                    },
+                    "rateProductCode": "A",
+                    "markupRate": "0.07",
+                    "destinationCurrencyCode": "826",
+                    "sourceCurrencyCode": "840",
+                    "destinationAmount": "75.85"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "FX response body",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/FXResponse_using_rateProductCode_A_or_B"
+                    },
+                    {
+                      "$ref": "#/components/schemas/FXResponse_using_rateProductCode_BANK_or_WALLET"
+                    }
+                  ]
+                },
+                "examples": {
+                  "FXRequest_BANK_or_WALLET_withQuoteID": {
+                    "summary": "FXRequest_BANK_or_WALLET_withQuoteID",
+                    "value": {
+                      "rateProductCode": "string",
+                      "destinationCurrencyCode": "string",
+                      "quoteIdExpiryDateTime": "string",
+                      "sourceCurrencyCode": "string",
+                      "conversionRate": "string",
+                      "quoteId": "string"
+                    }
+                  },
+                  "FX_BANK_or_WALLET_Destination_to_Source": {
+                    "summary": "FX_BANK_or_WALLET_Destination_to_Source",
+                    "value": {
+                      "rateProductCode": "string",
+                      "destinationCurrencyCode": "string",
+                      "sourceAmount": "string",
+                      "sourceCurrencyCode": "string",
+                      "conversionRate": "string",
+                      "destinationAmount": "string"
+                    }
+                  },
+                  "FXRequest_A_or_B_Source_to_Destination": {
+                    "summary": "FXRequest_A_or_B_Source_to_Destination",
+                    "value": {
+                      "acquirerDetails": {
+                        "settlement": {
+                          "amount": "string",
+                          "currencyCode": "string",
+                          "conversionRate": "string"
+                        }
+                      },
+                      "rateProductCode": "string",
+                      "sourceAmountWithoutMarkup": "string",
+                      "conversionRate": "string",
+                      "destinationAmount": "string",
+                      "markupRateApplied": "string"
+                    }
+                  },
+                  "FX_BANK_or_WALLET_Source_to_Destination": {
+                    "summary": "FX_BANK_or_WALLET_Source_to_Destination",
+                    "value": {
+                      "rateProductCode": "string",
+                      "destinationCurrencyCode": "string",
+                      "sourceAmount": "string",
+                      "sourceCurrencyCode": "string",
+                      "conversionRate": "string",
+                      "destinationAmount": "string"
+                    }
+                  },
+                  "FXRequest_A_or_B_Destination_to_Source": {
+                    "summary": "FXRequest_A_or_B_Destination_to_Source",
+                    "value": {
+                      "acquirerDetails": {
+                        "settlement": {
+                          "amount": "string",
+                          "currencyCode": "string",
+                          "conversionRate": "string"
+                        }
+                      },
+                      "rateProductCode": "string",
+                      "sourceAmount": "string",
+                      "sourceAmountWithMarkup": "string",
+                      "conversionRate": "string",
+                      "markupRateApplied": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse400"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse403"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Service Unavailable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse500"
+                }
+              }
+            }
+          }
+        },
+        "x-operationVersions": [
+          {
+            "label": "v1",
+            "operationPointer": "#/paths/~1forexrates~1v1~1foreignexchangerates/post",
+            "default": false
+          },
+          {
+            "label": "v2 - Latest",
+            "operationPointer": "#/paths/~1forexrates~1v2~1foreignexchangerates/post",
+            "default": false
+          }
+        ]
+      }
+    },
+    "/forexrates/v1/foreignexchangerates": {
+      "post": {
+        "tags": [
+          "Foreign Exchange Rates API"
+        ],
+        "summary": "Foreign Exchange Rates",
+        "description": "Provide Visa daily currency conversion rate for a given currency pair based on amount",
+        "operationId": "ForeignExchangeRates",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ForeignExchangeRatesRequest"
+              },
+              "examples": {
+                "Default": {
+                  "summary": "Default",
+                  "value": {
+                    "systemsTraceAuditNumber": "350421",
+                    "destinationCurrencyCode": "840",
+                    "markUpRate": "1",
+                    "cardAcceptor": {
+                      "address": {
+                        "country": "RU",
+                        "zipCode": "94404",
+                        "city": "Foster City",
+                        "county": "San Mateo",
+                        "state": "CA"
+                      },
+                      "idCode": "ABCD1234ABCD123",
+                      "name": "ABCD",
+                      "terminalId": "ABCD1234"
+                    },
+                    "sourceAmount": "100",
+                    "retrievalReferenceNumber": "201010101031",
+                    "sourceCurrencyCode": "643"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForeignExchangeRatesResponse"
+                }
+              }
+            }
+          }
+        },
+        "x-samplePayload": {
+          "markupRate": "0.07",
+          "acquiringBin": 408999,
+          "sourceAmount": "100.55",
+          "sourceCurrencyCode": "840",
+          "destinationCurrencyCode": "826"
+        },
+        "x-codegen-request-body-name": "ForeignExchangeRatesRequest",
+        "x-hideTryIt": true
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "FXRequest_using_rateProductCode_BANK_or_WALLET.Request_QuoteID": {
+        "required": [
+          "destinationCurrencyCode",
+          "initiatingPartyId",
+          "rateProductCode",
+          "sourceCurrencyCode"
+        ],
+        "type": "object",
+        "properties": {
+          "quoteIdRequired": {
+            "type": "boolean",
+            "description": "true or false - This field is to indicate whether the quote identifier is been expected in response for use in payout transactions.\n\n<b>Conditional</b>\n\nIf the value is false, client will not receive quoteId in the API response.\nIf the value is true, client will receive quoteId in the API response.\nIf QuoteIdRequired field is not available in the request, the API behavior is similar to when QuoteIdRequired  value is false.\n",
+            "example": true,
+            "default": false
+          },
+          "rateProductCode": {
+            "$ref": "#/components/schemas/BankOrWalletRateProductCode"
+          },
+          "initiatingPartyId": {
+            "type": "integer",
+            "description": "Identifier assigned by Visa to uniquely identify the Originating Entity who initiates the transaction\n",
+            "format": "int64",
+            "example": 476110
+          },
+          "sourceCurrencyCode": {
+            "pattern": "iso-4217",
+            "type": "string",
+            "description": "Source amount 3-alpha currency code in ISO 4217",
+            "example": "USD"
+          },
+          "destinationCurrencyCode": {
+            "pattern": "iso-4217",
+            "type": "string",
+            "description": "Destination amount 3-alpha currency code in ISO 4217",
+            "example": "GBP"
+          }
+        }
+      },
+      "TransactionType": {
+        "type": "string",
+        "description": "Indicate that the fx rate is for a push (OCT) or pull(AFT) transaction. If the field is not passed, it defaults to push (OCT). This field is only applicable when rateProductCode is A.",
+        "enum": [
+          "PUSH",
+          "PULL"
+        ]
+      },
+      "Amount": {
+        "minimum": 0,
+        "exclusiveMinimum": true,
+        "type": "number",
+        "format": "double",
+        "example": 43.01
+      },
+      "ForeignExchangeRatesResponse": {
+        "title": "ForeignExchangeRatesResponse",
+        "required": [
+          "conversionRate",
+          "destinationAmount",
+          "markUpRateApplied",
+          "originalDestnAmtBeforeMarkUp"
+        ],
+        "type": "object",
+        "properties": {
+          "conversionRate": {
+            "maxLength": 9,
+            "type": "string",
+            "description": "This is the Conversion Rate. Note: The ConversionRate field excludes any markup.",
+            "example": "0.07"
+          },
+          "destinationAmount": {
+            "maxLength": 13,
+            "minLength": 1,
+            "pattern": "\\d{1,8}(\\.\\d{1,4})?|\\d{1,9}(\\.\\d{1,3})?|\\d{1,10}(\\.\\d{1,2})?|\\d{1,11}(\\.\\d)?|\\d{1,12}",
+            "type": "string",
+            "description": "The transaction amount in destination currency.",
+            "example": "75.85"
+          },
+          "markUpRateApplied": {
+            "pattern": "\\d{1,2}(\\.\\d{1,3})?",
+            "type": "string",
+            "description": "The percentage FX mark up rate applied to the transaction.",
+            "example": "0.07"
+          },
+          "originalDestnAmtBeforeMarkUp": {
+            "maxLength": 13,
+            "minLength": 1,
+            "type": "string",
+            "example": "81.16"
+          }
+        }
+      },
+      "FXResponse_using_rateProductCode_BANK_or_WALLET": {
+        "title": "FXResponse_using_rateProductCode_BANK_or_WALLET",
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/FXResponse_using_rateProductCode_BANK_or_WALLET.ResponsewithQuote_Yes"
+          },
+          {
+            "$ref": "#/components/schemas/FXResponse_using_rateProductCode_BANK_or_WALLET.ResponsewithSourceAmount"
+          },
+          {
+            "$ref": "#/components/schemas/FXResponse_using_rateProductCode_BANK_or_WALLET.ResponsewithDestinationAmount"
+          }
+        ]
+      },
+      "Timestamp": {
+        "type": "string",
+        "description": "ISO 8601 formatted UTC Timestamp, YYYY-MM-DDThh:mm:ss.sTZD. TZD is Z or +/-00:00\n\nexample: 1997-07-16T19:20:30.45+00:00\n"
+      },
+      "FXResponse_using_rateProductCode_BANK_or_WALLET.ResponsewithSourceAmount": {
+        "required": [
+          "conversionRate",
+          "destinationCurrencyCode",
+          "rateProductCode",
+          "sourceCurrencyCode"
+        ],
+        "type": "object",
+        "properties": {
+          "sourceAmount": {
+            "description": "The transaction amount in source currency.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Amount"
+              }
+            ]
+          },
+          "conversionRate": {
+            "type": "number",
+            "description": "This field contains the exchange rate applied to convert sourceAmount to destinationAmount.",
+            "format": "double",
+            "example": 0.07
+          },
+          "rateProductCode": {
+            "$ref": "#/components/schemas/BankOrWalletRateProductCode"
+          },
+          "destinationAmount": {
+            "description": "The transaction amount in destination currency.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Amount"
+              }
+            ]
+          },
+          "sourceCurrencyCode": {
+            "pattern": "iso-4217",
+            "type": "string",
+            "description": "Source amount 3-alpha currency code in ISO 4217",
+            "example": "USD"
+          },
+          "destinationCurrencyCode": {
+            "pattern": "iso-4217",
+            "type": "string",
+            "description": "Destination amount 3-alpha currency code in ISO 4217",
+            "example": "GBP"
+          }
+        }
+      },
+      "FXRequest_using_rateProductCode_BANK_or_WALLET": {
+        "title": "FXRequest_using_rateProductCode_BANK_or_WALLET",
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/FXRequest_using_rateProductCode_BANK_or_WALLET.Request_QuoteID"
+          },
+          {
+            "$ref": "#/components/schemas/FXRequest_using_rateProductCode_BANK_or_WALLET.Request_Source_to_Destination"
+          },
+          {
+            "$ref": "#/components/schemas/FXRequest_using_rateProductCode_BANK_or_WALLET.Request_Destination_to_Source"
+          }
+        ]
+      },
+      "ErrorResponse500": {
+        "title": "ErrorResponse500",
+        "required": [
+          "errorResponse"
+        ],
+        "type": "object",
+        "properties": {
+          "errorResponse": {
+            "required": [
+              "message",
+              "reason",
+              "status"
+            ],
+            "type": "object",
+            "properties": {
+              "reason": {
+                "type": "string",
+                "description": "Drives the error handling business logic for API Consumer. can provide custom/business error codes",
+                "example": "3004"
+              },
+              "status": {
+                "type": "string",
+                "description": "HTTP Status Code",
+                "example": "500"
+              },
+              "message": {
+                "type": "string",
+                "description": "Free form text message describing the error condition.",
+                "example": "An error occurred while processing the request. Please contact your Visa Representative"
+              }
+            }
+          }
+        }
+      },
+      "ErrorResponse403": {
+        "title": "ErrorResponse403",
+        "required": [
+          "errorResponse"
+        ],
+        "type": "object",
+        "properties": {
+          "errorResponse": {
+            "required": [
+              "message",
+              "reason",
+              "status"
+            ],
+            "type": "object",
+            "properties": {
+              "reason": {
+                "type": "string",
+                "description": "Drives the error handling business logic for API Consumer. can provide custom/business error codes",
+                "example": "4001"
+              },
+              "status": {
+                "type": "string",
+                "description": "HTTP Status Code",
+                "example": "403"
+              },
+              "message": {
+                "type": "string",
+                "description": "Free form text message describing the error condition.",
+                "example": "Product code value B indicating pay-to-account rates is not supported with current subscription."
+              }
+            }
+          }
+        }
+      },
+      "ErrorResponse400": {
+        "title": "ErrorResponse400",
+        "required": [
+          "errorResponse"
+        ],
+        "type": "object",
+        "properties": {
+          "errorResponse": {
+            "required": [
+              "message",
+              "reason",
+              "status"
+            ],
+            "type": "object",
+            "properties": {
+              "reason": {
+                "type": "string",
+                "description": "Drives the error handling business logic for API Consumer. can provide custom/business error codes",
+                "example": "3001"
+              },
+              "status": {
+                "type": "string",
+                "description": "HTTP Status Code",
+                "example": "400"
+              },
+              "details": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "field specific error message",
+                      "example": "Missing or Invalid content"
+                    },
+                    "location": {
+                      "type": "string",
+                      "description": "reference to a field which failed validation",
+                      "example": "destinationCurrencyCode"
+                    }
+                  }
+                }
+              },
+              "message": {
+                "type": "string",
+                "description": "Free form text message describing the error condition.",
+                "example": "Missing or Invalid Request Parameters"
+              }
+            }
+          }
+        }
+      },
+      "FXResponse_using_rateProductCode_BANK_or_WALLET.ResponsewithQuote_Yes": {
+        "required": [
+          "conversionRate",
+          "destinationCurrencyCode",
+          "rateProductCode",
+          "sourceCurrencyCode"
+        ],
+        "type": "object",
+        "properties": {
+          "quoteId": {
+            "maximum": 9999999999999,
+            "minimum": 0,
+            "type": "integer",
+            "description": "This field contains the unique number representing the FX Quote.",
+            "format": "int64",
+            "example": 987654321
+          },
+          "conversionRate": {
+            "type": "number",
+            "description": "This field contains the exchange rate applied to convert sourceAmount to destinationAmount.",
+            "format": "double",
+            "example": 0.07
+          },
+          "rateProductCode": {
+            "$ref": "#/components/schemas/BankOrWalletRateProductCode"
+          },
+          "sourceCurrencyCode": {
+            "pattern": "iso-4217",
+            "type": "string",
+            "description": "Source amount 3-alpha currency code in ISO 4217",
+            "example": "USD"
+          },
+          "quoteIdExpiryDateTime": {
+            "description": "This timestamp represents the datetime value in UTC for which the QuoteId is valid. Format should be YYYY-MM-DDThh:mm:ss.sssTZD. TZD is either Z or +/-00:00.",
+            "example": "2018-07-19T10:22:15.529+00:00",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Timestamp"
+              }
+            ]
+          },
+          "destinationCurrencyCode": {
+            "pattern": "iso-4217",
+            "type": "string",
+            "description": "Destination amount 3-alpha currency code in ISO 4217",
+            "example": "GBP"
+          }
+        }
+      },
+      "FXRequest_using_rateProductCode_BANK_or_WALLET.Request_Source_to_Destination": {
+        "required": [
+          "destinationCurrencyCode",
+          "initiatingPartyId",
+          "rateProductCode",
+          "sourceCurrencyCode"
+        ],
+        "type": "object",
+        "properties": {
+          "sourceAmount": {
+            "description": "The amount to debit from merchant's funding account. Minor currency units after the decimal point, must be less than or equal to the defined currency exponent\n\nExamples- 99.85, 99.00, etc indicate 2 digits after the decimal point for a 2-exponent currency, 989.333, 989.340, 989.000\netc indicate 3 digits after the decimal point for a 3-exponent currency, & 95, 100 etc indicate no decimal point or minor units for a 0-exponent currency\n\nIf the quoteIdRequired value is false or not provided, then either sourceAmount or destinationAmount is required\n",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Amount"
+              }
+            ]
+          },
+          "rateProductCode": {
+            "$ref": "#/components/schemas/BankOrWalletRateProductCode"
+          },
+          "initiatingPartyId": {
+            "type": "integer",
+            "description": "Identifier assigned by Visa to uniquely identify the Originating Entity who initiates the transaction\n",
+            "format": "int64",
+            "example": 476110
+          },
+          "sourceCurrencyCode": {
+            "pattern": "iso-4217",
+            "type": "string",
+            "description": "Source amount 3-alpha currency code in ISO 4217",
+            "example": "USD"
+          },
+          "destinationCurrencyCode": {
+            "pattern": "iso-4217",
+            "type": "string",
+            "description": "Destination amount 3-alpha currency code in ISO 4217",
+            "example": "GBP"
+          }
+        }
+      },
+      "FXResponse_using_rateProductCode_A_or_B.Response_Source_to_Destination": {
+        "required": [
+          "conversionRate",
+          "rateProductCode"
+        ],
+        "type": "object",
+        "properties": {
+          "conversionRate": {
+            "maxLength": 14,
+            "pattern": "\\d{1,7}(\\.\\d{1,12})?",
+            "type": "string",
+            "description": "This is the Conversion Rate. Note: The ConversionRate field excludes any markup.",
+            "example": "0.07"
+          },
+          "acquirerDetails": {
+            "type": "object",
+            "properties": {
+              "settlement": {
+                "type": "object",
+                "properties": {
+                  "amount": {
+                    "maxLength": 13,
+                    "minLength": 1,
+                    "pattern": "\\d{1,8}(\\.\\d{1,4})?|\\d{1,9}(\\.\\d{1,3})?|\\d{1,10}(\\.\\d{1,2})?|\\d{1,11}(\\.\\d)?|\\d{1,12}",
+                    "type": "string",
+                    "description": "The transaction amount in settlement currency.",
+                    "example": "100.55"
+                  },
+                  "currencyCode": {
+                    "pattern": "iso-4217",
+                    "type": "string",
+                    "description": "settlement amount currency code in ISO 4217 Numeric code",
+                    "example": "840"
+                  },
+                  "conversionRate": {
+                    "maxLength": 14,
+                    "pattern": "\\d{1,7}(\\.\\d{1,12})?",
+                    "type": "string",
+                    "description": "ConversionRate",
+                    "example": "0.07"
+                  }
+                }
+              }
+            }
+          },
+          "rateProductCode": {
+            "$ref": "#/components/schemas/RateProductCode"
+          },
+          "destinationAmount": {
+            "maxLength": 13,
+            "minLength": 1,
+            "pattern": "\\d{1,8}(\\.\\d{1,4})?|\\d{1,9}(\\.\\d{1,3})?|\\d{1,10}(\\.\\d{1,2})?|\\d{1,11}(\\.\\d)?|\\d{1,12}",
+            "type": "string",
+            "description": "<b>Conditional.</b><br>This field is required for source-to-destination lookup.<br><br>The transaction amount in destination currency.",
+            "example": "75.85"
+          },
+          "markupRateApplied": {
+            "maxLength": 6,
+            "minLength": 0,
+            "pattern": "\\d{1,2}(\\.\\d{1,3})?",
+            "type": "string",
+            "description": "The percentage FX mark up rate (<100) to be applied to the transaction.  Example- A value of 0.07 will assume a 0.07% markup applies to the FX transaction. The default markup rates can also be optionally configured as part of onboarding process. If the markup value is not supplied in the FX inquiry API, and the Acquiring BIN is provided, the markup configured during onboarding will be picked up and applied to the transaction.",
+            "example": "0.07"
+          },
+          "sourceAmountWithoutMarkup": {
+            "maxLength": 13,
+            "minLength": 1,
+            "pattern": "\\\\d{1,8}(.\\\\d{1,4})?|\\\\d{1,9}(.\\\\d{1,3})?|\\\\d{1,10}(.\\\\d{1,2})?|\\\\d{1,11}(.\\\\d)?|\\\\d{1,12}",
+            "type": "string",
+            "description": "Source Transaction Amount excluding markup in source currency.  This field will be returned in a source-to-destination inquiry response when markup is applicable.",
+            "example": "75.85"
+          }
+        }
+      },
+      "FXRequest_using_rateProductCode_BANK_or_WALLET.Request_Destination_to_Source": {
+        "required": [
+          "destinationCurrencyCode",
+          "initiatingPartyId",
+          "rateProductCode",
+          "sourceCurrencyCode"
+        ],
+        "type": "object",
+        "properties": {
+          "rateProductCode": {
+            "$ref": "#/components/schemas/BankOrWalletRateProductCode"
+          },
+          "destinationAmount": {
+            "description": "The destination amount to credit to beneficiary's bank account. Minor currency units after the decimal point, must be less than or equal to the defined currency exponent.\n\nExamples- 99.85, 99.00, etc indicate 2 digits after the decimal point for a 2-exponent currency, 989.333, 989.340, 989.000, etc \nindicate 3 digits after the decimal point for a 3-exponent currency, & 95, 100 etc indicate no decimal point or minor units for a 0-exponent currency. \n\nIf the quoteIdRequired value is false or not provided, then either sourceAmount or destinationAmount is required.\n",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Amount"
+              }
+            ]
+          },
+          "initiatingPartyId": {
+            "type": "integer",
+            "description": "Identifier assigned by Visa to uniquely identify the Originating Entity who initiates the transaction\n",
+            "format": "int64"
+          },
+          "sourceCurrencyCode": {
+            "pattern": "iso-4217",
+            "type": "string",
+            "description": "Source amount 3-alpha currency code in ISO 4217",
+            "example": "USD"
+          },
+          "destinationCurrencyCode": {
+            "pattern": "iso-4217",
+            "type": "string",
+            "description": "Destination amount 3-alpha currency code in ISO 4217",
+            "example": "GBP"
+          }
+        }
+      },
+      "FXResponse_using_rateProductCode_A_or_B.Response_Destination_to_Source": {
+        "required": [
+          "conversionRate",
+          "rateProductCode"
+        ],
+        "type": "object",
+        "properties": {
+          "sourceAmount": {
+            "maxLength": 13,
+            "minLength": 1,
+            "pattern": "\\d{1,8}(\\.\\d{1,4})?|\\d{1,9}(\\.\\d{1,3})?|\\d{1,10}(\\.\\d{1,2})?|\\d{1,11}(\\.\\d)?|\\d{1,12}",
+            "type": "string",
+            "description": "<b>Conditional.</b><br>This field is required for destination-to-source lookup.<br><br>The transaction amount in source currency.",
+            "example": "100.55"
+          },
+          "conversionRate": {
+            "maxLength": 14,
+            "pattern": "\\d{1,7}(\\.\\d{1,12})?",
+            "type": "string",
+            "description": "This is the Conversion Rate. Note: The ConversionRate field excludes any markup.",
+            "example": "0.07"
+          },
+          "acquirerDetails": {
+            "type": "object",
+            "properties": {
+              "settlement": {
+                "type": "object",
+                "properties": {
+                  "amount": {
+                    "maxLength": 13,
+                    "minLength": 1,
+                    "pattern": "\\d{1,8}(\\.\\d{1,4})?|\\d{1,9}(\\.\\d{1,3})?|\\d{1,10}(\\.\\d{1,2})?|\\d{1,11}(\\.\\d)?|\\d{1,12}",
+                    "type": "string",
+                    "description": "The transaction amount in settlement currency.",
+                    "example": "100.55"
+                  },
+                  "currencyCode": {
+                    "pattern": "iso-4217",
+                    "type": "string",
+                    "description": "settlement amount currency code in ISO 4217 Numeric code",
+                    "example": "840"
+                  },
+                  "conversionRate": {
+                    "maxLength": 14,
+                    "pattern": "\\d{1,7}(\\.\\d{1,12})?",
+                    "type": "string",
+                    "description": "ConversionRate",
+                    "example": "0.07"
+                  }
+                }
+              }
+            }
+          },
+          "rateProductCode": {
+            "$ref": "#/components/schemas/RateProductCode"
+          },
+          "markupRateApplied": {
+            "maxLength": 6,
+            "minLength": 0,
+            "pattern": "\\d{1,2}(\\.\\d{1,3})?",
+            "type": "string",
+            "description": "The percentage FX mark up rate (<100) to be applied to the transaction.  Example- A value of 0.07 will assume a 0.07% markup applies to the FX transaction. The default markup rates can also be optionally configured as part of onboarding process. If the markup value is not supplied in the FX inquiry API, and the Acquiring BIN is provided, the markup configured during onboarding will be picked up and applied to the transaction.",
+            "example": "0.07"
+          },
+          "sourceAmountWithMarkup": {
+            "maxLength": 13,
+            "minLength": 1,
+            "pattern": "\\\\d{1,8}(\\.\\d{1,4})?|\\d{1,9}(.\\\\d{1,3})?|\\\\d{1,10}(.\\\\d{1,2})?|\\\\d{1,11}(.\\\\d)?|\\\\d{1,12}",
+            "type": "string",
+            "description": "Source Amount including markup in source currency.  This field will be returned in a destination-to-source inquiry response when markup is applicable.",
+            "example": "75.85"
+          }
+        }
+      },
+      "FXRequest_using_rateProductCode_A_or_B": {
+        "title": "FXRequest_using_rateProductCode_A_or_B",
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/FXRequest_using_rateProductCode_A_or_B.Request_Source_to_Destination"
+          },
+          {
+            "$ref": "#/components/schemas/FXRequest_using_rateProductCode_A_or_B.Request_Destination_to_Source"
+          }
+        ]
+      },
+      "RateProductCode": {
+        "title": "RateProductCode",
+        "type": "string",
+        "description": "indicates which rate source to be used like card based vs account based rates.\n- A - Card based rates\n- B - Account based rates\n",
+        "enum": [
+          "A",
+          "B"
+        ]
+      },
+      "FXRequest_using_rateProductCode_A_or_B.Request_Source_to_Destination": {
+        "required": [
+          "destinationCurrencyCode",
+          "rateProductCode",
+          "sourceAmount",
+          "sourceCurrencyCode"
+        ],
+        "type": "object",
+        "properties": {
+          "markupRate": {
+            "maxLength": 6,
+            "minLength": 0,
+            "pattern": "\\d{1,2}(\\.\\d{1,3})?",
+            "type": "string",
+            "description": "The percentage FX mark up rate (<100) to be applied to the transaction.  (Note: The markup is used to estimate how much to collect from a sender and when submitting the OCT payload transaction, the payload must exclude any markup).  Example- A value of 0.07 will assume a 0.07% markup applies to the FX transaction. The default markup rates can also be optionally configured as part of onboarding process. If the markup value is not supplied in the FX inquiry API, and the Acquiring BIN is provided, the markup configured during onboarding will be picked up and applied to the transaction.  To override any markup defaults set up on the account, always send a markup value of 0.00 to indicate 0% markup.",
+            "example": "0.07"
+          },
+          "sourceAmount": {
+            "maxLength": 13,
+            "minLength": 1,
+            "pattern": "\\d{1,8}(\\.\\d{1,4})?|\\d{1,9}(\\.\\d{1,3})?|\\d{1,10}(\\.\\d{1,2})?|\\d{1,11}(\\.\\d)?|\\d{1,12}",
+            "type": "string",
+            "description": "This field is required for source-to-destination lookup, and assumes that the “sourceAmount” in the request includes any applicable originator markup (Note: When submitting the OCT payload transaction, the payload must exclude any markup).  Minor currency units after the decimal point, must be less than or equal to the defined currency exponent. This field cannot be 0 or null. <br>Examples-  99.85, 99.00, etc indicate 2 digits after the decimal point for a 2-exponent currency, 989.333, 989.340, 989.000, etc indicate 3 digits after the decimal point for a 3-exponent currency, & 95, 100 etc indicate no decimal point or minor units for a 0-exponent currency.",
+            "example": "100.55"
+          },
+          "acquirerDetails": {
+            "type": "object",
+            "properties": {
+              "bin": {
+                "maxLength": 11,
+                "minLength": 6,
+                "type": "number",
+                "description": "The clients of Funds Transfer APIs can choose to provide acquiringBin for reporting purpose. This is the Bank Identification Number (BIN) under which your Funds Transfer is registered. This must match the information provided during onboarding process. This BIN value is conditionally required in the API request to apply default markup rate to the transaction. The markupRate provided in the API request takes precedence over the configured defaults.",
+                "format": "double",
+                "example": 408999
+              },
+              "settlement": {
+                "type": "object",
+                "properties": {
+                  "currencyCode": {
+                    "pattern": "iso-4217",
+                    "type": "string",
+                    "description": "Source Settlement currency code in ISO 4217 Numeric code",
+                    "example": "840"
+                  }
+                }
+              }
+            }
+          },
+          "rateProductCode": {
+            "$ref": "#/components/schemas/RateProductCode"
+          },
+          "transactionType": {
+            "$ref": "#/components/schemas/TransactionType"
+          },
+          "sourceCurrencyCode": {
+            "pattern": "iso-4217",
+            "type": "string",
+            "description": "Source amount currency code in ISO 4217 Numeric code",
+            "example": "840"
+          },
+          "destinationCurrencyCode": {
+            "pattern": "iso-4217",
+            "type": "string",
+            "description": "Destination amount currency code in ISO 4217 Numeric code",
+            "example": "826"
+          }
+        }
+      },
+      "BankOrWalletRateProductCode": {
+        "title": "BankOrWalletRateProductCode",
+        "type": "string",
+        "description": "Indicates which rate source is to be used\n- BANK - Account based Live or Quote FX rates\n- WALLET - Wallet based Live or Quote FX rates\n",
+        "enum": [
+          "BANK",
+          "WALLET"
+        ]
+      },
+      "FXResponse_using_rateProductCode_A_or_B": {
+        "title": "FXResponse_using_rateProductCode_A_or_B",
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/FXResponse_using_rateProductCode_A_or_B.Response_Source_to_Destination"
+          },
+          {
+            "$ref": "#/components/schemas/FXResponse_using_rateProductCode_A_or_B.Response_Destination_to_Source"
+          }
+        ]
+      },
+      "FXRequest_using_rateProductCode_A_or_B.Request_Destination_to_Source": {
+        "required": [
+          "destinationAmount",
+          "destinationCurrencyCode",
+          "rateProductCode",
+          "sourceCurrencyCode"
+        ],
+        "type": "object",
+        "properties": {
+          "markupRate": {
+            "maxLength": 6,
+            "minLength": 0,
+            "pattern": "\\d{1,2}(\\.\\d{1,3})?",
+            "type": "string",
+            "description": "The percentage FX mark up rate (<100) to be applied to the transaction.  (Note: The markup is used to estimate how much to collect from a sender and when submitting the OCT payload transaction, the payload must exclude any markup).  Example- A value of 0.07 will assume a 0.07% markup applies to the FX transaction. The default markup rates can also be optionally configured as part of onboarding process. If the markup value is not supplied in the FX inquiry API, and the Acquiring BIN is provided, the markup configured during onboarding will be picked up and applied to the transaction.  To override any markup defaults set up on the account, always send a markup value of 0.00 to indicate 0% markup.",
+            "example": "0.07"
+          },
+          "acquirerDetails": {
+            "type": "object",
+            "properties": {
+              "bin": {
+                "maxLength": 11,
+                "minLength": 6,
+                "type": "number",
+                "description": "The clients of Funds Transfer APIs can choose to provide acquiringBin for reporting purpose. This is the Bank Identification Number (BIN) under which your Funds Transfer is registered. This must match the information provided during onboarding process. This BIN value is conditionally required in the API request to apply default markup rate to the transaction. The markupRate provided in the API request takes precedence over the configured defaults.",
+                "format": "double",
+                "example": 408999
+              },
+              "settlement": {
+                "type": "object",
+                "properties": {
+                  "currencyCode": {
+                    "pattern": "iso-4217",
+                    "type": "string",
+                    "description": "Source Settlement currency code in ISO 4217 Numeric code",
+                    "example": "840"
+                  }
+                }
+              }
+            }
+          },
+          "rateProductCode": {
+            "$ref": "#/components/schemas/RateProductCode"
+          },
+          "transactionType": {
+            "$ref": "#/components/schemas/TransactionType"
+          },
+          "destinationAmount": {
+            "maxLength": 13,
+            "minLength": 1,
+            "pattern": "\\d{1,8}(\\.\\d{1,4})?|\\d{1,9}(\\.\\d{1,3})?|\\d{1,10}(\\.\\d{1,2})?|\\d{1,11}(\\.\\d)?|\\d{1,12}",
+            "type": "string",
+            "description": "This field is required for destination-to-source lookup. The transaction amount in destination currency does not include any markup; it represents the amount the beneficiary will receive.  Minor currency units after the decimal point, must be less than or equal to the defined currency exponent. This field cannot be 0 or null. <br>Examples-  99.85, 99.00, etc indicate 2 digits after the decimal point for a 2-exponent currency, 989.333, 989.340, 989.000, etc indicate 3 digits after the decimal point for a 3-exponent currency, & 95, 100 etc indicate no decimal point or minor units for a 0-exponent currency.",
+            "example": "75.85"
+          },
+          "sourceCurrencyCode": {
+            "pattern": "iso-4217",
+            "type": "string",
+            "description": "Source amount currency code in ISO 4217 Numeric code",
+            "example": "840"
+          },
+          "destinationCurrencyCode": {
+            "pattern": "iso-4217",
+            "type": "string",
+            "description": "Destination amount currency code in ISO 4217 Numeric code",
+            "example": "826"
+          }
+        }
+      },
+      "FXResponse_using_rateProductCode_BANK_or_WALLET.ResponsewithDestinationAmount": {
+        "required": [
+          "conversionRate",
+          "destinationCurrencyCode",
+          "rateProductCode",
+          "sourceCurrencyCode"
+        ],
+        "type": "object",
+        "properties": {
+          "sourceAmount": {
+            "description": "The transaction amount in source currency.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Amount"
+              }
+            ]
+          },
+          "conversionRate": {
+            "type": "number",
+            "description": "This field contains the exchange rate applied to convert sourceAmount to destinationAmount.",
+            "format": "double",
+            "example": 0.07
+          },
+          "rateProductCode": {
+            "$ref": "#/components/schemas/BankOrWalletRateProductCode"
+          },
+          "destinationAmount": {
+            "description": "The transaction amount in destination currency.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Amount"
+              }
+            ]
+          },
+          "sourceCurrencyCode": {
+            "pattern": "iso-4217",
+            "type": "string",
+            "description": "Source amount 3-alpha currency code in ISO 4217",
+            "example": "USD"
+          },
+          "destinationCurrencyCode": {
+            "pattern": "iso-4217",
+            "type": "string",
+            "description": "Destination amount 3-alpha currency code in ISO 4217",
+            "example": "GBP"
+          }
+        }
+      },
+      "ForeignExchangeRatesRequest": {
+        "title": "ForeignExchangeRatesRequest",
+        "required": [
+          "destinationCurrencyCode",
+          "sourceAmount",
+          "sourceCurrencyCode"
+        ],
+        "type": "object",
+        "properties": {
+          "markupRate": {
+            "maxLength": 6,
+            "minLength": 0,
+            "pattern": "\\d{1,2}(\\.\\d{1,3})?",
+            "type": "string",
+            "description": "The percentage FX mark up rate (<100) to be applied to the transaction.  (Note: The markup is used to estimate how much to collect from a sender and when submitting the OCT payload transaction, the payload must exclude any markup).  Example- A value of 0.07 will assume a 0.07% markup applies to the FX transaction. The default markup rates can also be optionally configured as part of onboarding process. If the markup value is not supplied in the FX inquiry API, and the Acquiring BIN is provided, the markup configured during onboarding will be picked up and applied to the transaction.  To override any markup defaults set up on the account, always send a markup value of 0.00 to indicate 0% markup.",
+            "example": "0.07"
+          },
+          "acquiringBin": {
+            "type": "integer",
+            "description": "The clients of Funds Transfer APIs can choose to provide acquiringBin for reporting purpose. This is the Bank Identification Number (BIN) under which your Funds Transfer is registered. This must match the information provided during onboarding process. This BIN value is conditionally required in the API request to apply default markup rate to the transaction. The markupRate provided in the API request takes precedence over the configured defaults.",
+            "example": 408999
+          },
+          "cardAcceptor": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "maxLength": 25,
+                "minLength": 1,
+                "type": "string",
+                "description": "Name of the originator/money transfer operator."
+              },
+              "idCode": {
+                "maxLength": 15,
+                "minLength": 1,
+                "type": "string",
+                "description": "An identifier for the card acceptor (Visa Direct Originator). This value should be unique for each originator for whom you are sending transactions."
+              },
+              "address": {
+                "type": "object",
+                "properties": {
+                  "city": {
+                    "maxLength": 13,
+                    "minLength": 1,
+                    "type": "string",
+                    "description": "Identifies name of the city where transaction occurs."
+                  },
+                  "state": {
+                    "maxLength": 50,
+                    "type": "string",
+                    "description": "State or province of the money transfer operator/Originator."
+                  },
+                  "county": {
+                    "maxLength": 50,
+                    "type": "string",
+                    "description": "It contains 3-digit numeric FIPS county code of the money transfer operator/Originator."
+                  },
+                  "country": {
+                    "maxLength": 60,
+                    "minLength": 1,
+                    "type": "string",
+                    "description": "This field must contain a valid ISO country code for the country of the originator or money transfer operator.<br><br>Refer to <a href=\"/request_response_codes#iso_country_and_currency_codes\">ISO Codes</a>"
+                  },
+                  "zipCode": {
+                    "maxLength": 14,
+                    "type": "string",
+                    "description": "<Zip/Postal code of the money transfer operator/Originator."
+                  }
+                }
+              },
+              "terminalId": {
+                "maxLength": 8,
+                "minLength": 1,
+                "type": "string",
+                "description": "The identifier for the terminal at a card acceptor location. If sending transactions from a card not present environment, use the same value for all transactions."
+              }
+            }
+          },
+          "sourceAmount": {
+            "maxLength": 13,
+            "minLength": 1,
+            "pattern": "\\d{1,8}(\\.\\d{1,4})?|\\d{1,9}(\\.\\d{1,3})?|\\d{1,10}(\\.\\d{1,2})?|\\d{1,11}(\\.\\d)?|\\d{1,12}",
+            "type": "string",
+            "description": "This field is required for source-to-destination lookup, and assumes that the “sourceAmount” in the request includes any applicable originator markup (Note: When submitting the OCT payload transaction, the payload must exclude any markup).  Minor currency units after the decimal point, must be less than or equal to the defined currency exponent. This field cannot be 0 or null. <br>Examples-  99.85, 99.00, etc indicate 2 digits after the decimal point for a 2-exponent currency, 989.333, 989.340, 989.000, etc indicate 3 digits after the decimal point for a 3-exponent currency, & 95, 100 etc indicate no decimal point or minor units for a 0-exponent currency.",
+            "example": "100.55"
+          },
+          "transactionType": {
+            "type": "string",
+            "description": "Indicate that the fx rate is for a push (OCT) or pull(AFT) transaction. If the field is not passed, it defaults to push (OCT).",
+            "enum": [
+              "PUSH",
+              "PULL"
+            ]
+          },
+          "sourceCurrencyCode": {
+            "maxLength": 3,
+            "minLength": 3,
+            "pattern": "(\\d{1,3})|([a-zA-Z]{3})",
+            "type": "string",
+            "description": "Source amount currency code in ISO 4217 Numeric code",
+            "example": "840"
+          },
+          "acquirerCountryCode": {
+            "maxLength": 3,
+            "minLength": 3,
+            "type": "string",
+            "description": "The Acquirer Country Code should conform to ISO 3166-1, 3-digit numeric representation",
+            "example": "826"
+          },
+          "destinationCurrencyCode": {
+            "maxLength": 3,
+            "minLength": 3,
+            "pattern": "(\\d{1,3})|([a-zA-Z]{3})'",
+            "type": "string",
+            "description": "Destination amount currency code in ISO 4217 Numeric code",
+            "example": "826"
+          },
+          "systemsTraceAuditNumber": {
+            "maxLength": 6,
+            "minLength": 6,
+            "type": "string",
+            "description": "This trace number is used to tie together the FX call and the related financial AFT/OCT transaction. For the FX lookup use a value that will be sent in subsequent AFT/OCT transaction."
+          },
+          "retrievalReferenceNumber": {
+            "maxLength": 12,
+            "minLength": 12,
+            "type": "string",
+            "description": "A value used to tie together the FX call and the related financial AFT/OCT transaction. For the FX lookup use a value that will be sent in subsequent AFT/OCT transaction.<br><br> Recommended Format : ydddhhnnnnnn<br><br>The first fours digits must be a valid yddd date in the Julian date format, where the first digit = 0-9 (last digit of current year) and the next three digits = 001-366 (number of the day in the year). hh can be the two digit hour in a 24 hour clock (00-23) during which the transaction is performed.<br><br> nnnnnn can be the systemsTraceAuditNumber or any 6 digit number."
+          }
+        }
+      }
+    },
+    "responses": {},
+    "parameters": {},
+    "examples": {},
+    "requestBodies": {},
+    "headers": {},
+    "callbacks": {}
+  },
+  "webhooks": {},
+  "x-tagGroups": [
+    {
+      "name": "API Reference",
+      "tags": [
+        "Foreign Exchange Rates API"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+{
+  "name": "Citi Insurance Booking API Client",
+  "description": "Interactive API client and pre-filled form manager for Citi OpenAPI Insurance Bookings with Offline Payments.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

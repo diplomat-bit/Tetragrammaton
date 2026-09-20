@@ -1,0 +1,6 @@
+{
+  "name": "Citi Account Balances & CSV Export",
+  "description": "Secure financial dashboard to pull Citi accounts and real-time balances using Bearer tokens, view interactive financial analytics, and export transaction history to CSV.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

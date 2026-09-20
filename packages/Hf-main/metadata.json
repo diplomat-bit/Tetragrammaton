@@ -1,0 +1,7 @@
+{
+  "name": "Paper Key & Ethereum Wallet Scanner",
+  "description": "Scan 64-digit private keys from paper using camera or Gemini AI vision, derive Ethereum wallet, and pull live balances and transactions.",
+  "requestFramePermissions": ["camera", "microphone"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
+

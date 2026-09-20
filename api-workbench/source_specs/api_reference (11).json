@@ -1,0 +1,1349 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Visa DCVV2 Generate",
+    "description": "",
+    "version": "1"
+  },
+  "servers": [
+    {
+      "url": "https://sandbox.api.visa.com",
+      "description": "Sandbox server"
+    }
+  ],
+  "security": [],
+  "tags": [
+    {
+      "name": "dCVV2 Generate",
+      "description": "dCVV2 Generate"
+    },
+    {
+      "name": "dCVV2 Management",
+      "description": "DCVV2 Enroll"
+    }
+  ],
+  "paths": {
+    "/dCVV2/v1/PanDB/Unenroll": {
+      "post": {
+        "tags": [
+          "dCVV2 Management"
+        ],
+        "summary": "UnEnroll",
+        "description": "",
+        "operationId": "UnEnroll",
+        "requestBody": {
+          "description": "Request Data",
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "acctInfo",
+                  "cardAcceptr"
+                ],
+                "type": "object",
+                "properties": {
+                  "agentId": {
+                    "maxLength": 2,
+                    "minLength": 1,
+                    "type": "string",
+                    "description": "Agent ID for this update"
+                  },
+                  "acctInfo": {
+                    "required": [
+                      "primryAcctNum"
+                    ],
+                    "type": "object",
+                    "properties": {
+                      "primryAcctNum": {
+                        "required": [
+                          "pan"
+                        ],
+                        "type": "object",
+                        "properties": {
+                          "pan": {
+                            "type": "integer",
+                            "description": "Primary account number (PAN)"
+                          }
+                        },
+                        "description": ""
+                      }
+                    },
+                    "description": ""
+                  },
+                  "cardAcceptr": {
+                    "required": [
+                      "clientId"
+                    ],
+                    "type": "object",
+                    "properties": {
+                      "clientId": {
+                        "maxLength": 64,
+                        "minLength": 1,
+                        "type": "string",
+                        "description": "Client ID of requestor"
+                      }
+                    },
+                    "description": ""
+                  }
+                }
+              },
+              "examples": {
+                "Default": {
+                  "summary": "Default",
+                  "value": {
+                    "acctInfo": {
+                      "primryAcctNum": {
+                        "pan": "4147180000000007"
+                      }
+                    },
+                    "cardAcceptr": {
+                      "clientId": "A48YG89AG89"
+                    },
+                    "agentId": "JB"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "Dcvv2UnenrollResponse": {
+                      "required": [
+                        "acctInfo",
+                        "transctnReslts"
+                      ],
+                      "type": "object",
+                      "properties": {
+                        "acctInfo": {
+                          "required": [
+                            "primryAcctNum"
+                          ],
+                          "type": "object",
+                          "properties": {
+                            "primryAcctNum": {
+                              "required": [
+                                "pan"
+                              ],
+                              "type": "object",
+                              "properties": {
+                                "pan": {
+                                  "type": "integer",
+                                  "description": "Primary account number (PAN)"
+                                }
+                              },
+                              "description": ""
+                            }
+                          },
+                          "description": ""
+                        },
+                        "msgIdentfctn": {
+                          "required": [
+                            "tranId"
+                          ],
+                          "type": "object",
+                          "properties": {
+                            "tranId": {
+                              "type": "integer",
+                              "description": "Transaction ID"
+                            }
+                          },
+                          "description": ""
+                        },
+                        "transctnReslts": {
+                          "required": [
+                            "actionCd"
+                          ],
+                          "type": "object",
+                          "properties": {
+                            "actionCd": {
+                              "maxLength": 3,
+                              "minLength": 1,
+                              "type": "string",
+                              "description": "Response code"
+                            }
+                          },
+                          "description": ""
+                        }
+                      },
+                      "description": "Success"
+                    }
+                  }
+                },
+                "examples": {
+                  "Default": {
+                    "summary": "Default",
+                    "value": {
+                      "acctInfo": {
+                        "primryAcctNum": {
+                          "pan": "4147180000000007"
+                        }
+                      },
+                      "msgIdentfctn": {
+                        "tranId": "389016808650001"
+                      },
+                      "transctnReslts": {
+                        "actionCd": "00"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Application error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "acctInfo": {
+                      "required": [
+                        "primryAcctNum"
+                      ],
+                      "type": "object",
+                      "properties": {
+                        "primryAcctNum": {
+                          "required": [
+                            "pan"
+                          ],
+                          "type": "object",
+                          "properties": {
+                            "pan": {
+                              "type": "integer",
+                              "description": "Primary account number (PAN)"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "msgIdentfctn": {
+                      "required": [
+                        "tranId"
+                      ],
+                      "type": "object",
+                      "properties": {
+                        "tranId": {
+                          "type": "integer",
+                          "description": "Transaction ID"
+                        }
+                      }
+                    },
+                    "errorResponse": {
+                      "required": [
+                        "status"
+                      ],
+                      "type": "object",
+                      "properties": {
+                        "status": {
+                          "type": "integer",
+                          "description": "Application error code"
+                        }
+                      }
+                    },
+                    "transctnReslts": {
+                      "required": [
+                        "actionCd"
+                      ],
+                      "type": "object",
+                      "properties": {
+                        "actionCd": {
+                          "maxLength": 3,
+                          "minLength": 1,
+                          "type": "string",
+                          "description": "Response code for error"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden.  Use this when the clientID does not validate properly.  No JSON payload is returned. The client MUST NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "required": [
+                        "code",
+                        "message"
+                      ],
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "integer",
+                          "description": "HTTP error code"
+                        },
+                        "message": {
+                          "type": "string",
+                          "description": "Error message"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Invalid message number or message is not yet supported.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "required": [
+                        "code",
+                        "message"
+                      ],
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "integer",
+                          "description": "HTTP error code"
+                        },
+                        "message": {
+                          "type": "string",
+                          "description": "Error message"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-codegen-request-body-name": "request",
+        "x-operationVersions": [
+          {
+            "label": "v1 - Latest",
+            "operationPointer": "#/paths/~1dCVV2~1v1~1PanDB~1Unenroll/post",
+            "default": false
+          }
+        ],
+        "x-hideTryIt": true
+      }
+    },
+    "/dCVV2/v1/PanDB/Inquiry": {
+      "post": {
+        "tags": [
+          "dCVV2 Management"
+        ],
+        "summary": "Inquiry",
+        "description": "",
+        "operationId": "Inquiry",
+        "requestBody": {
+          "description": "Request Data",
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "acctInfo",
+                  "cardAcceptr"
+                ],
+                "type": "object",
+                "properties": {
+                  "agentId": {
+                    "maxLength": 2,
+                    "minLength": 1,
+                    "type": "string",
+                    "description": "Agent ID for this update"
+                  },
+                  "acctInfo": {
+                    "required": [
+                      "primryAcctNum"
+                    ],
+                    "type": "object",
+                    "properties": {
+                      "primryAcctNum": {
+                        "required": [
+                          "pan"
+                        ],
+                        "type": "object",
+                        "properties": {
+                          "pan": {
+                            "type": "integer",
+                            "description": "Primary account number (PAN)"
+                          }
+                        },
+                        "description": ""
+                      }
+                    },
+                    "description": ""
+                  },
+                  "cardAcceptr": {
+                    "required": [
+                      "clientId"
+                    ],
+                    "type": "object",
+                    "properties": {
+                      "clientId": {
+                        "maxLength": 64,
+                        "minLength": 1,
+                        "type": "string",
+                        "description": "Client ID of requestor"
+                      }
+                    },
+                    "description": ""
+                  }
+                }
+              },
+              "examples": {
+                "Default": {
+                  "summary": "Default",
+                  "value": {
+                    "acctInfo": {
+                      "primryAcctNum": {
+                        "pan": "4147180000000007"
+                      }
+                    },
+                    "cardAcceptr": {
+                      "clientId": "A48YG89AG89"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "Dcvv2InquiryResponse": {
+                      "required": [
+                        "acctInfo",
+                        "transctnReslts"
+                      ],
+                      "type": "object",
+                      "properties": {
+                        "agentId": {
+                          "maxLength": 2,
+                          "minLength": 1,
+                          "type": "string",
+                          "description": "Agent ID of latest update"
+                        },
+                        "acctInfo": {
+                          "required": [
+                            "primryAcctNum"
+                          ],
+                          "type": "object",
+                          "properties": {
+                            "primryAcctNum": {
+                              "required": [
+                                "pan"
+                              ],
+                              "type": "object",
+                              "properties": {
+                                "pan": {
+                                  "type": "integer",
+                                  "description": "Primary account number (PAN)"
+                                }
+                              },
+                              "description": ""
+                            }
+                          },
+                          "description": ""
+                        },
+                        "msgIdentfctn": {
+                          "required": [
+                            "tranId"
+                          ],
+                          "type": "object",
+                          "properties": {
+                            "tranId": {
+                              "type": "integer",
+                              "description": "Transaction ID"
+                            }
+                          },
+                          "description": ""
+                        },
+                        "transctnReslts": {
+                          "required": [
+                            "actionCd"
+                          ],
+                          "type": "object",
+                          "properties": {
+                            "actionCd": {
+                              "maxLength": 3,
+                              "minLength": 1,
+                              "type": "string",
+                              "description": "Response code"
+                            }
+                          },
+                          "description": ""
+                        }
+                      },
+                      "description": "Success"
+                    }
+                  }
+                },
+                "examples": {
+                  "Default": {
+                    "summary": "Default",
+                    "value": {
+                      "acctInfo": {
+                        "primryAcctNum": {
+                          "pan": "4147180000000007"
+                        }
+                      },
+                      "agentId": "JB",
+                      "msgIdentfctn": {
+                        "tranId": "389016818880002"
+                      },
+                      "transctnReslts": {
+                        "enrolled": "false",
+                        "actionCd": "00"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Application error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "acctInfo": {
+                      "required": [
+                        "primryAcctNum"
+                      ],
+                      "type": "object",
+                      "properties": {
+                        "primryAcctNum": {
+                          "required": [
+                            "pan"
+                          ],
+                          "type": "object",
+                          "properties": {
+                            "pan": {
+                              "type": "integer",
+                              "description": "Primary account number (PAN)"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "msgIdentfctn": {
+                      "required": [
+                        "tranId"
+                      ],
+                      "type": "object",
+                      "properties": {
+                        "tranId": {
+                          "type": "integer",
+                          "description": "Transaction ID"
+                        }
+                      }
+                    },
+                    "errorResponse": {
+                      "required": [
+                        "status"
+                      ],
+                      "type": "object",
+                      "properties": {
+                        "status": {
+                          "type": "integer",
+                          "description": "Application error code"
+                        }
+                      }
+                    },
+                    "transctnReslts": {
+                      "required": [
+                        "actionCd"
+                      ],
+                      "type": "object",
+                      "properties": {
+                        "actionCd": {
+                          "maxLength": 3,
+                          "minLength": 1,
+                          "type": "string",
+                          "description": "Response code for error"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden.  Use this when the clientID does not validate properly.  No JSON payload is returned. The client MUST NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "required": [
+                        "code",
+                        "message"
+                      ],
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "integer",
+                          "description": "HTTP error code"
+                        },
+                        "message": {
+                          "type": "string",
+                          "description": "Error message"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Invalid message number or message is not yet supported.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "required": [
+                        "code",
+                        "message"
+                      ],
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "integer",
+                          "description": "HTTP error code"
+                        },
+                        "message": {
+                          "type": "string",
+                          "description": "Error message"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-codegen-request-body-name": "request",
+        "x-operationVersions": [
+          {
+            "label": "v1 - Latest",
+            "operationPointer": "#/paths/~1dCVV2~1v1~1PanDB~1Inquiry/post",
+            "default": false
+          }
+        ],
+        "x-hideTryIt": true
+      }
+    },
+    "/dCVV2/v1/PanDB/Enroll": {
+      "post": {
+        "tags": [
+          "dCVV2 Management"
+        ],
+        "summary": "Enroll",
+        "description": "",
+        "operationId": "Enroll",
+        "requestBody": {
+          "description": "Request Data",
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "acctInfo",
+                  "cardAcceptr"
+                ],
+                "type": "object",
+                "properties": {
+                  "agentId": {
+                    "maxLength": 2,
+                    "minLength": 1,
+                    "type": "string",
+                    "description": "Agent ID for this update"
+                  },
+                  "acctInfo": {
+                    "required": [
+                      "primryAcctNum"
+                    ],
+                    "type": "object",
+                    "properties": {
+                      "primryAcctNum": {
+                        "required": [
+                          "pan"
+                        ],
+                        "type": "object",
+                        "properties": {
+                          "pan": {
+                            "type": "integer",
+                            "description": "Primary account number (PAN)"
+                          }
+                        },
+                        "description": ""
+                      }
+                    },
+                    "description": ""
+                  },
+                  "cardAcceptr": {
+                    "required": [
+                      "clientId"
+                    ],
+                    "type": "object",
+                    "properties": {
+                      "clientId": {
+                        "maxLength": 64,
+                        "minLength": 1,
+                        "type": "string",
+                        "description": "Client ID of requestor"
+                      }
+                    },
+                    "description": ""
+                  }
+                }
+              },
+              "examples": {
+                "Default": {
+                  "summary": "Default",
+                  "value": {
+                    "acctInfo": {
+                      "primryAcctNum": {
+                        "pan": "4147180000000007"
+                      }
+                    },
+                    "cardAcceptr": {
+                      "clientId": "A48YG89AG89"
+                    },
+                    "agentId": "JB"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "Dcvv2EnrollResponse": {
+                      "required": [
+                        "acctInfo",
+                        "transctnReslts"
+                      ],
+                      "type": "object",
+                      "properties": {
+                        "acctInfo": {
+                          "required": [
+                            "primryAcctNum"
+                          ],
+                          "type": "object",
+                          "properties": {
+                            "primryAcctNum": {
+                              "required": [
+                                "pan"
+                              ],
+                              "type": "object",
+                              "properties": {
+                                "pan": {
+                                  "type": "integer",
+                                  "description": "Primary account number (PAN)"
+                                }
+                              },
+                              "description": ""
+                            }
+                          },
+                          "description": ""
+                        },
+                        "msgIdentfctn": {
+                          "required": [
+                            "tranId"
+                          ],
+                          "type": "object",
+                          "properties": {
+                            "tranId": {
+                              "type": "integer",
+                              "description": "Transaction ID"
+                            }
+                          },
+                          "description": ""
+                        },
+                        "transctnReslts": {
+                          "required": [
+                            "actionCd"
+                          ],
+                          "type": "object",
+                          "properties": {
+                            "actionCd": {
+                              "maxLength": 3,
+                              "minLength": 1,
+                              "type": "string",
+                              "description": "Response code"
+                            }
+                          },
+                          "description": ""
+                        }
+                      },
+                      "description": "Success"
+                    }
+                  }
+                },
+                "examples": {
+                  "Default": {
+                    "summary": "Default",
+                    "value": {
+                      "acctInfo": {
+                        "primryAcctNum": {
+                          "pan": "4147180000000007"
+                        }
+                      },
+                      "msgIdentfctn": {
+                        "tranId": "389016808650001"
+                      },
+                      "transctnReslts": {
+                        "actionCd": "00"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Application error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "acctInfo": {
+                      "required": [
+                        "primryAcctNum"
+                      ],
+                      "type": "object",
+                      "properties": {
+                        "primryAcctNum": {
+                          "required": [
+                            "pan"
+                          ],
+                          "type": "object",
+                          "properties": {
+                            "pan": {
+                              "type": "integer",
+                              "description": "Primary account number (PAN)"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "msgIdentfctn": {
+                      "required": [
+                        "tranId"
+                      ],
+                      "type": "object",
+                      "properties": {
+                        "tranId": {
+                          "type": "integer",
+                          "description": "Transaction ID"
+                        }
+                      }
+                    },
+                    "errorResponse": {
+                      "required": [
+                        "status"
+                      ],
+                      "type": "object",
+                      "properties": {
+                        "status": {
+                          "type": "integer",
+                          "description": "Application error code"
+                        }
+                      }
+                    },
+                    "transctnReslts": {
+                      "required": [
+                        "actionCd"
+                      ],
+                      "type": "object",
+                      "properties": {
+                        "actionCd": {
+                          "maxLength": 3,
+                          "minLength": 1,
+                          "type": "string",
+                          "description": "Response code for error"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden.  Use this when the clientID does not validate properly.  No JSON payload is returned. The client MUST NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "required": [
+                        "code",
+                        "message"
+                      ],
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "integer",
+                          "description": "HTTP error code"
+                        },
+                        "message": {
+                          "type": "string",
+                          "description": "Error message"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Invalid message number or message is not yet supported.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "required": [
+                        "code",
+                        "message"
+                      ],
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "integer",
+                          "description": "HTTP error code"
+                        },
+                        "message": {
+                          "type": "string",
+                          "description": "Error message"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-codegen-request-body-name": "request",
+        "x-operationVersions": [
+          {
+            "label": "v1 - Latest",
+            "operationPointer": "#/paths/~1dCVV2~1v1~1PanDB~1Enroll/post",
+            "default": false
+          }
+        ],
+        "x-hideTryIt": true
+      }
+    },
+    "/dCVV2/v1/PanDB/dCVV2GenerationRequest": {
+      "post": {
+        "tags": [
+          "dCVV2 Generate"
+        ],
+        "summary": "Generate",
+        "description": "dCVV2GenerationRequest",
+        "operationId": "Generate",
+        "requestBody": {
+          "description": "Request Data",
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "acctInfo",
+                  "cardAcceptr"
+                ],
+                "type": "object",
+                "properties": {
+                  "acctInfo": {
+                    "required": [
+                      "primryAcctNum"
+                    ],
+                    "type": "object",
+                    "properties": {
+                      "primryAcctNum": {
+                        "required": [
+                          "pan",
+                          "panExpDt"
+                        ],
+                        "type": "object",
+                        "properties": {
+                          "pan": {
+                            "type": "integer",
+                            "description": "Primary account number (PAN)"
+                          },
+                          "panExpDt": {
+                            "maxLength": 7,
+                            "minLength": 7,
+                            "type": "string",
+                            "description": "PAN expiration date"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "itemCount": {
+                    "minimum": 1,
+                    "type": "integer",
+                    "description": "Count of dCVV2 items to generate"
+                  },
+                  "cardAcceptr": {
+                    "required": [
+                      "clientId"
+                    ],
+                    "type": "object",
+                    "properties": {
+                      "clientId": {
+                        "maxLength": 64,
+                        "minLength": 1,
+                        "type": "string",
+                        "description": "Client ID of requestor"
+                      }
+                    }
+                  }
+                }
+              },
+              "examples": {
+                "Default": {
+                  "summary": "Default",
+                  "value": {
+                    "acctInfo": {
+                      "primryAcctNum": {
+                        "panExpDt": "2019-11",
+                        "pan": "4046760000000008"
+                      }
+                    },
+                    "cardAcceptr": {
+                      "clientId": "A98YG89AG89"
+                    },
+                    "itemCount": "2"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "dCVV2GenerationResponse": {
+                      "required": [
+                        "acctInfo",
+                        "transctnReslts"
+                      ],
+                      "type": "object",
+                      "properties": {
+                        "acctInfo": {
+                          "required": [
+                            "primryAcctNum"
+                          ],
+                          "type": "object",
+                          "properties": {
+                            "primryAcctNum": {
+                              "required": [
+                                "pan",
+                                "panExpDt"
+                              ],
+                              "type": "object",
+                              "properties": {
+                                "pan": {
+                                  "type": "integer",
+                                  "description": "Primary account number (PAN)"
+                                },
+                                "panExpDt": {
+                                  "maxLength": 7,
+                                  "minLength": 7,
+                                  "type": "string",
+                                  "description": "PAN expiration date"
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "msgIdentfctn": {
+                          "required": [
+                            "tranId"
+                          ],
+                          "type": "object",
+                          "properties": {
+                            "tranId": {
+                              "type": "integer",
+                              "description": "Transaction ID"
+                            }
+                          }
+                        },
+                        "dCVV2ItemList": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "dCVV2GenerationResponse": {
+                                "type": "object"
+                              }
+                            }
+                          }
+                        },
+                        "transctnReslts": {
+                          "required": [
+                            "actionCd"
+                          ],
+                          "type": "object",
+                          "properties": {
+                            "actionCd": {
+                              "maxLength": 3,
+                              "minLength": 1,
+                              "type": "string",
+                              "description": "Response code"
+                            }
+                          }
+                        }
+                      },
+                      "description": "Success"
+                    }
+                  }
+                },
+                "examples": {
+                  "Default": {
+                    "summary": "Default",
+                    "value": {
+                      "acctInfo": {
+                        "primryAcctNum": {
+                          "panExpDt": "2019-11",
+                          "pan": "4046760000000008"
+                        }
+                      },
+                      "msgIdentfctn": {
+                        "tranId": "389059658270001"
+                      },
+                      "dCVV2ItemList": [
+                        {
+                          "dCVV2Expiry": "2802200000",
+                          "dCVV2Value": "123"
+                        },
+                        {
+                          "dCVV2Expiry": "2802200000",
+                          "dCVV2Value": "456"
+                        }
+                      ],
+                      "transctnReslts": {
+                        "actionCd": "00"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Application error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "acctInfo": {
+                      "required": [
+                        "primryAcctNum"
+                      ],
+                      "type": "object",
+                      "properties": {
+                        "primryAcctNum": {
+                          "required": [
+                            "pan",
+                            "panExpDt"
+                          ],
+                          "type": "object",
+                          "properties": {
+                            "pan": {
+                              "type": "integer",
+                              "description": "Primary account number (PAN)"
+                            },
+                            "panExpDt": {
+                              "maxLength": 7,
+                              "minLength": 7,
+                              "type": "string",
+                              "description": "PAN expiration date"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "msgIdentfctn": {
+                      "required": [
+                        "tranId"
+                      ],
+                      "type": "object",
+                      "properties": {
+                        "tranId": {
+                          "type": "integer",
+                          "description": "Transaction ID"
+                        }
+                      }
+                    },
+                    "errorResponse": {
+                      "required": [
+                        "status"
+                      ],
+                      "type": "object",
+                      "properties": {
+                        "status": {
+                          "type": "integer",
+                          "description": "Application error code"
+                        }
+                      }
+                    },
+                    "transctnReslts": {
+                      "required": [
+                        "actionCd"
+                      ],
+                      "type": "object",
+                      "properties": {
+                        "actionCd": {
+                          "maxLength": 3,
+                          "minLength": 1,
+                          "type": "string",
+                          "description": "Response code for error"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden.  Use this when the clientID does not validate properly. No JSON payload is returned. The client MUST NOT repeat the request without modifications.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "required": [
+                        "code",
+                        "message"
+                      ],
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "integer",
+                          "description": "HTTP error code"
+                        },
+                        "message": {
+                          "type": "string",
+                          "description": "Error message"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Invalid message number or message is not yet supported.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "required": [
+                        "code",
+                        "message"
+                      ],
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "integer",
+                          "description": "HTTP error code"
+                        },
+                        "message": {
+                          "type": "string",
+                          "description": "Error message"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-codegen-request-body-name": "request",
+        "x-operationVersions": [
+          {
+            "label": "v1 - Latest",
+            "operationPointer": "#/paths/~1dCVV2~1v1~1PanDB~1dCVV2GenerationRequest/post",
+            "default": false
+          }
+        ],
+        "x-hideTryIt": true
+      }
+    }
+  },
+  "components": {
+    "schemas": {},
+    "responses": {},
+    "parameters": {},
+    "examples": {},
+    "requestBodies": {},
+    "headers": {},
+    "callbacks": {}
+  },
+  "webhooks": {},
+  "x-tagGroups": [
+    {
+      "name": "API Reference",
+      "tags": [
+        "dCVV2 Generate",
+        "dCVV2 Management"
+      ]
+    }
+  ]
+}

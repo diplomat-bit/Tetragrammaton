@@ -1,0 +1,3923 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Visa Pay",
+    "description": "",
+    "version": "1"
+  },
+  "servers": [
+    {
+      "url": "https://sandbox.api.visa.com",
+      "description": "Sandbox server"
+    }
+  ],
+  "security": [],
+  "tags": [
+    {
+      "name": " Visa Pay",
+      "description": " Visa Pay API is not hosted in VDP. For sandbox access you must use the domain: sandbox.visapay.visa.com"
+    }
+  ],
+  "paths": {
+    "/v1/enrollments/{external-id}": {
+      "patch": {
+        "tags": [
+          " Visa Pay"
+        ],
+        "summary": "Update Enrollment Data",
+        "description": "Update client wallet enrollment data (phone number, e-mail, etc.)",
+        "parameters": [
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "description": "Content type of the request/response",
+            "required": true,
+            "explode": false,
+            "schema": {
+              "default": "application/json",
+              "exampleSetFlag": false,
+              "types": [
+                "string"
+              ]
+            }
+          },
+          {
+            "name": "x-tenant",
+            "in": "header",
+            "description": "Tenant ID",
+            "required": true,
+            "explode": false,
+            "schema": {
+              "exampleSetFlag": false,
+              "types": [
+                "string"
+              ]
+            }
+          },
+          {
+            "name": "externalId",
+            "in": "path",
+            "description": "External ID of the enrollment to be updated (wallet_account_id).",
+            "required": true,
+            "explode": false,
+            "schema": {
+              "exampleSetFlag": false,
+              "types": [
+                "string"
+              ]
+            }
+          },
+          {
+            "name": "programId",
+            "in": "query",
+            "description": "Program ID to which the enrollment belongs.",
+            "required": true,
+            "explode": true,
+            "schema": {
+              "exampleSetFlag": false,
+              "types": [
+                "integer"
+              ]
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateEnrollmentInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Enrollment updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "message": {
+                      "example": "success",
+                      "exampleSetFlag": true,
+                      "types": [
+                        "string"
+                      ]
+                    }
+                  },
+                  "exampleSetFlag": false,
+                  "types": [
+                    "object"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Enrollment not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFound"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              }
+            }
+          }
+        },
+        "x-operationVersions": [
+          {
+            "label": "v1",
+            "operationPointer": "#/paths/~1v1~1enrollments~1{external-id}/patch",
+            "default": false
+          }
+        ],
+        "x-hideTryIt": true
+      }
+    },
+    "/passport/v2/s2s/access-token": {
+      "post": {
+        "tags": [
+          " Visa Pay"
+        ],
+        "summary": "Get Basic Authentication Access Token",
+        "description": "Generate an access token for use with basic authentication. <br/><br/> For more information, refer to [Endpoints that require an account-specific token](ref:endpoints-that-require-an-account-specific-token) and [Endpoints that require an external ID-specific token](ref:endpoints-that-require-an-external-id-token).",
+        "operationId": "post-passport-v2-s2s-access-token",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "server_key",
+                  "server_secret"
+                ],
+                "type": "object",
+                "properties": {
+                  "account_id": {
+                    "type": "number",
+                    "description": "Account ID for [endpoints that require an account token](ref:endpoints-that-require-an-account-specific-token)",
+                    "example": 123
+                  },
+                  "server_key": {
+                    "type": "string",
+                    "description": "Server credential ID",
+                    "example": "5d8252ea2e6729223f30d477d79a5c3cb45f8e03"
+                  },
+                  "server_secret": {
+                    "type": "string",
+                    "description": "Server credential secret",
+                    "example": "3$vKc)FCCfT;b%;_kPfaeq-zDG3vA=e&"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "roles": {
+                      "type": "array",
+                      "description": "Permissions roles associated with the generated access token",
+                      "example": [
+                        "onboarding-server",
+                        "account-server"
+                      ],
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "token": {
+                      "type": "string",
+                      "description": "Pismo access token used to make authenticated requests"
+                    },
+                    "tenant": {
+                      "type": "string",
+                      "description": "Tenant ID",
+                      "example": "TN-ab8b08af-8a20-44e3-a7ad-8329b3e42fa4"
+                    },
+                    "refresh": {
+                      "type": "string",
+                      "description": "JWT used to refresh an expired Pismo access token"
+                    },
+                    "account_id": {
+                      "type": "number",
+                      "description": "Account ID",
+                      "example": 123
+                    },
+                    "server_key": {
+                      "type": "string",
+                      "description": "Server credential ID",
+                      "example": "5d8252ea2e6729223f30d477d79a5c3cb45f8e03"
+                    },
+                    "program_ids": {
+                      "type": "array",
+                      "description": "Array of program IDs for which the server is allowed to make authenticated requests",
+                      "example": [
+                        101,
+                        102,
+                        103
+                      ],
+                      "items": {
+                        "type": "integer"
+                      }
+                    },
+                    "external_account_id": {
+                      "type": "string",
+                      "description": "Account ID for [endpoints that require an external account token](ref:endpoints-that-require-an-external-id-token). Used in place of the Pismo account ID.",
+                      "example": "5512990-642"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SimpleError"
+                },
+                "examples": {
+                  "Bad credentials": {
+                    "value": {
+                      "message": "Invalid credentials"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SimpleError"
+                },
+                "examples": {
+                  "Internal error": {
+                    "value": {
+                      "message": "Error authenticating server"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-operationVersions": [
+          {
+            "label": "v2 - Latest",
+            "operationPointer": "#/paths/~1passport~1v2~1s2s~1access-token/post",
+            "default": false
+          }
+        ],
+        "x-hideTryIt": true
+      }
+    },
+    "/v1/enrollments/{external-Id}/tokens/{token-id}/status": {
+      "patch": {
+        "tags": [
+          " Visa Pay"
+        ],
+        "summary": "Block and Unblock Token",
+        "description": "Allow updating the status of a token (block, unblock, cancel etc.)",
+        "parameters": [
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "description": "Content type of the request/response",
+            "required": true,
+            "explode": false,
+            "schema": {
+              "default": "application/json",
+              "exampleSetFlag": false,
+              "types": [
+                "string"
+              ]
+            }
+          },
+          {
+            "name": "externalId",
+            "in": "path",
+            "description": "External ID of the enrollment to be retrieved (wallet_account_id).",
+            "required": true,
+            "explode": false,
+            "schema": {
+              "exampleSetFlag": false,
+              "types": [
+                "string"
+              ]
+            }
+          },
+          {
+            "name": "programId",
+            "in": "query",
+            "description": "Program identifier to which the enrollment belongs.",
+            "required": true,
+            "explode": true,
+            "schema": {
+              "exampleSetFlag": false,
+              "types": [
+                "string"
+              ]
+            }
+          },
+          {
+            "name": "token_id",
+            "in": "path",
+            "description": "Token ID",
+            "required": true,
+            "explode": false,
+            "schema": {
+              "exampleSetFlag": false,
+              "types": [
+                "string"
+              ]
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "action": {
+                    "description": "The status update to be performed on the token",
+                    "enum": [
+                      "BLOCK",
+                      "UNBLOCK",
+                      "CANCEL"
+                    ],
+                    "exampleSetFlag": false,
+                    "types": [
+                      "string"
+                    ]
+                  },
+                  "update_reason": {
+                    "properties": {
+                      "reason_code": {
+                        "description": "Code identifying the reason for the action",
+                        "exampleSetFlag": false,
+                        "types": [
+                          "string"
+                        ]
+                      },
+                      "reason_desc": {
+                        "description": "Description of the reason for the action",
+                        "exampleSetFlag": false,
+                        "types": [
+                          "string"
+                        ]
+                      }
+                    },
+                    "exampleSetFlag": false,
+                    "types": [
+                      "object"
+                    ]
+                  }
+                },
+                "exampleSetFlag": false,
+                "types": [
+                  "object"
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Token status update operation completed successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "id": {
+                      "description": "Token ID",
+                      "exampleSetFlag": false,
+                      "types": [
+                        "string"
+                      ]
+                    },
+                    "status": {
+                      "description": "Current token status after the operation",
+                      "enum": [
+                        "active",
+                        "blocked",
+                        "cancelled"
+                      ],
+                      "exampleSetFlag": false,
+                      "types": [
+                        "string"
+                      ]
+                    },
+                    "last_updated_at": {
+                      "description": "Timestamp of the last update",
+                      "format": "date-time",
+                      "exampleSetFlag": false,
+                      "types": [
+                        "string"
+                      ]
+                    }
+                  },
+                  "exampleSetFlag": false,
+                  "types": [
+                    "object"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Enrollment or token not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFound"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Operation not permitted for current token state",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConflictError"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError-1"
+                }
+              }
+            }
+          }
+        },
+        "x-operationVersions": [
+          {
+            "label": "v1",
+            "operationPointer": "#/paths/~1v1~1enrollments~1{external-Id}~1tokens~1{token-id}~1status/patch",
+            "default": false
+          }
+        ],
+        "x-hideTryIt": true
+      }
+    },
+    "/pay-by-wallet/v1/enrollments/{external-id}": {
+      "get": {
+        "tags": [
+          " Visa Pay"
+        ],
+        "summary": "Get Visa Pay Account",
+        "description": "Get an enrollment.",
+        "parameters": [
+          {
+            "name": "externalId",
+            "in": "path",
+            "description": "External ID of the enrollment to be retrieved (wallet_account_id).",
+            "required": true,
+            "explode": false,
+            "schema": {
+              "exampleSetFlag": false,
+              "types": [
+                "string"
+              ]
+            }
+          },
+          {
+            "name": "programId",
+            "in": "path",
+            "description": "Program ID to which the enrollment belongs.",
+            "required": true,
+            "explode": false,
+            "schema": {
+              "exampleSetFlag": false,
+              "types": [
+                "integer"
+              ]
+            }
+          },
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "description": "Content type of the request/response",
+            "required": true,
+            "explode": false,
+            "schema": {
+              "default": "application/json",
+              "exampleSetFlag": false,
+              "types": [
+                "string"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get enrollment successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EnrollmentFinderOutput-2"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Enrollment not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFound-1"
+                }
+              }
+            }
+          }
+        },
+        "x-operationVersions": [
+          {
+            "label": "v1",
+            "operationPointer": "#/paths/~1pay-by-wallet~1v1~1enrollments~1{external-id}/get",
+            "default": false
+          }
+        ],
+        "x-hideTryIt": true
+      }
+    },
+    "/v1/enrollments/{External-Id}/{status}": {
+      "patch": {
+        "tags": [
+          " Visa Pay"
+        ],
+        "summary": "Block and Unblock Account",
+        "description": "Update the enrollment account status - Block or Unblock account",
+        "parameters": [
+          {
+            "name": "externalId",
+            "in": "path",
+            "description": "External ID of the enrollment to be retrieved (wallet_account_id)",
+            "required": true,
+            "explode": false,
+            "schema": {
+              "exampleSetFlag": false,
+              "types": [
+                "string"
+              ]
+            }
+          },
+          {
+            "name": "programId",
+            "in": "query",
+            "description": "Program ID to which the enrollment belongs.",
+            "required": true,
+            "explode": true,
+            "schema": {
+              "exampleSetFlag": false,
+              "types": [
+                "integer"
+              ]
+            }
+          },
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "description": "Content type of the request/response",
+            "required": true,
+            "explode": false,
+            "schema": {
+              "default": "application/json",
+              "exampleSetFlag": false,
+              "types": [
+                "string"
+              ]
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AccountStatus-1"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Enrollment status updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "id": {
+                      "description": "Enrollment ID",
+                      "exampleSetFlag": false,
+                      "types": [
+                        "string"
+                      ]
+                    },
+                    "status": {
+                      "description": "Current enrollment status",
+                      "exampleSetFlag": false,
+                      "types": [
+                        "string"
+                      ]
+                    },
+                    "updated_at": {
+                      "description": "When the status was updated",
+                      "format": "date-time",
+                      "exampleSetFlag": false,
+                      "types": [
+                        "string"
+                      ]
+                    }
+                  },
+                  "exampleSetFlag": false,
+                  "types": [
+                    "object"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestError-1"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Enrollment not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFound-1"
+                }
+              }
+            }
+          }
+        },
+        "x-operationVersions": [
+          {
+            "label": "v1",
+            "operationPointer": "#/paths/~1v1~1enrollments~1{External-Id}~1{status}/patch",
+            "default": false
+          }
+        ],
+        "x-hideTryIt": true
+      }
+    },
+    "/v1/enrollments/{external-Id}/replenish": {
+      "post": {
+        "tags": [
+          " Visa Pay"
+        ],
+        "summary": "Replenish HCE Keys",
+        "description": "Refreshes token cryptographic keys and replenishes counter-based payment credentials",
+        "parameters": [
+          {
+            "name": "externalId",
+            "in": "path",
+            "description": "External ID of the enrollment (wallet_account_id)",
+            "required": true,
+            "explode": false,
+            "schema": {
+              "exampleSetFlag": false,
+              "types": [
+                "string"
+              ]
+            }
+          },
+          {
+            "name": "programId",
+            "in": "query",
+            "description": "Program ID to which the enrollment belongs",
+            "required": true,
+            "explode": true,
+            "schema": {
+              "exampleSetFlag": false,
+              "types": [
+                "integer"
+              ]
+            }
+          },
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "description": "Content type of the request/response",
+            "required": true,
+            "explode": false,
+            "schema": {
+              "default": "application/json",
+              "exampleSetFlag": false,
+              "types": [
+                "string"
+              ]
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReplenishInput-1"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Token successfully replenished",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReplenishOutput"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Enrollment or token not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFound"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "error": {
+                      "description": "Error message",
+                      "example": "Communication error with token provider",
+                      "exampleSetFlag": true,
+                      "types": [
+                        "string"
+                      ]
+                    }
+                  },
+                  "exampleSetFlag": false,
+                  "types": [
+                    "object"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "x-operationVersions": [
+          {
+            "label": "v1",
+            "operationPointer": "#/paths/~1v1~1enrollments~1{external-Id}~1replenish/post",
+            "default": false
+          }
+        ],
+        "x-hideTryIt": true
+      }
+    },
+    "/pay-by-wallet/v1/enroll": {
+      "post": {
+        "tags": [
+          " Visa Pay"
+        ],
+        "summary": "Enroll Visa Pay Account",
+        "description": "Endpoint to make an enrollment, create an account and create a token",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EnrollInput-1"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful enrollment",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EnrollOutput"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestError-1"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConflictError-1"
+                }
+              }
+            }
+          }
+        },
+        "x-operationVersions": [
+          {
+            "label": "v1",
+            "operationPointer": "#/paths/~1pay-by-wallet~1v1~1enroll/post",
+            "default": false
+          }
+        ],
+        "x-hideTryIt": true
+      }
+    },
+    "/v1/enrollments/{external-Id}/payment-data": {
+      "post": {
+        "tags": [
+          " Visa Pay"
+        ],
+        "summary": "Retrieve Cryptogram Data",
+        "description": "Request payment data for a specific enrollment and token id.",
+        "parameters": [
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "description": "Content type of the request/response",
+            "required": true,
+            "explode": false,
+            "schema": {
+              "default": "application/json",
+              "exampleSetFlag": false,
+              "types": [
+                "string"
+              ]
+            }
+          },
+          {
+            "name": "externalId",
+            "in": "path",
+            "description": "External ID of the enrollment to be retrieved (wallet_account_id).",
+            "required": true,
+            "explode": false,
+            "schema": {
+              "exampleSetFlag": false,
+              "types": [
+                "string"
+              ]
+            }
+          },
+          {
+            "name": "programId",
+            "in": "query",
+            "description": "Program identifier to which the enrollment belongs.",
+            "required": true,
+            "explode": true,
+            "schema": {
+              "exampleSetFlag": false,
+              "types": [
+                "string"
+              ]
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TokenPaymentDataInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TokenPaymentDataOutput-1"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Enrollment or token not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFound"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError-1"
+                }
+              }
+            }
+          }
+        },
+        "x-operationVersions": [
+          {
+            "label": "v1",
+            "operationPointer": "#/paths/~1v1~1enrollments~1{external-Id}~1payment-data/post",
+            "default": false
+          }
+        ],
+        "x-hideTryIt": true
+      }
+    },
+    "/v1/enrollments/{external-id}/tokens": {
+      "post": {
+        "tags": [
+          " Visa Pay"
+        ],
+        "summary": "Request Additional Tokens",
+        "description": "Add a new tokens to an existing enrollment for tokenization purposes.",
+        "parameters": [
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "description": "Content type of the request/response",
+            "required": true,
+            "explode": false,
+            "schema": {
+              "default": "application/json",
+              "exampleSetFlag": false,
+              "types": [
+                "string"
+              ]
+            }
+          },
+          {
+            "name": "externalId",
+            "in": "path",
+            "description": "External ID of the enrollment (wallet_account_id)",
+            "required": true,
+            "explode": false,
+            "schema": {
+              "exampleSetFlag": false,
+              "types": [
+                "string"
+              ]
+            }
+          },
+          {
+            "name": "programId",
+            "in": "query",
+            "description": "Program ID to which the enrollment belongs",
+            "required": true,
+            "explode": true,
+            "schema": {
+              "exampleSetFlag": false,
+              "types": [
+                "integer"
+              ]
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "tokens"
+                ],
+                "properties": {
+                  "tokens": {
+                    "maxItems": 10,
+                    "minItems": 1,
+                    "description": "Array of tokens to add (1-10 tokens per request)",
+                    "items": {
+                      "$ref": "#/components/schemas/TokenRequestObj"
+                    },
+                    "exampleSetFlag": false,
+                    "types": [
+                      "array"
+                    ]
+                  }
+                },
+                "exampleSetFlag": false,
+                "types": [
+                  "object"
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Tokens successfully added to enrollment",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "external_id": {
+                      "description": "External ID of the enrollment (wallet_account_id)",
+                      "exampleSetFlag": false,
+                      "types": [
+                        "string"
+                      ]
+                    },
+                    "enrollment_id": {
+                      "description": "Internal enrollment UUID",
+                      "exampleSetFlag": false,
+                      "types": [
+                        "string"
+                      ]
+                    }
+                  },
+                  "exampleSetFlag": false,
+                  "types": [
+                    "object"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Enrollment not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFound"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict error (e.g., token already exists)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConflictError"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              }
+            }
+          }
+        },
+        "x-operationVersions": [
+          {
+            "label": "v1",
+            "operationPointer": "#/paths/~1v1~1enrollments~1{external-id}~1tokens/post",
+            "default": false
+          }
+        ],
+        "x-hideTryIt": true
+      }
+    },
+    "/v1/{wallet-defined-authorize-endpoint}": {
+      "post": {
+        "tags": [
+          " Visa Pay"
+        ],
+        "summary": "Authorization Callback - Outbound",
+        "description": "This endpoint is used to handle authorization callbacks from the wallet.\nIt receives transaction information and processes it accordingly.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AuthorizeCallbackInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful authorization",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthorizeCallbackOutput"
+                }
+              }
+            }
+          }
+        },
+        "x-operationVersions": [
+          {
+            "label": "v1",
+            "operationPointer": "#/paths/~1v1~1{wallet-defined-authorize-endpoint}/post",
+            "default": false
+          }
+        ],
+        "x-hideTryIt": true
+      }
+    },
+    "/passport/v1/oauth2/token": {
+      "post": {
+        "tags": [
+          " Visa Pay"
+        ],
+        "summary": "Get OpenID Access Token",
+        "description": "Get an access token for OpenID authentication <br><br>NOTE: Many of the endpoints in the Pismo API require you to pass a JWT that you generated which includes a Pismo account ID (`uid` or `account_id`) or an account ID from an external system used in place of the Pismo account ID (`external_account_id`). Further calls to Pismo endpoints will require this token in the Authorization header. <br><br> For more information, refer to [Endpoints that require an account-specific token](ref:endpoints-that-require-an-account-specific-token) and [Endpoints that require an external ID-specific token](ref:endpoints-that-require-an-external-id-token).",
+        "operationId": "post-passport-v1-oauth2-token",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "token"
+                ],
+                "type": "object",
+                "properties": {
+                  "token": {
+                    "type": "string",
+                    "description": "JWT signed by the client to obtain an OpenID access token from Pismo. For more information, see [Generating a JWT](doc:generating-a-jwt)."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "token": {
+                      "type": "string",
+                      "description": "Pismo-signed JWT used to make authenticated requests"
+                    },
+                    "expires_in": {
+                      "type": "string",
+                      "description": "Expiration time (in seconds) for the Pismo access token",
+                      "example": "3600"
+                    },
+                    "refresh_token": {
+                      "type": "string",
+                      "description": "JWT used to refresh an expired Pismo access token"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SimpleError"
+                },
+                "examples": {
+                  "Bad credentials": {
+                    "value": {
+                      "message": "Invalid credentials"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SimpleError"
+                },
+                "examples": {
+                  "Internal error": {
+                    "value": {
+                      "message": "Error authenticating server"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-operationVersions": [
+          {
+            "label": "v1",
+            "operationPointer": "#/paths/~1passport~1v1~1oauth2~1token/post",
+            "default": false
+          }
+        ],
+        "x-hideTryIt": true
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AuthorizationFields": {
+        "properties": {
+          "token": {
+            "description": "Token, if the transaction is related to a token.",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "card_id": {
+            "description": "Pismo Card ID, provided by enrollment feature.",
+            "exampleSetFlag": false,
+            "types": [
+              "integer"
+            ]
+          },
+          "account_id": {
+            "description": "Pismo Account ID, provided by enrollment feature.",
+            "exampleSetFlag": false,
+            "types": [
+              "integer"
+            ]
+          },
+          "program_id": {
+            "description": "Pismo Program ID, provided by enrollment feature.",
+            "exampleSetFlag": false,
+            "types": [
+              "integer"
+            ]
+          },
+          "local_amount": {
+            "description": "Transaction local amount in local currency, provided by ISO 8583 message.",
+            "format": "float",
+            "exampleSetFlag": false,
+            "types": [
+              "number"
+            ]
+          },
+          "merchant_city": {
+            "description": "Merchant city.",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "merchant_name": {
+            "description": "Merchant name.",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "local_currency": {
+            "description": "Transaction currency code based on ISO 4217 numeric code, provided by ISO 8583 message.",
+            "example": 986,
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          },
+          "transaction_code": {
+            "description": "Transaction type code based on ISO 8583.",
+            "example": 0,
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          },
+          "settlement_amount": {
+            "description": "Transaction settlement amount in local currency, provided by ISO 8583 message.",
+            "format": "float",
+            "exampleSetFlag": false,
+            "types": [
+              "number"
+            ]
+          },
+          "merchant_date_time": {
+            "description": "Merchant date and time.",
+            "format": "date-time",
+            "example": "2025-06-01T12:10:20",
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          },
+          "payment_card_brand": {
+            "description": "Network brand of the card, provided by ISO 8583 message.",
+            "example": "VISA, Mastercard",
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          },
+          "settlement_currency": {
+            "description": "Transaction currency code based on ISO 4217 numeric code, provided by ISO 8583 message.",
+            "example": 986,
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          },
+          "original_network_data": {
+            "description": "Raw ISO8583 message without PCI fields.",
+            "exampleSetFlag": false,
+            "types": [
+              "object"
+            ]
+          },
+          "network_scheme_metadata": {
+            "$ref": "#/components/schemas/NetworkSchemeMetadata"
+          },
+          "pay_by_wallet_reference_data": {
+            "$ref": "#/components/schemas/PayByWalletReferenceData"
+          },
+          "merchant_state_or_country_code": {
+            "description": "Merchant state or country.",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          }
+        },
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "ReplenishInput-1": {
+        "required": [
+          "mac"
+        ],
+        "properties": {
+          "sc": {
+            "description": "Security capability indicator",
+            "example": 0,
+            "exampleSetFlag": true,
+            "types": [
+              "integer"
+            ]
+          },
+          "api": {
+            "description": "Application Protocol Identifier",
+            "example": "05371100",
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          },
+          "mac": {
+            "description": "Message Authentication Code value",
+            "example": "ECCED7DEC859",
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          },
+          "tlv": {
+            "description": "TLV (Tag-Length-Value) data for replenishment",
+            "items": {
+              "$ref": "#/components/schemas/ReplenishTLV"
+            },
+            "exampleSetFlag": false,
+            "types": [
+              "array"
+            ]
+          },
+          "provisioned_token_id": {
+            "description": "Provisioned token ID",
+            "example": "1234567890abcdef",
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          }
+        },
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "AuthorizeCallbackOutput": {
+        "properties": {
+          "response_code": {
+            "description": "Response code, this value should be two characters string according with ISO-8583 and card network specifications.",
+            "example": "00",
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          }
+        },
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "InternalServerError-1": {
+        "properties": {
+          "code": {
+            "description": "Error code.",
+            "example": "INTERNAL_ERROR",
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          },
+          "message": {
+            "description": "Error message.",
+            "example": "An internal error occurred while trying to create the enrollment.",
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          }
+        },
+        "description": "An internal server error occurred due to an unexpected condition.",
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "TokenPaymentDataOutput": {
+        "properties": {
+          "atc": {
+            "description": "ATC (Application Transaction Counter) to be used in the payment transaction, present when cryptogram_type is TAVV.",
+            "example": "23231",
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          },
+          "cryptogram": {
+            "description": "Base-64 encoded cryptogram to be used in the payment transaction, present when cryptogram_type is TAVV.",
+            "example": "AeBBBBYSsssdeeAAAA=",
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          },
+          "dtvv_cryptogram": {
+            "description": "value to be used in the payment transaction, present when cryptogram_type is DTVV.",
+            "example": "sda",
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          }
+        },
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "TokenRequestObj-1": {
+        "properties": {
+          "type": {
+            "example": "TOKEN_DEVICE",
+            "enum": [
+              "TOKEN_DEVICE"
+            ],
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          },
+          "locale": {
+            "description": "Locale",
+            "example": "America/Sao_Paulo",
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          },
+          "os_type": {
+            "description": "OS Type",
+            "example": "IOS",
+            "enum": [
+              "IOS",
+              "ANDROID",
+              "WINDOWS"
+            ],
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          },
+          "device_id": {
+            "description": "Device ID",
+            "example": "123456",
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          },
+          "device_name": {
+            "description": "Device Name",
+            "example": "John's Iphone",
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          },
+          "device_type": {
+            "description": "Device Type",
+            "example": "PHONE",
+            "enum": [
+              "PHONE",
+              "TABLET",
+              "PC",
+              "WATCH"
+            ],
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          },
+          "client_app_id": {
+            "description": "Client App ID",
+            "example": "05043cb8-a07c-4cdc-b986-ceda85182d36",
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          },
+          "platform_type": {
+            "description": "Platform Type",
+            "example": "IOS",
+            "enum": [
+              "IOS",
+              "ANDROID",
+              "WINDOWS"
+            ],
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          },
+          "client_wallet_account_email_address_hash": {
+            "description": "Client Wallet Account Email Address Hash",
+            "example": "john@doe.com",
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          }
+        },
+        "description": "Token data to token requestor",
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "ValidationResult": {
+        "properties": {
+          "name": {
+            "description": "Name of the validation result",
+            "example": "MAGNETIC_STRIPE",
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          },
+          "reason": {
+            "description": "Reason for the validation result",
+            "example": "CURRENCY_ALLOWED",
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          },
+          "status": {
+            "description": "Status of the validation result",
+            "enum": [
+              "APPROVED",
+              "SKIPPED",
+              "REJECTED"
+            ],
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "description": {
+            "description": "Description of the validation result",
+            "example": "No magnetic stripe with cryptogram",
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          }
+        },
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "AuthorizeOutput": {
+        "properties": {
+          "denial_code": {
+            "description": "Denial code, this value should be inferred by us based on some error or validation failure.",
+            "example": "The request payload is invalid",
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          },
+          "response_code": {
+            "description": "Response code, this value should be two numbers string according with ISO-8583 and card network specifications.",
+            "example": 0,
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          },
+          "authorization_code": {
+            "description": "Authorization code, six alphanumeric characters, this field could be repeat.",
+            "example": "FH1S56",
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          }
+        },
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "ConflictError-1": {
+        "properties": {
+          "error": {
+            "description": "Error message.",
+            "example": "idempotency key already used",
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          }
+        },
+        "description": "Conflict error will threw when idempotency key is already used.",
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "ReplenishTlv": {
+        "properties": {
+          "atc": {
+            "description": "Application Transaction Counter",
+            "example": 13,
+            "exampleSetFlag": true,
+            "types": [
+              "integer"
+            ]
+          },
+          "timestamp": {
+            "description": "Timestamp value",
+            "format": "uint64",
+            "example": 12345,
+            "exampleSetFlag": true,
+            "types": [
+              "integer"
+            ]
+          },
+          "transaction_type": {
+            "description": "Type of transaction",
+            "example": "M",
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          },
+          "unpredictable_number": {
+            "description": "Unpredictable number for cryptographic operations",
+            "example": "123ABC",
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          }
+        },
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "ReplenishTLV": {
+        "properties": {
+          "atc": {
+            "description": "Application Transaction Counter",
+            "example": 13,
+            "exampleSetFlag": true,
+            "types": [
+              "integer"
+            ]
+          },
+          "timestamp": {
+            "description": "Timestamp value",
+            "format": "uint64",
+            "example": 12345,
+            "exampleSetFlag": true,
+            "types": [
+              "integer"
+            ]
+          },
+          "transaction_type": {
+            "description": "Type of transaction",
+            "example": "M",
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          },
+          "unpredictable_number": {
+            "description": "Unpredictable number for cryptographic operations",
+            "example": "123ABC",
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          }
+        },
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "AccountStatus": {
+        "properties": {
+          "status": {
+            "description": "Account action to perform",
+            "example": "BLOCKED",
+            "enum": [
+              "NORMAL",
+              "BLOCKED",
+              "CANCELLED"
+            ],
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          }
+        },
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "AuthorizeInput": {
+        "properties": {
+          "mti": {
+            "description": "MTI provided by ISO 8583 message.",
+            "example": 128,
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          },
+          "org_id": {
+            "description": "Internal Pismo Issuer ID.",
+            "example": "TN-face7e59-8885-49ec-a842-8ddd1f0bfd0f",
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          },
+          "network": {
+            "description": "Card network.",
+            "example": "VISA",
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          },
+          "raw_data": {
+            "description": "Raw data from the ISO 8583 without PCI information.",
+            "exampleSetFlag": false,
+            "types": [
+              "object"
+            ]
+          },
+          "card_hash": {
+            "description": "Card hash calculated based on PAN (not sensible).",
+            "example": "e5T+wSpwCYJZuGef3HxiXjo4mk9aAK9jBZeI3xKTanT1ZH6NlX/QzjylVvrmGL1SX8QcoRj4ENIz29oPzlLQTA==",
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          },
+          "local_amount": {
+            "description": "Transaction local amount in local currency.",
+            "example": 8,
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          },
+          "correlation_id": {
+            "description": "Internal Pismo ID to track the request.",
+            "example": "face7e59-8885-49ec-a842-8ddd1f0bfd0f",
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          },
+          "local_currency": {
+            "description": "Transaction local currency code based on ISO 4217 numeric code.",
+            "example": 986,
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          },
+          "settlement_amount": {
+            "description": "Transaction settlement amount in settlement currency.",
+            "example": 8,
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          },
+          "validation_result": {
+            "description": "Results of previously validations that Pismo do.",
+            "items": {
+              "$ref": "#/components/schemas/ValidationResult"
+            },
+            "exampleSetFlag": false,
+            "types": [
+              "array"
+            ]
+          },
+          "settlement_currency": {
+            "description": "Transaction settlement currency code based on ISO 4217 numeric code.",
+            "example": 986,
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          },
+          "transaction_type_code": {
+            "description": "Transaction type code based on ISO 8583.",
+            "example": 0,
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          }
+        },
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "EnrollmentStatus": {
+        "properties": {
+          "name": {
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "params": {
+            "additionalProperties": {
+              "exampleSetFlag": false,
+              "booleanSchemaValue": true
+            },
+            "exampleSetFlag": false,
+            "types": [
+              "object"
+            ]
+          },
+          "date_time": {
+            "format": "date-time",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          }
+        },
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "TokenRequestorData": {
+        "properties": {
+          "pan_enrollment_id": {
+            "description": "PAN enrollment ID, provided by token requestor api.",
+            "example": "abcdef1234567890",
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          },
+          "provisioned_token_id": {
+            "description": "Provisioned token ID, provided by token requestor api.",
+            "example": "1234567890abcdef",
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          }
+        },
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "PayByWalletReferenceData-1": {
+        "properties": {
+          "wallet_account_id": {
+            "description": "Wallet account identifier",
+            "example": "1234567890abcdef",
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          },
+          "enrollment_metadata": {
+            "additionalProperties": {
+              "exampleSetFlag": false,
+              "booleanSchemaValue": true
+            },
+            "description": "Metadata related to the enrollment.",
+            "exampleSetFlag": false,
+            "types": [
+              "object"
+            ]
+          }
+        },
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "AuthorizationObj": {
+        "properties": {
+          "mti": {
+            "description": "MTI provided by ISO 8583 message.",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "currency": {
+            "description": "Transaction currency code based on ISO 4217 numeric code, provided by ISO 8586 message.",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "local_amount": {
+            "description": "Transaction local amount in local currency, provided by ISO 8586 message.",
+            "format": "float",
+            "exampleSetFlag": false,
+            "types": [
+              "number"
+            ]
+          },
+          "processing_code": {
+            "description": "Processing code, provided by ISO 8583 message.",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "settlement_amount": {
+            "description": "Transaction settlement amount in local currency, provided by ISO 8586 message.",
+            "format": "float",
+            "exampleSetFlag": false,
+            "types": [
+              "number"
+            ]
+          },
+          "payment_card_brand": {
+            "description": "Payment card brand, provided by ISO 8583 message.",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "validation_results": {
+            "description": "Results of previously validations that Pismo do.",
+            "exampleSetFlag": false,
+            "types": [
+              "object"
+            ]
+          },
+          "original_network_data": {
+            "description": "Original network data, ISO 8583 message without PCI fields.",
+            "exampleSetFlag": false,
+            "types": [
+              "object"
+            ]
+          }
+        },
+        "description": "Authorization object",
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "EnrollmentSearchResult": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/EnrollmentFinderOutput"
+          },
+          {
+            "properties": {
+              "emails": {
+                "description": "List of email addresses associated with the enrollment",
+                "example": [
+                  "user@example.com",
+                  "user2@example.com"
+                ],
+                "items": {
+                  "format": "email",
+                  "exampleSetFlag": false,
+                  "types": [
+                    "string"
+                  ]
+                },
+                "exampleSetFlag": true,
+                "types": [
+                  "array"
+                ]
+              },
+              "phones": {
+                "description": "List of phone numbers associated with the enrollment",
+                "items": {
+                  "$ref": "#/components/schemas/ContactPhone"
+                },
+                "exampleSetFlag": false,
+                "types": [
+                  "array"
+                ]
+              },
+              "search_metadata": {
+                "additionalProperties": {
+                  "exampleSetFlag": false,
+                  "booleanSchemaValue": true
+                },
+                "description": "Additional metadata related to the search match",
+                "exampleSetFlag": false,
+                "types": [
+                  "object"
+                ]
+              }
+            },
+            "exampleSetFlag": false,
+            "types": [
+              "object"
+            ]
+          }
+        ],
+        "exampleSetFlag": false
+      },
+      "CardObj": {
+        "properties": {
+          "id": {
+            "description": "Pismo Card ID, provided by enrollment feature.",
+            "exampleSetFlag": false,
+            "types": [
+              "integer"
+            ]
+          },
+          "hash": {
+            "description": "Card hash, calculated based on PAN received on ISO 8583 message.",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          }
+        },
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "AuthorizeCallbackInput": {
+        "properties": {
+          "id": {
+            "description": "Unique transaction identifier",
+            "example": "face7e59-8885-49ec-a842-8ddd1f0bfd0f",
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          },
+          "entity": {
+            "description": "Entity type",
+            "example": "transaction",
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          },
+          "fields": {
+            "$ref": "#/components/schemas/AuthorizationFields"
+          }
+        },
+        "description": "Authorize callback input, this object should be sent to the wallet to handle the authorization feature.",
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "BadRequestError-1": {
+        "properties": {
+          "error": {
+            "description": "Error message.",
+            "example": "The request payload is invalid",
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          }
+        },
+        "description": "Bad request error will threw when any required field is missing or invalid.",
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "ConflictError": {
+        "properties": {
+          "code": {
+            "description": "Error code.",
+            "example": "CONFLICT",
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          },
+          "message": {
+            "description": "Error message.",
+            "example": "The idempotency key has already been used",
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          }
+        },
+        "description": "Conflict error will threw when idempotency key is already used.",
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "AuthorizationFields-1": {
+        "properties": {
+          "token": {
+            "description": "Token, if the transaction is related to a token.",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "card_id": {
+            "description": "Pismo Card ID, provided by enrollment feature.",
+            "example": 123563,
+            "exampleSetFlag": true,
+            "types": [
+              "integer"
+            ]
+          },
+          "account_id": {
+            "description": "Pismo Account ID, provided by enrollment feature.",
+            "example": 123563,
+            "exampleSetFlag": true,
+            "types": [
+              "integer"
+            ]
+          },
+          "program_id": {
+            "description": "Pismo Program ID, provided by enrollment feature.",
+            "example": 123563,
+            "exampleSetFlag": true,
+            "types": [
+              "integer"
+            ]
+          },
+          "local_amount": {
+            "description": "Transaction local amount in local currency, provided by ISO 8583 message.",
+            "format": "float",
+            "exampleSetFlag": false,
+            "types": [
+              "number"
+            ]
+          },
+          "merchant_city": {
+            "description": "Merchant city.",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "merchant_name": {
+            "description": "Merchant name.",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "local_currency": {
+            "description": "Transaction currency code based on ISO 4217 numeric code, provided by ISO 8583 message.",
+            "example": 986,
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          },
+          "transaction_code": {
+            "description": "Transaction type code based on ISO 8583.",
+            "example": 0,
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          },
+          "settlement_amount": {
+            "description": "Transaction settlement amount in local currency, provided by ISO 8583 message.",
+            "format": "float",
+            "exampleSetFlag": false,
+            "types": [
+              "number"
+            ]
+          },
+          "merchant_date_time": {
+            "description": "Merchant date and time.",
+            "format": "date-time",
+            "example": "2025-06-01T12:10:20",
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          },
+          "payment_card_brand": {
+            "description": "Network brand of the card, provided by ISO 8583 message.",
+            "example": "VISA, Mastercard",
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          },
+          "settlement_currency": {
+            "description": "Transaction currency code based on ISO 4217 numeric code, provided by ISO 8583 message.",
+            "example": 986,
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          },
+          "network_scheme_metadata": {
+            "$ref": "#/components/schemas/NetworkSchemeMetadata"
+          },
+          "pay_by_wallet_reference_data": {
+            "$ref": "#/components/schemas/PayByWalletReferenceData-1"
+          },
+          "merchant_state_or_country_code": {
+            "description": "Merchant state or country.",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          }
+        },
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "ReplenishOutput": {
+        "properties": {
+          "api": {
+            "description": "Application Protocol Identifier",
+            "example": "1ABCD23",
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          },
+          "dki": {
+            "description": "Derivation Key Index",
+            "example": "01",
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          },
+          "max_pmts": {
+            "description": "Maximum number of payments allowed",
+            "format": "int16",
+            "example": 50,
+            "exampleSetFlag": true,
+            "types": [
+              "integer"
+            ]
+          },
+          "key_exp_ts": {
+            "description": "Key expiration timestamp (milliseconds since epoch)",
+            "format": "int64",
+            "example": 1754236800000,
+            "exampleSetFlag": true,
+            "types": [
+              "integer"
+            ]
+          },
+          "enc_key_info": {
+            "description": "Encryption key information",
+            "example": "AB67CD89EF01GH23IJ45KL67MN89OP01QR23ST45UV67WX89YZ01",
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          },
+          "encryption_meta_data": {
+            "description": "Additional encryption metadata",
+            "example": "EX45PL90AM76PL32ED94CR56YP78TO90GR34AP78HI23CS",
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          }
+        },
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "ReplenishInput": {
+        "required": [
+          "mac"
+        ],
+        "properties": {
+          "sc": {
+            "description": "Security capability indicator",
+            "example": 0,
+            "exampleSetFlag": true,
+            "types": [
+              "integer"
+            ]
+          },
+          "api": {
+            "description": "Application Protocol Identifier",
+            "example": "05371100",
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          },
+          "mac": {
+            "description": "Message Authentication Code value",
+            "example": "ECCED7DEC859",
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          },
+          "tlv": {
+            "description": "TLV (Tag-Length-Value) data for replenishment",
+            "items": {
+              "$ref": "#/components/schemas/ReplenishTlv"
+            },
+            "exampleSetFlag": false,
+            "types": [
+              "array"
+            ]
+          },
+          "provisioned_token_id": {
+            "description": "Provisioned token ID",
+            "example": "1234567890abcdef",
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          }
+        },
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "ProgramObj": {
+        "properties": {
+          "id": {
+            "description": "Pismo Program ID, provided by enrollment feature.",
+            "exampleSetFlag": false,
+            "types": [
+              "integer"
+            ]
+          }
+        },
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "NetworkSchemeMetadata": {
+        "properties": {
+          "mti": {
+            "description": "MTI provided by ISO 8583 message.",
+            "example": "0100",
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          },
+          "response_code": {
+            "description": "Response code, this value should be two characters string according with ISO-8583 and card network specifications.",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "authorization_code": {
+            "description": "Authorization code.",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "transaction_identifier": {
+            "description": "Transaction identifier, provided by ISO 8583 message.",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "retrieval_reference_number": {
+            "description": "Retrieval reference number, provided by ISO 8583 message.",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          }
+        },
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "TokenPaymentDataOutput-1": {
+        "properties": {
+          "atc": {
+            "description": "ATC (Application Transaction Counter) to be used in the payment transaction.",
+            "example": "23231",
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          },
+          "cryptogram": {
+            "description": "cryptogram to be used in the payment transaction.",
+            "example": "adada",
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          }
+        },
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "UpdateEnrollmentInput": {
+        "required": [
+          "program_id",
+          "wallet_data"
+        ],
+        "properties": {
+          "program_id": {
+            "description": "Program ID",
+            "example": 16805,
+            "exampleSetFlag": true,
+            "types": [
+              "integer"
+            ]
+          },
+          "wallet_data": {
+            "$ref": "#/components/schemas/WalletData"
+          }
+        },
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "SimulateInput": {
+        "properties": {
+          "mti": {
+            "description": "MTI provided by ISO 8583 message.",
+            "example": 200,
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          },
+          "network": {
+            "description": "Card network.",
+            "example": "VISA",
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          },
+          "tenant_id": {
+            "description": "Internal Pismo Issuer ID.",
+            "example": "TN-face7e59-8885-49ec-a842-8ddd1f0bfd0f",
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          },
+          "wallet_data": {
+            "$ref": "#/components/schemas/WalletData"
+          },
+          "local_amount": {
+            "description": "Transaction local amount in local currency.",
+            "example": 8,
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          },
+          "merchant_name": {
+            "description": "Merchant name",
+            "example": "ABC merchant",
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          },
+          "local_currency": {
+            "description": "Transaction local currency code based on ISO 4217 numeric code.",
+            "example": 986,
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          },
+          "settlement_amount": {
+            "description": "Transaction settlement amount in settlement currency.",
+            "example": 8,
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          },
+          "settlement_currency": {
+            "description": "Transaction settlement currency code based on ISO 4217 numeric code.",
+            "example": 986,
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          },
+          "transaction_type_code": {
+            "description": "Transaction type code based on ISO 8583.",
+            "example": 0,
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          }
+        },
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "EnrollInput-1": {
+        "properties": {
+          "tokens": {
+            "items": {
+              "$ref": "#/components/schemas/TokenRequestObj-1"
+            },
+            "exampleSetFlag": false,
+            "types": [
+              "array"
+            ]
+          },
+          "program_id": {
+            "description": "Program ID",
+            "example": 20,
+            "exampleSetFlag": true,
+            "types": [
+              "integer"
+            ]
+          },
+          "wallet_data": {
+            "$ref": "#/components/schemas/WalletData-1"
+          }
+        },
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "WalletData": {
+        "required": [
+          "account_id"
+        ],
+        "properties": {
+          "phone": {
+            "$ref": "#/components/schemas/Phone"
+          },
+          "email_id": {
+            "maxLength": 100,
+            "description": "Email address",
+            "format": "email",
+            "example": "user@example.com",
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          },
+          "full_name": {
+            "maxLength": 60,
+            "description": "Full name of the user",
+            "example": "John Doe",
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          },
+          "user_name": {
+            "maxLength": 64,
+            "description": "Username",
+            "example": "johndoe",
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          },
+          "account_id": {
+            "maxLength": 15,
+            "description": "Wallet account ID",
+            "example": "123456",
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          },
+          "customer_id": {
+            "maxLength": 100,
+            "description": "Customer ID",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "document_number": {
+            "description": "Document number",
+            "example": "123456789",
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          }
+        },
+        "description": "Wallet data.",
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "SimpleError": {
+        "title": "SimpleError",
+        "required": [
+          "message"
+        ],
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Message describing the error"
+          },
+          "examples": {}
+        }
+      },
+      "AuthorizeCallbackOutput-1": {
+        "properties": {
+          "response_code": {
+            "description": "Response code, this value should be two characters string according with ISO-8583 and card network specifications.",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          }
+        },
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "AccountObj": {
+        "properties": {
+          "id": {
+            "description": "Pismo Account ID, provided by enrollment feature.",
+            "exampleSetFlag": false,
+            "types": [
+              "integer"
+            ]
+          }
+        },
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "EnrollmentFinderOutput": {
+        "properties": {
+          "id": {
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "card": {
+            "$ref": "#/components/schemas/CardObj"
+          },
+          "tokens": {
+            "items": {
+              "$ref": "#/components/schemas/TokenObj"
+            },
+            "exampleSetFlag": false,
+            "types": [
+              "array"
+            ]
+          },
+          "account": {
+            "$ref": "#/components/schemas/AccountObj"
+          },
+          "program": {
+            "$ref": "#/components/schemas/ProgramObj"
+          },
+          "created_at": {
+            "format": "date-time",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "wallet_data": {
+            "$ref": "#/components/schemas/WalletData"
+          },
+          "account_status": {
+            "$ref": "#/components/schemas/AccountStatusObj"
+          },
+          "last_updated_at": {
+            "format": "date-time",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "current_enrollment_status": {
+            "$ref": "#/components/schemas/EnrollmentStatus"
+          }
+        },
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "InternalServerError": {
+        "properties": {
+          "code": {
+            "description": "Error code.",
+            "example": "INTERNAL_ERROR",
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          },
+          "message": {
+            "description": "Error message.",
+            "example": "An internal error occurred.",
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          }
+        },
+        "description": "An internal server error occurred due to an unexpected condition.",
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "ContactPhone": {
+        "properties": {
+          "number": {
+            "description": "Phone number",
+            "example": "1234567890",
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          },
+          "country_code": {
+            "description": "Country code",
+            "example": "1",
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          }
+        },
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "TokenObj": {
+        "properties": {
+          "id": {
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "token": {
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "request": {
+            "$ref": "#/components/schemas/TokenRequestObj"
+          },
+          "token_requestor_data": {
+            "$ref": "#/components/schemas/TokenRequestorData"
+          },
+          "current_token_enrollment_status": {
+            "$ref": "#/components/schemas/TokenStatus"
+          }
+        },
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "Phone": {
+        "properties": {
+          "country_code": {
+            "maxLength": 5,
+            "description": "Country code (0 to 99999)",
+            "example": "1",
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          },
+          "phone_number": {
+            "maxLength": 15,
+            "description": "Phone number",
+            "example": "11111111",
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          }
+        },
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "EnrollInput": {
+        "properties": {
+          "tokens": {
+            "items": {
+              "$ref": "#/components/schemas/TokenRequestObj"
+            },
+            "exampleSetFlag": false,
+            "types": [
+              "array"
+            ]
+          },
+          "program_id": {
+            "description": "Program ID",
+            "example": 20,
+            "exampleSetFlag": true,
+            "types": [
+              "integer"
+            ]
+          },
+          "wallet_data": {
+            "$ref": "#/components/schemas/WalletData"
+          }
+        },
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "TokenStatus": {
+        "properties": {
+          "name": {
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "params": {
+            "additionalProperties": {
+              "exampleSetFlag": false,
+              "booleanSchemaValue": true
+            },
+            "exampleSetFlag": false,
+            "types": [
+              "object"
+            ]
+          },
+          "date_time": {
+            "format": "date-time",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          }
+        },
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "AccountStatusObj": {
+        "properties": {
+          "name": {
+            "description": "Account status",
+            "example": "NORMAL",
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          },
+          "params": {
+            "additionalProperties": {
+              "exampleSetFlag": false,
+              "booleanSchemaValue": true
+            },
+            "exampleSetFlag": false,
+            "types": [
+              "object"
+            ]
+          },
+          "date_time": {
+            "description": "When the status was updated",
+            "format": "date-time",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          }
+        },
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "EnrollmentSearchInput": {
+        "required": [
+          "search_type",
+          "search_value"
+        ],
+        "properties": {
+          "page_size": {
+            "maximum": 100,
+            "minimum": 1,
+            "description": "Number of results per page (default 50)",
+            "example": 10,
+            "exampleSetFlag": true,
+            "types": [
+              "integer"
+            ]
+          },
+          "page_token": {
+            "description": "Token for pagination to get next page of results",
+            "example": "eyJ0ZXN0IjoidG9rZW4ifQ==",
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          },
+          "search_type": {
+            "description": "Type of search to perform",
+            "example": "EMAIL",
+            "enum": [
+              "EMAIL",
+              "PHONE_NUMBER",
+              "DOCUMENT_NUMBER",
+              "WALLET_ACCOUNT_ID"
+            ],
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          },
+          "search_value": {
+            "description": "Value to search for based on search_type",
+            "example": "user@example.com",
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          }
+        },
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "AuthorizationTokenObj": {
+        "properties": {
+          "id": {
+            "description": "Pismo Token ID, provided by enrollment feature.",
+            "exampleSetFlag": false,
+            "types": [
+              "integer"
+            ]
+          },
+          "token": {
+            "description": "Token hash, provided by enrollment feature.",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          }
+        },
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "NotFound-1": {
+        "properties": {
+          "error": {
+            "description": "Error message.",
+            "example": "Not Found",
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          }
+        },
+        "description": "Entity with provided key was not found.",
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "WalletData-1": {
+        "properties": {
+          "account_id": {
+            "description": "Wallet account ID",
+            "example": "123456",
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          },
+          "customer_id": {
+            "description": "Wallet customer ID",
+            "example": "123456",
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          }
+        },
+        "description": "Wallet data.",
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "EnrollmentFinderOutput-1": {
+        "properties": {
+          "id": {
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "card": {
+            "$ref": "#/components/schemas/CardObj"
+          },
+          "tokens": {
+            "items": {
+              "$ref": "#/components/schemas/TokenObj-1"
+            },
+            "exampleSetFlag": false,
+            "types": [
+              "array"
+            ]
+          },
+          "account": {
+            "$ref": "#/components/schemas/AccountObj"
+          },
+          "program": {
+            "$ref": "#/components/schemas/ProgramObj"
+          },
+          "created_at": {
+            "format": "date-time",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "wallet_data": {
+            "$ref": "#/components/schemas/WalletData-1"
+          },
+          "account_status": {
+            "$ref": "#/components/schemas/AccountStatusObj"
+          },
+          "last_updated_at": {
+            "format": "date-time",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "current_enrollment_status": {
+            "$ref": "#/components/schemas/EnrollmentStatus"
+          }
+        },
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "SimulateOutput": {
+        "properties": {
+          "denial_code": {
+            "description": "Denial code, this value should be inferred by us based on some error or validation failure.",
+            "example": "The request payload is invalid",
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          },
+          "response_code": {
+            "description": "Response code, this value should be two numbers string according with ISO-8583 and card network specifications.",
+            "example": "00",
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          },
+          "authorization_code": {
+            "description": "Authorization code, six alphanumeric characters, this field could be repeat.",
+            "example": "FH1S56",
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          }
+        },
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "BadRequestError": {
+        "properties": {
+          "code": {
+            "description": "Error code.",
+            "example": "INVALID_REQUEST",
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          },
+          "message": {
+            "description": "Error message.",
+            "example": "The request payload is invalid",
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          }
+        },
+        "description": "Bad request error will threw when any required field is missing or invalid.",
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "TokenRequestObj": {
+        "properties": {
+          "type": {
+            "example": "DEVICE",
+            "enum": [
+              "DEVICE",
+              "ECOMMERCE_COF"
+            ],
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          },
+          "locale": {
+            "description": "Locale",
+            "example": "America/Sao_Paulo",
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          },
+          "os_type": {
+            "description": "OS Type",
+            "example": "IOS",
+            "enum": [
+              "IOS",
+              "ANDROID",
+              "WINDOWS"
+            ],
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          },
+          "device_id": {
+            "description": "Device ID",
+            "example": "123456",
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          },
+          "device_name": {
+            "description": "Device Name",
+            "example": "John's Iphone",
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          },
+          "device_type": {
+            "description": "Device Type",
+            "example": "PHONE",
+            "enum": [
+              "PHONE",
+              "TABLET",
+              "PC",
+              "WATCH"
+            ],
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          },
+          "client_app_id": {
+            "description": "Client App ID",
+            "example": "05043cb8-a07c-4cdc-b986-ceda85182d36",
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          },
+          "platform_type": {
+            "description": "Platform Type",
+            "example": "IOS",
+            "enum": [
+              "IOS",
+              "ANDROID",
+              "WINDOWS"
+            ],
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          },
+          "client_wallet_account_email_address_hash": {
+            "description": "Client Wallet Account Email Address Hash",
+            "example": "john@doe.com",
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          }
+        },
+        "description": "Token data to token requestor",
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "AuthorizeCallbackInput-2": {
+        "properties": {
+          "id": {
+            "description": "Unique transaction identifier",
+            "example": "face7e59-8885-49ec-a842-8ddd1f0bfd0f",
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          },
+          "entity": {
+            "description": "Entity type",
+            "example": "transaction",
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          },
+          "fields": {
+            "$ref": "#/components/schemas/AuthorizationFields-1"
+          }
+        },
+        "description": "Authorize callback input, this object should be sent to the wallet to handle the authorization feature.",
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "AuthorizeCallbackInput-1": {
+        "properties": {
+          "card": {
+            "$ref": "#/components/schemas/CardObj"
+          },
+          "token": {
+            "$ref": "#/components/schemas/AuthorizationTokenObj"
+          },
+          "account": {
+            "$ref": "#/components/schemas/AccountObj"
+          },
+          "program": {
+            "$ref": "#/components/schemas/ProgramObj"
+          },
+          "wallet_data": {
+            "$ref": "#/components/schemas/WalletData-1"
+          },
+          "authorization": {
+            "$ref": "#/components/schemas/AuthorizationObj"
+          }
+        },
+        "description": "Authorize callback input, this object should be sent to the wallet to handle the authorization feature.",
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "SimulateInput-1": {
+        "properties": {
+          "mti": {
+            "description": "MTI provided by ISO 8583 message.",
+            "example": 200,
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          },
+          "network": {
+            "description": "Card network.",
+            "example": "VISA",
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          },
+          "tenant_id": {
+            "description": "Internal Pismo Issuer ID.",
+            "example": "TN-face7e59-8885-49ec-a842-8ddd1f0bfd0f",
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          },
+          "wallet_data": {
+            "$ref": "#/components/schemas/WalletData-1"
+          },
+          "local_amount": {
+            "description": "Transaction local amount in local currency.",
+            "example": 8,
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          },
+          "merchant_name": {
+            "description": "Merchant name",
+            "example": "ABC merchant",
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          },
+          "local_currency": {
+            "description": "Transaction local currency code based on ISO 4217 numeric code.",
+            "example": 986,
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          },
+          "settlement_amount": {
+            "description": "Transaction settlement amount in settlement currency.",
+            "example": 8,
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          },
+          "settlement_currency": {
+            "description": "Transaction settlement currency code based on ISO 4217 numeric code.",
+            "example": 986,
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          },
+          "transaction_type_code": {
+            "description": "Transaction type code based on ISO 8583.",
+            "example": 0,
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          }
+        },
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "PageInfo": {
+        "properties": {
+          "has_more": {
+            "description": "Indicates if there are more results available",
+            "example": true,
+            "exampleSetFlag": true,
+            "types": [
+              "boolean"
+            ]
+          },
+          "page_token": {
+            "description": "Token to use for retrieving the next page of results",
+            "example": "eyJuZXh0IjoidG9rZW4ifQ==",
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          }
+        },
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "AccountStatus-1": {
+        "properties": {
+          "status": {
+            "description": "Account action to perform",
+            "example": "BLOCKED",
+            "enum": [
+              "NORMAL",
+              "BLOCKED"
+            ],
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          }
+        },
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "TokenObj-1": {
+        "properties": {
+          "id": {
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "token": {
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "request": {
+            "additionalProperties": {
+              "exampleSetFlag": false,
+              "booleanSchemaValue": true
+            },
+            "description": "Received data to try generate token.",
+            "exampleSetFlag": false,
+            "types": [
+              "object"
+            ]
+          },
+          "token_requestor_data": {
+            "$ref": "#/components/schemas/TokenRequestorData"
+          },
+          "current_token_enrollment_status": {
+            "$ref": "#/components/schemas/TokenStatus"
+          }
+        },
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "EnrollmentFinderOutput-3": {
+        "properties": {
+          "id": {
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "card": {
+            "$ref": "#/components/schemas/CardObj"
+          },
+          "tokens": {
+            "items": {
+              "$ref": "#/components/schemas/TokenObj-1"
+            },
+            "exampleSetFlag": false,
+            "types": [
+              "array"
+            ]
+          },
+          "account": {
+            "$ref": "#/components/schemas/AccountObj"
+          },
+          "program": {
+            "$ref": "#/components/schemas/ProgramObj"
+          },
+          "created_at": {
+            "format": "date-time",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "wallet_data": {
+            "$ref": "#/components/schemas/WalletData-1"
+          },
+          "last_updated_at": {
+            "format": "date-time",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "current_enrollment_status": {
+            "$ref": "#/components/schemas/EnrollmentStatus"
+          }
+        },
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "EnrollmentFinderOutput-2": {
+        "properties": {
+          "id": {
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "card": {
+            "$ref": "#/components/schemas/CardObj"
+          },
+          "tokens": {
+            "items": {
+              "$ref": "#/components/schemas/TokenObj-2"
+            },
+            "exampleSetFlag": false,
+            "types": [
+              "array"
+            ]
+          },
+          "account": {
+            "$ref": "#/components/schemas/AccountObj"
+          },
+          "program": {
+            "$ref": "#/components/schemas/ProgramObj"
+          },
+          "created_at": {
+            "format": "date-time",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "wallet_data": {
+            "$ref": "#/components/schemas/WalletData-1"
+          },
+          "last_updated_at": {
+            "format": "date-time",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "current_enrollment_status": {
+            "$ref": "#/components/schemas/EnrollmentStatus"
+          }
+        },
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "TokenObj-2": {
+        "properties": {
+          "id": {
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "type": {
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "token": {
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          },
+          "request": {
+            "additionalProperties": {
+              "exampleSetFlag": false,
+              "booleanSchemaValue": true
+            },
+            "description": "Received data to try generate token.",
+            "exampleSetFlag": false,
+            "types": [
+              "object"
+            ]
+          },
+          "current_token_enrollment_status": {
+            "$ref": "#/components/schemas/TokenStatus"
+          }
+        },
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "EnrollOutput": {
+        "properties": {
+          "id": {
+            "description": "Enrollment generated id.",
+            "exampleSetFlag": false,
+            "types": [
+              "string"
+            ]
+          }
+        },
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "TokenPaymentDataInput": {
+        "properties": {
+          "cryptogram_type": {
+            "description": "Cryptogram type to request payment data.",
+            "example": "DTVV",
+            "enum": [
+              "DTVV",
+              "TAVV"
+            ],
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          },
+          "provisioned_token_id": {
+            "description": "Provisioned Token ID to request payment data.",
+            "example": "1234567890abcdef",
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          },
+          "client_payment_data_id": {
+            "description": "Client payment data ID to request payment data.",
+            "example": "abcdef1234567890",
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          }
+        },
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "EnrollmentSearchOutput": {
+        "properties": {
+          "page_info": {
+            "$ref": "#/components/schemas/PageInfo"
+          },
+          "enrollments": {
+            "description": "List of found enrollments",
+            "items": {
+              "$ref": "#/components/schemas/EnrollmentSearchResult"
+            },
+            "exampleSetFlag": false,
+            "types": [
+              "array"
+            ]
+          }
+        },
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "PayByWalletReferenceData": {
+        "properties": {
+          "wallet_account_id": {
+            "description": "MTI provided by ISO 8583 message.",
+            "example": "0100",
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          },
+          "enrollment_metadata": {
+            "additionalProperties": {
+              "exampleSetFlag": false,
+              "booleanSchemaValue": true
+            },
+            "description": "Metadata related to the enrollment.",
+            "exampleSetFlag": false,
+            "types": [
+              "object"
+            ]
+          }
+        },
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      },
+      "NotFound": {
+        "properties": {
+          "code": {
+            "description": "Error code.",
+            "example": "NOT_FOUND",
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          },
+          "message": {
+            "description": "Error message.",
+            "example": "The entity with provided key was not found.",
+            "exampleSetFlag": true,
+            "types": [
+              "string"
+            ]
+          }
+        },
+        "description": "Entity with provided key was not found.",
+        "exampleSetFlag": false,
+        "types": [
+          "object"
+        ]
+      }
+    },
+    "responses": {},
+    "parameters": {
+      "ContentTypeHeader": {
+        "name": "Content-Type",
+        "in": "header",
+        "description": "Content type of the request/response",
+        "required": true,
+        "explode": false,
+        "schema": {
+          "default": "application/json",
+          "exampleSetFlag": false,
+          "types": [
+            "string"
+          ]
+        }
+      }
+    },
+    "examples": {},
+    "requestBodies": {},
+    "headers": {},
+    "callbacks": {}
+  },
+  "webhooks": {},
+  "x-tagGroups": [
+    {
+      "name": "API Reference",
+      "tags": [
+        " Visa Pay"
+      ]
+    }
+  ]
+}

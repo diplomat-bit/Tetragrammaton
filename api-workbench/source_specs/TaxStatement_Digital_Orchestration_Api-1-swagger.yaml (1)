@@ -1,0 +1,327 @@
+openapi: 3.0.1
+info:
+  title: TaxStatement_Digital_Orchestation
+  description: Account Documents APIs Version 2.0. These APIs will be used by Citi
+    Partners to retrieve tax documents for existing Accounts from various regions.
+    PCF Deployment Reference name --> DM-O-DocumentServices-Statements  </br>Version
+    2.0.0 Added new Tax statements apis.
+  version: 1.0.0
+servers:
+- url: /gcgapi/docmgmt/taxforms/v1
+paths:
+  /taxStatements:
+    get:
+      tags:
+      - Tax Statements
+      summary: OB Returns list of masked tax statements
+      description: This API is used to retrieve list of masked tax statements for
+        given parameters. This global API uses country fields to identify the appropriate
+        regional services.
+      operationId: getTaxStatements
+      parameters:
+      - name: Authorization
+        in: header
+        description: The authorization token received in earlier API call. This will
+          contain the access token and partner identity. This header is populated
+          only for third-party partners.
+        required: true
+        schema:
+          type: string
+      - name: Accept
+        in: header
+        description: Content types that are acceptable for the response. Currently
+          we support application/json
+        required: true
+        schema:
+          type: string
+          default: application/json
+      - name: uuid
+        in: header
+        description: 128 bit random UUID generated uniquely for every request
+        required: true
+        schema:
+          type: string
+          default: 4468adf1-adfe-4f85-a2c1-f29beaa1f6ee
+      - name: Content-Type
+        in: header
+        description: Content-Type of the request
+        required: true
+        schema:
+          type: string
+      - name: client_id
+        in: header
+        description: The client ID received during application registration in the
+          developer portal.
+        required: true
+        schema:
+          type: string
+          default: 1c5f30d9-043c-49ff-b9c4-255a923278b2
+      - name: countryCode
+        in: header
+        description: Two character ISO format country code.
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Documents'
+            charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/Documents'
+        "204":
+          description: No Content
+          content: {}
+        "400":
+          description: <table class="table"><tr><td>Type</td><td>Code</td><td>Details</td></tr><tr><td>error</td><td>invalidRequest</td><td>Missing
+            or invalid parameters</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "401":
+          description: <table class="table"><tr><td>Type</td><td>Code</td><td>Details</td></tr><tr><td>error</td><td>unAuthorized</td><td>Authorization
+            credentials are missing or invalid</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "403":
+          description: <table class="table"><tr><td>Type</td><td>Code</td><td>Details</td><td>More
+            Info</td></tr><tr><td>error</td><td>accessNotConfigured</td><td>The requested
+            operation is not configured to access this resource</td><td>Channel/Country/Business
+            provided in the request is not currently supported</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "404":
+          description: <table class="table"><tr><td>Type</td><td>Code</td><td>Details</td></tr><tr><td>error</td><td>resourceNotFound</td><td>The
+            requested resource was not found</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "500":
+          description: <table class="table"><tr><td>Type</td><td>Code</td><td>Details</td></tr><tr><td>fatal</td><td>serverUnavailable</td><td>The
+            request failed due to an internal error/server unavailability</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /taxStatements/{taxstatementId}:
+    get:
+      tags:
+      - Tax Statements
+      summary: OB Return the masked tax statement for the given tax statement id
+      description: This API retrieves a masked tax statement for the given tax statement
+        id. This global API uses country fields to identify the appropriate regional
+        services.
+      operationId: getTaxStatement
+      parameters:
+      - name: Authorization
+        in: header
+        description: The authorization token received in earlier API call. This will
+          contain the access token and partner identity. This header is populated
+          only for third-party partners.
+        required: true
+        schema:
+          type: string
+      - name: Accept
+        in: header
+        description: Content types that are acceptable for the response. Currently
+          we support application/json
+        required: true
+        schema:
+          type: string
+          default: application/json
+      - name: Content-Type
+        in: header
+        description: Content-Type of the request
+        required: true
+        schema:
+          type: string
+      - name: uuid
+        in: header
+        description: 128 bit random UUID generated uniquely for every request.
+        required: true
+        schema:
+          type: string
+          default: 4468adf1-adfe-4f85-a2c1-f29beaa1f6ee
+      - name: client_id
+        in: header
+        description: The client ID received during customer onboarding.
+        required: true
+        schema:
+          type: string
+          default: 1c5f30d9-043c-49ff-b9c4-255a923278b2
+      - name: countryCode
+        in: header
+        description: Two character ISO format country code.
+        schema:
+          type: string
+      - name: taxstatementId
+        in: path
+        description: Unique id that maps to the specific tax statement to be downloaded.
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Document'
+            charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/Document'
+        "400":
+          description: <table class="table"><tr><td>Type</td><td>Code</td><td>Details</td></tr><tr><td>error</td><td>invalidRequest</td><td>Missing
+            or invalid parameters</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "401":
+          description: <table class="table"><tr><td>Type</td><td>Code</td><td>Details</td></tr><tr><td>error</td><td>unAuthorized</td><td>Authorization
+            credentials are missing or invalid</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "403":
+          description: <table class="table"><tr><td>Type</td><td>Code</td><td>Details</td><td>More
+            Info</td></tr><tr><td>error</td><td>accessNotConfigured</td><td>The requested
+            operation is not configured to access this resource</td><td>Channel/Country/Business
+            provided in the request is not currently supported</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "404":
+          description: <table class="table"><tr><td>Type</td><td>Code</td><td>Details</td></tr><tr><td>error</td><td>resourceNotFound</td><td>The
+            requested resource was not found</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "500":
+          description: <table class="table"><tr><td>Type</td><td>Code</td><td>Details</td></tr><tr><td>fatal</td><td>serverUnavailable</td><td>The
+            request failed due to an internal error/server unavailability</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    Documents:
+      type: object
+      properties:
+        DocumentDetails:
+          type: array
+          items:
+            $ref: '#/components/schemas/DocumentDetails'
+    DocumentDetails:
+      type: object
+      properties:
+        statementId:
+          type: string
+          description: Unique identifier for the tax statement document.
+          example: 5d8b3fcf435dd400101037f4
+        statementType:
+          type: string
+          description: Type of a tax statement.
+          example: "801"
+        statementPostingDate:
+          type: string
+          description: Date on which this tax statement was generated. Format should
+            be MM/DD/YYYY.
+          format: date
+        primaryUserIndicator:
+          type: string
+          description: This field is used for identifier for what type of user( primary
+            or authorized) tax statement is being generated.
+          example: "1"
+        statementYear:
+          type: integer
+          description: It represents document tax year.
+          example: 2016
+    Document:
+      type: object
+      properties:
+        documentFormat:
+          type: string
+          description: The format for the document.
+          example: application/pdf
+        encodeType:
+          type: string
+          description: "Image Encoding Type e.g. base16, base64"
+          example: base64
+        dataPayload:
+          type: string
+          description: This field contains binary data for the statement.
+          example: "{\"encryptedPayload\":{\"header\":{\"alg\":\"RSA-OAEP\",\"enc\"\
+            :\"A256KW\",\"kid\":\"Citi_2020-02-10\",\"x5c\":\"9f02dfd3143e8202d774793902ca07e888462d5e\"\
+            ,\"cty\":\"application/pdf\"},\"iv\":\"fBglurNNzOplKdjH\",\"ciphertext\"\
+            :\"fBglurNNzOplKdjHXKCdSv4hQAAAAAAAAAAAAAA==\"}}"
+    ErrorResponse:
+      required:
+      - code
+      - type
+      type: object
+      properties:
+        code:
+          type: string
+          description: Error code
+        details:
+          type: string
+          description: Verbose explanation of the error
+        location:
+          type: string
+          description: The name of the field that resulted in the error
+        type:
+          type: string
+          description: error type
+          enum:
+          - ERROR
+          - WARN
+          - INVALID
+          - FATAL
+        moreInfo:
+          type: object
+          properties: {}
+          description: URI to documentation of the error
+x-original-swagger-version: "2.0"
